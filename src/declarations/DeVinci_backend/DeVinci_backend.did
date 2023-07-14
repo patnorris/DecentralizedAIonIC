@@ -1,0 +1,242 @@
+type UserRecord = 
+ record {
+   file_ids: vec text;
+   totalSize: nat;
+ };
+type UpdateMetadataValuesInput = 
+ record {
+   id: TokenId;
+   updatedOwnerContactInfo: text;
+   updatedOwnerName: text;
+   updatedSpaceData: opt text;
+   updatedSpaceDescription: text;
+   updatedSpaceName: text;
+ };
+type TxReceipt = 
+ variant {
+   Err: ApiError;
+   Ok: nat;
+ };
+type TokenId = nat64;
+type StreamingStrategy = variant {
+                           Callback:
+                            record {
+                              callback: StreamingCallback;
+                              token: StreamingCallbackToken;
+                            };};
+type StreamingCallbackToken = 
+ record {
+   content_encoding: text;
+   index: nat;
+   key: text;
+ };
+type StreamingCallbackResponse = 
+ record {
+   body: blob;
+   token: opt StreamingCallbackToken;
+ };
+type StreamingCallback = func (StreamingCallbackToken) ->
+                          (StreamingCallbackResponse) query;
+type SignUpFormInput = 
+ record {
+   emailAddress: text;
+   pageSubmittedFrom: text;
+ };
+type Response = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+   streaming_strategy: opt StreamingStrategy;
+   upgrade: bool;
+ };
+type Request = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type PersonalWebSpace = 
+ service {
+   balanceOfDip721: (principal) -> (nat64) query;
+   check_user_has_nft: () -> (bool) query;
+   createSpace: (text) -> (NftResult);
+   deleteEmailSubscriber: (text) -> (bool);
+   deleteFile: (text) -> (FileResult);
+   getCallerSpaces: () -> (vec Nft) query;
+   getEmailSubscribers: () -> (vec record {
+                                     text;
+                                     EmailSubscriber;
+                                   });
+   getFile: (text) -> (FileResult);
+   getMaxLimitDip721: () -> (nat16) query;
+   getMetadataDip721: (TokenId) -> (MetadataResult) query;
+   getMetadataForUserDip721: (principal) -> (ExtendedMetadataResult);
+   getRandomSpace: () -> (NftResult);
+   getSpace: (TokenId) -> (NftResult) query;
+   getTokenIdsForUserDip721: (principal) -> (vec TokenId) query;
+   getUserRecord: () -> (FileResult);
+   greet: (text) -> (text);
+   http_request: (Request) -> (Response) query;
+   listUserFileIds: () -> (FileResult);
+   listUserFileNames: () -> (FileResult);
+   logoDip721: () -> (LogoResult) query;
+   mintDip721: (principal, MetadataDesc) -> (MintReceipt);
+   nameDip721: () -> (text) query;
+   ownerOfDip721: (TokenId) -> (OwnerResult) query;
+   safeTransferFromDip721: (principal, principal, TokenId) -> (TxReceipt);
+   submitSignUpForm: (SignUpFormInput) -> (text);
+   supportedInterfacesDip721: () -> (vec InterfaceId) query;
+   symbolDip721: () -> (text) query;
+   totalSupplyDip721: () -> (nat64) query;
+   transferFromDip721: (principal, principal, TokenId) -> (TxReceipt);
+   updateUserSpace: (UpdateMetadataValuesInput) -> (NftResult);
+   uploadUserFile: (text, File) -> (FileResult);
+ };
+type OwnerResult = 
+ variant {
+   Err: ApiError;
+   Ok: principal;
+ };
+type NftResult = 
+ variant {
+   Err: ApiError;
+   Ok: Nft;
+ };
+type Nft = 
+ record {
+   id: TokenId;
+   metadata: MetadataDesc;
+   owner: principal;
+ };
+type MintReceiptPart = 
+ record {
+   id: nat;
+   token_id: TokenId;
+ };
+type MintReceipt = 
+ variant {
+   Err: ApiError;
+   Ok: MintReceiptPart;
+ };
+type MetadataVal = 
+ variant {
+   BlobContent: blob;
+   Nat16Content: nat16;
+   Nat32Content: nat32;
+   Nat64Content: nat64;
+   Nat8Content: nat8;
+   NatContent: nat;
+   PrincipalContent: principal;
+   TextArrayContent: vec text;
+   TextContent: text;
+   TextToTextAssocListContent: AssocList;
+ };
+type MetadataResult = 
+ variant {
+   Err: ApiError;
+   Ok: MetadataDesc;
+ };
+type MetadataPurpose = 
+ variant {
+   Preview;
+   Rendered;
+ };
+type MetadataPart = 
+ record {
+   data: blob;
+   key_val_data: vec MetadataKeyVal;
+   purpose: MetadataPurpose;
+ };
+type MetadataKeyVal = 
+ record {
+   key: text;
+   val: MetadataVal;
+ };
+type MetadataDesc = vec MetadataPart;
+type LogoResult = 
+ record {
+   data: text;
+   logo_type: text;
+ };
+type List = 
+ opt record {
+       record {
+         text;
+         text;
+       };
+       List;
+     };
+type InterfaceId = 
+ variant {
+   Approval;
+   Burn;
+   Mint;
+   TransactionHistory;
+   TransferNotification;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
+ };
+type FileResultSuccessOptions = 
+ variant {
+   File: FileInfo;
+   FileId: text;
+   FileIds: vec text;
+   FileNames: vec text;
+   Other: text;
+   Success;
+   UserRecord: UserRecord;
+ };
+type FileResult = 
+ variant {
+   Err: ApiError;
+   Ok: FileResultSuccessOptions;
+ };
+type FileInfo = 
+ record {
+   file_content: blob;
+   file_name: text;
+   owner_principal: text;
+ };
+type File = blob;
+type ExtendedMetadataResult = 
+ variant {
+   Err: ApiError;
+   Ok: record {
+         metadata_desc: MetadataDesc;
+         token_id: TokenId;
+       };
+ };
+type EmailSubscriber = 
+ record {
+   emailAddress: text;
+   pageSubmittedFrom: text;
+   subscribedAt: nat64;
+ };
+type Dip721NonFungibleToken = 
+ record {
+   logo: LogoResult;
+   maxLimit: nat16;
+   name: text;
+   symbol: text;
+ };
+type AssocList = 
+ opt record {
+       record {
+         text;
+         text;
+       };
+       List;
+     };
+type ApiError = 
+ variant {
+   InvalidTokenId;
+   Other: text;
+   Unauthorized;
+   ZeroAddress;
+ };
+service : (principal, Dip721NonFungibleToken) -> PersonalWebSpace

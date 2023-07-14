@@ -1,0 +1,28 @@
+{
+  "canisters": {
+    "DeVinci_backend": {
+      "main": "src/DeVinci_backend/main.mo",
+      "type": "motoko"
+    },
+    "DeVinci_frontend": {
+      "dependencies": [
+        "DeVinci_backend"
+      ],
+      "frontend": {
+        "entrypoint": "dist/index.html"
+      },
+      "source": [
+        "dist/",
+        "src/assets"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "vessel sources",
+      "args": ""
+    }
+  },
+  "version": 1
+}
