@@ -7,11 +7,10 @@
   import NotFound from "./pages/NotFound.svelte";
 
   const routes = {
-    // Exact path (with /# in front of route)
+    // Exact path (with /# in front of route, e.g. .../#/about)
     "/": Intro,
     "/mychats": UserChatsOverview,
     "/about": About,
-    // "/spaces": Spaces, //e.g. URL: https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/#/spaces
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };
