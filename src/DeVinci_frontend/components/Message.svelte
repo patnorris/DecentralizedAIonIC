@@ -3,8 +3,8 @@
 </script>
 
 <div class="message">
-  <p><strong>{message.user}</strong></p>
-  <p>{message.text}</p>
+  <p><strong>{message.sender}</strong></p>
+  <p>{message.content}</p>
 </div>
 
 <style>

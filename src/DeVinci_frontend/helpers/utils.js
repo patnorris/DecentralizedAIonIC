@@ -5,7 +5,7 @@ export async function submitEmailSignUpForm(emailAddress, pageSubmittedFrom) {
     emailAddress: emailAddress,
     pageSubmittedFrom: pageSubmittedFrom,
   };
-  let result = await DeVinci_backend.submitSignUpForm(input);
+  let result = await DeVinci_backend.submit_signup_form(input);
   return result;
 }
 

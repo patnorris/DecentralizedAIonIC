@@ -1,62 +1,15 @@
 <script lang="ts">
-  import { push } from "svelte-spa-router";
-  import { onMount } from "svelte";
-  import { store } from "../store";
-  import Login from "../components/Login.svelte";
-  import Button from "../components/Button.svelte";
   import Topnav from "../components/Topnav.svelte";
   import Footer from "../components/Footer.svelte";
   import ChatInterface from "../components/ChatInterface.svelte";
-
+  import LoginMenu from "../components/LoginMenu.svelte";
 </script>
 
 <Topnav />
 
+<LoginMenu />
+
 <ChatInterface />
-
-<!-- <div class="py-7 items-center leading-8 text-center text-xl font-semibold">
-  <h3>Want to have your own Virtual Home?</h3>
-  <h3>Want to become part of the Open Metaverse Neighborhood?</h3>
-  <h3>Want to have your Personal Web Space as a 3D webpage?</h3>
-</div>
-
-<section id="login" class="py-7 space-y-6 items-center text-center bg-slate-100">
-  {#if !$store.isAuthed}
-    <Login />
-  {:else}
-    <h3 class="font-bold">You're Logged In</h3>
-    <div>Principal: {$store.principal}</div>
-    <div>AccountId: {$store.accountId}</div>
-    <Button on:click={() => store.disconnect()}>disconnect</Button>
-  {/if}
-</section>
-
-<section id="create" class="py-7 space-y-6 items-center text-center">
-  <h3 class="font-bold">Create a new Personal Web Space</h3>
-  {#if !$store.isAuthed}
-    <button type='button' id='createButton' disabled class="bg-slate-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed">Create Space</button>
-    <p id='createSubtext'>Log in to generate a 3D room (Your Space, Your Realm, Your Virtual Home) which you can edit afterwards. Fun fact: The Space is an NFT itself and will be sent to your wallet. This way you know it's truly yours!</p>
-  {:else}
-    <button type='button' id='createButton' on:click={() => push("#/create")} class="active-app-button bg-slate-500 text-white font-bold py-2 px-4 rounded">Create Space</button>
-    <p id='createSubtext'>Click and we'll generate a 3D room for you (Your Space, Your Realm, Your Virtual Home) which you can edit afterwards. Fun fact: The Space is an NFT itself and will be sent to your wallet. This way you know it's truly yours!</p>
-  {/if}
-</section>
-
-<section id="spaces" class="py-7 space-y-6 items-center text-center bg-slate-100">
-  <h3 class="font-bold">My Personal Web Spaces</h3>
-  {#if !$store.isAuthed}
-    <p id='spacesSubtext'>Log in to see which Spaces you own.</p>
-  {:else}
-    <p id='spacesSubtext'>Let's see which Spaces you own...</p>
-    {#if !hasLoadedSpaces}
-      <p hidden>{loadUserSpaces()}</p>
-    {:else}
-      <UserSpaces spaces={loadedUserSpaces} />
-    {/if}
-  {/if}
-</section>
-
-<div class='clearfix'></div> -->
 
 <Footer />
 

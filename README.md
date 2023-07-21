@@ -38,18 +38,7 @@ If you want to start a clean local IC replica (i.e. all canister state is erased
 
 # 3. Deploys your canisters to the replica and generates your candid interface
 Local:
-dfx deploy --argument "(
-  principal\"$(dfx identity get-principal)\",
-  record {
-    logo = record {
-      logo_type = \"image/png\";
-      data = \"\";
-    };
-    name = \"DeVinci\";
-    symbol = \"PWS\";
-    maxLimit = 65535;
-  }
-)" DeVinci_backend
+dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
 dfx deploy
 
 # Alternative 3. Run a local vite UI (note that this had issues communicating to the backend canister for some setups in the past)
@@ -66,18 +55,7 @@ dfx start --background
 Deploy to Mainnet (live IC):
 Ensure that all changes needed for Mainnet deployment have been made (e.g. define HOST in store.ts)
 
-dfx deploy --network ic --argument "(
-  principal\"$(dfx identity get-principal)\",
-  record {
-    logo = record {
-      logo_type = \"image/png\";
-      data = \"\";
-    };
-    name = \"DeVinci\";
-    symbol = \"PWS\";
-    maxLimit = 65535;
-  }
-)" DeVinci_backend
+dfx deploy --network ic --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
 dfx deploy --network ic
 
 In case there are authentication issues, you could try this command

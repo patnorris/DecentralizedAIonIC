@@ -1,10 +1,9 @@
 <script lang="ts">
   import * as webllm from "@mlc-ai/web-llm";
-  import { push } from "svelte-spa-router";
   import { store } from "../store";
-  import Login from "./Login.svelte";
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
+  import ChatHistory from "./ChatHistory.svelte";
 
   let chatModel;
   const workerPath = './worker.ts';
@@ -58,21 +57,34 @@
     const reply = await chatModel.generate(prompt, progressCallback);
     return reply;
   };
+
+// User can select between chats
+  let activeChat = null;
+
+  async function showNewChat() {
+    activeChat = null;
+    return;
+  };
 </script>
 
 <section id="chat-model-section" class="py-7 space-y-6 items-center text-center bg-slate-100">
   {#if chatModelDownloaded}
     <h3 id='chatModelStatusSubtext'>Success! You can chat with your AI Assistant now.</h3>
+    <Button id="newChatButton"
+        class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
+        on:click={showNewChat}>New Chat</Button>
+    <ChatHistory bind:selectedChat={activeChat} />
     <p id="generate-label"> </p>
-    <ChatBox modelCallbackFunction={getChatModelResponse} />
+    {#key activeChat}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={activeChat} />
+    {/key}
   {:else}
     {#if chatModelDownloadInProgress}
       <h3 id='chatModelStatusSubtext'>Downloading AI Assistant. This may take a moment...</h3>
       <p id="init-label"> </p>
     {:else}
       <h3 id='chatModelStatusSubtext'>Let's first download the AI Assistant for you. Please click on the button:</h3>
-      <Button
-        id="downloadChatModelButton"
+      <Button id="downloadChatModelButton"
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={loadChatModel}>Initialize</Button>
     {/if}

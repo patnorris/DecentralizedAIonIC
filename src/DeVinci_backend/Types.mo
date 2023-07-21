@@ -10,6 +10,42 @@ import List "mo:base/List";
 import AssocList "mo:base/AssocList";
 
 module {
+  public type Chat = {
+    id : Text;
+    messages : [Message];
+    owner : Principal;
+    creationTime : Nat64;
+    firstMessagePreview : Text;
+    chatTitle : Text;
+  };
+
+  public type ChatPreview = {
+    id : Text;
+    creationTime : Nat64;
+    firstMessagePreview : Text;
+    chatTitle : Text;
+  };
+
+  public type UpdateChatObject = {
+    id : Text;
+    chatTitle : Text;
+  };
+
+  public type Message = {
+    sender : Text;
+    content : Text;
+  };
+
+  public type ChatCreationResult = Result<Text, ApiError>;
+
+  public type ChatResult = Result<Chat, ApiError>;
+
+  public type ChatsResult = Result<[Chat], ApiError>;
+
+  public type ChatIdResult = Result<Text, ApiError>;
+
+  public type ChatsPreviewResult = Result<[ChatPreview], ApiError>;
+  
   public type Dip721NonFungibleToken = {
     logo: LogoResult;
     name: Text;
