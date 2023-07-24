@@ -2,6 +2,8 @@ import { writable } from "svelte/store";
 import type { Principal } from "@dfinity/principal";
 import type { HttpAgent, Identity } from "@dfinity/agent";
 import { StoicIdentity } from "ic-stoic-identity";
+import { AuthClient } from "@dfinity/auth-client";
+import UAParser from 'ua-parser-js';
 import {
   DeVinci_backend,
   createActor as createBackendCanisterActor,
@@ -20,8 +22,36 @@ export const HOST =
     ? "https://ic0.app"
     : "http://localhost:4943";
 
+// User's device and browser information
+export const webGpuSupportedBrowsers = "Google Chrome, Mircosoft Edge";
+const uaParser = new UAParser();
+const result = uaParser.getResult();
+export const device = result.device.model || 'Unknown Device';
+export let deviceType = result.device.type; // Will return 'mobile' for mobile devices, 'tablet' for tablets, and undefined for desktops
+if (!deviceType) {
+  deviceType = 'desktop';
+};
+export const browser = result.browser.name || 'Unknown Browser';
+// @ts-ignore
+export const supportsWebGpu = navigator.gpu !== undefined;
+
+export let chatModelGlobal = writable(null);
+export let chatModelDownloadedGlobal = writable(false);
+export let activeChatGlobal = writable(null);
+
+let authClient : AuthClient;
+const APPLICATION_NAME = "DeVinci";
+const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)
+//"https%3A%2F%2Fx6occ%2Dbiaaa%2Daaaai%2Dacqzq%2Dcai.icp0.io%2Ffavicon.ico"
+//"https%3A%2F%2Fx6occ-biaaa-aaaai-acqzq-cai.icp0.io%2FFutureWebInitiative%5Fimg.png";
+const AUTH_PATH = "/authenticate/?applicationName="+APPLICATION_NAME+"&applicationLogo="+APPLICATION_LOGO_URL+"#authorize";
+
+const days = BigInt(30);
+const hours = BigInt(24);
+const nanosecondsPerHour = BigInt(3600000000000);
+
 type State = {
-  isAuthed: "plug" | "stoic" | null;
+  isAuthed: "plug" | "stoic" | "nfid" | null;
   backendActor: typeof DeVinci_backend;
   principal: Principal;
   accountId: string;
@@ -48,6 +78,56 @@ export const createStore = ({
   host?: string;
 }) => {
   const { subscribe, update } = writable<State>(defaultState);
+  let globalState: State;
+  subscribe((value) => globalState = value);
+
+  const nfidConnect = async () => {
+    authClient = await AuthClient.create();
+    await authClient.login({
+      onSuccess: async () => {
+        const identity = await authClient.getIdentity();
+        initNfid(identity);
+      },
+      identityProvider: "https://nfid.one" + AUTH_PATH,
+        /* process.env.DFX_NETWORK === "ic"
+          ? "https://nfid.one" + AUTH_PATH
+          : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
+      // Maximum authorization expiration is 30 days
+      maxTimeToLive: days * hours * nanosecondsPerHour,
+      windowOpenerFeatures: 
+        `left=${window.screen.width / 2 - 525 / 2}, `+
+        `top=${window.screen.height / 2 - 705 / 2},` +
+        `toolbar=0,location=0,menubar=0,width=525,height=705`,
+      // See https://docs.nfid.one/multiple-domains
+      // for instructions on how to use derivationOrigin
+      // derivationOrigin: "https://<canister_id>.ic0.app"
+    });
+  };
+
+  const initNfid = async (identity: Identity) => {
+    const backendActor = createBackendCanisterActor(backendCanisterId, {
+      agentOptions: {
+        identity,
+        host: HOST,
+      },
+    });
+
+    if (!backendActor) {
+      console.warn("couldn't create backend actor");
+      return;
+    };
+
+    //let accounts = JSON.parse(await identity.accounts());
+
+    update((state) => ({
+      ...state,
+      backendActor,
+      principal: identity.getPrincipal(),
+      //accountId: accounts[0].address, // we take the default account associated with the identity
+      accountId: null,
+      isAuthed: "nfid",
+    }));
+  };
 
   const stoicConnect = () => {
     StoicIdentity.load().then(async (identity) => {
@@ -169,12 +249,33 @@ export const createStore = ({
   };
 
   const disconnect = async () => {
-    console.log("disconnected");
-    StoicIdentity.disconnect();
-    window.ic?.plug?.disconnect();
-    // wait for 500ms to ensure that the disconnection is complete
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log("plug status: ", await window.ic?.plug?.isConnected());
+    // Check isAuthed to determine which method to use to disconnect
+    if (globalState.isAuthed === "plug") {
+      try {
+        await window.ic?.plug?.disconnect();
+        // wait for 500ms to ensure that the disconnection is complete
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        const plugConnected = await window.ic?.plug?.isConnected();
+        if (plugConnected) {
+          console.log("plug disconnect failed, trying once more");
+          await window.ic?.plug?.disconnect();
+        };      
+      } catch (error) {
+        console.error("Plug disconnect error: ", error);      
+      };
+    } else if (globalState.isAuthed === "stoic") {
+      try {
+        StoicIdentity.disconnect();
+      } catch (error) {
+        console.error("StoicIdentity disconnect error: ", error);      
+      };
+    } else if (globalState.isAuthed === "nfid") {
+      try {
+        await authClient.logout();      
+      } catch (error) {
+        console.error("NFid disconnect error: ", error);       
+      };
+    };
 
     update((prevState) => {
       return {
@@ -188,6 +289,7 @@ export const createStore = ({
     update,
     plugConnect,
     stoicConnect,
+    nfidConnect,
     disconnect,
   };
 };

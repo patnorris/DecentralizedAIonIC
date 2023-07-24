@@ -14,10 +14,8 @@
       return;
     };
     if (!showChats) {
-      console.log("Retrieving chats...");
       chatsRetrievalInProgress = true;
       const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
-      console.log("Retrieved chats: ", retrievedChatsResponse);
       // @ts-ignore
       chats = retrievedChatsResponse.Ok;
       chatsRetrievalInProgress = false;
@@ -27,7 +25,6 @@
 
   const handleChatClick = (chat) => {
     selectedChat = chat;
-    console.log("Selected chat: " + selectedChat);
   };
 
   const handleMouseOver = (event) => {
@@ -49,7 +46,7 @@
         <!-- svelte-ignore a11y-invalid-attribute -->
         <a href="javascript:;" on:click={() => handleChatClick(chat)}>
           <span>{new Date(Number(chat.creationTime) / 1000000).toLocaleDateString()}</span>
-          <span>{chat.firstMessagePreview}</span>
+          <span>{chat.firstMessagePreview.substring(0, 30)}</span>
         </a>
       {/each}
     </div>

@@ -26,13 +26,11 @@
         chats = chats.filter(chat => chat.id !== id);
         // Persist to backend
         const chatDeletedResponse = await $store.backendActor.delete_chat(id);
-        console.log("Chat deleted: ", chatDeletedResponse);
     };
 
     const loadUserChats = async () => {
         chatsRetrievalInProgress = true;
         const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
-        console.log("Retrieved chats: ", retrievedChatsResponse);
         // @ts-ignore
         chats = retrievedChatsResponse.Ok;
         chatsRetrievalInProgress = false;
@@ -59,11 +57,11 @@
                     <div class="chat-info">
                         <div>{chat.chatTitle ? chat.chatTitle : "Untitled"}</div>
                         <div>{new Date(Number(chat.creationTime) / 1000000).toLocaleDateString()}</div>
-                        <div>{chat.firstMessagePreview}</div>
+                        <div>{chat.firstMessagePreview.substring(0, 100)}</div>
                     </div>
                     <div>
-                        <button on:click={() => editTitle(chat.id)}>Edit Title</button>
-                        <button on:click={() => deleteChat(chat.id)}>Delete</button>
+                        <button on:click={() => editTitle(chat.id)} class="bg-slate-300 text-slate-900 hover:bg-slate-500 hover:text-slate-900 p-1 m-px">Edit Title</button>
+                        <button on:click={() => deleteChat(chat.id)} class="bg-slate-300 text-slate-900 hover:bg-slate-500 hover:text-slate-900 p-1 m-px">Delete</button>
                     </div>
                 </div>
             {/each}

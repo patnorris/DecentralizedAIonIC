@@ -1,15 +1,15 @@
 <script lang="ts">
   import * as webllm from "@mlc-ai/web-llm";
-  import { store } from "../store";
+  import { chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal } from "../store";
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
 
-  let chatModel;
   const workerPath = './worker.ts';
 
   let chatModelDownloadInProgress = false;
   let chatModelDownloaded = false;
+  chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   function setLabel(id: string, text: string) {
     const label = document.getElementById(id);
@@ -20,6 +20,12 @@
   }
 
   async function loadChatModel() {
+    if (chatModelDownloadInProgress) {
+      return;
+    };
+    if (chatModelDownloaded === true && $chatModelGlobal) {
+      return;
+    };
     //console.log("Loading chat model...");
     chatModelDownloadInProgress = true;
     if (process.env.NODE_ENV !== "development") {
@@ -30,22 +36,22 @@
           new URL(workerPath, import.meta.url),
           {type: 'module'}
         )); */
-        chatModel = new webllm.ChatModule();
+        $chatModelGlobal = new webllm.ChatModule();
       } catch (error) {
         console.error("Error loading web worker: ", error);
-        chatModel = new webllm.ChatModule();
+        $chatModelGlobal = new webllm.ChatModule();
       }      
     } else {
       //console.log("Using webllm");
-      chatModel = new webllm.ChatModule();
+      $chatModelGlobal = new webllm.ChatModule();
     }
 
-    chatModel.setInitProgressCallback((report: webllm.InitProgressReport) => {
+    $chatModelGlobal.setInitProgressCallback((report: webllm.InitProgressReport) => {
       setLabel("init-label", report.text);
     });
 
-    await chatModel.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
-    chatModelDownloaded = true;
+    await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
+    $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
 
@@ -54,15 +60,13 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    const reply = await chatModel.generate(prompt, progressCallback);
+    const reply = await $chatModelGlobal.generate(prompt, progressCallback);
     return reply;
   };
 
-// User can select between chats
-  let activeChat = null;
-
+// User can select between chats (global variable is kept)
   async function showNewChat() {
-    activeChat = null;
+    $activeChatGlobal = null;
     return;
   };
 </script>
@@ -73,10 +77,10 @@
     <Button id="newChatButton"
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={showNewChat}>New Chat</Button>
-    <ChatHistory bind:selectedChat={activeChat} />
+    <ChatHistory bind:selectedChat={$activeChatGlobal} />
     <p id="generate-label"> </p>
-    {#key activeChat}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
-      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={activeChat} />
+    {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
     {/key}
   {:else}
     {#if chatModelDownloadInProgress}

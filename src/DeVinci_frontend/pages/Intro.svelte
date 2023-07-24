@@ -1,13 +1,23 @@
 <script lang="ts">
+  import { deviceType, supportsWebGpu } from "../store";
+
   import Topnav from "../components/Topnav.svelte";
   import Footer from "../components/Footer.svelte";
   import ChatInterface from "../components/ChatInterface.svelte";
   import LoginMenu from "../components/LoginMenu.svelte";
+  import UnsupportedDeviceBanner from "../components/UnsupportedDeviceBanner.svelte";
+  import UnsupportedBrowserBanner from "../components/UnsupportedBrowserBanner.svelte";
 </script>
 
 <Topnav />
 
 <LoginMenu />
+
+{#if deviceType !== 'desktop'}
+  <UnsupportedDeviceBanner />
+{:else if !supportsWebGpu}
+  <UnsupportedBrowserBanner />
+{/if}
 
 <ChatInterface />
 

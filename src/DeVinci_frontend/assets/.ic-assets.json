@@ -1,0 +1,23 @@
+[
+  {
+    "match": "**/*",
+    "allow_raw_access": true,
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "X-Frame-Options": "ALLOWALL"
+    },
+    "ignore": false
+  },
+  {
+    "match": ".well-known",
+    "ignore": false
+  },
+  {
+    "match": ".well-known/ii-alternative-origins",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    },
+    "ignore": false
+  }
+]
