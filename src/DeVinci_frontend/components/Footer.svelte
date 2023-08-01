@@ -25,7 +25,7 @@
       <h2>{message}</h2>
     {/if}
   </div>
-  <p>Powered by <a href='' target='_blank' rel="noreferrer" class='underline'>DeVinci AI Assistant</a>, part of <a href='https://u4375-ryaaa-aaaai-acqsq-cai.icp0.io/' target='_blank' rel="noreferrer" class='underline'>Future Web Initiative</a> and hosted on <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a></p>
+  <p>Powered by <a href='https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/#/about' target='_blank' rel="noreferrer" class='underline'>DeVinci AI Assistant</a>, part of <a href='https://u4375-ryaaa-aaaai-acqsq-cai.icp0.io/' target='_blank' rel="noreferrer" class='underline'>Future Web Initiative</a> and hosted on <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a></p>
 </footer>
 
 <style>  
