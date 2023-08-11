@@ -1,4 +1,22 @@
 import { DeVinci_backend } from "canisters/DeVinci_backend";
+import { encryptionServiceGlobal } from "../store";
+
+// Initializing the encryption service may take a moment (2023-08-11: ca. 18 sec after login), so we need to wait for it to be ready before we can use it.
+let cryptoService;
+encryptionServiceGlobal.subscribe((value) => cryptoService = value);
+
+export async function isEncryptionServiceInit(counter=0, limit=30) {
+  if (cryptoService) {
+    return true;
+  } else {
+    if (counter >= limit) {
+      return false;
+    } else {
+      await new Promise(r => setTimeout(r, 1000));
+      return isEncryptionServiceInit(counter+1, limit);
+    };
+  };
+};
 
 export async function submitEmailSignUpForm(emailAddress, pageSubmittedFrom) {
   const input = {

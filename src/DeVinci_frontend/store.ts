@@ -11,6 +11,9 @@ import {
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
 
+import init from 'ic-vetkd-utils';
+import { CryptoService } from './helpers/encryption_service';
+
 //__________Local vs Mainnet Development____________
 /* export const HOST =
   backendCanisterId === "vee64-zyaaa-aaaai-acpta-cai"
@@ -35,10 +38,17 @@ export const browser = result.browser.name || 'Unknown Browser';
 // @ts-ignore
 export const supportsWebGpu = navigator.gpu !== undefined;
 
+// Chat model
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
 
+// vetKeys integration
+export const encryptionEnabledGlobal = writable(true); // flag to turn off/on encryption via vetKeys for all users
+export let encryptionEnabledByUserGlobal = writable(true); // setting for user to turn off/on encryption via vetKeys for themselves
+export let encryptionServiceGlobal = writable(null); // encryption service for the user
+
+// For authentication with NFid
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
 const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)
@@ -80,6 +90,30 @@ export const createStore = ({
   const { subscribe, update } = writable<State>(defaultState);
   let globalState: State;
   subscribe((value) => globalState = value);
+  let cryptoService: CryptoService;
+
+  const initEncryption = async (backendActor) => {
+    if (encryptionEnabledGlobal) {
+      // Initialize encryption files
+      // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/main.ts
+      // Once the wasm is initialized in this way, i.e., with the defaultExport of the respective .js file,
+      // the (non-defaultExport-ed) methods of the .js file can be imported and used.
+      // See also https://github.com/rollup/plugins/tree/master/packages/wasm#using-with-wasm-bindgen-and-wasm-pack
+      init().then(async () => {
+        // Initialize encryption service
+        // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/store/auth.ts
+        cryptoService = new CryptoService(backendActor);
+        await cryptoService
+          .init()
+          .catch((e) => {
+            console.error('Could not initialize encryption service', e);
+            //showError(e, 'Could not initialize crypto service');
+          });
+        encryptionServiceGlobal.set(cryptoService);
+        encryptionServiceGlobal.subscribe((value) => cryptoService = value);
+      });
+    };
+  };
 
   const nfidConnect = async () => {
     authClient = await AuthClient.create();
@@ -117,6 +151,9 @@ export const createStore = ({
       return;
     };
 
+    // Initialize encryption
+    initEncryption(backendActor);
+
     //let accounts = JSON.parse(await identity.accounts());
 
     update((state) => ({
@@ -153,6 +190,9 @@ export const createStore = ({
       console.warn("couldn't create backend actor");
       return;
     };
+
+    // Initialize encryption
+    initEncryption(backendActor);
 
     // the stoic agent provides an `accounts()` method that returns
     // accounts associated with the principal
@@ -216,7 +256,7 @@ export const createStore = ({
     }
 
     // Fetch root key for certificate validation during development
-    if (process.env.DFX_NETWORK !== "ic") {
+    if (process.env.DFX_NETWORK === "local") {
       window.ic.plug.agent.fetchRootKey().catch((err) => {
         console.warn(
           "Unable to fetch root key. Check to ensure that your local replica is running",
@@ -235,6 +275,9 @@ export const createStore = ({
       return;
     };
 
+    // Initialize encryption
+    initEncryption(backendActor);
+
     const principal = await window.ic.plug.agent.getPrincipal();
 
     update((state) => ({
@@ -249,6 +292,11 @@ export const createStore = ({
   };
 
   const disconnect = async () => {
+    // Logout encryption service
+    if (cryptoService) {
+      cryptoService.logout();
+      encryptionServiceGlobal.set(cryptoService);
+    };
     // Check isAuthed to determine which method to use to disconnect
     if (globalState.isAuthed === "plug") {
       try {

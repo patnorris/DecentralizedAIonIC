@@ -38,14 +38,20 @@ If you want to start a clean local IC replica (i.e. all canister state is erased
 
 # 3. Deploys your canisters to the replica and generates your candid interface
 Local:
+dfx deploy vetkd_system_api
 dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
-dfx deploy
+dfx deploy DeVinci_frontend
 
 # Alternative 3. Run a local vite UI (note that this had issues communicating to the backend canister for some setups in the past)
 npm run vite
 --> runs on port 3000
 access routes like "http://172.30.141.44:3000/#/testroom" (same as on Mainnet)
 hot reloads with every UI change
+
+# Development Canisters on Mainnet
+dfx deploy --network development vetkd_system_api
+dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
+dfx deploy --network development DeVinci_frontend
 
 # Production Deployment
 npm install
@@ -55,8 +61,9 @@ dfx start --background
 Deploy to Mainnet (live IC):
 Ensure that all changes needed for Mainnet deployment have been made (e.g. define HOST in store.ts)
 
+dfx deploy --network ic vetkd_system_api
 dfx deploy --network ic --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
-dfx deploy --network ic
+dfx deploy --network ic DeVinci_frontend
 
 In case there are authentication issues, you could try this command
 Note that only authorized identities which are set up as canister controllers may deploy the production canisters

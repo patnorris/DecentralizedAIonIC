@@ -1,12 +1,21 @@
 {
   "canisters": {
+    "vetkd_system_api": {
+      "candid": "vetkd_system_api/vetkd_system_api.did",
+      "type": "custom",
+      "wasm": "vetkd_system_api/vetkd_system_api.wasm"
+    },
     "DeVinci_backend": {
+      "dependencies": [
+        "vetkd_system_api"
+      ],
       "main": "src/DeVinci_backend/main.mo",
       "type": "motoko"
     },
     "DeVinci_frontend": {
       "dependencies": [
-        "DeVinci_backend"
+        "DeVinci_backend",
+        "vetkd_system_api"
       ],
       "frontend": {
         "entrypoint": "dist/index.html"
@@ -22,6 +31,14 @@
     "build": {
       "packtool": "vessel sources",
       "args": ""
+    }
+  },
+  "networks": {
+    "development": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
     }
   },
   "version": 1
