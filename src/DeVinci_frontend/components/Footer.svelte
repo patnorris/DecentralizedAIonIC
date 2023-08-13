@@ -5,6 +5,7 @@
   let message = "";
   const submitForm = async (event) => {
     event.preventDefault();
+    // @ts-ignore
     const email = document.getElementById('hero-email').value;
     message = await submitEmailSignUpForm(email, $location);
   };

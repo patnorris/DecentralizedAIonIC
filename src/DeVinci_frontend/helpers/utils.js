@@ -1,11 +1,14 @@
-import { DeVinci_backend } from "canisters/DeVinci_backend";
+import { store } from "../store";
+
+let storeState;
+store.subscribe((value) => storeState = value);
 
 export async function submitEmailSignUpForm(emailAddress, pageSubmittedFrom) {
   const input = {
     emailAddress: emailAddress,
     pageSubmittedFrom: pageSubmittedFrom,
   };
-  let result = await DeVinci_backend.submit_signup_form(input);
+  let result = await storeState.backendActor.submit_signup_form(input);
   return result;
 }
 
