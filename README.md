@@ -63,6 +63,16 @@ Note that only authorized identities which are set up as canister controllers ma
 
 dfx deploy --network ic --wallet "$(dfx identity --network ic get-wallet)"
 
+# Get and delete Email Subscribers
+dfx canister call DeVinci_backend get_email_subscribers
+dfx canister call DeVinci_backend delete_email_subscriber 'j@g.com'
+
+dfx canister call DeVinci_backend get_email_subscribers --network development
+dfx canister call DeVinci_backend delete_email_subscriber 'j@g.com' --network development
+
+dfx canister call DeVinci_backend get_email_subscribers --network ic
+dfx canister call DeVinci_backend delete_email_subscriber 'j@g.com' --network ic
+
 # Cycles for Production Canisters
 Fund wallet with cycles (from ICP): https://medium.com/dfinity/internet-computer-basics-part-3-funding-a-cycles-wallet-a724efebd111
 
