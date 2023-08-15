@@ -26,6 +26,7 @@
       const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
       // @ts-ignore
       const retrievedChats : ChatPreview[] = retrievedChatsResponse.Ok;
+      const chatsToDisplay = [];
       for (let i = 0; i < retrievedChats.length; i++) {
         let firstMessagePreviewString;
         if (retrievedChats[i].firstMessagePreview.encrypted) {
@@ -41,13 +42,14 @@
           // Don't decrypt
           firstMessagePreviewString = retrievedChats[i].firstMessagePreview.firstMessagePreview;
         };
-        chats.push({
+        chatsToDisplay.push({
           id: retrievedChats[i].id,
           creationTime: retrievedChats[i].creationTime,
           firstMessagePreview: firstMessagePreviewString,
           chatTitle: retrievedChats[i].chatTitle,
         });
       };
+      chats = chatsToDisplay;
       chatsRetrievalInProgress = false;
     };
     showChats = !showChats;    
