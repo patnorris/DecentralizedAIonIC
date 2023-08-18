@@ -50,7 +50,8 @@
       setLabel("init-label", report.text);
     });
 
-    await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
+    //await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
+    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1");
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
