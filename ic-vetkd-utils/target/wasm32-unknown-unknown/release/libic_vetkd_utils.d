@@ -1,0 +1,1 @@
+/home/patrick/InternetComputer/DeVinci/DeVinciSvelte/ic-vetkd-utils/target/wasm32-unknown-unknown/release/libic_vetkd_utils.rlib: /home/patrick/InternetComputer/DeVinci/DeVinciSvelte/ic-vetkd-utils/src/lib.rs /home/patrick/InternetComputer/DeVinci/DeVinciSvelte/ic-vetkd-utils/src/ro.rs

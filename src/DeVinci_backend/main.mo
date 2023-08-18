@@ -27,8 +27,7 @@ import Stoic "./EXT/Stoic";
 import Protocol "./Protocol";
 import Testable "mo:matchers/Testable";
 import Blob "mo:base/Blob";
-
-
+import Hex "Hex";
 
 shared actor class DeVinciBackend(custodian: Principal) = Self {
   stable var custodians = List.make<Principal>(custodian);
@@ -150,7 +149,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     return chatId;
   };
 
-  public shared({ caller }) func create_chat(messages : [Types.Message]) : async Types.ChatCreationResult {
+  public shared({ caller }) func create_chat(messagesObject : Types.MessagesObject, firstMessagePreviewObject : Types.FirstMessagePreviewObject) : async Types.ChatCreationResult {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
@@ -158,17 +157,12 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 
     let newId : Text = await Utils.newRandomUniqueId();
 
-    var firstMessagePreview : Text = "";
-    if (messages.size() > 0) {
-      firstMessagePreview := messages[0].content;
-    };
-
     let newChat : Types.Chat = {
       id : Text = newId;
-      messages : [Types.Message] = messages;
+      messages : Types.MessagesObject = messagesObject;
       owner : Principal = caller;
       creationTime : Nat64 = Nat64.fromNat(Int.abs(Time.now()));
-      firstMessagePreview : Text = firstMessagePreview;
+      firstMessagePreview : Types.FirstMessagePreviewObject = firstMessagePreviewObject;
       chatTitle : Text = "";
     };
 
@@ -190,7 +184,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
       return {
         id : Text = chat.id;
         creationTime : Nat64 = chat.creationTime;
-        firstMessagePreview : Text = chat.firstMessagePreview;
+        firstMessagePreview : Types.FirstMessagePreviewObject = chat.firstMessagePreview;
         chatTitle : Text = chat.chatTitle;
       };
     });
@@ -238,7 +232,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };
   };
 
-  public shared({ caller }) func update_chat_messages(chatId : Text, updatedMessages : [Types.Message]) : async Types.ChatIdResult {
+  public shared({ caller }) func update_chat_messages(chatId : Text, updatedMessagesObject : Types.MessagesObject) : async Types.ChatIdResult {
     switch (getChat(chatId)) {
       case (null) {
         return #Err(#InvalidTokenId);
@@ -251,7 +245,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 
         let updatedChat : Types.Chat = {
           id = chat.id;
-          messages = updatedMessages;
+          messages = updatedMessagesObject;
           owner = chat.owner;
           creationTime = chat.creationTime;
           firstMessagePreview = chat.firstMessagePreview;
@@ -336,6 +330,54 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };
     return false;
   };
+
+// vetKeys integration
+  // copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/encrypted_notes_motoko/main.mo
+  // Only the ecdsa methods in the IC management canister is required here.
+    type VETKD_SYSTEM_API = actor {
+        vetkd_public_key : ({
+            canister_id : ?Principal;
+            derivation_path : [Blob];
+            key_id : { curve: { #bls12_381; } ; name: Text };
+        }) -> async ({ public_key : Blob; });
+        vetkd_encrypted_key : ({
+            public_key_derivation_path : [Blob];
+            derivation_id : Blob;
+            key_id : { curve: { #bls12_381; } ; name: Text };
+            encryption_public_key : Blob;
+        }) -> async ({ encrypted_key : Blob });
+    };
+
+    let vetkd_system_api : VETKD_SYSTEM_API = actor("zfito-7qaaa-aaaak-qcjtq-cai");
+
+    public shared({ caller }) func app_vetkd_public_key(derivation_path: [Blob]): async Text {
+        let { public_key } = await vetkd_system_api.vetkd_public_key({
+            canister_id = null;
+            derivation_path;
+            key_id = { curve = #bls12_381; name = "test_key_1" };
+        });
+        Hex.encode(Blob.toArray(public_key))
+    };
+
+    public shared({ caller }) func symmetric_key_verification_key(): async Text {
+        let { public_key } = await vetkd_system_api.vetkd_public_key({
+            canister_id = null;
+            derivation_path = Array.make(Text.encodeUtf8("symmetric_key"));
+            key_id = { curve = #bls12_381; name = "test_key_1" };
+        });
+        Hex.encode(Blob.toArray(public_key))
+    };
+
+    public shared ({ caller }) func encrypted_symmetric_key_for_caller(encryption_public_key : Blob) : async Text {
+        let caller_blob = Principal.toBlob(caller);
+        let { encrypted_key } = await vetkd_system_api.vetkd_encrypted_key({
+            derivation_id = Principal.toBlob(caller);
+            public_key_derivation_path = Array.make(Text.encodeUtf8("symmetric_key"));
+            key_id = { curve = #bls12_381; name = "test_key_1" };
+            encryption_public_key;
+        });
+        Hex.encode(Blob.toArray(encrypted_key));
+    };
 
 // HTTP interface
   /* public query func http_request(request : HTTP.Request) : async HTTP.Response {

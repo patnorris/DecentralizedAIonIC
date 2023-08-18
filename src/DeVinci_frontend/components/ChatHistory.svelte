@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { store } from "../store";
+  import { store, encryptionServiceGlobal } from "../store";
+
+  import type { ChatPreview } from "../../declarations/DeVinci_backend/DeVinci_backend.did";
+  import type { CryptoService } from '../helpers/encryption_service';
+
+  import { isEncryptionServiceInit } from "../helpers/utils";
 
   export let selectedChat;
 
@@ -9,6 +14,9 @@
   
   let showChats = false;
 
+  let cryptoService: CryptoService;
+  encryptionServiceGlobal.subscribe((value) => cryptoService = value);
+
   const handleClick = async () => {
     if (chatsRetrievalInProgress) {
       return;
@@ -17,7 +25,31 @@
       chatsRetrievalInProgress = true;
       const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
       // @ts-ignore
-      chats = retrievedChatsResponse.Ok;
+      const retrievedChats : ChatPreview[] = retrievedChatsResponse.Ok;
+      const chatsToDisplay = [];
+      for (let i = 0; i < retrievedChats.length; i++) {
+        let firstMessagePreviewString;
+        if (retrievedChats[i].firstMessagePreview.encrypted) {
+          // Decrypt
+          // Ensure encryption service is initialized before usage
+          const encryptionServiceIsInit = await isEncryptionServiceInit();
+          if (!encryptionServiceIsInit) {
+            console.error("Error: Encryption service not initialized.");
+            return;
+          };
+          firstMessagePreviewString = await cryptoService.decrypt(retrievedChats[i].firstMessagePreview.firstMessagePreview);
+        } else {
+          // Don't decrypt
+          firstMessagePreviewString = retrievedChats[i].firstMessagePreview.firstMessagePreview;
+        };
+        chatsToDisplay.push({
+          id: retrievedChats[i].id,
+          creationTime: retrievedChats[i].creationTime,
+          firstMessagePreview: firstMessagePreviewString,
+          chatTitle: retrievedChats[i].chatTitle,
+        });
+      };
+      chats = chatsToDisplay;
       chatsRetrievalInProgress = false;
     };
     showChats = !showChats;    
