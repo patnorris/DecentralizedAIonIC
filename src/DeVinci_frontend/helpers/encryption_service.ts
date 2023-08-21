@@ -23,19 +23,22 @@ export class CryptoService {
   public async init() {
     // Showcase that the integration of the vetkd user library works
     const seed = window.crypto.getRandomValues(new Uint8Array(32));
-    const tsk = new vetkd.TransportSecretKey(seed);
+    const tsk = new vetkd.TransportSecretKey(seed); 
+    const ek_bytes_hex_promise = this.actor.encrypted_symmetric_key_for_caller(tsk.public_key());
+    const pk_bytes_hex_promise = this.actor.symmetric_key_verification_key(); 
+    const principal_promise = agent.Actor.agentOf(this.actor).getPrincipal();
+    const promiseResponses = await Promise.all([ek_bytes_hex_promise, pk_bytes_hex_promise, principal_promise]);
 
-    const ek_bytes_hex = await this.actor.encrypted_symmetric_key_for_caller(tsk.public_key());
-    const pk_bytes_hex = await this.actor.symmetric_key_verification_key();
-    const principal = await agent.Actor.agentOf(this.actor).getPrincipal();
-
+    const ek_bytes_hex = promiseResponses[0];
+    const pk_bytes_hex = promiseResponses[1];
+    const principal = promiseResponses[2];
     const aes_256_gcm_key_raw = tsk.decrypt_and_hash(
       hex_decode(ek_bytes_hex),
       hex_decode(pk_bytes_hex),
       principal.toUint8Array(),
       32,
       new TextEncoder().encode("aes-256-gcm")
-    );
+    ); 
     this.vetAesGcmKey = await window.crypto.subtle.importKey("raw", aes_256_gcm_key_raw, "AES-GCM", false, ["encrypt", "decrypt"]);
   }
 

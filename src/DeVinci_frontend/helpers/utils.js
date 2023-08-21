@@ -1,5 +1,7 @@
-import { DeVinci_backend } from "canisters/DeVinci_backend";
-import { encryptionServiceGlobal } from "../store";
+import { store, encryptionServiceGlobal } from "../store";
+
+let storeState;
+store.subscribe((value) => storeState = value);
 
 // Initializing the encryption service may take a moment (2023-08-11: ca. 18 sec after login), so we need to wait for it to be ready before we can use it.
 let cryptoService;
@@ -23,7 +25,7 @@ export async function submitEmailSignUpForm(emailAddress, pageSubmittedFrom) {
     emailAddress: emailAddress,
     pageSubmittedFrom: pageSubmittedFrom,
   };
-  let result = await DeVinci_backend.submit_signup_form(input);
+  let result = await storeState.backendActor.submit_signup_form(input);
   return result;
 }
 

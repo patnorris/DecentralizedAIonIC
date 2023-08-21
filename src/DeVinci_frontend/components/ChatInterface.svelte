@@ -60,7 +60,13 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    const reply = await $chatModelGlobal.generate(prompt, progressCallback);
+    let reply = "";
+    try {
+      reply = await $chatModelGlobal.generate(prompt, progressCallback);      
+    } catch (error) {
+      console.error("Error getting response from model: ", error);
+      reply = "There was an error unfortunately. Please try again.";      
+    };
     return reply;
   };
 
