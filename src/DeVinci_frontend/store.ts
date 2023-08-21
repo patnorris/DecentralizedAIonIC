@@ -48,9 +48,7 @@ export const encryptionEnabledGlobal = writable(true); // flag to turn off/on en
 export let encryptionEnabledByUserGlobal = writable(true); // setting for user to turn off/on encryption via vetKeys for themselves
 export let encryptionServiceGlobal = writable(null); // encryption service for the user
 let icVetkdUtilsWasmInitialized = false; // flag to ensure that ic-vetkd-utils is initialized before creating the encryption service
-console.time('Execution Time initwasm'); 
 init().then(() => {
-  console.timeEnd('Execution Time initwasm');
   icVetkdUtilsWasmInitialized = true;
 });
 
@@ -108,19 +106,14 @@ export const createStore = ({
       // See also https://github.com/rollup/plugins/tree/master/packages/wasm#using-with-wasm-bindgen-and-wasm-pack
       if (icVetkdUtilsWasmInitialized) {
         // Initialize encryption service
-        // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/store/auth.ts
-        console.time('Execution Time CryptoService');  
-        cryptoService = new CryptoService(backendActor);
-        console.timeEnd('Execution Time CryptoService');
-
-        console.time('Execution Time initcs');  
+        // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/store/auth.ts 
+        cryptoService = new CryptoService(backendActor); 
         await cryptoService
           .init()
           .catch((e) => {
             console.error('Could not initialize encryption service', e);
             //showError(e, 'Could not initialize crypto service');
           });
-        console.timeEnd('Execution Time initcs');
 
         encryptionServiceGlobal.set(cryptoService);
         encryptionServiceGlobal.subscribe((value) => cryptoService = value);
