@@ -31,7 +31,7 @@
     "@dfinity/candid": "0.15.1",
     "@dfinity/principal": "0.15.1",
     "svelte-spa-router": "^3.3.0",
-    "@mlc-ai/web-llm": "^0.2.4",
+    "@mlc-ai/web-llm": "^0.2.6",
     "ua-parser-js": "^1.0.35"
   },
   "devDependencies": {

@@ -5,6 +5,8 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
 
+  import { modelConfig } from "../helpers/gh-config";
+
   const workerPath = './worker.ts';
 
   let chatModelDownloadInProgress = false;
@@ -50,8 +52,9 @@
       setLabel("init-label", report.text);
     });
 
-    //await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
-    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1");
+    await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
+    //await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
+    //await $chatModelGlobal.reload("vicuna-v1-7b-q4f32_0");
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
@@ -61,7 +64,15 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    const reply = await $chatModelGlobal.generate(prompt, progressCallback);
+    console.log("Debug Getting chat model response...");
+    let reply = "";
+    try {
+      reply = await $chatModelGlobal.generate(prompt, progressCallback);      
+    } catch (error) {
+      console.error("Error getting response from model: ", error);
+      reply = "There was an error unfortunately. Please try again.";      
+    };
+    console.log("Debug Got chat model response: ", reply);
     return reply;
   };
 
