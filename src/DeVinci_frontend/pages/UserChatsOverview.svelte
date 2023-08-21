@@ -38,6 +38,7 @@
     const loadUserChats = async () => {
         chatsRetrievalInProgress = true;
         const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
+        chatsRetrievalInProgress = false;
         // @ts-ignore
         const retrievedChats : ChatPreview[] = retrievedChatsResponse.Ok;
         for (let i = 0; i < retrievedChats.length; i++) {
@@ -62,7 +63,6 @@
                 chatTitle: retrievedChats[i].chatTitle,
             });
         };
-        chatsRetrievalInProgress = false;
         hasLoadedChats = true;
     };
 </script>
@@ -77,8 +77,12 @@
       <p id='chatsSubtext'>Please login to view Your Chats.</p>
     {:else}
       {#if !hasLoadedChats}
-        <p id='chatsSubtext'>Retrieving Your Chats...</p>
         <p hidden>{loadUserChats()}</p>
+        {#if chatsRetrievalInProgress}
+            <p id='chatsSubtext'>Retrieving Your Chats...</p>
+        {:else}
+            <p id='chatsSubtext'>Decrypting Your Chats...</p>
+        {/if}
       {:else}
         <div>
             {#each chats as chat (chat.id)}

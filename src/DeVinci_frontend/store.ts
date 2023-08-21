@@ -47,6 +47,13 @@ export let activeChatGlobal = writable(null);
 export const encryptionEnabledGlobal = writable(true); // flag to turn off/on encryption via vetKeys for all users
 export let encryptionEnabledByUserGlobal = writable(true); // setting for user to turn off/on encryption via vetKeys for themselves
 export let encryptionServiceGlobal = writable(null); // encryption service for the user
+let icVetkdUtilsWasmInitialized = false; // flag to ensure that ic-vetkd-utils is initialized before creating the encryption service
+console.time('Execution Time initwasm'); 
+init().then(() => {
+  console.timeEnd('Execution Time initwasm');
+  icVetkdUtilsWasmInitialized = true;
+});
+
 
 // For authentication with NFid
 let authClient : AuthClient;
@@ -99,19 +106,30 @@ export const createStore = ({
       // Once the wasm is initialized in this way, i.e., with the defaultExport of the respective .js file,
       // the (non-defaultExport-ed) methods of the .js file can be imported and used.
       // See also https://github.com/rollup/plugins/tree/master/packages/wasm#using-with-wasm-bindgen-and-wasm-pack
-      init().then(async () => {
+      if (icVetkdUtilsWasmInitialized) {
         // Initialize encryption service
         // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/store/auth.ts
+        console.time('Execution Time CryptoService');  
         cryptoService = new CryptoService(backendActor);
+        console.timeEnd('Execution Time CryptoService');
+
+        console.time('Execution Time initcs');  
         await cryptoService
           .init()
           .catch((e) => {
             console.error('Could not initialize encryption service', e);
             //showError(e, 'Could not initialize crypto service');
           });
+        console.timeEnd('Execution Time initcs');
+
         encryptionServiceGlobal.set(cryptoService);
         encryptionServiceGlobal.subscribe((value) => cryptoService = value);
-      });
+      } else {
+        console.error("ic-vetkd-utils wasm not initialized");
+        return setTimeout(() => {
+          initEncryption(backendActor);
+        }, 500);
+      };
     };
   };
 
