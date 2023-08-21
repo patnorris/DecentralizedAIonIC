@@ -5,6 +5,8 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
 
+  import { modelConfig } from "../helpers/gh-config";
+
   const workerPath = './worker.ts';
 
   let chatModelDownloadInProgress = false;
@@ -51,7 +53,7 @@
     });
 
     //await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
-    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1");
+    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
