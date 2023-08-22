@@ -52,8 +52,8 @@
       setLabel("init-label", report.text);
     });
 
-    await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
-    //await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
+    //await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
+    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
     //await $chatModelGlobal.reload("vicuna-v1-7b-q4f32_0");
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
