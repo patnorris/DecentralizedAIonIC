@@ -20,7 +20,9 @@
     "build": "vite build",
     "serve": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "stop": "dfx stop"
+    "stop": "dfx stop",
+    "wasm": "wasm-pack build ./ic-vetkd-utils --target web",
+    "wasm-vite": "npm run wasm && npm run vite"
   },
   "dependencies": {
     "@dfinity/agent": "0.15.1",
@@ -29,7 +31,7 @@
     "@dfinity/candid": "0.15.1",
     "@dfinity/principal": "0.15.1",
     "svelte-spa-router": "^3.3.0",
-    "@mlc-ai/web-llm": "^0.2.4",
+    "@mlc-ai/web-llm": "^0.2.6",
     "ua-parser-js": "^1.0.35"
   },
   "devDependencies": {
@@ -53,7 +55,8 @@
     "tslib": "^2.4.1",
     "typescript": "^4.9.4",
     "util": "0.12.5",
-    "vite": "^4.0.4"
+    "vite": "^4.0.4",
+    "vite-plugin-wasm-pack": "^0.1.12"
   },
   "engines": {
     "node": "^12 || ^14 || ^16 || ^18"

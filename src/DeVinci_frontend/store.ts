@@ -12,6 +12,9 @@ import {
 } from "../declarations/DeVinci_backend";
 import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
+import init from 'ic-vetkd-utils';
+import { CryptoService } from './helpers/encryption_service';
+
 //__________Local vs Mainnet Development____________
 /* export const HOST =
   backendCanisterId === "vee64-zyaaa-aaaai-acpta-cai"
@@ -36,11 +39,25 @@ export const browser = result.browser.name || 'Unknown Browser';
 // @ts-ignore
 export const supportsWebGpu = navigator.gpu !== undefined;
 
+// Chat model
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
 export let selectedAiModelId = writable(getDefaultAiModelId());
 
+// vetKeys integration
+export const encryptionEnabledGlobal = writable(true); // flag to turn off/on encryption via vetKeys for all users
+export let encryptionEnabledByUserGlobal = writable(true); // setting for user to turn off/on encryption via vetKeys for themselves
+export let encryptionServiceGlobal = writable(null); // encryption service for the user
+let icVetkdUtilsWasmInitialized = false; // flag to ensure that ic-vetkd-utils is initialized before creating the encryption service
+console.time('Execution Time initwasm'); 
+init().then(() => {
+  console.timeEnd('Execution Time initwasm');
+  icVetkdUtilsWasmInitialized = true;
+});
+
+
+// For authentication with NFid
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
 const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)
@@ -82,6 +99,41 @@ export const createStore = ({
   const { subscribe, update } = writable<State>(defaultState);
   let globalState: State;
   subscribe((value) => globalState = value);
+  let cryptoService: CryptoService;
+
+  const initEncryption = async (backendActor) => {
+    if (encryptionEnabledGlobal) {
+      // Initialize encryption files
+      // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/main.ts
+      // Once the wasm is initialized in this way, i.e., with the defaultExport of the respective .js file,
+      // the (non-defaultExport-ed) methods of the .js file can be imported and used.
+      // See also https://github.com/rollup/plugins/tree/master/packages/wasm#using-with-wasm-bindgen-and-wasm-pack
+      if (icVetkdUtilsWasmInitialized) {
+        // Initialize encryption service
+        // Copied from https://github.com/dfinity/examples/blob/master/motoko/encrypted-notes-dapp-vetkd/src/frontend/src/store/auth.ts
+        console.time('Execution Time CryptoService');  
+        cryptoService = new CryptoService(backendActor);
+        console.timeEnd('Execution Time CryptoService');
+
+        console.time('Execution Time initcs');  
+        await cryptoService
+          .init()
+          .catch((e) => {
+            console.error('Could not initialize encryption service', e);
+            //showError(e, 'Could not initialize crypto service');
+          });
+        console.timeEnd('Execution Time initcs');
+
+        encryptionServiceGlobal.set(cryptoService);
+        encryptionServiceGlobal.subscribe((value) => cryptoService = value);
+      } else {
+        console.error("ic-vetkd-utils wasm not initialized");
+        return setTimeout(() => {
+          initEncryption(backendActor);
+        }, 500);
+      };
+    };
+  };
 
   const initUserSettings = async (backendActor) => {
     // Load the user's settings
@@ -136,6 +188,8 @@ export const createStore = ({
     };
 
     await initUserSettings(backendActor);
+    // Initialize encryption
+    initEncryption(backendActor);
 
     //let accounts = JSON.parse(await identity.accounts());
 
@@ -175,6 +229,8 @@ export const createStore = ({
     };
 
     await initUserSettings(backendActor);
+    // Initialize encryption
+    initEncryption(backendActor);
 
     // the stoic agent provides an `accounts()` method that returns
     // accounts associated with the principal
@@ -238,7 +294,7 @@ export const createStore = ({
     }
 
     // Fetch root key for certificate validation during development
-    if (process.env.DFX_NETWORK !== "ic") {
+    if (process.env.DFX_NETWORK === "local") {
       window.ic.plug.agent.fetchRootKey().catch((err) => {
         console.warn(
           "Unable to fetch root key. Check to ensure that your local replica is running",
@@ -258,6 +314,8 @@ export const createStore = ({
     };
 
     await initUserSettings(backendActor);
+    // Initialize encryption
+    initEncryption(backendActor);
 
     const principal = await window.ic.plug.agent.getPrincipal();
 
@@ -273,6 +331,11 @@ export const createStore = ({
   };
 
   const disconnect = async () => {
+    // Logout encryption service
+    if (cryptoService) {
+      cryptoService.logout();
+      encryptionServiceGlobal.set(cryptoService);
+    };
     // Check isAuthed to determine which method to use to disconnect
     if (globalState.isAuthed === "plug") {
       try {

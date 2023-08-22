@@ -1,5 +1,12 @@
 export const idlFactory = ({ IDL }) => {
-  const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
+  const MessagesObject = IDL.Record({
+    'messages' : IDL.Text,
+    'encrypted' : IDL.Bool,
+  });
+  const FirstMessagePreviewObject = IDL.Record({
+    'encrypted' : IDL.Bool,
+    'firstMessagePreview' : IDL.Text,
+  });
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
     'InvalidTokenId' : IDL.Null,
@@ -9,18 +16,18 @@ export const idlFactory = ({ IDL }) => {
   const ChatCreationResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : ApiError });
   const Chat = IDL.Record({
     'id' : IDL.Text,
-    'messages' : IDL.Vec(Message),
+    'messages' : MessagesObject,
     'owner' : IDL.Principal,
     'creationTime' : IDL.Nat64,
     'chatTitle' : IDL.Text,
-    'firstMessagePreview' : IDL.Text,
+    'firstMessagePreview' : FirstMessagePreviewObject,
   });
   const ChatResult = IDL.Variant({ 'Ok' : Chat, 'Err' : ApiError });
   const ChatPreview = IDL.Record({
     'id' : IDL.Text,
     'creationTime' : IDL.Nat64,
     'chatTitle' : IDL.Text,
-    'firstMessagePreview' : IDL.Text,
+    'firstMessagePreview' : FirstMessagePreviewObject,
   });
   const ChatsPreviewResult = IDL.Variant({
     'Ok' : IDL.Vec(ChatPreview),
@@ -51,9 +58,23 @@ export const idlFactory = ({ IDL }) => {
     'chatTitle' : IDL.Text,
   });
   const DeVinciBackend = IDL.Service({
-    'create_chat' : IDL.Func([IDL.Vec(Message)], [ChatCreationResult], []),
+    'app_vetkd_public_key' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [IDL.Text],
+        [],
+      ),
+    'create_chat' : IDL.Func(
+        [MessagesObject, FirstMessagePreviewObject],
+        [ChatCreationResult],
+        [],
+      ),
     'delete_chat' : IDL.Func([IDL.Text], [ChatResult], []),
     'delete_email_subscriber' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'encrypted_symmetric_key_for_caller' : IDL.Func(
+        [IDL.Vec(IDL.Nat8)],
+        [IDL.Text],
+        [],
+      ),
     'get_caller_chat_history' : IDL.Func([], [ChatsPreviewResult], ['query']),
     'get_caller_chats' : IDL.Func([], [ChatsResult], ['query']),
     'get_caller_settings' : IDL.Func([], [UserSettingsResult], ['query']),
@@ -70,8 +91,9 @@ export const idlFactory = ({ IDL }) => {
         [UpdateUserSettingsResult],
         [],
       ),
+    'symmetric_key_verification_key' : IDL.Func([], [IDL.Text], []),
     'update_chat_messages' : IDL.Func(
-        [IDL.Text, IDL.Vec(Message)],
+        [IDL.Text, MessagesObject],
         [ChatIdResult],
         [],
       ),

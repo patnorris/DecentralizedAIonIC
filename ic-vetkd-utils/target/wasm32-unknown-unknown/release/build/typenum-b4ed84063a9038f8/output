@@ -1,0 +1,3 @@
+cargo:rerun-if-changed=build/main.rs
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/patrick/InternetComputer/DeVinci/DeVinciSvelte/ic-vetkd-utils/target/wasm32-unknown-unknown/release/build/typenum-b4ed84063a9038f8/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/patrick/InternetComputer/DeVinci/DeVinciSvelte/ic-vetkd-utils/target/wasm32-unknown-unknown/release/build/typenum-b4ed84063a9038f8/out/op.rs

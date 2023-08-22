@@ -8,21 +8,22 @@ import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
 import List "mo:base/List";
 import AssocList "mo:base/AssocList";
+import Bool "mo:base/Bool";
 
 module {
   public type Chat = {
     id : Text;
-    messages : [Message];
+    messages : MessagesObject; 
     owner : Principal;
     creationTime : Nat64;
-    firstMessagePreview : Text;
+    firstMessagePreview : FirstMessagePreviewObject;
     chatTitle : Text;
   };
 
   public type ChatPreview = {
     id : Text;
     creationTime : Nat64;
-    firstMessagePreview : Text;
+    firstMessagePreview : FirstMessagePreviewObject;
     chatTitle : Text;
   };
 
@@ -34,6 +35,16 @@ module {
   public type Message = {
     sender : Text;
     content : Text;
+  };
+
+  public type MessagesObject = {
+    messages : Text; // holds potentially encrypted, stringified array of messages
+    encrypted : Bool;
+  };
+
+  public type FirstMessagePreviewObject = {
+    firstMessagePreview : Text; // holds potentially encrypted, first message
+    encrypted : Bool;
   };
 
   public type ChatCreationResult = Result<Text, ApiError>;

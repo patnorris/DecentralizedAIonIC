@@ -19,10 +19,15 @@ type SignUpFormInput =
    emailAddress: text;
    pageSubmittedFrom: text;
  };
-type Message = 
+type MessagesObject = 
  record {
-   content: text;
-   sender: text;
+   encrypted: bool;
+   messages: text;
+ };
+type FirstMessagePreviewObject = 
+ record {
+   encrypted: bool;
+   firstMessagePreview: text;
  };
 type EmailSubscriber = 
  record {
@@ -32,9 +37,12 @@ type EmailSubscriber =
  };
 type DeVinciBackend = 
  service {
-   create_chat: (vec Message) -> (ChatCreationResult);
+   app_vetkd_public_key: (vec blob) -> (text);
+   create_chat: (MessagesObject, FirstMessagePreviewObject) ->
+    (ChatCreationResult);
    delete_chat: (text) -> (ChatResult);
    delete_email_subscriber: (text) -> (bool);
+   encrypted_symmetric_key_for_caller: (blob) -> (text);
    get_caller_chat_history: () -> (ChatsPreviewResult) query;
    get_caller_chats: () -> (ChatsResult) query;
    get_caller_settings: () -> (UserSettingsResult) query;
@@ -47,6 +55,8 @@ type DeVinciBackend =
    submit_signup_form: (SignUpFormInput) -> (text);
    update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
    update_chat_messages: (text, vec Message) -> (ChatIdResult);
+   symmetric_key_verification_key: () -> (text);
+   update_chat_messages: (text, MessagesObject) -> (ChatIdResult);
    update_chat_metadata: (UpdateChatObject) -> (ChatIdResult);
  };
 type ChatsResult = 
@@ -68,7 +78,7 @@ type ChatPreview =
  record {
    chatTitle: text;
    creationTime: nat64;
-   firstMessagePreview: text;
+   firstMessagePreview: FirstMessagePreviewObject;
    id: text;
  };
 type ChatIdResult = 
@@ -85,9 +95,9 @@ type Chat =
  record {
    chatTitle: text;
    creationTime: nat64;
-   firstMessagePreview: text;
+   firstMessagePreview: FirstMessagePreviewObject;
    id: text;
-   messages: vec Message;
+   messages: MessagesObject;
    owner: principal;
  };
 type ApiError = 

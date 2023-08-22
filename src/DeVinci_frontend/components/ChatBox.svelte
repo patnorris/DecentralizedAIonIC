@@ -1,9 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store } from "../store";
+  import { store, encryptionEnabledByUserGlobal, encryptionEnabledGlobal, encryptionServiceGlobal } from "../store";
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
+
+  import type { Chat } from "../../declarations/DeVinci_backend/DeVinci_backend.did";
+  import type { CryptoService } from '../helpers/encryption_service';
+
+  import { isEncryptionServiceInit } from "../helpers/utils";
 
   export let modelCallbackFunction;
   export let chatDisplayed;
@@ -15,11 +20,22 @@
 
   let messageGenerationInProgress = false;
 
+  let cryptoService: CryptoService;
+  encryptionServiceGlobal.subscribe((value) => cryptoService = value);
+
 // Toggle whether user wants their messages to be stored
   let storeChatToggle = true;
 
   function handleStoreChatToggle() {
     storeChatToggle = !storeChatToggle;
+  };
+
+// Toggle whether user wants their chats to be encrypted
+  let encryptChatsToggle = true;
+  encryptionEnabledByUserGlobal.subscribe((value) => encryptChatsToggle = value);
+
+  function handleEncryptChatsToggle() {
+    encryptionEnabledByUserGlobal.update((value) => !value);
   };
 
   const generateProgressCallback = (_step: number, message: string) => {
@@ -46,18 +62,55 @@
     messageGenerationInProgress = false;
     // Store chat
     if (storeChatToggle && $store.isAuthed) {
+      // Prepare messages object and potentially encrypt
+      const messagesObject = {
+        messages: JSON.stringify(messages),
+        encrypted: false,
+      };
+      if (encryptChatsToggle && $encryptionEnabledGlobal) {
+        // Encrypt
+        messagesObject.encrypted = true;
+        // Ensure encryption service is initialized before usage
+        const encryptionServiceIsInit = await isEncryptionServiceInit();
+        if (!encryptionServiceIsInit) {
+          console.error("Error: Encryption service not initialized.");
+          return;
+        };
+        const encryptedMessages = await cryptoService.encrypt(
+          messagesObject.messages
+        );
+        messagesObject.messages = encryptedMessages;
+      };
       if(chatDisplayed) {
         // Update chat
         try {
-          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messages); 
+          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesObject);
         } catch (error) {
           console.error("Error storing chat: ", error);        
         };
       } else {
         // New chat
         try {
-          const chatCreatedResponse = await $store.backendActor.create_chat(messages);
-          console.log("Debug Chat created: ", chatCreatedResponse); 
+          // Prepare first message object and potentially encrypt
+          const firstMessagePreviewObject = {
+            firstMessagePreview: messages[0].content,
+            encrypted: false,
+          };
+          if (encryptChatsToggle && $encryptionEnabledGlobal) {
+            // Encrypt
+            firstMessagePreviewObject.encrypted = true;
+            // Ensure encryption service is initialized before usage
+            const encryptionServiceIsInit = await isEncryptionServiceInit();
+            if (!encryptionServiceIsInit) {
+              console.error("Error: Encryption service not initialized.");
+              return;
+            };
+            const encryptedFirstMessagePreview = await cryptoService.encrypt(
+              firstMessagePreviewObject.firstMessagePreview
+            );
+            firstMessagePreviewObject.firstMessagePreview = encryptedFirstMessagePreview;
+          };
+          const chatCreatedResponse = await $store.backendActor.create_chat(messagesObject, firstMessagePreviewObject);
           // @ts-ignore
           if (chatCreatedResponse.Err) {
             // @ts-ignore
@@ -88,8 +141,21 @@
       chatRetrievalInProgress = true;
       const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
       // @ts-ignore
-      const chatHistory = chatHistoryResponse.Ok;
-      messages = chatHistory.messages;
+      const chatHistory : Chat = chatHistoryResponse.Ok;
+      if (chatHistory.messages.encrypted) {
+        // Decrypt
+        // Ensure encryption service is initialized before usage
+        const encryptionServiceIsInit = await isEncryptionServiceInit();
+        if (!encryptionServiceIsInit) {
+          console.error("Error: Encryption service not initialized.");
+          return;
+        };
+        const decryptedMessages = await cryptoService.decrypt(chatHistory.messages.messages);
+        messages = JSON.parse(decryptedMessages);
+      } else {
+        messages = JSON.parse(chatHistory.messages.messages);
+      };
+      chatRetrievalInProgress = false;
     };
     // Fresh chat
   };
@@ -106,6 +172,11 @@
     <p>Should your chat messages be stored?</p>
     <input type="checkbox" bind:checked={storeChatToggle} on:click={handleStoreChatToggle} />
     <span>{storeChatToggle ? 'YES' : 'NO'}</span>
+  </div>
+  <div>
+    <p>Do you want your chats to be encrypted for maximal privacy?</p>
+    <input type="checkbox" bind:checked={encryptChatsToggle} on:click={handleEncryptChatsToggle} />
+    <span>{encryptChatsToggle ? 'YES' : 'NO'}</span>
   </div>
 {/if}
 
