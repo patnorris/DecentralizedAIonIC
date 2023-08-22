@@ -1,8 +1,10 @@
 {
   "DeVinci_backend": {
-    "ic": "xzpew-mqaaa-aaaai-acqza-cai"
+    "ic": "xzpew-mqaaa-aaaai-acqza-cai",
+    "development": "sbflw-gyaaa-aaaal-qcbeq-cai"
   },
   "DeVinci_frontend": {
-    "ic": "x6occ-biaaa-aaaai-acqzq-cai"
+    "ic": "x6occ-biaaa-aaaai-acqzq-cai",
+    "development": "yi77p-fyaaa-aaaap-qblxa-cai"
   }
 }

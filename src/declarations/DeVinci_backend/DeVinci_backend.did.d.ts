@@ -35,10 +35,15 @@ export interface DeVinciBackend {
   'delete_email_subscriber' : ActorMethod<[string], boolean>,
   'get_caller_chat_history' : ActorMethod<[], ChatsPreviewResult>,
   'get_caller_chats' : ActorMethod<[], ChatsResult>,
+  'get_caller_settings' : ActorMethod<[], UserSettingsResult>,
   'get_chat' : ActorMethod<[string], ChatResult>,
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
   'submit_signup_form' : ActorMethod<[SignUpFormInput], string>,
+  'update_caller_settings' : ActorMethod<
+    [UserSettings],
+    UpdateUserSettingsResult
+  >,
   'update_chat_messages' : ActorMethod<[string, Array<Message>], ChatIdResult>,
   'update_chat_metadata' : ActorMethod<[UpdateChatObject], ChatIdResult>,
 }
@@ -53,4 +58,9 @@ export interface SignUpFormInput {
   'pageSubmittedFrom' : string,
 }
 export interface UpdateChatObject { 'id' : string, 'chatTitle' : string }
+export type UpdateUserSettingsResult = { 'Ok' : boolean } |
+  { 'Err' : ApiError };
+export interface UserSettings { 'selectedAiModelId' : string }
+export type UserSettingsResult = { 'Ok' : UserSettings } |
+  { 'Err' : ApiError };
 export interface _SERVICE extends DeVinciBackend {}
