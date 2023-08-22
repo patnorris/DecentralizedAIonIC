@@ -45,6 +45,14 @@ module {
   public type ChatIdResult = Result<Text, ApiError>;
 
   public type ChatsPreviewResult = Result<[ChatPreview], ApiError>;
+
+  public type UserSettings = {
+    selectedAiModelId : Text;
+  };
+
+  public type UserSettingsResult = Result<UserSettings, ApiError>;
+
+  public type UpdateUserSettingsResult = Result<Bool, ApiError>;
   
   public type Dip721NonFungibleToken = {
     logo: LogoResult;

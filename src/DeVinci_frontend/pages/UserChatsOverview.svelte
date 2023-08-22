@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import { store } from "../store";
 
     import Topnav from "../components/Topnav.svelte";
