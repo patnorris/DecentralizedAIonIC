@@ -53,9 +53,8 @@ type DeVinciBackend =
                                      }) query;
    greet: (text) -> (text);
    submit_signup_form: (SignUpFormInput) -> (text);
-   update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
-   update_chat_messages: (text, vec Message) -> (ChatIdResult);
    symmetric_key_verification_key: () -> (text);
+   update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
    update_chat_messages: (text, MessagesObject) -> (ChatIdResult);
    update_chat_metadata: (UpdateChatObject) -> (ChatIdResult);
  };

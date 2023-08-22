@@ -6,8 +6,6 @@
   import ChatHistory from "./ChatHistory.svelte";
   import { modelConfig } from "../helpers/gh-config";
 
-  import { modelConfig } from "../helpers/gh-config";
-
   const workerPath = './worker.ts';
 
   let chatModelDownloadInProgress = false;
