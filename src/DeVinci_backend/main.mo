@@ -72,6 +72,8 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 // Project-specific functions
   stable var userChatsStorageStable : [(Principal, List.List<Text>)] = [];
   var userChatsStorage : HashMap.HashMap<Principal, List.List<Text>> = HashMap.HashMap(0, Principal.equal, Principal.hash);
+  stable var userSettingsStorageStable : [(Principal, Types.UserSettings)] = [];
+  var userSettingsStorage : HashMap.HashMap<Principal, Types.UserSettings> = HashMap.HashMap(0, Principal.equal, Principal.hash);
   stable var chatsStorageStable : [(Text, Types.Chat)] = [];
   var chatsStorage : HashMap.HashMap<Text, Types.Chat> = HashMap.HashMap(0, Text.equal, Text.hash);
 
@@ -173,11 +175,19 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   public shared query ({caller}) func get_caller_chats() : async Types.ChatsResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
     let chats = getUserChats(caller);
     return #Ok(List.toArray(chats)); 
   };
 
   public shared query ({caller}) func get_caller_chat_history() : async Types.ChatsPreviewResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
     let chats = getUserChats(caller);
     var chatsPreview : List.List<Types.ChatPreview> = List.nil<Types.ChatPreview>();
     chatsPreview := List.map<Types.Chat, Types.ChatPreview>(chats, func (chat : Types.Chat) : Types.ChatPreview {
@@ -192,6 +202,10 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   public shared query ({caller}) func get_chat(chatId : Text) : async Types.ChatResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
     let chat = getChat(chatId);
     switch (chat) {
       case (null) {
@@ -207,6 +221,10 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   public shared({ caller }) func update_chat_metadata(updateChatObject : Types.UpdateChatObject) : async Types.ChatIdResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
     switch (getChat(updateChatObject.id)) {
       case (null) {
         return #Err(#InvalidTokenId);
@@ -233,6 +251,10 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   public shared({ caller }) func update_chat_messages(chatId : Text, updatedMessagesObject : Types.MessagesObject) : async Types.ChatIdResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+    };
     switch (getChat(chatId)) {
       case (null) {
         return #Err(#InvalidTokenId);
@@ -259,6 +281,10 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   public shared ({caller}) func delete_chat(chatId : Text) : async Types.ChatResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
     let chat = getChat(chatId);
     switch (chat) {
       case (null) {
@@ -275,7 +301,53 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };
   };
 
-  // Email Signups from Website
+// User Settings
+
+  /**
+   * A simple function to retrieve the user's settings, this provides no protection so should only be called if
+   * the caller has permissions to read the settings data
+   *
+   * @return The user's settings if they exist, otherwise an empty List
+  */
+  private func getUserSettings(user : Principal) : ?Types.UserSettings {
+    switch (userSettingsStorage.get(user)) {
+      case (null) { return null; };
+      case (?userSettings) { return ?userSettings; };
+    };
+  };
+
+  /**
+   * Simple function to store user settings in the database. There are no protections so this function should only
+   * be called if the caller has permissions to store the user settings to the database
+   *
+   * @return Confirmation that the user settings were stored successfully
+  */
+  private func putUserSettings(user : Principal, userSettings : Types.UserSettings) : Bool {
+    userSettingsStorage.put(user, userSettings);
+    return true;
+  };
+
+  public shared query ({caller}) func get_caller_settings() : async Types.UserSettingsResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    switch (getUserSettings(caller)) {
+      case (null) { return #Err(#Unauthorized); };
+      case (?userSettings) { return #Ok(userSettings); };
+    };   
+  };
+
+  public shared({ caller }) func update_caller_settings(updatedSettingsObject : Types.UserSettings) : async Types.UpdateUserSettingsResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    let settingsUpdated = putUserSettings(caller, updatedSettingsObject);
+    return #Ok(settingsUpdated);
+  };
+
+// Email Signups from Website
   stable var emailSubscribersStorageStable : [(Text, Types.EmailSubscriber)] = [];
   var emailSubscribersStorage : HashMap.HashMap<Text, Types.EmailSubscriber> = HashMap.HashMap(0, Text.equal, Text.hash);
 
@@ -313,7 +385,11 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   };
 
   // Function for custodian to get all email subscribers
-  public shared({ caller }) func get_email_subscribers() : async [(Text, Types.EmailSubscriber)] {
+  public shared query ({ caller }) func get_email_subscribers() : async [(Text, Types.EmailSubscriber)] {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return [];
+		};
     // Only Principals registered as custodians can access this function
     if (List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
       return Iter.toArray(emailSubscribersStorage.entries());
@@ -323,6 +399,10 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 
   // Function for custodian to delete an email subscriber
   public shared({ caller }) func delete_email_subscriber(emailAddress : Text) : async Bool {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return false;
+		};
     // Only Principals registered as custodians can access this function
     if (List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
       emailSubscribersStorage.delete(emailAddress);
@@ -450,6 +530,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 // Upgrade Hooks
   system func preupgrade() {
     userChatsStorageStable := Iter.toArray(userChatsStorage.entries());
+    userSettingsStorageStable := Iter.toArray(userSettingsStorage.entries());
     chatsStorageStable := Iter.toArray(chatsStorage.entries());
     emailSubscribersStorageStable := Iter.toArray(emailSubscribersStorage.entries());
   };
@@ -457,6 +538,8 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   system func postupgrade() {
     userChatsStorage := HashMap.fromIter(Iter.fromArray(userChatsStorageStable), userChatsStorageStable.size(), Principal.equal, Principal.hash);
     userChatsStorageStable := [];
+    userSettingsStorage := HashMap.fromIter(Iter.fromArray(userSettingsStorageStable), userSettingsStorageStable.size(), Principal.equal, Principal.hash);
+    userSettingsStorageStable := [];    
     chatsStorage := HashMap.fromIter(Iter.fromArray(chatsStorageStable), chatsStorageStable.size(), Text.equal, Text.hash);
     chatsStorageStable := [];
     emailSubscribersStorage := HashMap.fromIter(Iter.fromArray(emailSubscribersStorageStable), emailSubscribersStorageStable.size(), Text.equal, Text.hash);

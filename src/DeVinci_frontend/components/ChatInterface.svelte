@@ -1,9 +1,10 @@
 <script lang="ts">
   import * as webllm from "@mlc-ai/web-llm";
-  import { chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal } from "../store";
+  import { chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal, selectedAiModelId } from "../store";
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
+  import { modelConfig } from "../helpers/gh-config";
 
   import { modelConfig } from "../helpers/gh-config";
 
@@ -52,8 +53,9 @@
       setLabel("init-label", report.text);
     });
 
+    await $chatModelGlobal.reload($selectedAiModelId, undefined, modelConfig);
     //await $chatModelGlobal.reload("RedPajama-INCITE-Chat-3B-v1-q4f32_0");
-    await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
+    //await $chatModelGlobal.reload("Llama-2-7b-chat-hf-q4f32_1", undefined, modelConfig);
     //await $chatModelGlobal.reload("vicuna-v1-7b-q4f32_0");
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
@@ -104,5 +106,8 @@
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={loadChatModel}>Initialize</Button>
     {/if}
+    <p>Note: AI assistants are pretty huge and require quite some computational resources. 
+      As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can try a smaller one from the selection under Settings and see if the device can support it.</p>
+    <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
   {/if}
 </section>

@@ -10,6 +10,7 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
+import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
 import init from 'ic-vetkd-utils';
 import { CryptoService } from './helpers/encryption_service';
@@ -42,6 +43,7 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
+export let selectedAiModelId = writable(getDefaultAiModelId());
 
 // vetKeys integration
 export const encryptionEnabledGlobal = writable(true); // flag to turn off/on encryption via vetKeys for all users
@@ -133,6 +135,22 @@ export const createStore = ({
     };
   };
 
+  const initUserSettings = async (backendActor) => {
+    // Load the user's settings
+      // Especially selected AI model to be used for chat
+    const retrievedSettingsResponse = await backendActor.get_caller_settings();
+    let userSettings;
+    // @ts-ignore
+    if (retrievedSettingsResponse.Ok) {
+      // @ts-ignore
+      userSettings = retrievedSettingsResponse.Ok;
+      const userSelectedAiModelId = userSettings.selectedAiModelId;
+      selectedAiModelId.set(userSelectedAiModelId);
+    } else {
+      console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+    };
+  };
+
   const nfidConnect = async () => {
     authClient = await AuthClient.create();
     await authClient.login({
@@ -169,6 +187,7 @@ export const createStore = ({
       return;
     };
 
+    await initUserSettings(backendActor);
     // Initialize encryption
     initEncryption(backendActor);
 
@@ -209,6 +228,7 @@ export const createStore = ({
       return;
     };
 
+    await initUserSettings(backendActor);
     // Initialize encryption
     initEncryption(backendActor);
 
@@ -293,6 +313,7 @@ export const createStore = ({
       return;
     };
 
+    await initUserSettings(backendActor);
     // Initialize encryption
     initEncryption(backendActor);
 

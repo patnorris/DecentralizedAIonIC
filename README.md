@@ -1,5 +1,15 @@
 # DeVinci
 
+## Try DeVinci
+DeVinci is live on the Internet Computer. If you like, you can give it a try here:
+https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/
+Note: currently, only Chrome and Edge on desktop support the required features. Other devices, including smartphones, and other browsers cannot run it (for now :) ).
+
+Do you have any feedback? We'd love to hear it!
+You can open an issue on GitHub or share your thoughts on this forum post: https://forum.dfinity.org/t/browser-based-ai-chatbot-served-from-the-ic/22263 Thank you!
+
+## Internet Computer Resources
+
 Welcome to your new DeVinci project and to the internet computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
 To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.

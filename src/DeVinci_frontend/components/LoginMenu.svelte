@@ -52,6 +52,10 @@
       </p>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <p class="mainMenuItem" transition:fly={{ y: -15, delay: 50 * 4 }}>
+        <a href="/#/settings">Settings</a>
+      </p>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <p class="mainMenuItem" transition:fly={{ y: -15, delay: 50 * 4 }}>
         <a href="/#/about" target="_blank">About DeVinci</a>
       </p>
       <!-- svelte-ignore a11y-click-events-have-key-events -->

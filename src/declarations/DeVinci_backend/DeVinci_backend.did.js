@@ -34,6 +34,11 @@ export const idlFactory = ({ IDL }) => {
     'Err' : ApiError,
   });
   const ChatsResult = IDL.Variant({ 'Ok' : IDL.Vec(Chat), 'Err' : ApiError });
+  const UserSettings = IDL.Record({ 'selectedAiModelId' : IDL.Text });
+  const UserSettingsResult = IDL.Variant({
+    'Ok' : UserSettings,
+    'Err' : ApiError,
+  });
   const EmailSubscriber = IDL.Record({
     'subscribedAt' : IDL.Nat64,
     'emailAddress' : IDL.Text,
@@ -42,6 +47,10 @@ export const idlFactory = ({ IDL }) => {
   const SignUpFormInput = IDL.Record({
     'emailAddress' : IDL.Text,
     'pageSubmittedFrom' : IDL.Text,
+  });
+  const UpdateUserSettingsResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
   });
   const ChatIdResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : ApiError });
   const UpdateChatObject = IDL.Record({
@@ -68,14 +77,20 @@ export const idlFactory = ({ IDL }) => {
       ),
     'get_caller_chat_history' : IDL.Func([], [ChatsPreviewResult], ['query']),
     'get_caller_chats' : IDL.Func([], [ChatsResult], ['query']),
+    'get_caller_settings' : IDL.Func([], [UserSettingsResult], ['query']),
     'get_chat' : IDL.Func([IDL.Text], [ChatResult], ['query']),
     'get_email_subscribers' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Text, EmailSubscriber))],
-        [],
+        ['query'],
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'submit_signup_form' : IDL.Func([SignUpFormInput], [IDL.Text], []),
+    'update_caller_settings' : IDL.Func(
+        [UserSettings],
+        [UpdateUserSettingsResult],
+        [],
+      ),
     'symmetric_key_verification_key' : IDL.Func([], [IDL.Text], []),
     'update_chat_messages' : IDL.Func(
         [IDL.Text, MessagesObject],
