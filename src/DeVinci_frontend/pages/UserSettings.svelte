@@ -1,5 +1,5 @@
-<script>
-    import { store, selectedAiModelId } from "../store";
+<script lang="ts">
+    import { store, selectedAiModelId, chatModelDownloadedGlobal } from "../store";
 
     import Topnav from "../components/Topnav.svelte";
     import Footer from "../components/Footer.svelte";
@@ -12,8 +12,12 @@
     let hasLoadedSettings = false;
 
     const changeModel = async (id) => {
+        if ($selectedAiModelId === id) {
+            return;
+        };
         // Change the model in the store
         selectedAiModelId.set(id);
+        chatModelDownloadedGlobal.set(false);
         // Persist to backend
         const updatedSettingsObject = {
             selectedAiModelId: id,
@@ -35,6 +39,7 @@
             // @ts-ignore
             userSettings = retrievedSettingsResponse.Ok;
         } else {
+            // @ts-ignore
             console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
         };
         hasLoadedSettings = true;
@@ -60,15 +65,10 @@
             <p>Note: AI models are pretty huge and require quite some computational resources. 
                 As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can thus try a smaller one and see if the device can support it.</p>
             <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
-            <select id="modelselection" name="modelselection" on:change={changeModel}>
-                {#each availableAiModels as model (model.id)}
-                    <option value={model.id}>{model.name}: {model.size} Size ({model.numberOfParameters} parameters), {model.performance} Performance</option>
-                {/each}
-            </select>
             <div class="model-options">
                 {#each availableAiModels as model (model.id)}
                     <div 
-                        class:model-option 
+                        class="model-option"
                         class:selected={model.id === $selectedAiModelId} 
                         on:click={() => changeModel(model.id)}
                         on:keydown={(event) => handleKeydown(event, model.id)}
@@ -101,5 +101,13 @@
     }
     .model-option.selected {
         background-color: #e0e0e0;
+    }
+    .model-options {
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        width: 100%;
+        max-height: 400px;
+        overflow-y: auto; /* allows vertical scrolling when content exceeds the container's height */
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     }
 </style>

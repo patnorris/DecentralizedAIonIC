@@ -40,11 +40,12 @@ export interface DeVinciBackend {
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
   'submit_signup_form' : ActorMethod<[SignUpFormInput], string>,
+  'symmetric_key_verification_key' : ActorMethod<[], string>,
   'update_caller_settings' : ActorMethod<
     [UserSettings],
     UpdateUserSettingsResult
   >,
-  'update_chat_messages' : ActorMethod<[string, Array<Message>], ChatIdResult>,
+  'update_chat_messages' : ActorMethod<[string, MessagesObject], ChatIdResult>,
   'update_chat_metadata' : ActorMethod<[UpdateChatObject], ChatIdResult>,
 }
 export interface EmailSubscriber {

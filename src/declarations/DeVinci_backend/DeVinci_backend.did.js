@@ -65,6 +65,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'submit_signup_form' : IDL.Func([SignUpFormInput], [IDL.Text], []),
+    'symmetric_key_verification_key' : IDL.Func([], [IDL.Text], []),
     'update_caller_settings' : IDL.Func(
         [UserSettings],
         [UpdateUserSettingsResult],
