@@ -30,6 +30,12 @@
         "https://icp0.io"
       ],
       "type": "persistent"
+    },
+    "testing": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
     }
   },
   "version": 1

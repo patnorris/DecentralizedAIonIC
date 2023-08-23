@@ -1,10 +1,12 @@
 {
   "DeVinci_backend": {
     "ic": "xzpew-mqaaa-aaaai-acqza-cai",
-    "development": "sbflw-gyaaa-aaaal-qcbeq-cai"
+    "development": "sbflw-gyaaa-aaaal-qcbeq-cai",
+    "test": "x56rt-nqaaa-aaaal-qcb3a-cai"
   },
   "DeVinci_frontend": {
     "ic": "x6occ-biaaa-aaaai-acqzq-cai",
-    "development": "yi77p-fyaaa-aaaap-qblxa-cai"
+    "development": "yi77p-fyaaa-aaaap-qblxa-cai",
+    "test": "4clue-eaaaa-aaaao-a2gwq-cai"
   }
 }
