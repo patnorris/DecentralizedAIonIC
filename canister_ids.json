@@ -1,12 +1,14 @@
 {
   "DeVinci_backend": {
-    "ic": "xzpew-mqaaa-aaaai-acqza-cai",
     "development": "sbflw-gyaaa-aaaal-qcbeq-cai",
-    "test": "x56rt-nqaaa-aaaal-qcb3a-cai"
+    "ic": "xzpew-mqaaa-aaaai-acqza-cai",
+    "test": "x56rt-nqaaa-aaaal-qcb3a-cai",
+    "testing": "xmiv3-nyaaa-aaaai-acq2q-cai"
   },
   "DeVinci_frontend": {
-    "ic": "x6occ-biaaa-aaaai-acqzq-cai",
     "development": "yi77p-fyaaa-aaaap-qblxa-cai",
-    "test": "4clue-eaaaa-aaaao-a2gwq-cai"
+    "ic": "x6occ-biaaa-aaaai-acqzq-cai",
+    "test": "4clue-eaaaa-aaaao-a2gwq-cai",
+    "testing": "xfl6h-3qaaa-aaaai-acq3a-cai"
   }
 }

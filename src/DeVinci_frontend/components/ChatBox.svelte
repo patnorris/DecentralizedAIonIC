@@ -57,7 +57,6 @@
         // New chat
         try {
           const chatCreatedResponse = await $store.backendActor.create_chat(messages);
-          console.log("Debug Chat created: ", chatCreatedResponse); 
           // @ts-ignore
           if (chatCreatedResponse.Err) {
             // @ts-ignore
