@@ -57,6 +57,10 @@ npm run vite
 access routes like "http://172.30.141.44:3000/#/testroom" (same as on Mainnet)
 hot reloads with every UI change
 
+# Testing Stage
+dfx deploy --network testing --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
+dfx deploy --network testing
+
 # Production Deployment
 npm install
 

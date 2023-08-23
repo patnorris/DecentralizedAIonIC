@@ -1,3 +1,14 @@
+type UserSettingsResult = 
+ variant {
+   Err: ApiError;
+   Ok: UserSettings;
+ };
+type UserSettings = record {selectedAiModelId: text;};
+type UpdateUserSettingsResult = 
+ variant {
+   Err: ApiError;
+   Ok: bool;
+ };
 type UpdateChatObject = 
  record {
    chatTitle: text;
@@ -26,13 +37,15 @@ type DeVinciBackend =
    delete_email_subscriber: (text) -> (bool);
    get_caller_chat_history: () -> (ChatsPreviewResult) query;
    get_caller_chats: () -> (ChatsResult) query;
+   get_caller_settings: () -> (UserSettingsResult) query;
    get_chat: (text) -> (ChatResult) query;
    get_email_subscribers: () -> (vec record {
                                        text;
                                        EmailSubscriber;
-                                     });
+                                     }) query;
    greet: (text) -> (text);
    submit_signup_form: (SignUpFormInput) -> (text);
+   update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
    update_chat_messages: (text, vec Message) -> (ChatIdResult);
    update_chat_metadata: (UpdateChatObject) -> (ChatIdResult);
  };

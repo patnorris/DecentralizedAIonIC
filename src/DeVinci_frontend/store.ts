@@ -10,6 +10,7 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
+import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
 //__________Local vs Mainnet Development____________
 /* export const HOST =
@@ -38,6 +39,7 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
+export let selectedAiModelId = writable(getDefaultAiModelId());
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
@@ -81,6 +83,22 @@ export const createStore = ({
   let globalState: State;
   subscribe((value) => globalState = value);
 
+  const initUserSettings = async (backendActor) => {
+    // Load the user's settings
+      // Especially selected AI model to be used for chat
+    const retrievedSettingsResponse = await backendActor.get_caller_settings();
+    let userSettings;
+    // @ts-ignore
+    if (retrievedSettingsResponse.Ok) {
+      // @ts-ignore
+      userSettings = retrievedSettingsResponse.Ok;
+      const userSelectedAiModelId = userSettings.selectedAiModelId;
+      selectedAiModelId.set(userSelectedAiModelId);
+    } else {
+      console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+    };
+  };
+
   const nfidConnect = async () => {
     authClient = await AuthClient.create();
     await authClient.login({
@@ -116,6 +134,8 @@ export const createStore = ({
       console.warn("couldn't create backend actor");
       return;
     };
+
+    await initUserSettings(backendActor);
 
     //let accounts = JSON.parse(await identity.accounts());
 
@@ -153,6 +173,8 @@ export const createStore = ({
       console.warn("couldn't create backend actor");
       return;
     };
+
+    await initUserSettings(backendActor);
 
     // the stoic agent provides an `accounts()` method that returns
     // accounts associated with the principal
@@ -234,6 +256,8 @@ export const createStore = ({
       console.warn("couldn't create backend actor");
       return;
     };
+
+    await initUserSettings(backendActor);
 
     const principal = await window.ic.plug.agent.getPrincipal();
 
