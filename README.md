@@ -12,7 +12,7 @@ Do you have any feedback? We'd love to hear it! You can open an issue on GitHub 
 
 ## About DeVinci
 
-DeVinci is the personalized AI assistant that redefines the paradigm of digital privacy and trust. It's decentralized, trusted, open-source, and truly yours. Powered by an open-source AI model that runs directly within the browser, the interactions with DeVinci happen on the user's device, giving users unprecedented control.
+DeVinci is the personalized AI assistant that redefines the paradigm of digital privacy and trust. It's decentralized, trusted, open-source, and truly user-focused. Powered by an open-source AI model that runs directly within the browser, the interactions with DeVinci happen on the user's device, giving users unprecedented control.
 
 ### Key Features
 - **Decentralized**: Operates directly within the browser. Users can choose if they want to log in and store their chats on the decentralized cloud and under their control.
@@ -52,6 +52,8 @@ npm install
 ```
 ### 2. Install Vessel which is a dependency
 https://github.com/dfinity/vessel
+
+### 3. Start a local replica
 ```bash
 npm run dev
 ```
@@ -61,7 +63,7 @@ If you want to start a clean local IC replica (i.e. all canister state is erased
 npm run erase-replica
 ```
 
-### 3. Deploy your canisters to the replica
+### 4. Deploy your canisters to the replica
 Local:
 ```bash
 dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
@@ -123,7 +125,7 @@ dfx canister call DeVinci_backend delete_email_subscriber 'j@g.com' --network ic
 ```
 
 ## Cycles for Production Canisters
-Due to the IC's reverse model, developers charge their canisters with cycles to pay for any used computational resources. The following can help with managing these cycles.
+Due to the IC's reverse gas model, developers charge their canisters with cycles to pay for any used computational resources. The following can help with managing these cycles.
 
 Fund wallet with cycles (from ICP): https://medium.com/dfinity/internet-computer-basics-part-3-funding-a-cycles-wallet-a724efebd111
 
