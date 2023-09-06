@@ -53,6 +53,11 @@ dfx deploy --network development vetkd_system_api
 dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
 dfx deploy --network development DeVinci_frontend
 
+# Showcase Canisters on Mainnet
+dfx deploy --network showcase vetkd_system_api
+dfx deploy --network showcase --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
+dfx deploy --network showcase DeVinci_frontend
+
 # Production Deployment
 npm install
 

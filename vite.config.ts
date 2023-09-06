@@ -9,7 +9,7 @@ const isDev = process.env["DFX_NETWORK"] === "local";
 // Get the network name, or `local` by default.
 const networkName = process.env["DFX_NETWORK"] || "local";
 
-type Network = "ic" | "development" | "testing" | "local";
+type Network = "ic" | "development" | "testing" | "showcase" | "local";
 
 interface CanisterIds {
   [key: string]: { [key in Network]: string };

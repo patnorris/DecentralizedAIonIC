@@ -1,13 +1,16 @@
 {
   "DeVinci_backend": {
     "ic": "xzpew-mqaaa-aaaai-acqza-cai",
-    "development": "sbflw-gyaaa-aaaal-qcbeq-cai"
+    "development": "sbflw-gyaaa-aaaal-qcbeq-cai",
+    "showcase": "u4kwi-2qaaa-aaaag-qcj5a-cai"
   },
   "DeVinci_frontend": {
     "ic": "x6occ-biaaa-aaaai-acqzq-cai",
-    "development": "yi77p-fyaaa-aaaap-qblxa-cai"
+    "development": "yi77p-fyaaa-aaaap-qblxa-cai",
+    "showcase": "khpys-xiaaa-aaaap-abj3a-cai"
   },
   "vetkd_system_api": {
-    "development": "zfito-7qaaa-aaaak-qcjtq-cai"
+    "development": "zfito-7qaaa-aaaak-qcjtq-cai",
+    "showcase": "yps54-gaaaa-aaaan-qeava-cai"
   }
 }
