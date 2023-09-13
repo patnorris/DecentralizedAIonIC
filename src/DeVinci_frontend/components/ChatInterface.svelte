@@ -18,7 +18,7 @@
       throw Error("Cannot find label " + id);
     }
     label.innerText = text;
-  }
+  };
 
   async function loadChatModel() {
     if (chatModelDownloadInProgress) {

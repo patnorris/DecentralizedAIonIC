@@ -112,3 +112,5 @@ dist
 dist-ssr
 *.local
 .vessel
+
+.env

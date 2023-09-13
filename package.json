@@ -28,8 +28,13 @@
     "@dfinity/authentication": "^0.14.2",
     "@dfinity/candid": "0.15.1",
     "@dfinity/principal": "0.15.1",
-    "svelte-spa-router": "^3.3.0",
     "@mlc-ai/web-llm": "^0.2.4",
+    "axios": "^1.5.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "langchain": "0.0.146",
+    "openai": "^4.5.0",
+    "svelte-spa-router": "^3.3.0",
     "ua-parser-js": "^1.0.35"
   },
   "devDependencies": {

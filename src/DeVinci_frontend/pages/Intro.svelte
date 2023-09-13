@@ -7,6 +7,7 @@
   import LoginMenu from "../components/LoginMenu.svelte";
   import UnsupportedDeviceBanner from "../components/UnsupportedDeviceBanner.svelte";
   import UnsupportedBrowserBanner from "../components/UnsupportedBrowserBanner.svelte";
+  import AgentInterface from "../components/AgentInterface.svelte";
 </script>
 
 <Topnav />
@@ -19,7 +20,9 @@
   <UnsupportedBrowserBanner />
 {/if}
 
-<ChatInterface />
+<AgentInterface />
+
+<!-- <ChatInterface /> -->
 
 <Footer />
 
