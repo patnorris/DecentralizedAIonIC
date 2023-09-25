@@ -35,7 +35,8 @@
     "langchain": "0.0.146",
     "openai": "^4.5.0",
     "svelte-spa-router": "^3.3.0",
-    "ua-parser-js": "^1.0.35"
+    "ua-parser-js": "^1.0.35",
+    "@xenova/transformers": "^2.1.1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.2",

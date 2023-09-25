@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal, selectedAiModelId } from "../store";
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
-  import { modelConfig } from "../helpers/gh-config";
+  //import { modelConfig } from "../helpers/gh-config";
   import {
     canisterId as proxyCanisterId,
   } from "../../declarations/proxy_backend";
@@ -13,11 +12,17 @@
   import { initializeAgentExecutorWithOptions } from "langchain/agents";
   import { ChatOpenAI } from "langchain/chat_models/openai";
   import { OpenAI } from "langchain/llms/openai";
-  import { WolframAlphaTool } from "langchain/tools";
+  import { GoogleCustomSearch, ChainTool } from "langchain/tools";
   import { Calculator } from "langchain/tools/calculator";
   import { WebBrowser } from "langchain/tools/webbrowser";
   import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-  import { GoogleCustomSearch } from 'langchain/tools'
+  // Vector store
+  import { VectorDBQAChain } from "langchain/chains";
+  import { MemoryVectorStore } from "langchain/vectorstores/memory";
+  import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+  import { getUserKnowledgeBaseContent } from "../helpers/langchain/knowledge_base";
+  import { XenovaTransformersEmbeddings } from '../helpers/langchain/embeddings';
+
 
   import { WebLLM } from "../helpers/langchain/web_llm"; 
   import type * as webllm from "@mlc-ai/web-llm";
@@ -74,6 +79,7 @@
     }); */
     //const tools = [new Calculator(), new WolframAlphaTool({ appid: "ET9V8J-AT64RVXWQY" })];
     const chat = new ChatOpenAI({ openAIApiKey: "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" });
+    // Web browser
     const model = new OpenAI({ openAIApiKey: "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" });
     const embeddings = new OpenAIEmbeddings({ openAIApiKey: "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" });
     const headers = {
@@ -90,10 +96,36 @@
       //withCredentials: false,
       proxy: proxyConfig,
     };
-    //const tools = [new Calculator(), new WebBrowser({ model, embeddings, headers, axiosConfig }),];
+    // Vector store
+    const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000 });
+    const fileText = await getUserKnowledgeBaseContent();
+    console.log("Debug fileText ", fileText);
+    const docs = await textSplitter.createDocuments([fileText]);
+    console.log("Debug docs ", docs);
+    const vectorStore = await MemoryVectorStore.fromTexts(
+      [...docs.map(doc => doc.pageContent)],
+      [...docs.map((v, k) => k)],
+      //new XenovaTransformersEmbeddings({ modelInstance: model }),
+      embeddings,
+    );
+    console.log("Debug vectorStore ", vectorStore);
+    const chain = VectorDBQAChain.fromLLM(model, vectorStore);
+    const userKnowledgeBaseTool = new ChainTool({
+      name: "user-knowledge-base",
+      description:
+        "User's Knowledge Base - useful for when you need to retrieve information about the user as it contains user-specific data.",
+      chain: chain,
+    });
+    // Google search
     const google_api = "AIzaSyAYTuTfeSYnqSs6ZE1kFRhVYVwduKeXHsc";
     const google_cse = "12cbfb4eaced74690";
-    const tools = [new Calculator(), new GoogleCustomSearch({apiKey: google_api, googleCSEId: google_cse}), new WebBrowser({ model, embeddings, headers, axiosConfig })];
+
+    const tools = [
+      new Calculator(),
+      new GoogleCustomSearch({apiKey: google_api, googleCSEId: google_cse}),
+      new WebBrowser({ model, embeddings, headers, axiosConfig }),
+      userKnowledgeBaseTool,
+    ];
 
     $chatModelGlobal = await initializeAgentExecutorWithOptions(tools, chat, {
       //agentType: "chat-conversational-react-description",

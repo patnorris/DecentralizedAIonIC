@@ -116,3 +116,15 @@ export function saveBlob(blob, filename) {
   link.click();
   // URL.revokeObjectURL(url); breaks Firefox...
 }
+
+export function printWebLlmCacheContent() {
+  caches.open("webllm/config").then((cache) => {
+    console.log("webllm/config", cache.keys());
+  });
+  caches.open("webllm/wasm").then((cache) => {
+    console.log("webllm/wasm", cache.keys());
+  });
+  caches.open("webllm/model").then((cache) => {
+    console.log("webllm/model", cache.keys());
+  });
+};
