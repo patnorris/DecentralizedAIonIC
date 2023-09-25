@@ -1,0 +1,9 @@
+[dependencies]
+base = "0.9.3"
+matchers = "https://github.com/kritzcreek/motoko-matchers#v1.2.0"
+accountid = "https://github.com/aviate-labs/principal.mo#main"
+hex = "https://github.com/letmejustputthishere/motoko-hex#master"
+canistergeek = "https://github.com/usergeek/canistergeek-ic-motoko#v0.0.3"
+uuid = "https://github.com/aviate-labs/uuid.mo#v0.2.0"
+certified-cache = "0.2.0"
+server = "0.2.2"

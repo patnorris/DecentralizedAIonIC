@@ -5,6 +5,9 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { modelConfig } from "../helpers/gh-config";
+  import {
+    canisterId as proxyCanisterId,
+  } from "../../declarations/proxy_backend";
 
   //Import the OpenAPI Large Language Model (you can import other models here eg. Cohere)
   import { initializeAgentExecutorWithOptions } from "langchain/agents";
@@ -71,20 +74,26 @@
     }); */
     //const tools = [new Calculator(), new WolframAlphaTool({ appid: "ET9V8J-AT64RVXWQY" })];
     const chat = new ChatOpenAI({ openAIApiKey: "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" });
-    /* const model = new OpenAI({ openAIApiKey: "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" });
+    const model = new OpenAI({ openAIApiKey: "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" });
     const embeddings = new OpenAIEmbeddings({ openAIApiKey: "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" });
     const headers = {
-      "Accept": "application/json",
+      //"Accept": "application/json",
       "Accept-Language": "en-US",
-      "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+      //"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+    };
+    const proxyConfig = {
+      protocol: 'http',
+      host: `https://${proxyCanisterId}.icp0.io`,
+      port: 443,
     };
     const axiosConfig = {
-      withCredentials: false,
+      //withCredentials: false,
+      proxy: proxyConfig,
     };
-    const tools = [new Calculator(), new WebBrowser({ model, embeddings, headers, axiosConfig }),]; */
+    //const tools = [new Calculator(), new WebBrowser({ model, embeddings, headers, axiosConfig }),];
     const google_api = "AIzaSyAYTuTfeSYnqSs6ZE1kFRhVYVwduKeXHsc";
     const google_cse = "12cbfb4eaced74690";
-    const tools = [new Calculator(), new GoogleCustomSearch({apiKey: google_api, googleCSEId: google_cse})];
+    const tools = [new Calculator(), new GoogleCustomSearch({apiKey: google_api, googleCSEId: google_cse}), new WebBrowser({ model, embeddings, headers, axiosConfig })];
 
     $chatModelGlobal = await initializeAgentExecutorWithOptions(tools, chat, {
       //agentType: "chat-conversational-react-description",

@@ -4,6 +4,10 @@
       "main": "src/DeVinci_backend/main.mo",
       "type": "motoko"
     },
+    "proxy_backend": {
+      "main": "src/proxy_backend/main.mo",
+      "type": "motoko"
+    },
     "DeVinci_frontend": {
       "dependencies": [
         "DeVinci_backend"
@@ -20,8 +24,7 @@
   },
   "defaults": {
     "build": {
-      "packtool": "vessel sources",
-      "args": ""
+      "packtool": "mops sources"
     }
   },
   "networks": {
