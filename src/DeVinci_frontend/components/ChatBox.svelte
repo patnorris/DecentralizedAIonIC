@@ -7,6 +7,7 @@
 
   export let modelCallbackFunction;
   export let chatDisplayed;
+  export let addToAgentMemoryCallbackFunction;
 
   let newMessageText = '';
   let messages = [];
@@ -89,8 +90,24 @@
       // @ts-ignore
       const chatHistory = chatHistoryResponse.Ok;
       messages = chatHistory.messages;
+      await loadChatHistoryIntoAgentMemory(chatHistory.messages);
     };
     // Fresh chat
+  };
+
+  const loadChatHistoryIntoAgentMemory = async (pastMessages) => {
+    const userMessages = [];
+    const aiMessages = [];
+    pastMessages.forEach(pastMessage => {
+      if (pastMessage.sender === 'You') {
+        // User message
+        userMessages.push(pastMessage);
+      } else {
+        // AI message
+        aiMessages.push(pastMessage);
+      };      
+    });
+    await addToAgentMemoryCallbackFunction(userMessages, aiMessages);
   };
 
   onMount(loadChat);

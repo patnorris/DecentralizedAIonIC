@@ -22,6 +22,8 @@
   import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
   import { getUserKnowledgeBaseContent } from "../helpers/langchain/knowledge_base";
   import { XenovaTransformersEmbeddings } from '../helpers/langchain/embeddings';
+  // Memory
+  import { BufferMemory } from "langchain/memory";
 
 
   import { WebLLM } from "../helpers/langchain/web_llm"; 
@@ -127,10 +129,14 @@
       userKnowledgeBaseTool,
     ];
 
+    // Memory
+    const agentMemory = new BufferMemory();
+
+    // Create Agent
     $chatModelGlobal = await initializeAgentExecutorWithOptions(tools, chat, {
-      //agentType: "chat-conversational-react-description",
       //agentType: "openai-functions",
-      agentType: "zero-shot-react-description",
+      agentType: "chat-conversational-react-description",
+      memory: agentMemory,
       verbose: true,
       handleParsingErrors: true,
         //"Please try again, paying close attention to the allowed enum values",
@@ -154,6 +160,18 @@
   async function showNewChat() {
     $activeChatGlobal = null;
     return;
+  };
+
+// Previous chat messages can be loaded into the agent's memory
+  const loadChatHistoryIntoAgentMemory = async (pastUserMessages, pastAiMessages) => {
+    await $chatModelGlobal.memory.chatHistory.clear();
+    pastUserMessages.forEach(pastMessage => {
+      $chatModelGlobal.memory.chatHistory.addUserMessage(pastMessage);     
+    });
+    pastAiMessages.forEach(pastMessage => {
+      $chatModelGlobal.memory.chatHistory.addAIChatMessage(pastMessage);     
+    });
+    console.log("Debug memory messages", $chatModelGlobal.memory.chatHistory.getMessages());
   };
 
   /* const run = async () => {
@@ -190,7 +208,7 @@
     <ChatHistory bind:selectedChat={$activeChatGlobal} />
     <p id="generate-label"> </p>
     {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
-      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
+      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} addToAgentMemoryCallbackFunction={loadChatHistoryIntoAgentMemory} />
     {/key}
   {:else}
     {#if chatModelDownloadInProgress}
