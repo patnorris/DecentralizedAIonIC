@@ -5,6 +5,7 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { modelConfig } from "../helpers/gh-config";
+  import { store } from "../store";
 
   const workerPath = './worker.ts';
 
@@ -75,10 +76,12 @@
 <section id="chat-model-section" class="py-7 space-y-6 items-center text-center bg-slate-100">
   {#if chatModelDownloaded}
     <h3 id='chatModelStatusSubtext'>Success! You can chat with your AI Assistant now.</h3>
-    <Button id="newChatButton"
+    {#if $store.isAuthed}
+      <Button id="newChatButton"
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={showNewChat}>New Chat</Button>
-    <ChatHistory bind:selectedChat={$activeChatGlobal} />
+      <ChatHistory bind:selectedChat={$activeChatGlobal} />
+    {/if}
     <p id="generate-label"> </p>
     {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
