@@ -76,7 +76,7 @@
 <section id="chat-model-section" class="py-7 space-y-6 items-center text-center bg-slate-100">
   {#if chatModelDownloaded}
     <h3 id='chatModelStatusSubtext'>Success! You can chat with your AI Assistant now.</h3>
-    {#if !$store.isAuthed}
+    {#if $store.isAuthed}
       <Button id="newChatButton"
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={showNewChat}>New Chat</Button>
