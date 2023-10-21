@@ -16,6 +16,14 @@ const availableAiModels = [
     default: false
   },
   {
+    id: 'Mistral-7B-OpenOrca-q4f32_1',
+    name: 'Mistral',
+    size: 'Large',
+    numberOfParameters: '7 billion',
+    performance: 'Very Good',
+    default: false
+  },
+  {
     id: 'vicuna-v1-7b-q4f32_0',
     name: 'Vicuna',
     size: 'Large',
