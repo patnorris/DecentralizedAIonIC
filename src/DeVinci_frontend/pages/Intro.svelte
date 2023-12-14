@@ -13,7 +13,7 @@
 
 <LoginMenu />
 
-{#if deviceType !== 'desktop'}
+{#if !(deviceType === 'desktop' || deviceType === 'Android')}
   <UnsupportedDeviceBanner />
 {:else if !supportsWebGpu}
   <UnsupportedBrowserBanner />

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { store, selectedAiModelId, chatModelDownloadedGlobal } from "../store";
+    import { store, selectedAiModelId, chatModelDownloadedGlobal, deviceType } from "../store";
 
     import Topnav from "../components/Topnav.svelte";
     import Footer from "../components/Footer.svelte";
@@ -8,7 +8,7 @@
     import { getAvailableAiModels } from "../helpers/ai_model_helpers";
 
     let userSettings;
-    let availableAiModels = getAvailableAiModels();
+    let availableAiModels = getAvailableAiModels(deviceType === 'Android');
     let hasLoadedSettings = false;
 
     const changeModel = async (id) => {

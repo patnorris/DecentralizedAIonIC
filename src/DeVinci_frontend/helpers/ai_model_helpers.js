@@ -31,7 +31,7 @@ const availableAiModels = [
     performance: 'Super Good',
     default: false
   },
-  /* {
+  /* { //requires shader-f16
     id: 'Llama-2-70b-chat-hf-q4f16_1',
     name: 'Llama2 70b',
     size: 'Gigantic',
@@ -79,14 +79,36 @@ const availableAiModels = [
     performance: 'Good',
     default: false
   },
+  // Android WebGPU models
+  {
+    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-1k',
+    name: 'Red Pajama',
+    size: 'Medium',
+    numberOfParameters: '3 billion',
+    performance: 'Alright',
+    default: true,
+    android: true
+  },
+  /* { //requires shader-f16
+    id: 'Llama-2-7b-chat-hf-q4f16_1-1k',
+    name: 'Llama2 7b',
+    size: 'Large',
+    numberOfParameters: '7 billion',
+    performance: 'Very Good',
+    default: false,
+    android: true
+  }, */
 ];
 
-export const getAvailableAiModels = () => {
-  return availableAiModels;
+export const getAvailableAiModels = (isAndroid = false) => {
+  return availableAiModels.filter((model) => isAndroid ? model.android === isAndroid : !model.android);
 };
 
-export const getDefaultAiModelId = () => {
-  return availableAiModels.find(model => model.default).id;
+export const getDefaultAiModelId = (isAndroid = false) => {
+  if (isAndroid) {
+    return availableAiModels.find(model => model.android && model.default).id;
+  };
+  return availableAiModels.find(model => model.default && !model.android).id;
 };
 
 // Named event listener function such that it will only be attached once (anonymous event listeners may be attached mulitple times, so in casu each time initiateCollapsibles is called which messes up the functionality)
