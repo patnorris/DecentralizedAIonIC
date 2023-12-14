@@ -29,8 +29,18 @@ const uaParser = new UAParser();
 const result = uaParser.getResult();
 export const device = result.device.model || 'Unknown Device';
 export let deviceType = result.device.type; // Will return 'mobile' for mobile devices, 'tablet' for tablets, and undefined for desktops
+let osName = result.os.name; // Get the operating system name
+
 if (!deviceType) {
   deviceType = 'desktop';
+} else if (deviceType === 'mobile' || deviceType === 'tablet') {
+  if (osName === 'Android') {
+    //deviceType = 'Android ' + deviceType; // e.g., 'Android mobile'
+    deviceType = 'Android';
+  } else if (osName === 'iOS') {
+    //deviceType = 'iOS ' + deviceType; // e.g., 'iOS mobile'
+    deviceType = 'iOS';
+  };
 };
 export const browser = result.browser.name || 'Unknown Browser';
 // @ts-ignore
@@ -39,7 +49,7 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
-export let selectedAiModelId = writable(getDefaultAiModelId());
+export let selectedAiModelId = writable(getDefaultAiModelId(deviceType === 'Android'));
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
