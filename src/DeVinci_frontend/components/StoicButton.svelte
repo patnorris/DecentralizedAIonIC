@@ -9,20 +9,20 @@
     export let loading;
     export let toggleModal;
 
-    onMount(async () => {
+    /* onMount(async () => {
         StoicIdentity.load().then(async (identity) => {
             if (identity !== false) {
                 //ID is a already connected wallet!
                 store.stoicConnect();
             }
         });
-    });
+    }); */
 
     async function connect() {
-        loading = "stoic";
+        /* loading = "stoic";
         await store.stoicConnect();
         loading = "";
-        toggleModal();
+        toggleModal(); */
     }
 </script>
 

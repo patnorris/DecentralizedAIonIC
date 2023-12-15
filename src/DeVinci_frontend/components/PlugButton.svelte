@@ -32,6 +32,6 @@
   {#if loading === "plug"}
     <img class="h-6 block" src={spinner} alt="loading animation" />
   {:else}
-    plug
+    Plug
   {/if}
 </Button>

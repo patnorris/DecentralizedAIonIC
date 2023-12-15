@@ -63,7 +63,7 @@ const hours = BigInt(24);
 const nanosecondsPerHour = BigInt(3600000000000);
 
 type State = {
-  isAuthed: "plug" | "stoic" | "nfid" | null;
+  isAuthed: "plug" | "stoic" | "nfid" | "bitfinity" | null;
   backendActor: typeof DeVinci_backend;
   principal: Principal;
   accountId: string;
@@ -282,6 +282,87 @@ export const createStore = ({
     console.log("plug is authed");
   };
 
+  const bitfinityConnect = async () => {
+    // check if Bitfinity is installed in the browser
+    if (window.ic?.infinityWallet === undefined) {
+      window.open("https://wallet.bitfinity.network/", "_blank");
+      return;
+    };
+
+    // check if bitfinity is connected
+    const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
+    if (!bitfinityConnected) {
+      try {
+        console.log({
+          whitelist,
+          host,
+        });
+        await window.ic?.infinityWallet.requestConnect({
+          whitelist,
+          //host,
+        });
+      } catch (e) {
+        console.warn(e);
+        return;
+      };
+    };
+
+    await initBitfinity();
+  };
+
+  const initBitfinity = async () => {
+    // check whether agent is present
+    // if not create it
+    /* if (!window.ic?.infinityWallet?.agent) {
+      console.warn("no agent found");
+      const result = await window.ic?.infinityWallet?.createAgent({
+        whitelist,
+        host,
+      });
+      result
+        ? console.log("agent created")
+        : console.warn("agent creation failed");
+    }; */
+    // check if createActor method is available
+    if (!window.ic?.infinityWallet?.createActor) {
+      console.warn("no createActor found");
+      return;
+    };
+
+    // Fetch root key for certificate validation during development
+    if (process.env.DFX_NETWORK === "local") {
+      /* window.ic.infinityWallet.agent.fetchRootKey().catch((err) => {
+        console.warn(
+          "Unable to fetch root key. Check to ensure that your local replica is running",
+        );
+        console.error(err);
+      }); */
+    }
+
+    const backendActor = (await window.ic?.infinityWallet.createActor({
+      canisterId: backendCanisterId,
+      interfaceFactory: backendIdlFactory,
+      host,
+    })) as typeof DeVinci_backend;
+
+    if (!backendActor) {
+      console.warn("couldn't create backend actor");
+      return;
+    };
+
+    const principal = await window.ic.infinityWallet.getPrincipal();
+
+    update((state) => ({
+      ...state,
+      backendActor,
+      principal,
+      //accountId: window.ic.infinityWallet.sessionManager.sessionData.accountId,
+      isAuthed: "bitfinity",
+    }));
+
+    console.log("bitfinity is authed");
+  };
+
   const disconnect = async () => {
     // Check isAuthed to determine which method to use to disconnect
     if (globalState.isAuthed === "plug") {
@@ -309,6 +390,19 @@ export const createStore = ({
       } catch (error) {
         console.error("NFid disconnect error: ", error);       
       };
+    } else if (globalState.isAuthed === "bitfinity") {
+      /* try {
+        await window.ic?.infinityWallet?.disconnect();
+        // wait for 500ms to ensure that the disconnection is complete
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
+        if (bitfinityConnected) {
+          console.log("Bitfinity disconnect failed, trying once more");
+          await window.ic?.infinityWallet?.disconnect();
+        };      
+      } catch (error) {
+        console.error("Bitfinity disconnect error: ", error);      
+      }; */
     };
 
     update((prevState) => {
@@ -324,6 +418,7 @@ export const createStore = ({
     plugConnect,
     stoicConnect,
     nfidConnect,
+    bitfinityConnect,
     disconnect,
   };
 };
@@ -378,6 +473,55 @@ declare global {
             };
           };
         }) => Promise<{ height: number }>;
+      };
+      infinityWallet: {
+        /* agent: HttpAgent;
+        sessionManager: {
+          sessionData: {
+            accountId: string;
+          };
+        }; */
+        getPrincipal: () => Promise<Principal>;
+        //deleteAgent: () => void;
+        requestConnect: (options?: {
+          whitelist?: string[];
+          //host?: string;
+        }) => Promise<any>;
+        createActor: (options: {
+          canisterId: string;
+          interfaceFactory: any;
+          host?: string;
+        }) => Promise<typeof DeVinci_backend>;
+        isConnected: () => Promise<boolean>;
+        /* disconnect: () => Promise<boolean>;
+        createAgent: (args?: {
+          whitelist: string[];
+          host?: string;
+        }) => Promise<undefined>;
+        requestBalance: () => Promise<
+          Array<{
+            amount: number;
+            canisterId: string | null;
+            image: string;
+            name: string;
+            symbol: string;
+            value: number | null;
+          }>
+        >;
+        requestTransfer: (arg: {
+          to: string;
+          amount: number;
+          opts?: {
+            fee?: number;
+            memo?: string;
+            from_subaccount?: number;
+            created_at_time?: {
+              timestamp_nanos: number;
+            };
+          };
+        }) => Promise<{ height: number }>; */
+        getUserAssets: () => Promise<any>;
+        batchTransactions: () => Promise<any>;
       };
     };
   }
