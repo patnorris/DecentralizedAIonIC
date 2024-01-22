@@ -22,7 +22,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "checkJs": true,
-    "types": ["vite/client", "svelte", "node"],
+    "types": ["vite/client", "svelte", "node", "vite-plugin-pwa/client"],
     "baseUrl": ".",
     "paths": { "canisters/*": [".dfx/local/canisters/*"] }
   },

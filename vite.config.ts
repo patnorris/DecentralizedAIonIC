@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import path from "path";
 import dfxJson from "./dfx.json";
 import fs from "fs";
+import { VitePWA } from 'vite-plugin-pwa';
 
 const isDev = process.env["DFX_NETWORK"] === "local";
 // Get the network name, or `local` by default.
@@ -63,11 +64,89 @@ const canisterDefinitions = Object.entries(canisterIds).reduce(
   {},
 );
 
+const pwaOptions = {
+  //mode: 'development',
+  base: '/',
+  includeAssets: ['favicon.ico'],
+  registerType: 'autoUpdate',
+  //selfDestroying: true,
+  workbox: {
+    clientsClaim: true,
+    skipWaiting: true,
+    globPatterns: ['**/*.{js,css,html,ico,png,svg, json, wasm, bin}'],
+    runtimeCaching: [
+      {
+        urlPattern: ({ url }) => {
+          return url.pathname.startsWith("/");
+        },
+        handler: "CacheFirst" as const,
+        options: {
+          cacheName: "api-cache",
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
+      },
+    ],
+  },
+  /* devOptions: {
+    enabled: true,
+    type: 'module',
+    navigateFallback: 'index.html',
+  }, */
+  /* devOptions: {
+    enabled: process.env.SW_DEV === 'true',
+    // when using generateSW the PWA plugin will switch to classic
+    type: 'module',
+    navigateFallback: 'index.html',
+  }, */
+  manifest: {
+    short_name: "DeVinci",
+    name: "Decentralized AI Chat App",
+    icons: [
+      {
+        src: './FutureWebInitiative_img192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: './FutureWebInitiative_img512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+      {
+        src: './FutureWebInitiative_img512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any'
+      },
+      {
+        src: './FutureWebInitiative_img512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable'
+      },
+      {
+        src: "./FutureWebInitiative_img.png",
+        type: "image/png",
+        sizes: "721x721"
+      },
+    ],
+    //"start_url": "/",
+    background_color: "#3367D6",
+    //display: "standalone",
+    scope: "/",
+    theme_color: "#3367D6",
+    description: "Your decentralized AI Chat app served from the Internet Computer and running on your device through the browser."
+  },
+};
+
 // See guide on how to configure Vite at:
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    svelte()
+    svelte(),
+    VitePWA(pwaOptions),
   ],
   build: {
     target: "es2020",
