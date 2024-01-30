@@ -1,6 +1,6 @@
 import App from "./App.svelte"
 import "./app.css"
-import {useRegisterSW} from 'virtual:pwa-register/svelte';
+/* import {useRegisterSW} from 'virtual:pwa-register/svelte';
 
 const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
     async onRegistered(swr) {
@@ -16,7 +16,7 @@ const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
         console.log('SW ready for offline')
         //setTimeout(() => close(), 5000)
     }
-});
+}); */
 
 const app = new App({
   target: document.getElementById("root"),

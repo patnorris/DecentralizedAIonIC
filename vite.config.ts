@@ -65,17 +65,17 @@ const canisterDefinitions = Object.entries(canisterIds).reduce(
 );
 
 const pwaOptions = {
-  workbox: {
-    globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-  },
-  registerType: "autoUpdate",
+  // workbox: {
+  //   globPatterns: ['**/*.{js,css,html,svg,png}'],
+  // },
+  //registerType: "autoUpdate",
   manifest: {
     short_name: "DeVinci",
     name: "DeVinci AI Chat App",
     description: "Your decentralized AI Chat app served from the Internet Computer and running on your device through the browser.",
-    display: "standalone",
-    scope: "/",
-    start_url: "/",
+    //display: "standalone",
+    //scope: "/",
+    //start_url: "/",
     background_color: "#3367D6",
     theme_color: "#3367D6",
     icons: [
