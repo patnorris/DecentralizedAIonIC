@@ -64,50 +64,64 @@ const canisterDefinitions = Object.entries(canisterIds).reduce(
   {},
 );
 
+const pwaManifest = {
+  short_name: "DeVinci",
+  name: "DeVinci AI Chat App",
+  description: "Your decentralized AI Chat app served from the Internet Computer and running on your device through the browser.",
+  //display: "standalone",
+  //scope: "/",
+  //start_url: "/",
+  background_color: "#3367D6",
+  theme_color: "#3367D6",
+  icons: [
+    {
+      src: './FutureWebInitiative_img192.png',
+      sizes: '192x192',
+      type: 'image/png',
+    },
+    {
+      src: './FutureWebInitiative_img512.png',
+      sizes: '512x512',
+      type: 'image/png',
+    },
+    {
+      src: './FutureWebInitiative_img512.png',
+      sizes: '512x512',
+      type: 'image/png',
+      purpose: 'any'
+    },
+    {
+      src: './FutureWebInitiative_img512.png',
+      sizes: '512x512',
+      type: 'image/png',
+      purpose: 'maskable'
+    },
+    {
+      src: "./FutureWebInitiative_img.png",
+      type: "image/png",
+      sizes: "721x721"
+    },
+  ],
+};
+
 const pwaOptions = {
   // workbox: {
   //   globPatterns: ['**/*.{js,css,html,svg,png}'],
   // },
-  //registerType: "autoUpdate",
-  manifest: {
-    short_name: "DeVinci",
-    name: "DeVinci AI Chat App",
-    description: "Your decentralized AI Chat app served from the Internet Computer and running on your device through the browser.",
-    //display: "standalone",
-    //scope: "/",
-    //start_url: "/",
-    background_color: "#3367D6",
-    theme_color: "#3367D6",
-    icons: [
-      {
-        src: './FutureWebInitiative_img192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: './FutureWebInitiative_img512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        src: './FutureWebInitiative_img512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any'
-      },
-      {
-        src: './FutureWebInitiative_img512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: "./FutureWebInitiative_img.png",
-        type: "image/png",
-        sizes: "721x721"
-      },
-    ],
+  registerType: 'autoUpdate',
+  manifest: pwaManifest,
+  injectRegister: null,
+  // for own service worker (not auto-generated)
+  strategies: 'injectManifest',
+  srcDir: 'src/DeVinci_frontend',
+  filename: 'service-worker.ts',
+  injectManifest: {
+    //injectionPoint: undefined
+    rollupFormat: 'iife'
   },
+  devOptions: {
+    enabled: true
+  }
 };
 
 // See guide on how to configure Vite at:
