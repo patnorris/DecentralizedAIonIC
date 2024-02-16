@@ -68,9 +68,9 @@ const pwaManifest = {
   short_name: "DeVinci",
   name: "DeVinci AI Chat App",
   description: "Your decentralized AI Chat app served from the Internet Computer and running on your device through the browser.",
-  //display: "standalone",
-  //scope: "/",
-  //start_url: "/",
+  display: "standalone",
+  scope: "/",
+  start_url: "/",
   background_color: "#3367D6",
   theme_color: "#3367D6",
   icons: [
@@ -115,6 +115,7 @@ const pwaOptions = {
   strategies: 'injectManifest',
   srcDir: 'src/DeVinci_frontend',
   filename: 'service-worker.ts',
+  outDir: './dist/serviceWorker',
   injectManifest: {
     //injectionPoint: undefined
     rollupFormat: 'iife'

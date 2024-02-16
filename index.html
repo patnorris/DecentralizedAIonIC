@@ -11,12 +11,13 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('https://xfl6h-3qaaa-aaaai-acq3a-cai.raw.icp0.io/service-worker.js')
+        //navigator.serviceWorker.register('https://xfl6h-3qaaa-aaaai-acq3a-cai.icp0.io/service-worker-shell.js')
+        navigator.serviceWorker.register('./serviceWorker/service-worker.js', { scope: '/' })
           .then((registration) => {
-              console.log('Service Worker registered with scope:', registration);
+            console.log('Service Worker registered with scope:', registration);
           })
           .catch((error) => {
-              console.log('Service Worker registration failed:', error);
+            console.log('Service Worker registration failed:', error);
           });
       });
     };
