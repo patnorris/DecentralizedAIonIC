@@ -12,27 +12,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 self.skipWaiting();
 clientsClaim();
 
-self.addEventListener('message', (event) => {
-    console.log('Service Worker file message');
-    if (event.data && event.data.type === 'SKIP_WAITING')
-      self.skipWaiting()
-  });
-
-self.addEventListener('install', (event) => {
-    console.log('Service Worker installing.');
-});
-
-self.addEventListener('activate', (event) => {
-    console.log('Service Worker activated.');
-});
-
-console.log('Service Worker file END');
-
-/* 
-/// <reference lib="webworker" />
-declare const self: ServiceWorkerGlobalScope;
-
-const CACHE_NAME = 'v1-cache';
+const CACHE_NAME = 'devinci-cache';
 const urlsToCache = [
   // List URLs to cache here
   '/',
@@ -42,6 +22,7 @@ const urlsToCache = [
 
 // Install event
 self.addEventListener('install', event => {
+  console.log('Service Worker installing.');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -52,18 +33,36 @@ self.addEventListener('install', event => {
 });
 
 // Fetch event to cache all requests
-self.addEventListener('fetch', event => {
+/* self.addEventListener('fetch', event => {
+  console.log('Service Worker file fetch event ', event);
+  console.log('Service Worker file fetch event.request ', event.request);
   event.respondWith(
     caches.match(event.request)
       .then(response => {
         // Return cache hit or fetch and cache
+  console.log('Service Worker file fetch response ', response);
         return response || fetch(event.request).then(fetchResponse => {
+          console.log('Service Worker file fetch fetchResponse ', fetchResponse);
           return caches.open(CACHE_NAME).then(cache => {
+            console.log('Service Worker file fetch cache ', cache);
             cache.put(event.request, fetchResponse.clone());
             return fetchResponse;
           });
         });
       })
   );
+}); */
+
+self.addEventListener('message', (event) => {
+  console.log('Service Worker file message');
+  if (event.data && event.data.type === 'SKIP_WAITING')
+    self.skipWaiting()
 });
-*/
+
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activated.');
+});
+
+
+console.log('Service Worker file END');
+

@@ -106,7 +106,24 @@ const pwaManifest = {
 
 const pwaOptions = {
   // workbox: {
-  //   globPatterns: ['**/*.{js,css,html,svg,png}'],
+  //   //globPatterns: ['**/*.{js,css,html,svg,png}'],
+  //   runtimeCaching: [
+  //     {
+  //       // Match any request
+  //       urlPattern: new RegExp('.*'), 
+  //       handler: 'CacheFirst', // Change to 'CacheFirst' if you prefer to go cache-first
+  //       options: {
+  //         cacheName: 'devinci-cache',
+  //         expiration: {
+  //           maxEntries: 200, // Adjust the number of entries according to your needs
+  //           maxAgeSeconds: 24 * 60 * 60, // 24 hours
+  //         },
+  //         cacheableResponse: {
+  //           statuses: [0, 200], // Cache successful responses and opaque responses
+  //         },
+  //       },
+  //     },
+  //   ],
   // },
   registerType: 'autoUpdate',
   manifest: pwaManifest,
