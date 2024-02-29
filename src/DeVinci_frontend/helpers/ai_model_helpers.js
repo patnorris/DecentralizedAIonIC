@@ -16,6 +16,38 @@ const availableAiModels = [
     default: false
   },
   {
+    id: 'gemma-2b-it-q4f32_1',
+    name: 'Gemma',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: false
+  },
+  {
+    id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',
+    name: 'TinyLlama',
+    size: 'Small',
+    numberOfParameters: '1.1 billion',
+    performance: 'Alright',
+    default: false
+  },
+  {
+    id: 'Phi2-q4f32_1',
+    name: 'Phi',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: false
+  },
+  {
+    id: 'Phi1.5-q0f32',
+    name: 'Phi',
+    size: 'Small',
+    numberOfParameters: '1.5 billion',
+    performance: 'Alright',
+    default: false
+  },
+  {
     id: 'Llama-2-7b-chat-hf-q4f32_1',
     name: 'Llama2 7b',
     size: 'Large',
@@ -47,30 +79,30 @@ const availableAiModels = [
     performance: 'Super Good',
     default: false
   },
-  {
+  /* {
     id: 'WizardMath-7B-V1.0-q4f32_1',
     name: 'WizardMath',
     size: 'Large',
     numberOfParameters: '7 billion',
     performance: 'Very Good',
     default: false
-  },
-  {
+  }, */
+  /* {
     id: 'OpenHermes-2.5-Mistral-7B-q4f32_1',
     name: 'OpenHermes 2.5',
     size: 'Large',
     numberOfParameters: '7 billion',
     performance: 'Very Good',
     default: false
-  },
-  {
+  }, */
+  /* {
     id: 'NeuralHermes-2.5-Mistral-7B-q4f32_1',
     name: 'NeuralHermes 2.5',
     size: 'Large',
     numberOfParameters: '7 billion',
     performance: 'Very Good',
     default: false
-  },
+  }, */
   {
     id: 'vicuna-v1-7b-q4f32_0',
     name: 'Vicuna',
@@ -87,6 +119,42 @@ const availableAiModels = [
     numberOfParameters: '3 billion',
     performance: 'Alright',
     default: true,
+    android: true
+  },
+  {
+    id: 'gemma-2b-it-q4f32_1-1k',
+    name: 'Gemma',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-1k',
+    name: 'TinyLlama',
+    size: 'Small',
+    numberOfParameters: '1.1 billion',
+    performance: 'Alright',
+    default: false,
+    android: true
+  },
+  {
+    id: 'Phi2-q4f32_1-1k',
+    name: 'Phi',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    id: 'Phi1.5-q4f32_1-1k',
+    name: 'Phi',
+    size: 'Small',
+    numberOfParameters: '1.5 billion',
+    performance: 'Alright',
+    default: false,
     android: true
   },
   /* { //requires shader-f16
