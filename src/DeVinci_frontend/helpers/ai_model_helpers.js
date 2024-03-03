@@ -58,6 +58,15 @@ const availableAiModels = [
     android: true
   },
   {
+    id: 'Phi2-q4f32_1-1k',
+    name: 'Phi',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  /* {
     id: 'gemma-2b-it-q4f32_1-1k',
     name: 'Gemma',
     size: 'Smaller',
@@ -72,15 +81,6 @@ const availableAiModels = [
     size: 'Small',
     numberOfParameters: '1.1 billion',
     performance: 'Alright',
-    default: false,
-    android: true
-  },
-  {
-    id: 'Phi2-q4f32_1-1k',
-    name: 'Phi',
-    size: 'Smaller',
-    numberOfParameters: '2 billion',
-    performance: 'Good',
     default: false,
     android: true
   },
@@ -101,7 +101,7 @@ const availableAiModels = [
     performance: 'Very Good',
     default: false,
     android: true
-  },
+  }, */
 ];
 
 export const getAvailableAiModels = (isAndroid = false) => {
