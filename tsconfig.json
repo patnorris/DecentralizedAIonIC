@@ -22,7 +22,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "checkJs": true,
-    "types": ["vite/client", "svelte", "node"],
+    "types": ["vite/client", "svelte", "node", "vite-plugin-pwa/svelte"],
     "baseUrl": ".",
     "paths": { "canisters/*": [".dfx/local/canisters/*"] }
   },
@@ -31,5 +31,6 @@
     "src/DeVinci_frontend/**/*.ts",
     "src/DeVinci_frontend/**/*.js",
     "src/DeVinci_frontend/**/*.svelte"
-  ]
+  ],
+  "lib": ["ESNext", "DOM", "WebWorker"]
 }
