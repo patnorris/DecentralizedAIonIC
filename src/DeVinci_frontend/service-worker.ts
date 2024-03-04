@@ -32,15 +32,19 @@ self.addEventListener('install', event => {
   );
 });
 
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activated.');
+});
+
 // Fetch event to cache all requests
-/* self.addEventListener('fetch', event => {
+self.addEventListener('fetch', event => {
   console.log('Service Worker file fetch event ', event);
   console.log('Service Worker file fetch event.request ', event.request);
   event.respondWith(
     caches.match(event.request)
       .then(response => {
         // Return cache hit or fetch and cache
-  console.log('Service Worker file fetch response ', response);
+        console.log('Service Worker file fetch response ', response);
         return response || fetch(event.request).then(fetchResponse => {
           console.log('Service Worker file fetch fetchResponse ', fetchResponse);
           return caches.open(CACHE_NAME).then(cache => {
@@ -51,16 +55,12 @@ self.addEventListener('install', event => {
         });
       })
   );
-}); */
+});
 
 self.addEventListener('message', (event) => {
   console.log('Service Worker file message');
   if (event.data && event.data.type === 'SKIP_WAITING')
     self.skipWaiting()
-});
-
-self.addEventListener('activate', (event) => {
-  console.log('Service Worker activated.');
 });
 
 
