@@ -13,6 +13,8 @@ self.skipWaiting();
 clientsClaim();
 
 const CACHE_NAME = 'devinci-cache';
+
+// All of these will be pre-cached (in install event)
 const urlsToCache = [
   // List URLs to cache here
   '/',
@@ -46,7 +48,6 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
         return cache.addAll(urlsToCache);
       })
   );
@@ -56,7 +57,7 @@ self.addEventListener('activate', (event) => {
   console.log('Service Worker activated.');
 });
 
-// Use a CacheFirst strategy for all requests
+// Use a CacheFirst strategy for all requests (i.e. all requests are cached)
 registerRoute(
   ({ request }) => true,
   new CacheFirst({

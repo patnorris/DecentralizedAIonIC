@@ -6,7 +6,6 @@
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
   import NotFound from "./pages/NotFound.svelte";
-  //import Pwa from "./components/PWA.svelte";
 
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)
@@ -21,5 +20,4 @@
 
 <div class="App">
   <Router {routes} />
-  <!-- <Pwa /> -->
 </div>
