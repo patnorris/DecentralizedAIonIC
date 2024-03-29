@@ -54,7 +54,7 @@ const availableAiModels = [
     size: 'Medium',
     numberOfParameters: '3 billion',
     performance: 'Alright',
-    default: true,
+    default: false,
     android: true
   },
   {
@@ -63,7 +63,7 @@ const availableAiModels = [
     size: 'Smaller',
     numberOfParameters: '2 billion',
     performance: 'Good',
-    default: false,
+    default: true,
     android: true
   },
   /* {
