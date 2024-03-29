@@ -1,11 +1,19 @@
 const availableAiModels = [
   {
-    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1',
-    name: 'Red Pajama',
-    size: 'Medium',
-    numberOfParameters: '3 billion',
-    performance: 'Alright',
+    id: 'gemma-2b-it-q4f32_1',
+    name: 'Gemma',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
     default: true
+  },
+  {
+    id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',
+    name: 'TinyLlama',
+    size: 'Small',
+    numberOfParameters: '1.1 billion',
+    performance: 'Alright',
+    default: false
   },
   { //requires shader-f16
     id: 'Mistral-7B-Instruct-v0.2-q4f16_1',
@@ -16,18 +24,10 @@ const availableAiModels = [
     default: false
   },
   {
-    id: 'gemma-2b-it-q4f32_1',
-    name: 'Gemma',
-    size: 'Smaller',
-    numberOfParameters: '2 billion',
-    performance: 'Good',
-    default: false
-  },
-  {
-    id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',
-    name: 'TinyLlama',
-    size: 'Small',
-    numberOfParameters: '1.1 billion',
+    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1',
+    name: 'Red Pajama',
+    size: 'Medium',
+    numberOfParameters: '3 billion',
     performance: 'Alright',
     default: false
   },
