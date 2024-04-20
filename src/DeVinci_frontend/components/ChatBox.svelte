@@ -22,6 +22,23 @@
     storeChatToggle = !storeChatToggle;
   };
 
+  function formatMessagesForBackend(messagesToFormat) {
+    // Map each message to a new format
+    return messagesToFormat.map(message => ({
+        content: message.content,
+        sender: message.name
+    }));
+  };
+
+  function formatMessagesForUi(messages) {
+    // Map each message to the UI format
+    return messages.map(message => ({
+        content: message.content,
+        name: message.sender,
+        role: message.sender === 'DeVinci' ? 'assistant' : 'user'
+    }));
+  };
+
   const generateProgressCallback = (_step: number, message: string) => {
     replyText = message;
     messages = [...messages.slice(0, -1), { role: 'assistant', content: replyText, name: 'DeVinci' }];
@@ -31,12 +48,14 @@
     messageGenerationInProgress = true;
     if(newMessageText.trim() !== '') {
       const newPrompt = newMessageText.trim();
-      const messageHistoryWithPrompt = [...messages, { role: 'user', content: newPrompt, name: 'You' }];
+      const newMessageEntry = { role: 'user', content: newPrompt, name: 'You' };
+      const messageHistoryWithPrompt = [...messages, newMessageEntry];
       messages = messageHistoryWithPrompt;
       newMessageText = '';
       try {
         messages = [...messages, { role: 'assistant', content: replyText, name: 'DeVinci' }];
-        const reply = await modelCallbackFunction(messageHistoryWithPrompt, generateProgressCallback);
+        const promptFormattedForModel = [newMessageEntry]; // passing in the message history easily overwhelms the available device memory --> TODO: find good way to keep memory (as currently each message is like a new chat without the LLM knowing about any messages before)
+        const reply = await modelCallbackFunction(promptFormattedForModel, generateProgressCallback);
         messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }]; 
       } catch (error) {
         console.error("Error getting response from model: ", error);
@@ -47,17 +66,19 @@
     messageGenerationInProgress = false;
     // Store chat
     if (storeChatToggle && $store.isAuthed) {
+      // Get messages into format for backend
+      const messagesFormattedForBackend = formatMessagesForBackend(messages);
       if(chatDisplayed) {
         // Update chat
         try {
-          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messages); 
+          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend); 
         } catch (error) {
           console.error("Error storing chat: ", error);        
         };
       } else {
         // New chat
         try {
-          const chatCreatedResponse = await $store.backendActor.create_chat(messages);
+          const chatCreatedResponse = await $store.backendActor.create_chat(messagesFormattedForBackend);
           // @ts-ignore
           if (chatCreatedResponse.Err) {
             // @ts-ignore
@@ -89,7 +110,8 @@
       const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
       // @ts-ignore
       const chatHistory = chatHistoryResponse.Ok;
-      messages = chatHistory.messages;
+      const formattedMessages = formatMessagesForUi(chatHistory.messages);
+      messages = formattedMessages;
     };
     // Fresh chat
   };

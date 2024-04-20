@@ -13,7 +13,7 @@
   chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   // Debug Android
-  let debugOutput = "";
+  //let debugOutput = "";
 
   function setLabel(id: string, text: string) {
     const label = document.getElementById(id);
@@ -24,32 +24,32 @@
   }
 
   async function loadChatModel() {
-    debugOutput += "###in loadChatModel###";
-    setLabel("debug-label", debugOutput);
+    /* debugOutput += "###in loadChatModel###";
+    setLabel("debug-label", debugOutput); */
     if (chatModelDownloadInProgress) {
       return;
     };
     if (chatModelDownloaded === true && $chatModelGlobal) {
       return;
     };
-    console.log("Loading chat model...");
+    //console.log("Loading chat model...");
     chatModelDownloadInProgress = true;
     if (process.env.NODE_ENV !== "development") {
-      console.log("Using web worker");
+      //console.log("Using web worker");
       try {
         /* TODO: fix
         chatModel = new webllm.ChatWorkerClient(new Worker(
           new URL(workerPath, import.meta.url),
           {type: 'module'}
         )); */
-        console.log("Using webllm");
+        //console.log("Using webllm");
         $chatModelGlobal = new webllm.Engine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.Engine();
       }      
     } else {
-      console.log("Using webllm");
+      //console.log("Using webllm");
       $chatModelGlobal = new webllm.Engine();
     };
 
@@ -116,5 +116,5 @@
       As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can try a smaller one from the selection under Settings and see if the device can support it.</p>
     <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
   {/if}
-  <p id="debug-label"> </p>  Debug
+  <!-- <p id="debug-label"> </p>  Debug -->
 </section>

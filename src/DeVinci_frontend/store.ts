@@ -167,9 +167,9 @@ export const createStore = ({
         initInternetIdentity(identity);
       },
       identityProvider:
-        process.env.DFX_NETWORK === "ic"
-          ? "https://identity.ic0.app/#authorize"
-          : `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`,
+        process.env.DFX_NETWORK === "local"
+          ? `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`
+          : "https://identity.ic0.app/#authorize",
       // Maximum authorization expiration is 30 days
       maxTimeToLive: days * hours * nanosecondsPerHour,
       windowOpenerFeatures: 
