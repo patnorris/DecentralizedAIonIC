@@ -34,6 +34,6 @@
   {#if loading === "nfid"}
     <img class="h-6 block" src={spinner} alt="loading animation" />
   {:else}
-    NFID (incl. Google, MetaMask, WalletConnect, passkey)
+    NFID (incl. Google)
   {/if}
 </Button>

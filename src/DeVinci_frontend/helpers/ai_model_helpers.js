@@ -8,6 +8,14 @@ const availableAiModels = [
     default: true
   },
   {
+    id: 'Llama-3-8B-Instruct-q4f32_1',
+    name: 'Llama3 8B',
+    size: 'Large',
+    numberOfParameters: '8 billion',
+    performance: 'Super Good',
+    default: false
+  },
+  {
     id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',
     name: 'TinyLlama',
     size: 'Small',
@@ -33,18 +41,26 @@ const availableAiModels = [
   },
   { //requires shader-f16
     id: 'Llama-2-13b-chat-hf-q4f16_1',
-    name: 'Llama2 13b',
+    name: 'Llama2 13B',
     size: 'Very Large',
     numberOfParameters: '13 billion',
     performance: 'Super Good',
     default: false
   },
   { //requires shader-f16
-    id: 'Llama-2-70b-chat-hf-q4f16_1',
-    name: 'Llama2 70b',
+    id: 'Llama-3-70B-Instruct-q3f16_1',
+    name: 'Llama3 70B',
     size: 'Gigantic',
     numberOfParameters: '70 billion',
     performance: 'Insane',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'Llama-2-70b-chat-hf-q4f16_1',
+    name: 'Llama2 70B',
+    size: 'Gigantic',
+    numberOfParameters: '70 billion',
+    performance: 'Great',
     default: false
   },
   // Android WebGPU models
@@ -64,6 +80,15 @@ const availableAiModels = [
     numberOfParameters: '2 billion',
     performance: 'Good',
     default: true,
+    android: true
+  },
+  {
+    id: 'Llama-3-8B-Instruct-q4f32_1-1k',
+    name: 'Llama3 8B',
+    size: 'Large',
+    numberOfParameters: '8 billion',
+    performance: 'Super Good',
+    default: false,
     android: true
   },
   /* {

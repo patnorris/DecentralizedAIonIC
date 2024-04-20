@@ -1,8 +1,47 @@
 // copied from: https://github.com/mlc-ai/web-llm/blob/main/examples/simple-chat/src/gh-config.js
+export const modelVersion = "v0_2_30";
+export const modelLibURLPrefix =
+	"https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/";
 
 export const modelConfig = {
-	"model_list": [
+	model_list: [
 	// Models with _1-1k at the end of the local_id fit for 128MB buffer limit (e.g. webgpu on Android)
+		// Llama-3
+		{
+			"model_url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_30/Llama-3-8B-Instruct-q4f32_1-ctx1k_cs1k-webgpu.wasm",
+			"model_id": "Llama-3-8B-Instruct-q4f32_1",
+			"model_lib_url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_30/Llama-3-8B-Instruct-q4f32_1-ctx1k_cs1k-webgpu.wasm",
+			"vram_required_MB": 6101.01,
+			"low_resource_required": false,
+		},
+		{
+			"model_url": "https://huggingface.co/mlc-ai/Llama-3-8B-Instruct-q4f16_1-MLC/resolve/main/",
+			"model_id": "Llama-3-8B-Instruct-q4f16_1",
+			"model_lib_url": modelLibURLPrefix + modelVersion + "/Llama-3-8B-Instruct-q4f16_1-ctx4k_cs1k-webgpu.wasm",
+			"vram_required_MB": 5001.00,
+			"low_resource_required": false,
+		},
+		{
+			"model_url": "https://huggingface.co/mlc-ai/Llama-3-8B-Instruct-q4f32_1-MLC/resolve/main/",
+			"model_id": "Llama-3-8B-Instruct-q4f32_1-1k",
+			"model_lib_url": modelLibURLPrefix + modelVersion + "/Llama-3-8B-Instruct-q4f32_1-ctx1k_cs1k-webgpu.wasm",
+			"vram_required_MB": 5295.70,
+			"low_resource_required": true,
+		},
+		{
+			"model_url": "https://huggingface.co/mlc-ai/Llama-3-8B-Instruct-q4f16_1-MLC/resolve/main/",
+			"model_id": "Llama-3-8B-Instruct-q4f16_1-1k",
+			"model_lib_url": modelLibURLPrefix + modelVersion + "/Llama-3-8B-Instruct-q4f16_1-ctx1k_cs1k-webgpu.wasm",
+			"vram_required_MB": 4598.34,
+			"low_resource_required": true,
+		},
+		{
+			"model_url": "https://huggingface.co/mlc-ai/Llama-3-70B-Instruct-q3f16_1-MLC/resolve/main/",
+			"model_id": "Llama-3-70B-Instruct-q3f16_1",
+			"model_lib_url": modelLibURLPrefix + modelVersion + "/Llama-3-70B-Instruct-q3f16_1-ctx4k_cs1k-webgpu.wasm",
+			"vram_required_MB": 31153.13,
+			"low_resource_required": false,
+		},
 		// Llama-2
 		{
 			"model_url": "https://huggingface.co/mlc-ai/Llama-2-7b-chat-hf-q4f32_1-MLC/resolve/main/",
@@ -280,7 +319,10 @@ export const modelConfig = {
 			"low_resource_required": false,
 		}, */
 	],
-	"model_lib_map": {
+	/* model_lib_map: {
+		"Llama-3-8B-Instruct-q4f32_1": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_30/Llama-3-8B-Instruct-q4f32_1-ctx1k_cs1k-webgpu.wasm",
+		"Llama-3-8B-Instruct-q4f32_1-1k": modelLibURLPrefix + modelVersion + "/Llama-3-8B-Instruct-q4f32_1-ctx1k_cs1k-webgpu.wasm",
+		"Llama-3-70B-Instruct-q3f16_1": modelLibURLPrefix + modelVersion + "/Llama-3-70B-Instruct-q3f16_1-ctx4k_cs1k-webgpu.wasm",			
 		"Llama-2-7b-chat-hf-q4f32_1": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/Llama-2-7b-chat-hf-q4f32_1-webgpu.wasm",
 		"Llama-2-7b-chat-hf-q4f16_1": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/Llama-2-7b-chat-hf-q4f16_1-webgpu.wasm",
 		"Llama-2-13b-chat-hf-q4f16_1": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/Llama-2-13b-chat-hf-q4f16_1-webgpu.wasm",
@@ -301,6 +343,6 @@ export const modelConfig = {
 		"Llama-2-7b-chat-hf-q4f16_1-1k": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/Llama-2-7b-chat-hf-q4f16_1-1k-webgpu.wasm",
 		"RedPajama-INCITE-Chat-3B-v1-q4f16_1-1k": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/RedPajama-INCITE-Chat-3B-v1-q4f16_1-1k-webgpu.wasm",
 		"RedPajama-INCITE-Chat-3B-v1-q4f32_1-1k": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/RedPajama-INCITE-Chat-3B-v1-q4f32_1-1k-webgpu.wasm",
-	},
+	}, */
 	//"use_web_worker": true
 }
