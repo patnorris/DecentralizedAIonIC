@@ -28,7 +28,7 @@
     "@dfinity/authentication": "^0.14.2",
     "@dfinity/candid": "0.15.1",
     "@dfinity/principal": "0.15.1",
-    "@mlc-ai/web-llm": "0.2.29",
+    "@mlc-ai/web-llm": "0.2.33",
     "svelte-spa-router": "^3.3.0",
     "ua-parser-js": "^1.0.35"
   },

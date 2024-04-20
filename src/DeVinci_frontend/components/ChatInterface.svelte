@@ -4,7 +4,6 @@
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
-  import { modelConfig } from "../helpers/gh-config";
   import { store } from "../store";
 
   const workerPath = './worker.ts';
@@ -44,20 +43,21 @@
           {type: 'module'}
         )); */
         console.log("Using webllm");
-        $chatModelGlobal = new webllm.ChatModule();
+        $chatModelGlobal = new webllm.Engine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
-        $chatModelGlobal = new webllm.ChatModule();
+        $chatModelGlobal = new webllm.Engine();
       }      
     } else {
       console.log("Using webllm");
-      $chatModelGlobal = new webllm.ChatModule();
+      $chatModelGlobal = new webllm.Engine();
     };
 
-    $chatModelGlobal.setInitProgressCallback((report: webllm.InitProgressReport) => {
+    const initProgressCallback = (report) => {
       setLabel("init-label", report.text);
-    });
-    await $chatModelGlobal.reload($selectedAiModelId, undefined, modelConfig);
+    };
+    $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+    await $chatModelGlobal.reload($selectedAiModelId);
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
@@ -67,7 +67,18 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    const reply = await $chatModelGlobal.generate(prompt, progressCallback);
+    let curMessage = "";
+    let stepCount = 0;
+    const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
+    for await (const chunk of completion) {
+      const curDelta = chunk.choices[0].delta.content;
+      if (curDelta) {
+          curMessage += curDelta;
+      };
+      progressCallback(stepCount, curMessage);
+      stepCount ++;
+    };
+    const reply = await $chatModelGlobal.getMessage();
     return reply;
   };
 

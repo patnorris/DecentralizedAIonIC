@@ -5,7 +5,7 @@ const availableAiModels = [
     size: 'Smaller',
     numberOfParameters: '2 billion',
     performance: 'Good',
-    default: true
+    default: false // TODO: change back to being default
   },
   {
     id: 'Llama-3-8B-Instruct-q4f32_1',
@@ -13,7 +13,7 @@ const availableAiModels = [
     size: 'Large',
     numberOfParameters: '8 billion',
     performance: 'Super Good',
-    default: false
+    default: true // TODO: only default for testing
   },
   {
     id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',

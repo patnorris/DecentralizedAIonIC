@@ -24,22 +24,23 @@
 
   const generateProgressCallback = (_step: number, message: string) => {
     replyText = message;
-    messages = [...messages.slice(0, -1), { sender: 'DeVinci', content: replyText }];
+    messages = [...messages.slice(0, -1), { role: 'assistant', content: replyText, name: 'DeVinci' }];
   };
 
   async function sendMessage() {
     messageGenerationInProgress = true;
     if(newMessageText.trim() !== '') {
-      messages = [...messages, { sender: 'You', content: newMessageText.trim() }];
       const newPrompt = newMessageText.trim();
+      const messageHistoryWithPrompt = [...messages, { role: 'user', content: newPrompt, name: 'You' }];
+      messages = messageHistoryWithPrompt;
       newMessageText = '';
       try {
-        messages = [...messages, { sender: 'DeVinci', content: replyText }];
-        const reply = await modelCallbackFunction(newPrompt, generateProgressCallback);
-        messages = [...messages.slice(0, -1), { sender: 'DeVinci', content: reply }]; 
+        messages = [...messages, { role: 'assistant', content: replyText, name: 'DeVinci' }];
+        const reply = await modelCallbackFunction(messageHistoryWithPrompt, generateProgressCallback);
+        messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }]; 
       } catch (error) {
         console.error("Error getting response from model: ", error);
-        messages = [...messages, { sender: 'DeVinci', content: "There was an error unfortunately. Please try again." }];
+        messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
       }
       replyText = 'Thinking...';
     }

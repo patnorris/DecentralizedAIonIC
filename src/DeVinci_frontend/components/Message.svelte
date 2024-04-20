@@ -3,7 +3,7 @@
 </script>
 
 <div class="message">
-  <p><strong>{message.sender}</strong></p>
+  <p><strong>{message.name}</strong></p>
   <p>{message.content}</p>
 </div>
 
