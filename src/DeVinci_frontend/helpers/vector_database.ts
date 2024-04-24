@@ -84,7 +84,6 @@ const generateEmbeddings = async () => {
 
     const metadata = existingDataEntries.map((dataEntry) => ({ id: dataEntry.id }));
 
-    //const embeddings = new OpenAIEmbeddings({ openAIApiKey: "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" });
     const embeddings = new TensorFlowEmbeddings();
 
     vectorStoreState = await MemoryVectorStore.fromTexts(
