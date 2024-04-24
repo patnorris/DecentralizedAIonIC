@@ -5,12 +5,17 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { store } from "../store";
+  import { getSearchVectorDbTool } from "../helpers/vector_database";
+  import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
+  
 
   let chatModelDownloadInProgress = false;
   let chatModelDownloaded = false;
   chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
+
+  let vectorDbSearchTool;
 
   // Debug Android
   //let debugOutput = "";
@@ -67,6 +72,28 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
+    console.log("getChatModelResponse prompt ", prompt);
+    // Add content from local knowledge base if activated
+    let additionalContentToProvide = "";
+    if (vectorDbSearchTool) {
+      additionalContentToProvide = " Additional content (use this if relevant to the User Prompt): ";
+      const promptContent = prompt[0].content;
+      let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
+      vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
+      console.log("getChatModelResponse vectorDbSearchToolResponse ", vectorDbSearchToolResponse);
+
+      for (let index = 0; index < vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase.length; index++) {
+        const additionalEntry = vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase[index];
+        additionalContentToProvide += "  ";
+        additionalContentToProvide += additionalEntry.content;  
+      };
+    };
+
+    // Compose the final prompt
+    const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
+    prompt = [...prompt, additionalContentEntry];
+    console.log("getChatModelResponse finalPrompt ", prompt);
+
     let curMessage = "";
     let stepCount = 0;
     const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
@@ -80,6 +107,24 @@
     };
     const reply = await $chatModelGlobal.getMessage();
     return reply;
+  };
+
+  // User can upload a pdf and a vector database is set up including the pdf's content
+  let pathToUploadedPdf = '';
+  let loadingKnowledgeDatabase = false;
+
+  async function uploadPdfToVectorDatabase() {
+    const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      pathToUploadedPdf = URL.createObjectURL(file);
+      loadingKnowledgeDatabase = true;
+      vectorDbSearchTool = await getSearchVectorDbTool(pathToUploadedPdf);
+      loadingKnowledgeDatabase = false;
+      alert("PDF uploaded and processed.");
+    } else {
+      alert("Please select a PDF file.");
+    }
   };
 
 // User can select between chats (global variable is kept)
@@ -102,6 +147,16 @@
     {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
     {/key}
+    <div>
+      <input type="file" id="pdf-upload" accept=".pdf" style="display: none;" on:change={uploadPdfToVectorDatabase}>
+      <Button class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900" on:click={() => document.getElementById('pdf-upload').click()}>
+        Upload PDF
+      </Button>
+      {#if loadingKnowledgeDatabase}
+        <p class="text-gray-900 dark:text-gray-200">Loading your PDF into the Knowledge Base for you...</p>
+        <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+      {/if}
+    </div>
   {:else}
     {#if chatModelDownloadInProgress}
       <h3 id='chatModelStatusSubtext'>Downloading AI Assistant. This may take a moment...</h3>
