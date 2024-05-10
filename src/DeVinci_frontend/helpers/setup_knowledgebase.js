@@ -15,6 +15,19 @@ const getDocumentContent = async (documentUrl) => {
   try {
     const pdf = await pdfjsLib.getDocument(documentUrl).promise;
     const numPages = pdf.numPages;
+    let limitOfCharacters = 1700; // for any document with 50 or more pages
+    if (numPages < 10) {
+      limitOfCharacters = 500;
+    } else if (numPages < 20) {
+      limitOfCharacters = 700;
+    } else if (numPages < 30) {
+      limitOfCharacters = 1100;
+    } else if (numPages < 40) {
+      limitOfCharacters = 1300;
+    } else if (numPages < 50) {
+      limitOfCharacters = 1500;
+    };
+
     const pageTextPromises = [];
 
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
@@ -26,7 +39,6 @@ const getDocumentContent = async (documentUrl) => {
               .filter(str => str.trim().length > 0 && !/^\p{P}+$/u.test(str));
 
           // Concatenate and split text to ensure each entry is under the limit of characters (the LLM's context window size might otherwise not be able to handle it)
-          const limitOfCharacters = 1300;
           let combinedText = '';
           const pageTexts = [];
 
