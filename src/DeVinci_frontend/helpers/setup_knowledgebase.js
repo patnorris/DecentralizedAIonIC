@@ -1,7 +1,5 @@
 export const getResourceAsArray = async (pathToUploadedPdf) => {
-  console.log("getResourceAsArray pathToUploadedPdf ", pathToUploadedPdf);
   let documentContent = await getDocumentContent(pathToUploadedPdf);
-  console.log("getResourceAsArray documentContent ", documentContent);
   return documentContent;
 };
 

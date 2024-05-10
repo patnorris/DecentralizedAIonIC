@@ -72,7 +72,6 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    console.log("getChatModelResponse prompt ", prompt);
     // Add content from local knowledge base if activated
     let additionalContentToProvide = "";
     if (vectorDbSearchTool) {
@@ -80,7 +79,6 @@
       const promptContent = prompt[0].content;
       let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
       vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
-      console.log("getChatModelResponse vectorDbSearchToolResponse ", vectorDbSearchToolResponse);
 
       for (let index = 0; index < vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase.length; index++) {
         const additionalEntry = vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase[index];
@@ -92,7 +90,6 @@
     // Compose the final prompt
     const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
     prompt = [...prompt, additionalContentEntry];
-    console.log("getChatModelResponse finalPrompt ", prompt);
 
     let curMessage = "";
     let stepCount = 0;
