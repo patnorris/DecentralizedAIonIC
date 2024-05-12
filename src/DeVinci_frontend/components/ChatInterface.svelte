@@ -145,14 +145,14 @@
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
     {/key}
     <div class="space-y-2">
-      <h3 class="font-semibold text-gray-900 dark:text-gray-200">Chat with a PDF</h3>
+      <h3 class="font-semibold text-gray-900 dark:text-gray-600">Chat with a PDF</h3>
       <input type="file" id="pdf-upload" accept=".pdf" style="display: none;" on:change={uploadPdfToVectorDatabase}>
       <Button class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900" on:click={() => document.getElementById('pdf-upload').click()}>
         Upload PDF
       </Button>
-      <p class="text-gray-900 dark:text-gray-200">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
+      <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
       {#if loadingKnowledgeDatabase}
-        <p class="text-gray-900 dark:text-gray-200">Loading your PDF into the Knowledge Base for you...</p>
+        <p class="text-gray-900 dark:text-gray-600">Loading your PDF into the Knowledge Base for you...</p>
         <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
       {/if}
     </div>
