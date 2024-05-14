@@ -36,7 +36,7 @@ interface MemoryVector {
   metadata: Record<string, any>;
 };
 
-const vectorDbByTopic = {};
+//const vectorDbByTopic = {};
 let pathToUploadedPdf;
 
 // https://js.langchain.com/docs/modules/agents/tools/how_to/dynamic
@@ -71,6 +71,9 @@ export const getSearchVectorDbTool = async (pathToUploadedPdfInput) => {
 }; 
 
 const generateEmbeddings = async () => {
+  if (!pathToUploadedPdf) {
+    return;
+  };
   try {
     const start = performance.now() / 1000;
     const existingDataEntries = await getDataEntries(pathToUploadedPdf);
@@ -101,8 +104,7 @@ const generateEmbeddings = async () => {
 const searchEmbeddings = async (text: string) => {
   try {
     if (!vectorStoreState) {
-      return;
-      //await generateEmbeddings();
+      await generateEmbeddings();
     };
 
     const searchResult = await vectorStoreState.similaritySearch(text, 1); // returns 1 entry
@@ -127,4 +129,46 @@ const getDataEntries = async (pathToUploadedPdf) => {
   };
   
   return dataEntries;
+};
+
+export const storeEmbeddings = async () => {
+  if (!vectorStoreState) {
+    return;
+  };
+  try {
+    const memVecs = vectorStoreState.memoryVectors;
+    try {
+      const storeMemoryVectorsResponse = await storeState.backendActor.store_user_chats_memory_vectors(memVecs);
+      console.log("Debug storeEmbeddings storeMemoryVectorsResponse ", storeMemoryVectorsResponse);
+      if (!storeMemoryVectorsResponse.Ok) {
+        return false;
+      };
+    } catch (error) {
+      console.error("Error storing memory vectors: ", error);        
+    };
+    return true;
+  } catch (error) {
+    console.error("Error in storeEmbeddings: ", error)
+  };
+};
+
+export const retrieveEmbeddings = async () => {
+  if (!vectorStoreState) {
+    return;
+  };
+  try {
+    let retrievedMemVecs = [];
+    try {
+      const getMemoryVectorsResponse = await storeState.backendActor.get_caller_memory_vectors();
+      console.log("Debug retrieveEmbeddings getMemoryVectorsResponse ", getMemoryVectorsResponse);
+      if (getMemoryVectorsResponse.Ok) {
+        retrievedMemVecs = getMemoryVectorsResponse.Ok;
+      };
+    } catch (error) {
+      console.error("Error retrieving memory vectors: ", error);        
+    };
+    return retrievedMemVecs;
+  } catch (error) {
+    console.error("Error in retrieveEmbeddings: ", error)
+  };
 };
