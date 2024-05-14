@@ -60,6 +60,7 @@ const canisterDefinitions = Object.entries(canisterIds).reduce(
   (acc, [key, val]) => ({
     ...acc,
     [`process.env.${key.toUpperCase()}_CANISTER_ID`]: JSON.stringify(val[networkName]),
+    [`process.env.CANISTER_ID_${key.toUpperCase()}`]: JSON.stringify(val[networkName]),
   }),
   {},
 );

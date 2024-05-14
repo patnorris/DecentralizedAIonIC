@@ -66,8 +66,9 @@ npm run erase-replica
 ### 4. Deploy your canisters to the replica
 Local:
 ```bash
-dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
-dfx deploy
+dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend --network local
+dfx deploy internet_identity --network local
+dfx deploy DeVinci_frontend --network local
 ```
 Alternative: Run a local vite UI (note that this had issues communicating to the backend canister for some setups in the past)
 ```bash
