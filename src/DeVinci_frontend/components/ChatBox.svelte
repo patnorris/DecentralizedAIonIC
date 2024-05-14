@@ -44,6 +44,13 @@
     messages = [...messages.slice(0, -1), { role: 'assistant', content: replyText, name: 'DeVinci' }];
   };
 
+  function handleInputKeyDown(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    };
+  };
+
   async function sendMessage() {
     messageGenerationInProgress = true;
     if(newMessageText.trim() !== '') {
@@ -139,7 +146,7 @@
   </div>
 
   <div class="message-input">
-    <input bind:value={newMessageText} placeholder="Type your message here..." />
+    <input bind:value={newMessageText} on:keydown={handleInputKeyDown} placeholder="Type your message here..." />
     {#if messageGenerationInProgress}
       <button disabled on:click={sendMessage}>Send</button>
     {:else}

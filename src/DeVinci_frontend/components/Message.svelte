@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { marked } from 'marked';
+
   export let message;
 </script>
 
 <div class="message">
   <p><strong>{message.name}</strong></p>
-  <p>{message.content}</p>
+  <p>{@html marked(message.content)}</p>
 </div>
 
 <style>
