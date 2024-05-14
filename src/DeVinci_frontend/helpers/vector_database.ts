@@ -152,10 +152,7 @@ export const storeEmbeddings = async () => {
   };
 };
 
-export const retrieveEmbeddings = async () => {
-  if (!vectorStoreState) {
-    return;
-  };
+const retrieveEmbeddings = async () => {
   try {
     let retrievedMemVecs = [];
     try {
@@ -170,5 +167,36 @@ export const retrieveEmbeddings = async () => {
     return retrievedMemVecs;
   } catch (error) {
     console.error("Error in retrieveEmbeddings: ", error)
+  };
+};
+
+export const loadExistingVectorStore = async () => {
+  try {
+    let retrievedMemVecs = await retrieveEmbeddings();
+    try {
+      const start = performance.now() / 1000;
+
+      const textsToEmbed = [];
+
+      const metadata = [];
+
+      const embeddings = new TensorFlowEmbeddings();
+
+      vectorStoreState = await MemoryVectorStore.fromTexts(
+        textsToEmbed,
+        metadata,
+        embeddings,
+      );
+      
+      vectorStore.set(vectorStoreState);
+
+      const end = performance.now() / 1000;
+      console.log(`Debug: loadExistingVectorStore took ${(end - start).toFixed(2)}s`);
+    } catch (error) {
+      console.error("Error loading retrieved vectors: ", error);        
+    };
+    return retrievedMemVecs;
+  } catch (error) {
+    console.error("Error in loadExistingVectorStore: ", error)
   };
 };

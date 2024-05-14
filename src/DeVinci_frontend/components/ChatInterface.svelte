@@ -5,7 +5,7 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { store } from "../store";
-  import { getSearchVectorDbTool, storeEmbeddings, retrieveEmbeddings } from "../helpers/vector_database";
+  import { getSearchVectorDbTool, storeEmbeddings, loadExistingVectorStore } from "../helpers/vector_database";
   import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
@@ -132,7 +132,7 @@
       return;
     };
     loadingKnowledgeDatabase = true;
-    await retrieveEmbeddings();
+    await loadExistingVectorStore();
     initiatedKnowledgeDatabase = true;
     loadingKnowledgeDatabase = false;
     alert("Your Knowledge Base Was Loaded!");
@@ -175,7 +175,10 @@
       <Button class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900" on:click={() => document.getElementById('pdf-upload').click()}>
         Upload PDF
       </Button>
-      {#if initiatedKnowledgeDatabase}
+      {#if loadingKnowledgeDatabase}
+        <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
+        <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+      {:else if initiatedKnowledgeDatabase}
         <p class="font-semibold text-gray-900 dark:text-gray-600">Success, the local Knowledge Base is ready! Your PDF's content will now be used by the AI in its responses.</p>
         <p class="text-gray-900 dark:text-gray-600">You can also load a different PDF into the local Knowledge Base on your device. The AI will include that PDF's content in its answers to your prompts then.</p>
         {#if $store.isAuthed}
@@ -189,9 +192,6 @@
             <p class="text-gray-900 dark:text-gray-600">You may store the local Knowledge Base created from your PDF's content. You can then also use it when you return next time.</p>            
           {/if}
         {/if}
-      {:else if loadingKnowledgeDatabase}
-        <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
-        <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
       {:else}
         <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
       {/if}
