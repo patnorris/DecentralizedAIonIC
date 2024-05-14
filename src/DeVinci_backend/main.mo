@@ -385,6 +385,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    
     switch (getUserMemoryVectors(caller)) {
       case (null) { return #Err(#Unauthorized); };
       case (?memoryVectors) { return #Ok(memoryVectors); };
