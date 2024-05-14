@@ -10,7 +10,6 @@ cleanupOutdatedCaches();
 // This array should be replaced by self.__WB_MANIFEST in production
 // self.__WB_MANIFEST is injected by Workbox during the build process
 const manifestEntries = self.__WB_MANIFEST;
-console.log("manifestEntries ", manifestEntries);
 
 const CACHE_NAME = 'devinci-cache';
 
