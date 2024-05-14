@@ -5,7 +5,7 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { store } from "../store";
-  import { getSearchVectorDbTool } from "../helpers/vector_database";
+  import { getSearchVectorDbTool, storeEmbeddings, retrieveEmbeddings } from "../helpers/vector_database";
   import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
@@ -108,7 +108,9 @@
 
   // User can upload a pdf and a vector database is set up including the pdf's content
   let pathToUploadedPdf = '';
+  let initiatedKnowledgeDatabase = false;
   let loadingKnowledgeDatabase = false;
+  let persistingCurrentEmbeddings = false;
 
   async function uploadPdfToVectorDatabase() {
     const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
@@ -117,11 +119,33 @@
       pathToUploadedPdf = URL.createObjectURL(file);
       loadingKnowledgeDatabase = true;
       vectorDbSearchTool = await getSearchVectorDbTool(pathToUploadedPdf);
+      initiatedKnowledgeDatabase = true;
       loadingKnowledgeDatabase = false;
       alert("PDF uploaded and processed.");
     } else {
       alert("Please select a PDF file.");
-    }
+    };
+  };
+
+  async function getPreviousEmbeddings() {
+    if(!$store.isAuthed){
+      return;
+    };
+    loadingKnowledgeDatabase = true;
+    await retrieveEmbeddings();
+    initiatedKnowledgeDatabase = true;
+    loadingKnowledgeDatabase = false;
+    alert("Your Knowledge Base Was Loaded!");
+  };
+
+  async function persistCurrentEmbeddings() {
+    if(!$store.isAuthed){
+      return;
+    };
+    persistingCurrentEmbeddings = true;
+    await storeEmbeddings();
+    persistingCurrentEmbeddings = false;
+    alert("Your Knowledge Base Was Stored!");
   };
 
 // User can select between chats (global variable is kept)
@@ -144,16 +168,38 @@
     {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
     {/key}
+    <!-- TODO: refactor into own RAG component -->
     <div class="space-y-2">
       <h3 class="font-semibold text-gray-900 dark:text-gray-600">Chat with a PDF</h3>
       <input type="file" id="pdf-upload" accept=".pdf" style="display: none;" on:change={uploadPdfToVectorDatabase}>
       <Button class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900" on:click={() => document.getElementById('pdf-upload').click()}>
         Upload PDF
       </Button>
-      <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
-      {#if loadingKnowledgeDatabase}
-        <p class="text-gray-900 dark:text-gray-600">Loading your PDF into the Knowledge Base for you...</p>
+      {#if initiatedKnowledgeDatabase}
+        <p class="font-semibold text-gray-900 dark:text-gray-600">Success, the local Knowledge Base is ready! Your PDF's content will now be used by the AI in its responses.</p>
+        <p class="text-gray-900 dark:text-gray-600">You can also load a different PDF into the local Knowledge Base on your device. The AI will include that PDF's content in its answers to your prompts then.</p>
+        {#if $store.isAuthed}
+          <Button id="storeEmbeddingsButton"
+            class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
+            on:click={persistCurrentEmbeddings}>Store Knowledge Base</Button>
+          {#if persistingCurrentEmbeddings}
+            <p class="text-gray-900 dark:text-gray-600">Storing the local Knowledge Base for you...</p>
+            <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+          {:else}
+            <p class="text-gray-900 dark:text-gray-600">You may store the local Knowledge Base created from your PDF's content. You can then also use it when you return next time.</p>            
+          {/if}
+        {/if}
+      {:else if loadingKnowledgeDatabase}
+        <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
         <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+      {:else}
+        <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
+      {/if}
+      {#if $store.isAuthed}
+        <Button id="retrieveEmbeddingsButton"
+          class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
+          on:click={getPreviousEmbeddings}>Load Previous Knowledge Base</Button>
+        <p class="text-gray-900 dark:text-gray-600">Instead, you may also load the Knowledge Base you stored last time. The AI can then use it like before (with the contents of the PDF you uploaded back then).</p>
       {/if}
     </div>
   {:else}
