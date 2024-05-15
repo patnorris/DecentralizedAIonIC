@@ -5,7 +5,7 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { store } from "../store";
-  import { getSearchVectorDbTool, storeEmbeddings, loadExistingVectorStore } from "../helpers/vector_database";
+  import { getSearchVectorDbTool, storeEmbeddings, loadExistingVectorStore, checkUserHasKnowledgeBase } from "../helpers/vector_database";
   import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
@@ -90,6 +90,7 @@
     // Compose the final prompt
     const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
     prompt = [...prompt, additionalContentEntry];
+    console.log("DEBUG additionalContentEntry ", additionalContentEntry);
 
     let curMessage = "";
     let stepCount = 0;
@@ -111,6 +112,7 @@
   let initiatedKnowledgeDatabase = false;
   let loadingKnowledgeDatabase = false;
   let persistingCurrentEmbeddings = false;
+  let userHasExistingKnowledgeBase = false;
 
   async function uploadPdfToVectorDatabase() {
     const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
@@ -146,6 +148,16 @@
     await storeEmbeddings();
     persistingCurrentEmbeddings = false;
     alert("Your Knowledge Base Was Stored!");
+  };
+
+  async function checkUserKnowledgeBase() {
+    console.log("DEBUG checkUserKnowledgeBase");
+    if(!$store.isAuthed){
+      userHasExistingKnowledgeBase = false;
+    };
+    let knowledgeBaseExists = await checkUserHasKnowledgeBase();
+    console.log("DEBUG checkUserKnowledgeBase knowledgeBaseExists ", knowledgeBaseExists);
+    userHasExistingKnowledgeBase = knowledgeBaseExists;
   };
 
 // User can select between chats (global variable is kept)
@@ -196,10 +208,13 @@
         <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
       {/if}
       {#if $store.isAuthed}
-        <Button id="retrieveEmbeddingsButton"
-          class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
-          on:click={getPreviousEmbeddings}>Load Previous Knowledge Base</Button>
-        <p class="text-gray-900 dark:text-gray-600">Instead, you may also load the Knowledge Base you stored last time. The AI can then use it like before (with the contents of the PDF you uploaded back then).</p>
+        <p hidden>{checkUserKnowledgeBase()}</p>
+        {#if userHasExistingKnowledgeBase}
+          <Button id="retrieveEmbeddingsButton"
+            class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
+            on:click={getPreviousEmbeddings}>Load Previous Knowledge Base</Button>
+          <p class="text-gray-900 dark:text-gray-600">Instead, you may also load the Knowledge Base you stored last time. The AI can then use it like before (with the contents of the PDF you uploaded back then).</p>
+        {/if}
       {/if}
     </div>
   {:else}

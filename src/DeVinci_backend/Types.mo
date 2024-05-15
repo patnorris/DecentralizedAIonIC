@@ -155,7 +155,7 @@ module {
   };
 
   public type MemoryVectorMetadata = {
-    id: Text;
+    id: Int;
   };
 
   public type MemoryVector = {
@@ -167,6 +167,8 @@ module {
   public type MemoryVectorsStoredResult = Result<Bool, ApiError>;
 
   public type MemoryVectorsResult = Result<[MemoryVector], ApiError>;
+
+  public type MemoryVectorsCheckResult = Result<Bool, ApiError>;
 
   public type SignUpFormInput = {
     emailAddress: Text; // provided by user on signup

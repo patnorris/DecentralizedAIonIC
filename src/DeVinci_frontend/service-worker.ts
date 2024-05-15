@@ -1,7 +1,7 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { NetworkFirst } from 'workbox-strategies';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -71,7 +71,7 @@ self.addEventListener('activate', (event) => {
 // Use a CacheFirst strategy for all requests (i.e. all requests are cached)
 registerRoute(
   ({ request }) => true,
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: CACHE_NAME,
     plugins: [
       // Optionally, configure plugins, e.g., to limit cache entries or expiration

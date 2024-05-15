@@ -31,6 +31,10 @@ export type ChatsPreviewResult = { 'Ok' : Array<ChatPreview> } |
 export type ChatsResult = { 'Ok' : Array<Chat> } |
   { 'Err' : ApiError };
 export interface DeVinciBackend {
+  'check_caller_has_memory_vectors_entry' : ActorMethod<
+    [],
+    MemoryVectorsCheckResult
+  >,
   'create_chat' : ActorMethod<[Array<Message>], ChatCreationResult>,
   'delete_chat' : ActorMethod<[string], ChatResult>,
   'delete_email_subscriber' : ActorMethod<[string], boolean>,
@@ -63,7 +67,9 @@ export interface MemoryVector {
   'metadata' : MemoryVectorMetadata,
   'embedding' : Array<number>,
 }
-export interface MemoryVectorMetadata { 'id' : string }
+export interface MemoryVectorMetadata { 'id' : bigint }
+export type MemoryVectorsCheckResult = { 'Ok' : boolean } |
+  { 'Err' : ApiError };
 export type MemoryVectorsResult = { 'Ok' : Array<MemoryVector> } |
   { 'Err' : ApiError };
 export type MemoryVectorsStoredResult = { 'Ok' : boolean } |

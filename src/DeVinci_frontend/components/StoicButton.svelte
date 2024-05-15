@@ -1,7 +1,7 @@
 <script>
-    import { onMount } from "svelte";
-    import { StoicIdentity } from "ic-stoic-identity";
-    import { store } from "../store";
+    //import { onMount } from "svelte";
+    //import { StoicIdentity } from "ic-stoic-identity";
+    //import { store } from "../store";
 
     import Button from "./Button.svelte";
     import spinner from "../assets/loading.gif";

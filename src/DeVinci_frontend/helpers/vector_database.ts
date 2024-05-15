@@ -132,11 +132,13 @@ const getDataEntries = async (pathToUploadedPdf) => {
 };
 
 export const storeEmbeddings = async () => {
+  console.log("Debug storeEmbeddings ");
   if (!vectorStoreState) {
     return;
   };
   try {
     const memVecs = vectorStoreState.memoryVectors;
+    console.log("Debug storeEmbeddings memVecs ", memVecs);
     try {
       const storeMemoryVectorsResponse = await storeState.backendActor.store_user_chats_memory_vectors(memVecs);
       console.log("Debug storeEmbeddings storeMemoryVectorsResponse ", storeMemoryVectorsResponse);
@@ -171,14 +173,16 @@ const retrieveEmbeddings = async () => {
 };
 
 export const loadExistingVectorStore = async () => {
+  console.log("Debug loadExistingVectorStore ");
   try {
     let retrievedMemVecs = await retrieveEmbeddings();
+    console.log("Debug loadExistingVectorStore retrievedMemVecs ", retrievedMemVecs);
     try {
       const start = performance.now() / 1000;
 
-      const textsToEmbed = [];
+      const textsToEmbed = ["valueToInitialize"];
 
-      const metadata = [];
+      const metadata = [{ id: 0 }];
 
       const embeddings = new TensorFlowEmbeddings();
 
@@ -187,7 +191,13 @@ export const loadExistingVectorStore = async () => {
         metadata,
         embeddings,
       );
-      
+      console.log("Debug loadExistingVectorStore vectorStoreState ", vectorStoreState);
+      console.log("Debug loadExistingVectorStore vectorStoreState.memoryVectors ", vectorStoreState.memoryVectors);
+
+      vectorStoreState.memoryVectors = retrievedMemVecs;
+
+      console.log("Debug loadExistingVectorStore vectorStoreState.memoryVectors after ", vectorStoreState.memoryVectors);
+
       vectorStore.set(vectorStoreState);
 
       const end = performance.now() / 1000;
@@ -198,5 +208,21 @@ export const loadExistingVectorStore = async () => {
     return retrievedMemVecs;
   } catch (error) {
     console.error("Error in loadExistingVectorStore: ", error)
+  };
+};
+
+export const checkUserHasKnowledgeBase = async () => {
+  console.log("Debug checkUserHasKnowledgeBase ");
+  try {
+    const checkResponse = await storeState.backendActor.check_caller_has_memory_vectors_entry();
+    console.log("Debug checkUserHasKnowledgeBase checkResponse ", checkResponse);
+    if (checkResponse.Ok) {
+      console.log("Debug checkUserHasKnowledgeBase checkResponse.Ok ", checkResponse.Ok);
+      return checkResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in checkUserHasKnowledgeBase: ", error)
   };
 };

@@ -392,6 +392,18 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };   
   };
 
+  public shared query ({caller}) func check_caller_has_memory_vectors_entry() : async Types.MemoryVectorsCheckResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    
+    switch (getUserMemoryVectors(caller)) {
+      case (null) { return #Err(#Unauthorized); };
+      case (?memoryVectors) { return #Ok(true); };
+    };   
+  };
+
 // Email Signups from Website
   stable var emailSubscribersStorageStable : [(Text, Types.EmailSubscriber)] = [];
   var emailSubscribersStorage : HashMap.HashMap<Text, Types.EmailSubscriber> = HashMap.HashMap(0, Text.equal, Text.hash);

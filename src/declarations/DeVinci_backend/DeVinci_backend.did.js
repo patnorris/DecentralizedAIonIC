@@ -1,11 +1,15 @@
 export const idlFactory = ({ IDL }) => {
-  const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
     'InvalidTokenId' : IDL.Null,
     'Unauthorized' : IDL.Null,
     'Other' : IDL.Text,
   });
+  const MemoryVectorsCheckResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
+  });
+  const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
   const ChatCreationResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : ApiError });
   const Chat = IDL.Record({
     'id' : IDL.Text,
@@ -27,7 +31,7 @@ export const idlFactory = ({ IDL }) => {
     'Err' : ApiError,
   });
   const ChatsResult = IDL.Variant({ 'Ok' : IDL.Vec(Chat), 'Err' : ApiError });
-  const MemoryVectorMetadata = IDL.Record({ 'id' : IDL.Text });
+  const MemoryVectorMetadata = IDL.Record({ 'id' : IDL.Int });
   const MemoryVector = IDL.Record({
     'content' : IDL.Text,
     'metadata' : MemoryVectorMetadata,
@@ -65,6 +69,11 @@ export const idlFactory = ({ IDL }) => {
     'chatTitle' : IDL.Text,
   });
   const DeVinciBackend = IDL.Service({
+    'check_caller_has_memory_vectors_entry' : IDL.Func(
+        [],
+        [MemoryVectorsCheckResult],
+        ['query'],
+      ),
     'create_chat' : IDL.Func([IDL.Vec(Message)], [ChatCreationResult], []),
     'delete_chat' : IDL.Func([IDL.Text], [ChatResult], []),
     'delete_email_subscriber' : IDL.Func([IDL.Text], [IDL.Bool], []),

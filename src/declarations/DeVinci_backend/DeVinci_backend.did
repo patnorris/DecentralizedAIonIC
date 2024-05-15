@@ -34,7 +34,12 @@ type MemoryVectorsResult =
    Err: ApiError;
    Ok: vec MemoryVector;
  };
-type MemoryVectorMetadata = record {id: text;};
+type MemoryVectorsCheckResult = 
+ variant {
+   Err: ApiError;
+   Ok: bool;
+ };
+type MemoryVectorMetadata = record {id: int;};
 type MemoryVector = 
  record {
    content: text;
@@ -49,6 +54,8 @@ type EmailSubscriber =
  };
 type DeVinciBackend = 
  service {
+   check_caller_has_memory_vectors_entry: () ->
+    (MemoryVectorsCheckResult) query;
    create_chat: (vec Message) -> (ChatCreationResult);
    delete_chat: (text) -> (ChatResult);
    delete_email_subscriber: (text) -> (bool);
