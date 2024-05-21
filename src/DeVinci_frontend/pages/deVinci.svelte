@@ -1,23 +1,32 @@
 <script lang="ts">
-  import { deviceType, supportsWebGpu } from "../store";
-
-  import Topnav from "../components/Topnav.svelte";
-  import Footer from "../components/Footer.svelte";
-  import ChatInterface from "../components/ChatInterface.svelte";
-  import LoginMenu from "../components/LoginMenu.svelte";
-  import UnsupportedDeviceBanner from "../components/UnsupportedDeviceBanner.svelte";
-  import UnsupportedBrowserBanner from "../components/UnsupportedBrowserBanner.svelte";
   import ChatInput from "../components/new/ChatInput.svelte";
   import SelectModel from "../components/new/SelectModel.svelte";
   import MyChats from "../components/new/MyChats.svelte";
 </script>
 
 
-<div class="flex flex-col max-w-screen-lg justify-between h-screen mx-auto px-12">
+<div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+
  <MyChats />
-<SelectModel />
-<ChatInput/>
+
+ <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+  <header class="header bg-white shadow py-4 px-4">
+   <div class="header-content flex items-center flex-row">
+     <div class="flex ml-auto">
+      <a href class="flex flex-row items-center">
+       settings
+      </a>
+     </div>
+   </div>
+  </header>
+
+  <SelectModel />
+  <ChatInput/>
+ </main>
 </div>
+
+
+
 
 
 

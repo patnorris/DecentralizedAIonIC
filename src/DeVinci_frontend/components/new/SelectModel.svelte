@@ -3,15 +3,16 @@
 </script>
 
 <div>
-  <h3 class="mb-1 text-lg font-medium text-gray-900 dark:text-white">Select model</h3>
-  <p class="mb-5 text-md text-gray-900 dark:text-white">Please select the AI model you want to use to power your DeVinci chat bot.</p>
-  <ul class="grid w-full gap-6 md:grid-cols-3">
+  <h3 class="mb-1 text-lg font-medium text-gray-900 dark:text-white p-4 pb-0 pt-8">Select model</h3>
+  <p class="mb-5 text-md text-gray-900 dark:text-white p-4 pt-0">Please select the AI model you want to use to power your DeVinci chat bot.</p>
+
+  <ul class="grid w-full gap-0 md:grid-cols-4 px-4">
     <li>
       <input type="radio" id="TinyLlama" name="models" value="TinyLlama" class="hidden peer">
       <label for="TinyLlama" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">TinyLlama</div>
-          <div class="w-full text-lg font-normal">1.1 billion parameters</div>
+          <div class="w-full text-md font-normal">1.1 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Alright performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Small size</span>
         </div>
@@ -25,7 +26,7 @@
       <label for="Gemma" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Gemma</div>
-          <div class="w-full text-lg font-normal">2 billion parameters</div>
+          <div class="w-full text-md font-normal">2 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Good performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Small size</span>
         </div>
@@ -39,7 +40,7 @@
       <label for="RedPajama" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Red Pajama</div>
-          <div class="w-full text-lg font-normal">3 billion parameters</div>
+          <div class="w-full text-md font-normal">3 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Alright performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Small size</span>
         </div>
@@ -53,7 +54,7 @@
       <label for="Mistral" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Mistral</div>
-          <div class="w-full text-lg font-normal">7 billion parameters</div>
+          <div class="w-full text-md font-normal">7 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Very good performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Large size</span>
         </div>
@@ -67,7 +68,7 @@
       <label for="Llama38B" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Llama 3 8B</div>
-          <div class="w-full text-lg font-normal">8 billion parameters</div>
+          <div class="w-full text-md font-normal">8 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Super good performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Large size</span>
         </div>
@@ -81,7 +82,7 @@
       <label for="Llama213B" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Llama2 13B</div>
-          <div class="w-full text-lg font-normal">13 billion parameters</div>
+          <div class="w-full text-md font-normal">13 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Super good performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Large size</span>
         </div>
@@ -95,7 +96,7 @@
       <label for="Llama370B" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div class="block">
           <div class="w-full text-lg font-semibold">Llama3 70B</div>
-          <div class="w-full text-lg font-normal">70 billion parameters</div>
+          <div class="w-full text-md font-normal">70 billion parameters</div>
           <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Insane performance</span>
           <span class="bg-green-100 inline-block text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Very large size</span>
         </div>
