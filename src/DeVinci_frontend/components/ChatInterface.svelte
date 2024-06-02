@@ -18,7 +18,7 @@
   let vectorDbSearchTool;
 
   // Debug Android
-  let debugOutput = "";
+  //let debugOutput = "";
 
   function setLabel(id: string, text: string) {
     const label = document.getElementById(id);
@@ -29,8 +29,8 @@
   }
 
   async function loadChatModel() {
-    debugOutput += "###in loadChatModel###";
-    setLabel("debug-label", debugOutput);
+    //debugOutput += "###in loadChatModel###";
+    //setLabel("debug-label", debugOutput);
     if (chatModelDownloadInProgress) {
       return;
     };
@@ -72,9 +72,9 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
-    // Add content from local knowledge base if activated
-    let additionalContentToProvide = "";
-    if (vectorDbSearchTool) {
+    if (vectorDbSearchTool && useKnowledgeBase) {
+      // Add content from local knowledge base if activated
+      let additionalContentToProvide = "";
       additionalContentToProvide = " Additional content (use this if relevant to the User Prompt): ";
       const promptContent = prompt[0].content;
       let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
@@ -85,12 +85,11 @@
         additionalContentToProvide += "  ";
         additionalContentToProvide += additionalEntry.content;  
       };
+      // Compose the final prompt
+      const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
+      prompt = [...prompt, additionalContentEntry];
+      console.log("DEBUG additionalContentEntry ", additionalContentEntry);
     };
-
-    // Compose the final prompt
-    const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
-    prompt = [...prompt, additionalContentEntry];
-    console.log("DEBUG additionalContentEntry ", additionalContentEntry);
 
     let curMessage = "";
     let stepCount = 0;
@@ -113,6 +112,7 @@
   let loadingKnowledgeDatabase = false;
   let persistingCurrentEmbeddings = false;
   let userHasExistingKnowledgeBase = false;
+  let useKnowledgeBase = false;
 
   async function uploadPdfToVectorDatabase() {
     const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
@@ -123,6 +123,7 @@
       vectorDbSearchTool = await getSearchVectorDbTool(pathToUploadedPdf);
       initiatedKnowledgeDatabase = true;
       loadingKnowledgeDatabase = false;
+      useKnowledgeBase = true;
       alert("PDF uploaded and processed.");
     } else {
       alert("Please select a PDF file.");
@@ -137,6 +138,7 @@
     await loadExistingVectorStore();
     initiatedKnowledgeDatabase = true;
     loadingKnowledgeDatabase = false;
+    useKnowledgeBase = true;
     alert("Your Knowledge Base Was Loaded!");
   };
 
@@ -158,6 +160,10 @@
     let knowledgeBaseExists = await checkUserHasKnowledgeBase();
     console.log("DEBUG checkUserKnowledgeBase knowledgeBaseExists ", knowledgeBaseExists);
     userHasExistingKnowledgeBase = knowledgeBaseExists;
+  };
+
+  function handleUseKnowledgeBaseToggle() {
+    useKnowledgeBase = !useKnowledgeBase;
   };
 
 // User can select between chats (global variable is kept)
@@ -183,6 +189,11 @@
     <!-- TODO: refactor into own RAG component -->
     <div class="space-y-2">
       <h3 class="font-semibold text-gray-900 dark:text-gray-600">Chat with a PDF</h3>
+      <div>
+        <p>Should your PDF's content be used by the AI to respond?</p>
+        <input type="checkbox" bind:checked={useKnowledgeBase} on:click={handleUseKnowledgeBaseToggle} />
+        <span>{useKnowledgeBase ? 'YES' : 'NO'}</span>
+      </div>
       <input type="file" id="pdf-upload" accept=".pdf" style="display: none;" on:change={uploadPdfToVectorDatabase}>
       <Button class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900" on:click={() => document.getElementById('pdf-upload').click()}>
         Upload PDF
@@ -231,5 +242,5 @@
       As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can try a smaller one from the selection under Settings and see if the device can support it.</p>
     <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
   {/if}
-  <p id="debug-label"> </p>  Debug
+  <!-- <p id="debug-label"> </p>  Debug -->
 </section>
