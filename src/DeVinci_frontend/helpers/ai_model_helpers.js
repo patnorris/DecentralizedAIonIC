@@ -1,14 +1,30 @@
 const availableAiModels = [
   {
-    id: 'gemma-2b-it-q4f32_1',
+    id: 'gemma-2b-it-q4f32_1-MLC',
     name: 'Gemma',
-    size: 'Smaller',
+    size: 'Small',
     numberOfParameters: '2 billion',
     performance: 'Good',
     default: true
   },
   {
-    id: 'Llama-3-8B-Instruct-q4f32_1',
+    id: 'Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC',
+    name: 'Hermes 2 Pro Llama3',
+    size: 'Large',
+    numberOfParameters: '8B billion',
+    performance: 'Super Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'Hermes-2-Pro-Mistral-7B-q4f16_1-MLC',
+    name: 'Hermes 2 Pro Mistral',
+    size: 'Large',
+    numberOfParameters: '7B billion',
+    performance: 'Super Good',
+    default: false
+  },
+  {
+    id: 'Llama-3-8B-Instruct-q4f32_1-MLC',
     name: 'Llama3 8B',
     size: 'Large',
     numberOfParameters: '8 billion',
@@ -16,23 +32,39 @@ const availableAiModels = [
     default: false
   },
   {
-    id: 'TinyLlama-1.1B-Chat-v0.4-q0f32',
+    id: 'Phi-3-mini-4k-instruct-q4f32_1-MLC',
+    name: 'Phi3',
+    size: 'Medium',
+    numberOfParameters: '3.8 billion',
+    performance: 'Very Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC',
     name: 'TinyLlama',
-    size: 'Small',
+    size: 'Very Small',
     numberOfParameters: '1.1 billion',
     performance: 'Alright',
     default: false
   },
-  { //requires shader-f16
-    id: 'Mistral-7B-Instruct-v0.2-q4f16_1',
-    name: 'Mistral',
-    size: 'Large',
-    numberOfParameters: '7 billion',
-    performance: 'Very Good',
+  {
+    id: 'Qwen1.5-1.8B-Chat-q4f32_1-MLC',
+    name: 'Qwen 1.5',
+    size: 'Small',
+    numberOfParameters: '1.8 billion',
+    performance: 'Good for Chinese',
     default: false
   },
   {
-    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1',
+    id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC',
+    name: 'Stable LM 2',
+    size: 'Small',
+    numberOfParameters: '1.6 billion',
+    performance: 'Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC',
     name: 'Red Pajama',
     size: 'Medium',
     numberOfParameters: '3 billion',
@@ -40,15 +72,15 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'Llama-2-13b-chat-hf-q4f16_1',
-    name: 'Llama2 13B',
-    size: 'Very Large',
-    numberOfParameters: '13 billion',
-    performance: 'Super Good',
+    id: 'Mistral-7B-Instruct-v0.2-q4f16_1-MLC',
+    name: 'Mistral',
+    size: 'Large',
+    numberOfParameters: '7 billion',
+    performance: 'Very Good',
     default: false
   },
   { //requires shader-f16
-    id: 'Llama-3-70B-Instruct-q3f16_1',
+    id: 'Llama-3-70B-Instruct-q3f16_1-MLC',
     name: 'Llama3 70B',
     size: 'Gigantic',
     numberOfParameters: '70 billion',
@@ -56,11 +88,11 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'Llama-2-70b-chat-hf-q4f16_1',
-    name: 'Llama2 70B',
-    size: 'Gigantic',
-    numberOfParameters: '70 billion',
-    performance: 'Great',
+    id: 'WizardMath-7B-V1.1-q4f16_1-MLC',
+    name: 'WizardMath',
+    size: 'Large',
+    numberOfParameters: '7 billion',
+    performance: 'Great for Math',
     default: false
   },
   // Android WebGPU models
@@ -74,16 +106,25 @@ const availableAiModels = [
     android: true
   },
   {
-    id: 'Phi2-q4f32_1-1k',
-    name: 'Phi',
-    size: 'Smaller',
-    numberOfParameters: '2 billion',
-    performance: 'Good',
-    default: true,
+    id: 'Phi-3-mini-4k-instruct-q4f32_1-MLC-1k',
+    name: 'Phi3',
+    size: 'Medium',
+    numberOfParameters: '3.8 billion',
+    performance: 'Very Good',
+    default: false,
     android: true
   },
   {
-    id: 'Llama-3-8B-Instruct-q4f32_1-1k',
+    id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC-1k',
+    name: 'Stable LM 2',
+    size: 'Smaller',
+    numberOfParameters: '1.6 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    id: 'Llama-3-8B-Instruct-q4f32_1-MLC-1k',
     name: 'Llama3 8B',
     size: 'Large',
     numberOfParameters: '8 billion',
@@ -91,8 +132,26 @@ const availableAiModels = [
     default: false,
     android: true
   },
-  /* {
-    id: 'gemma-2b-it-q4f32_1-1k',
+  {
+    id: 'Qwen1.5-1.8B-Chat-q4f32_1-MLC-1k',
+    name: 'Qwen 1.5',
+    size: 'Smaller',
+    numberOfParameters: '1.8 billion',
+    performance: 'Good for Chinese',
+    default: false,
+    android: true
+  },
+  {
+    id: 'Phi2-q4f32_1-1k',
+    name: 'Phi2',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: true,
+    android: true
+  },
+  {
+    id: 'gemma-2b-it-q4f32_1-MLC-1k',
     name: 'Gemma',
     size: 'Smaller',
     numberOfParameters: '2 billion',
@@ -100,8 +159,8 @@ const availableAiModels = [
     default: false,
     android: true
   },
-  {
-    id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-1k',
+  { //requires shader-f16
+    id: 'TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC-1k',
     name: 'TinyLlama',
     size: 'Small',
     numberOfParameters: '1.1 billion',
@@ -109,24 +168,6 @@ const availableAiModels = [
     default: false,
     android: true
   },
-  {
-    id: 'Phi1.5-q4f32_1-1k',
-    name: 'Phi',
-    size: 'Small',
-    numberOfParameters: '1.5 billion',
-    performance: 'Alright',
-    default: false,
-    android: true
-  },
-  { //requires shader-f16
-    id: 'Llama-2-7b-chat-hf-q4f16_1-1k',
-    name: 'Llama2 7b',
-    size: 'Large',
-    numberOfParameters: '7 billion',
-    performance: 'Very Good',
-    default: false,
-    android: true
-  }, */
 ];
 
 export const getAvailableAiModels = (isAndroid = false) => {
