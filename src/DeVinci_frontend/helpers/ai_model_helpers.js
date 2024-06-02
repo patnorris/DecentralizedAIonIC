@@ -132,15 +132,6 @@ const availableAiModels = [
     default: false,
     android: true
   },
-  {
-    id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k',
-    name: 'TinyLlama',
-    size: 'Small',
-    numberOfParameters: '1.1 billion',
-    performance: 'Alright',
-    default: false,
-    android: true
-  },
   /* {
     id: 'gemma-2b-it-q4f32_1-MLC-1k',
     name: 'Gemma',
@@ -165,6 +156,15 @@ const availableAiModels = [
     size: 'Smaller',
     numberOfParameters: '1.6 billion',
     performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k',
+    name: 'TinyLlama',
+    size: 'Small',
+    numberOfParameters: '1.1 billion',
+    performance: 'Alright',
     default: false,
     android: true
   }, */
