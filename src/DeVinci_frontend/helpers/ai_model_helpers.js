@@ -95,9 +95,18 @@ const availableAiModels = [
     performance: 'Great for Math',
     default: false
   },
-  // Android WebGPU models
+// Android WebGPU models
   {
-    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-1k',
+    id: 'phi-2-q4f32_1-MLC-1k',
+    name: 'Phi2',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
+    default: true,
+    android: true
+  },
+  {
+    id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k',
     name: 'Red Pajama',
     size: 'Medium',
     numberOfParameters: '3 billion',
@@ -115,20 +124,29 @@ const availableAiModels = [
     android: true
   },
   {
-    id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC-1k',
-    name: 'Stable LM 2',
-    size: 'Smaller',
-    numberOfParameters: '1.6 billion',
-    performance: 'Good',
-    default: false,
-    android: true
-  },
-  {
     id: 'Llama-3-8B-Instruct-q4f32_1-MLC-1k',
     name: 'Llama3 8B',
     size: 'Large',
     numberOfParameters: '8 billion',
     performance: 'Super Good',
+    default: false,
+    android: true
+  },
+  {
+    id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k',
+    name: 'TinyLlama',
+    size: 'Small',
+    numberOfParameters: '1.1 billion',
+    performance: 'Alright',
+    default: false,
+    android: true
+  },
+  /* {
+    id: 'gemma-2b-it-q4f32_1-MLC-1k',
+    name: 'Gemma',
+    size: 'Smaller',
+    numberOfParameters: '2 billion',
+    performance: 'Good',
     default: false,
     android: true
   },
@@ -142,32 +160,14 @@ const availableAiModels = [
     android: true
   },
   {
-    id: 'Phi2-q4f32_1-1k',
-    name: 'Phi2',
+    id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC-1k',
+    name: 'Stable LM 2',
     size: 'Smaller',
-    numberOfParameters: '2 billion',
-    performance: 'Good',
-    default: true,
-    android: true
-  },
-  {
-    id: 'gemma-2b-it-q4f32_1-MLC-1k',
-    name: 'Gemma',
-    size: 'Smaller',
-    numberOfParameters: '2 billion',
+    numberOfParameters: '1.6 billion',
     performance: 'Good',
     default: false,
     android: true
-  },
-  { //requires shader-f16
-    id: 'TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC-1k',
-    name: 'TinyLlama',
-    size: 'Small',
-    numberOfParameters: '1.1 billion',
-    performance: 'Alright',
-    default: false,
-    android: true
-  },
+  }, */
 ];
 
 export const getAvailableAiModels = (isAndroid = false) => {
