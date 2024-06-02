@@ -1,10 +1,11 @@
 <script lang="ts">
   import * as webllm from "@mlc-ai/web-llm";
-  import { chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal, selectedAiModelId } from "../store";
+  import { onMount } from 'svelte';
+  import { store, chatModelGlobal, chatModelDownloadedGlobal, activeChatGlobal, selectedAiModelId } from "../store";
   import Button from "./Button.svelte";
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
-  import { store } from "../store";
+  import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
@@ -14,6 +15,17 @@
   import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
+
+  let showToast = false;
+
+  onMount(() => {
+    showToast = true; // Show toast on load
+
+    // Automatically hide the toast
+    setTimeout(() => {
+      showToast = false;
+    }, 8000);
+  });
   
 
   let chatModelDownloadInProgress = false;
@@ -244,9 +256,14 @@
         class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
         on:click={loadChatModel}>Initialize</Button>
     {/if}
+    <p>Did you know? You can also install the DeVinci app on your device. And once you've downloaded the AI Assistant, you can even chat with it in the installed app offline!</p>
     <p>Note: AI assistants are pretty huge and require quite some computational resources. 
       As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can try a smaller one from the selection under Settings and see if the device can support it.</p>
     <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
   {/if}
   <!-- <p id="debug-label"> </p>  Debug -->
 </section>
+
+{#if showToast}
+  <InstallToastNotification />
+{/if}
