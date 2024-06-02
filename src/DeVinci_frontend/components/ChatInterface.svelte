@@ -5,7 +5,12 @@
   import ChatBox from "./ChatBox.svelte";
   import ChatHistory from "./ChatHistory.svelte";
   import { store } from "../store";
-  import { getSearchVectorDbTool, storeEmbeddings, loadExistingVectorStore, checkUserHasKnowledgeBase } from "../helpers/vector_database";
+  import {
+    getSearchVectorDbTool,
+    //storeEmbeddings,
+    //loadExistingVectorStore,
+    //checkUserHasKnowledgeBase
+  } from "../helpers/vector_database";
   import spinner from "../assets/loading.gif";
 
   const workerPath = './worker.ts';
@@ -110,9 +115,13 @@
   let pathToUploadedPdf = '';
   let initiatedKnowledgeDatabase = false;
   let loadingKnowledgeDatabase = false;
-  let persistingCurrentEmbeddings = false;
-  let userHasExistingKnowledgeBase = false;
   let useKnowledgeBase = false;
+  //let persistingCurrentEmbeddings = false;
+  //let userHasExistingKnowledgeBase = false;
+
+  function handleUseKnowledgeBaseToggle() {
+    useKnowledgeBase = !useKnowledgeBase;
+  };
 
   async function uploadPdfToVectorDatabase() {
     const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
@@ -128,6 +137,17 @@
     } else {
       alert("Please select a PDF file.");
     };
+  };
+
+  // functionality to retrieve and store user's knowledge base
+  /* async function checkUserKnowledgeBase() {
+    console.log("DEBUG checkUserKnowledgeBase");
+    if(!$store.isAuthed){
+      userHasExistingKnowledgeBase = false;
+    };
+    let knowledgeBaseExists = await checkUserHasKnowledgeBase();
+    console.log("DEBUG checkUserKnowledgeBase knowledgeBaseExists ", knowledgeBaseExists);
+    userHasExistingKnowledgeBase = knowledgeBaseExists;
   };
 
   async function getPreviousEmbeddings() {
@@ -150,21 +170,7 @@
     await storeEmbeddings();
     persistingCurrentEmbeddings = false;
     alert("Your Knowledge Base Was Stored!");
-  };
-
-  async function checkUserKnowledgeBase() {
-    console.log("DEBUG checkUserKnowledgeBase");
-    if(!$store.isAuthed){
-      userHasExistingKnowledgeBase = false;
-    };
-    let knowledgeBaseExists = await checkUserHasKnowledgeBase();
-    console.log("DEBUG checkUserKnowledgeBase knowledgeBaseExists ", knowledgeBaseExists);
-    userHasExistingKnowledgeBase = knowledgeBaseExists;
-  };
-
-  function handleUseKnowledgeBaseToggle() {
-    useKnowledgeBase = !useKnowledgeBase;
-  };
+  }; */
 
 // User can select between chats (global variable is kept)
   async function showNewChat() {
@@ -204,7 +210,7 @@
       {:else if initiatedKnowledgeDatabase}
         <p class="font-semibold text-gray-900 dark:text-gray-600">Success, the local Knowledge Base is ready! Your PDF's content will now be used by the AI in its responses.</p>
         <p class="text-gray-900 dark:text-gray-600">You can also load a different PDF into the local Knowledge Base on your device. The AI will include that PDF's content in its answers to your prompts then.</p>
-        {#if $store.isAuthed}
+        <!-- {#if $store.isAuthed}
           <Button id="storeEmbeddingsButton"
             class="bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900"
             on:click={persistCurrentEmbeddings}>Store Knowledge Base</Button>
@@ -214,11 +220,11 @@
           {:else}
             <p class="text-gray-900 dark:text-gray-600">You may store the local Knowledge Base created from your PDF's content. You can then also use it when you return next time.</p>            
           {/if}
-        {/if}
+        {/if} -->
       {:else}
         <p class="text-gray-900 dark:text-gray-600">This loads your PDF into a local Knowledge Base on your device such that the AI can include the PDF's content in its answers to your prompts in real-time.</p>
       {/if}
-      {#if $store.isAuthed}
+      <!-- {#if $store.isAuthed}
         <p hidden>{checkUserKnowledgeBase()}</p>
         {#if userHasExistingKnowledgeBase}
           <Button id="retrieveEmbeddingsButton"
@@ -226,7 +232,7 @@
             on:click={getPreviousEmbeddings}>Load Previous Knowledge Base</Button>
           <p class="text-gray-900 dark:text-gray-600">Instead, you may also load the Knowledge Base you stored last time. The AI can then use it like before (with the contents of the PDF you uploaded back then).</p>
         {/if}
-      {/if}
+      {/if} -->
     </div>
   {:else}
     {#if chatModelDownloadInProgress}
