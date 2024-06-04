@@ -62,7 +62,7 @@
         <div id="modelsetting">
             <h4 class="font-semibold">AI Model In Use</h4>
             <p>Please select the AI model you want to be used to power your DeVinci chat bot.</p>
-            <p>Note: AI models are pretty huge and require quite some computational resources. 
+            <p>Please note: AI models are pretty huge and require quite some computational resources. 
                 As DeVinci runs on your device (via the browser), whether and how fast it may run depend on the device's hardware. If a given model doesn't work, you can thus try a smaller one and see if the device can support it.</p>
             <p>For the best possible experience, we recommend running as few other programs and browser tabs as possible besides DeVinci as those can limit the computational resources available for DeVinci.</p>
             <div class="model-options">

@@ -10,8 +10,7 @@ export { idlFactory } from "./DeVinci_backend.did.js";
  * beginning in dfx 0.15.0
  */
 export const canisterId =
-  process.env.CANISTER_ID_DEVINCI_BACKEND ||
-  process.env.DEVINCI_BACKEND_CANISTER_ID;
+  process.env.CANISTER_ID_DEVINCI_BACKEND;
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -40,4 +39,4 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const DeVinci_backend = createActor(canisterId);
+export const DeVinci_backend = canisterId ? createActor(canisterId) : undefined;
