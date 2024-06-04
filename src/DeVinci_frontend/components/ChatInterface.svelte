@@ -304,7 +304,7 @@
     {/key}
     <!-- TODO: refactor into own RAG component -->
     <!-- TODO: does not work properly on mobile -->
-    {#if !deviceType}
+    {#if deviceType === 'desktop'}
       <div class="space-y-2">
         <h3 class="font-semibold text-gray-900 dark:text-gray-600">Chat with a PDF</h3>
         <div>
