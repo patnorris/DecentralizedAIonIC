@@ -7,22 +7,22 @@
 
 <div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
 
- <MyChats />
+  <MyChats />
 
- <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
-  <header class="header bg-white shadow py-4 px-4">
-   <div class="header-content flex items-center flex-row">
-     <div class="flex ml-auto">
-      <a href class="flex flex-row items-center">
-       settings
-      </a>
-     </div>
-   </div>
-  </header>
+  <main class="main flex flex-col flex-grow -ml-64  md:ml-0 transition-all duration-150 ease-in">
+     <header class="header bg-white shadow py-4 px-4">
+       <div class="header-content flex items-center flex-row">
+          <div class="flex ml-auto">
+            <a href class="flex flex-row items-center">
+             settings
+            </a>
+          </div>
+       </div>
+     </header>
 
-  <SelectModel />
-  <ChatInput/>
- </main>
+     <SelectModel />
+     <ChatInput/>
+  </main>
 </div>
 
 
