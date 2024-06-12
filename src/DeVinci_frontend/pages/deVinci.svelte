@@ -2,6 +2,8 @@
   import ChatInput from "../components/new/ChatInput.svelte";
   import SelectModel from "../components/new/SelectModel.svelte";
   import MyChats from "../components/new/MyChats.svelte";
+  import Login from "../components/new/Login.svelte";
+
 
   document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -41,9 +43,7 @@
           </svg>
         </button>
         <div class="flex ml-auto">
-          <a href class="flex flex-row items-center">
-            set
-          </a>
+            <Login />
         </div>
       </div>
     </header>

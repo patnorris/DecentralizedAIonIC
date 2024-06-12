@@ -2,7 +2,6 @@
 
 </script>
 
-
   <ul class="grid w-full gap-0 md:grid-cols-4 px-4 mt-4">
     <li>
       <input type="radio" id="TinyLlama" name="models" value="TinyLlama" class="hidden peer">
@@ -103,7 +102,6 @@
       </label>
     </li>
   </ul>
-
 
 <style>
 </style>
