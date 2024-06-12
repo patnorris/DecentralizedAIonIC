@@ -1,12 +1,12 @@
 <script lang="ts">
-
+  import ChatInput from "./ChatInput.svelte";
+  import SelectModel from "./SelectModel.svelte";
 </script>
 
-<aside class="sidebar h-100vh w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-gray-100">
-  <div class="sidebar-header flex items-center justify-center py-4">
+  <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
+
     <div class="inline-flex">
       <a href="#" class="inline-flex flex-row items-center">
-
         <!--?xml version="1.0" encoding="UTF-8"?-->
         <svg class="w-16 h-16 p-0 drop-shadow-md rounded-full" id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.5 99.5" width="55" height="55">
           <defs>
@@ -45,9 +45,9 @@
         </svg>
       </a>
     </div>
-  </div>
 
-  <div class="sidebar-content mt-auto w-full absolute bottom-0 px-1 pt-6 pb-2">
+
+  <div class="mt-auto w-full">
     <ul class="flex flex-col w-full">
       <li class="hover:bg-gray-400">
         <a href="#" class="flex flex-row items-center text-xs p-1 rounded-lg text-gray-700 bg-gray-100">
@@ -71,8 +71,8 @@
       </li>
     </ul>
 
-    <button type="button" class="text-white w-full justify-center bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-regular rounded-lg text-sm px-5 py-2 text-center inline-flex items-center me-2 mt-2">
+    <button type="button" class="text-white w-full justify-center bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg text-xs px-5 py-2 text-center inline-flex items-center me-2 mt-2">
       Sign in to save chats
     </button>
   </div>
-</aside>
+  </div>

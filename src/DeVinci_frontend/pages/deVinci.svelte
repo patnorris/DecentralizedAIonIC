@@ -5,23 +5,45 @@
 </script>
 
 
-<div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+<!--<div class="container mx-auto">
+ <div class="flex flex-row ">
+    &lt;!&ndash; navigation &ndash;&gt;
+    <MyChats />
+  <main role="main" class="w-full sm:w-full md:w-3/4 pt-1 px-2">
+    <SelectModel />
+&lt;!&ndash;    <ChatInput />&ndash;&gt;
+  </main>
+ </div>
+</div>-->
 
-  <MyChats />
-
-  <main class="main flex flex-col flex-grow -ml-64  md:ml-0 transition-all duration-150 ease-in">
-     <header class="header bg-white shadow py-4 px-4">
-       <div class="header-content flex items-center flex-row">
-          <div class="flex ml-auto">
-            <a href class="flex flex-row items-center">
-             settings
-            </a>
-          </div>
-       </div>
-     </header>
-
-     <SelectModel />
-     <ChatInput/>
+<div class="flex flex-row">
+  <aside id="chat" class="bg-gray-100 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
+    <div class="sidebar-content px-4">
+      <MyChats />
+    </div>
+  </aside>
+  <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+    <header class="header bg-white shadow py-2 px-4">
+      <div class="header-content flex items-center flex-row">
+        <button data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+          <span class="sr-only">Open sidebar</span>
+          <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+          </svg>
+        </button>
+        <div class="flex ml-auto">
+          <a href class="flex flex-row items-center">
+            set
+          </a>
+        </div>
+      </div>
+    </header>
+    <div class="flex flex-col flex-grow p-4">
+        <SelectModel />
+    </div>
+    <footer class="footer px-4">
+        <ChatInput />
+    </footer>
   </main>
 </div>
 
@@ -30,90 +52,10 @@
 
 
 
+
 <style global>
-/* NOTE: these styles are global and affect any element in the app. Thus, ensure that there aren't any conflicts with the class names chosen (i.e. avoid generic names as they might conflict with an A-Frame class, e.g. content which is used in the Inspector)  */
-  .App-logo {
-    height: 15vmin;
-    pointer-events: none;
+  .footer {
+      background: rgba(1,1,1,0);
   }
 
-  .App-header {
-    margin-top: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-  }
-
-  .App-link {
-    color: rgb(26, 117, 255);
-  }
-
-  .demo-button {
-    background: #a02480;
-    padding: 0 1.3em;
-    margin-top: 1em;
-    border-radius: 60px;
-    font-size: 0.7em;
-    height: 35px;
-    outline: 0;
-    border: 0;
-    cursor: pointer;
-    color: white;
-  }
-
-  .demo-button:active {
-    color: white;
-    background: #979799;
-  }
-
-  .space-details-collapsible {
-    padding: 7px;
-    text-align: center;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
-
-  .active-app-button:hover, .space-details-collapsible:hover {
-    background-color: #555;
-  }
-
-  .space-details-content {
-    display: none;
-    overflow: hidden;
-  }
-
-  .devinci-topnav {
-    background: #333;
-  }
-
-  footer {
-    background: #333;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px 0;
-  }
-
-  footer p {
-    margin-bottom: 20px;
-  }
-
-  footer a {
-    margin: 0 10px;
-    color: #ffffff;
-  }
-
-  footer img {
-    display: block;
-    width: 20%;
-    max-width: 900px;
-    height: auto;
-    margin: auto;
-  }
 </style>
