@@ -25,18 +25,6 @@
 
 </script>
 
-
-<!--<div class="container mx-auto">
- <div class="flex flex-row ">
-    &lt;!&ndash; navigation &ndash;&gt;
-    <MyChats />
-  <main role="main" class="w-full sm:w-full md:w-3/4 pt-1 px-2">
-    <SelectModel />
-&lt;!&ndash;    <ChatInput />&ndash;&gt;
-  </main>
- </div>
-</div>-->
-
 <div class="flex flex-row">
   <aside id="chat" class="bg-gray-100 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
     <div class="sidebar-content px-4">
@@ -68,15 +56,8 @@
   </main>
 </div>
 
-
-
-
-
-
-
 <style global>
   .footer {
       background: rgba(1,1,1,0);
   }
-
 </style>
