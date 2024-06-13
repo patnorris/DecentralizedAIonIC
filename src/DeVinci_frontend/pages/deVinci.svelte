@@ -31,7 +31,7 @@
 
 <div class="flex flex-row h-screen">
   <aside id="chat" class="fixed z-50 bg-gray-200 w-72 min-w-72 h-full md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in">
-    <div class="sidebar-content p-4 pt-0 h-full overflow-y-auto">
+    <div class="sidebar-content p-4 pt-0 h-full overflow-hidden">
       <MyChats />
     </div>
   </aside>
