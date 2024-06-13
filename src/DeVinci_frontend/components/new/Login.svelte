@@ -42,13 +42,66 @@
 
   // Initialize the modal functionality when the DOM content is loaded
   document.addEventListener('DOMContentLoaded', initializeModal);
+
+  /************
+   * handles dropdown top-right menu
+   */
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdownMenuIconButton = document.getElementById('dropdownMenuIconButton');
+    const dropdownDots = document.getElementById('dropdownDots');
+
+    dropdownMenuIconButton.addEventListener('click', function (event) {
+      event.stopPropagation();
+      console.log('Dropdown button clicked');
+      dropdownDots.classList.toggle('hidden');
+    });
+
+    document.body.addEventListener('click', function (event) {
+      if (!dropdownDots.contains(event.target) && !dropdownMenuIconButton.contains(event.target)) {
+        if (!dropdownDots.classList.contains('hidden')) {
+          console.log('Clicked outside dropdown');
+          dropdownDots.classList.add('hidden');
+        }
+      }
+    });
+
+    dropdownDots.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+  });
 </script>
 
 
-<button type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+<button type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal" class="mr-1 text-gray-900 bg-gray-100 hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
   <svg aria-hidden="true" class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-  Connect wallet
+  Connect
 </button>
+
+
+<div class="relative inline-block">
+  <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2.5 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">
+    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+      <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+    </svg>
+  </button>
+
+  <!-- Dropdown menu -->
+  <div id="dropdownDots" class="absolute right-0 top-14 z-10 hidden bg-gray-100 divide-y divide-gray-200 rounded-lg shadow-2xl w-52 border-gray-200 border-4">
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">About</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+      </li>
+    </ul>
+    <div class="py-2">
+      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Disconnect</a>
+    </div>
+  </div>
+</div>
+
 
 <!-- Main modal -->
 <div id="crypto-modal" tabindex="-1" aria-hidden="true" class="hidden bg-gray-900/[.36] overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
