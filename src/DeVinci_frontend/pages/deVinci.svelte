@@ -30,12 +30,12 @@
 </script>
 
 <div class="flex flex-row">
-  <aside id="chat" class="bg-gray-200 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
+  <aside id="chat" class="bg-gray-200 w-64 min-w-64 min-w-72 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
     <div class="sidebar-content p-4 pt-0">
       <MyChats />
     </div>
   </aside>
-  <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+  <main class="main flex flex-col flex-grow -ml-72 md:ml-0 transition-all duration-150 ease-in">
     <header class="header bg-white shadow py-2 px-4">
       <div class="header-content flex items-center flex-row">
         <button id="sidebarToggle"  data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">

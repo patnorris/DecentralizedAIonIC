@@ -37,8 +37,34 @@
       </g>
     </svg>
   </a>
-  <button type="button" class="mr-auto text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-light rounded-lg px-3 py-2 text-xs text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mt-8">
+  <button type="button" class="mr-auto mb-3 mt-8 text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-light rounded-lg px-3 py-2 text-xs text-center inline-flex items-center ">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 mr-2" viewBox="0 -960 960 960"  fill="#5f6368"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
     New chat
   </button>
+
+  <!--
+  --- Show when user is logged and has saved chats
+  -->
+  <ul class="flex flex-col w-full">
+    <li class="hover:bg-gray-400">
+      <a href="#" class="bg-gray-200 flex flex-row items-center text-xs p-1 rounded-lg text-gray-700">
+        Elephant trumpet call...
+      </a>
+    </li>
+    <li class="hover:bg-gray-400">
+      <a href="#" class="bg-gray-200 flex flex-row items-center text-xs p-1 rounded-lg text-gray-700">
+        Victory throught time...
+      </a>
+    </li>
+    <li class="hover:bg-gray-400">
+      <a href="#" class="bg-gray-200 flex flex-row items-center text-xs p-1 rounded-lg text-gray-700">
+        Help fixing...
+      </a>
+    </li>
+    <li class="hover:bg-gray-400">
+      <a href="#" class="bg-gray-200  flex flex-row items-center text-xs p-1 rounded-lg text-gray-700">
+        How to setup a 3d printer...
+      </a>
+    </li>
+  </ul>
 </div>
