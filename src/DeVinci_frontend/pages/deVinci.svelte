@@ -3,6 +3,8 @@
   import SelectModel from "../components/new/SelectModel.svelte";
   import MyChats from "../components/new/MyChats.svelte";
   import Login from "../components/new/Login.svelte";
+  import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
+  import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
 
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -29,7 +31,7 @@
 
 <div class="flex flex-row">
   <aside id="chat" class="bg-gray-200 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
-    <div class="sidebar-content px-4">
+    <div class="sidebar-content p-4 pt-0">
       <MyChats />
     </div>
   </aside>
@@ -47,8 +49,11 @@
         </div>
       </div>
     </header>
-    <div class="flex flex-col flex-grow p-4">
+    <div class="flex flex-col p-4">
         <SelectModel />
+        <ChatBubbleUser />
+        <ChatBubbleDeVinci />
+
     </div>
     <footer class="footer px-4">
         <ChatInput />
