@@ -29,40 +29,44 @@
 
 </script>
 
-<div class="flex flex-row">
-  <aside id="chat" class="bg-gray-200 w-64 min-w-64 min-w-72 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
-    <div class="sidebar-content p-4 pt-0">
+<div class="flex flex-row h-screen">
+  <aside id="chat" class="fixed z-50 bg-gray-200 w-72 min-w-72 h-full md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in">
+    <div class="sidebar-content p-4 pt-0 h-full overflow-y-auto">
       <MyChats />
     </div>
   </aside>
-  <main class="main flex flex-col flex-grow -ml-72 md:ml-0 transition-all duration-150 ease-in">
+  <main class="main flex flex-col flex-grow ml-0 md:ml-72 transition-all duration-150 ease-in">
     <header class="header bg-white shadow py-2 px-4">
       <div class="header-content flex items-center flex-row">
-        <button id="sidebarToggle"  data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <!--
+        -- triggers sidebar on small devices
+        -->
+        <button id="sidebarToggle" data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
           <span class="sr-only">Open sidebar</span>
           <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
           </svg>
         </button>
+
         <div class="flex ml-auto">
-            <Login />
+          <Login />
         </div>
       </div>
     </header>
-    <div class="flex flex-col p-4">
-        <SelectModel />
-        <ChatBubbleUser />
-        <ChatBubbleDeVinci />
-
+    <div class="flex flex-col p-4 pb-24">
+      <SelectModel />
+      <ChatBubbleUser />
+      <ChatBubbleDeVinci />
     </div>
-    <footer class="footer px-4">
-        <ChatInput />
+    <footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
+      <ChatInput />
     </footer>
   </main>
 </div>
 
 <style global>
   .footer {
-      background: rgba(1,1,1,0);
+      background: rgba(255,255,255,1);
+      padding-top: 10px;
   }
 </style>

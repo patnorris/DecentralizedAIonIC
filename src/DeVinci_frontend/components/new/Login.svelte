@@ -42,9 +42,6 @@
 
   // Initialize the modal functionality when the DOM content is loaded
   document.addEventListener('DOMContentLoaded', initializeModal);
-
-
-
 </script>
 
 
