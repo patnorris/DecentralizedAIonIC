@@ -28,7 +28,7 @@
 </script>
 
 <div class="flex flex-row">
-  <aside id="chat" class="bg-gray-100 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
+  <aside id="chat" class="bg-gray-200 w-64 min-w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in" >
     <div class="sidebar-content px-4">
       <MyChats />
     </div>
