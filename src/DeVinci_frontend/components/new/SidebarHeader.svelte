@@ -85,25 +85,35 @@
   --- Show when user is logged and has saved chats
   -->
   <ul class="flex flex-col w-full">
-    <li class="hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500">
+    <li class="relative group hover:bg-gray-400">
+      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
         Consider the ethical implications and potential benefits
       </a>
+      <button class="delete-btn hidden absolute right-4 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs px-1 py-1 rounded">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4" viewBox="0 -960 960 960" fill="#ffffff"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+      </button>
     </li>
-    <li class="hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500">
-        Talk about the latest developments in space exploration
-      </a>
-    </li>
-    <li class="hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500">
+    <li class="relative group hover:bg-gray-400">
+      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
         Discuss how globalization is impacting cultural
       </a>
+      <button class="delete-btn hidden absolute right-4 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs px-1 py-1 rounded">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4" viewBox="0 -960 960 960" fill="#ffffff"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+      </button>
     </li>
-    <li class="hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-300  flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500">
-        Chat about the current state of the environment
+    <li class="relative group hover:bg-gray-400">
+      <a href="#" class="truncate bg-gray-300 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
+        Talk about the latest developments in space exploration
       </a>
+      <button class="delete-btn hidden absolute right-4 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs px-1 py-1 rounded">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4" viewBox="0 -960 960 960" fill="#ffffff"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+      </button>
     </li>
   </ul>
 </div>
+
+<style>
+	.group:hover .delete-btn {
+		display: flex;
+	}
+</style>
