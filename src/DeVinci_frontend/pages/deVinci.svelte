@@ -6,25 +6,36 @@
   import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
   import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
 
+  import { onMount } from 'svelte';
 
-  document.addEventListener('DOMContentLoaded', function () {
+  onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const chat = document.getElementById('chat');
 
-    sidebarToggle.addEventListener('click', function (event) {
+    function toggleSidebar(event) {
       event.stopPropagation();
       chat.classList.toggle('-translate-x-full');
-    });
+    }
 
-    document.body.addEventListener('click', function (event) {
+    function closeSidebar(event) {
       if (!chat.contains(event.target) && !sidebarToggle.contains(event.target)) {
         chat.classList.add('-translate-x-full');
       }
-    });
+    }
 
-    chat.addEventListener('click', function (event) {
+    function stopPropagation(event) {
       event.stopPropagation();
-    });
+    }
+
+    sidebarToggle.addEventListener('click', toggleSidebar);
+    document.body.addEventListener('click', closeSidebar);
+    chat.addEventListener('click', stopPropagation);
+
+    return () => {
+      sidebarToggle.removeEventListener('click', toggleSidebar);
+      document.body.removeEventListener('click', closeSidebar);
+      chat.removeEventListener('click', stopPropagation);
+    };
   });
 
 </script>
