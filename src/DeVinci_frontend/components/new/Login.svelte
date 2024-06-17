@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   // Function to open the modal
   const openModal = (modal: HTMLElement) => {
     modal.classList.remove('hidden');
@@ -40,35 +42,36 @@
     }
   };
 
-  // Initialize the modal functionality when the DOM content is loaded
-  document.addEventListener('DOMContentLoaded', initializeModal);
-
-  /************
-   * handles dropdown top-right menu
-   */
-
-  document.addEventListener('DOMContentLoaded', function () {
+  // Function to initialize dropdown functionality
+  const initializeDropdown = () => {
     const dropdownMenuIconButton = document.getElementById('dropdownMenuIconButton');
     const dropdownDots = document.getElementById('dropdownDots');
 
-    dropdownMenuIconButton.addEventListener('click', function (event) {
-      event.stopPropagation();
-      console.log('Dropdown button clicked');
-      dropdownDots.classList.toggle('hidden');
-    });
+    if (dropdownMenuIconButton && dropdownDots) {
+      dropdownMenuIconButton.addEventListener('click', function (event) {
+        event.stopPropagation();
+        console.log('Dropdown button clicked');
+        dropdownDots.classList.toggle('hidden');
+      });
 
-    document.body.addEventListener('click', function (event) {
-      if (!dropdownDots.contains(event.target) && !dropdownMenuIconButton.contains(event.target)) {
-        if (!dropdownDots.classList.contains('hidden')) {
-          console.log('Clicked outside dropdown');
-          dropdownDots.classList.add('hidden');
+      document.body.addEventListener('click', function (event) {
+        if (!dropdownDots.contains(event.target) && !dropdownMenuIconButton.contains(event.target)) {
+          if (!dropdownDots.classList.contains('hidden')) {
+            console.log('Clicked outside dropdown');
+            dropdownDots.classList.add('hidden');
+          }
         }
-      }
-    });
+      });
 
-    dropdownDots.addEventListener('click', function (event) {
-      event.stopPropagation();
-    });
+      dropdownDots.addEventListener('click', function (event) {
+        event.stopPropagation();
+      });
+    }
+  };
+
+  onMount(() => {
+    initializeModal();
+    initializeDropdown();
   });
 </script>
 
@@ -90,18 +93,17 @@
   <div id="dropdownDots" class="absolute right-0 top-14 z-10 hidden bg-gray-100 divide-y divide-gray-200 rounded-lg shadow-2xl w-52 border-gray-200 border-4">
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">About</a>
+        <a href="#" class="block px-4 py-2 hover:bg-white">About</a>
       </li>
       <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+        <a href="#" class="block px-4 py-2 hover:bg-white">Settings</a>
       </li>
     </ul>
-    <div class="py-2">
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Disconnect</a>
+    <div>
+      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Disconnect</a>
     </div>
   </div>
 </div>
-
 
 <!-- Main modal -->
 <div id="crypto-modal" tabindex="-1" aria-hidden="true" class="hidden bg-gray-900/[.36] overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
