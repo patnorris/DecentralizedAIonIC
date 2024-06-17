@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex flex-col justify-center w-full items-center">
-  <a href="#">
+  <a href="#/devinci">
     <!--?xml version="1.0" encoding="UTF-8"?-->
     <svg class="thishere w-14 h-14 p-0 drop-shadow-md rounded-full" id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.5 99.5" width="55" height="55">
       <defs>
