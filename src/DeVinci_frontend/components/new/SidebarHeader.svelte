@@ -1,15 +1,17 @@
 <script>
+  import newchaticon from "/newchat.svg";
+  import devincilogo from "/devinci-logo.svg";
 
 </script>
 
 <div class="flex flex-col justify-center w-full items-center">
   <a href="#/devinci">
     <!--?xml version="1.0" encoding="UTF-8"?-->
-        <img src="../../src/DeVinci_frontend/assets/devinci-logo.svg" class="w-14 h-14 p-0 drop-shadow-md rounded-full" alt="devinci logo" />
+        <img src={devincilogo} class="w-14 h-14 p-0 drop-shadow-md rounded-full" alt="devinci logo" />
   </a>
 
   <button type="button" class="mr-auto mb-3 mt-8 text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-light rounded-lg px-3 py-2 text-xs text-center inline-flex items-center ">
-    <img src="../../src/DeVinci_frontend/assets/devinci-logo-white.svg" class="w-6 h-6 mr-2 p-0 rounded-full" alt="devinci logo" />
+    <img src={newchaticon} class="w-5 mr-2 p-0 rounded-full" alt="new chat" />
     New chat
   </button>
 
