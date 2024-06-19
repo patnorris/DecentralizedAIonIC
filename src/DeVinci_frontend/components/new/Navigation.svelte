@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import InternetIdentityButton from "../InternetIdentityButton.svelte";
 
   // Function to open the modal
   const openModal = (modal: HTMLElement) => {
@@ -130,10 +131,7 @@
         <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Connect with one of our available wallet providers.</p>
         <ul class="my-4 space-y-3">
           <li>
-            <a href="#" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-              <img class="h-3" src="../../src/DeVinci_frontend/assets/internet-computer.svg"  alt="ic wallet" />
-              <span class="flex-1 ms-3 whitespace-nowrap">Internet Identity</span>
-            </a>
+            <InternetIdentityButton />
           </li>
           <li>
             <a href="#" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">

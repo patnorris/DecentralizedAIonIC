@@ -2,6 +2,7 @@
   import { store } from "../store";
 
   import spinner from "../assets/loading.gif";
+  import iclogo from "../assets/internet-computer.svg";
   import Button from "./Button.svelte";
 
   export let loading;
@@ -15,14 +16,15 @@
   };
 </script>
 
-<Button
+<a
+  class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow cursor-pointer"
   on:click={connect}
   disabled={loading}
-  style={"lg:h-16 2xl:h-20 lg:rounded-[55px]"}
 >
   {#if loading === "internetidentity"}
     <img class="h-6 block" src={spinner} alt="loading animation" />
   {:else}
-    Internet Identity
+    <img class="h-3" src={iclogo}  alt="ic wallet" />
+    <span class="flex-1 ms-3 whitespace-nowrap">Internet Identity</span>
   {/if}
-</Button>
+</a>
