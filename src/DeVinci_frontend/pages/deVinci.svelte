@@ -2,7 +2,7 @@
   import ChatInput from "../components/new/ChatInput.svelte";
   import SelectModel from "../components/new/SelectModel.svelte";
   import MyChats from "../components/new/MyChats.svelte";
-  import Login from "../components/new/Login.svelte";
+  import Navigation from "../components/new/Navigation.svelte";
   import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
   import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
 
@@ -60,7 +60,7 @@
         </button>
 
         <div class="flex ml-auto">
-          <Login />
+          <Navigation />
         </div>
       </div>
     </header>
