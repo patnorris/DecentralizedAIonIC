@@ -2,8 +2,7 @@
   import { store } from "../store";
 
   import spinner from "../assets/loading.gif";
-  import iclogo from "../assets/internet-computer.svg";
-  import Button from "./Button.svelte";
+  import iclogo from "/internet-computer.svg";
 
   export let loading;
   export let toggleModal;

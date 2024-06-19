@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import InternetIdentityButton from "../InternetIdentityButton.svelte";
+  import  NfidButton from "../NfidButton.svelte";
 
   // Function to open the modal
   const openModal = (modal: HTMLElement) => {
@@ -134,10 +135,7 @@
             <InternetIdentityButton />
           </li>
           <li>
-            <a href="#" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-              <img class="h-5" src="../../src/DeVinci_frontend/assets/nfid.webp"  alt="nfid wallet" />
-              <span class="flex-1 ms-3 whitespace-nowrap">NFID (incl. Google)</span>
-            </a>
+            <NfidButton />
           </li>
           <li>
             <a href="#" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
