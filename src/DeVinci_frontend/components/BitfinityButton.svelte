@@ -3,7 +3,7 @@
   import { store } from "../store";
 
   import spinner from "../assets/loading.gif";
-  import Button from "./Button.svelte";
+  import bitfinitylogo from "/bitfinity.svg";
 
   export let loading;
   export let toggleModal;
@@ -16,14 +16,15 @@
   }
 </script>
 
-<Button
+<a
+class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow cursor-pointer"
   on:click={connect}
   disabled={loading}
-  style={"lg:h-16 2xl:h-20 lg:rounded-[55px]"}
 >
   {#if loading === "bitfinity"}
     <img class="h-6 block" src={spinner} alt="loading animation" />
   {:else}
-    Bitfinity
+    <img class="h-5" src={bitfinitylogo}  alt="bitfinity wallet" />
+    <span class="flex-1 ms-3 whitespace-nowrap">Bitfinity</span>
   {/if}
-</Button>
+</a>
