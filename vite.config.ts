@@ -4,6 +4,7 @@ import path from "path";
 import dfxJson from "./dfx.json";
 import fs from "fs";
 import { VitePWA } from "vite-plugin-pwa";
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 const isDev = process.env["DFX_NETWORK"] === "local";
 // Get the network name, or `local` by default.
@@ -130,7 +131,15 @@ const pwaOptions = {
 export default defineConfig({
   plugins: [
     svelte(),
-    VitePWA(pwaOptions)
+    VitePWA(pwaOptions),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/onnxruntime-web/dist/*.wasm',
+          dest: ''
+        }
+      ]
+    })
   ],
   build: {
     target: "es2020",

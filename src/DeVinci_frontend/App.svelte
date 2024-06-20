@@ -7,12 +7,15 @@
   import About from "./pages/About.svelte";
   import NotFound from "./pages/NotFound.svelte";
 
+  import Training from "./pages/Training.svelte";
+
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)
     "/": Intro,
     "/mychats": UserChatsOverview,
     "/settings": UserSettings,
     "/about": About,
+    "/training": Training,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };
