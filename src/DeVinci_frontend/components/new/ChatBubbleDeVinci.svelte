@@ -1,7 +1,5 @@
 <script lang="ts">
-
 </script>
-
 
 <div class="flex items-start gap-2.5 mt-4">
   <img class="w-8 h-8 rounded-full border-solid border-2 p-1 border-gray-200" src="../../src/DeVinci_frontend/assets/android-chrome-192x192.png" alt="DeVinci Logo">

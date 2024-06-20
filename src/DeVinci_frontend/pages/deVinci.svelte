@@ -1,10 +1,11 @@
 <script lang="ts">
   import ChatInput from "../components/new/ChatInput.svelte";
   import SelectModel from "../components/new/SelectModel.svelte";
-  import MyChats from "../components/new/MyChats.svelte";
+  import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
   import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
   import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
+  import ChatBubbleDeVinciPDF from "../components/new/ChatBubbleDeVinciPDF.svelte";
 
   import { onMount } from 'svelte';
 
@@ -43,7 +44,7 @@
 <div class="flex flex-row h-screen">
   <aside id="chat" class="fixed z-50 bg-gray-200 w-72 min-w-72 h-full md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in">
     <div class="sidebar-content p-4 pt-0 h-full overflow-hidden">
-      <MyChats />
+      <Sidebar />
     </div>
   </aside>
   <main class="main flex flex-col flex-grow ml-0 md:ml-72 transition-all duration-150 ease-in">
@@ -68,6 +69,7 @@
       <SelectModel />
       <ChatBubbleUser />
       <ChatBubbleDeVinci />
+      <ChatBubbleDeVinciPDF />
     </div>
     <footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
       <ChatInput />
