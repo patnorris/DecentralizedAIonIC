@@ -114,3 +114,8 @@ dist-ssr
 .vessel
 .mops
 *.idea
+
+*.onnx
+*.onnx_data
+*checkpoint
+*-ubyte
