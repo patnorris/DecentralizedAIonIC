@@ -5,6 +5,8 @@
   import BitfinityButton from "../BitfinityButton.svelte";
   import PlugButton from "../PlugButton.svelte";
 
+  let loading = ""; // this allows us to disable all other login buttons if one of them is clicked
+
   // Function to open the modal
   const openModal = (modal: HTMLElement) => {
     modal.classList.remove('hidden');
@@ -14,6 +16,8 @@
   const closeModal = (modal: HTMLElement) => {
     modal.classList.add('hidden');
   };
+
+  let toggleModal = closeModal;
 
   // Main function to initialize modal functionality
   const initializeModal = () => {
@@ -134,23 +138,19 @@
         <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Connect with one of our available wallet providers.</p>
         <ul class="my-4 space-y-3">
           <li>
-            <InternetIdentityButton />
+            <InternetIdentityButton bind:loading {toggleModal} />
           </li>
           <li>
-            <NfidButton />
+            <NfidButton bind:loading {toggleModal} />
           </li>
           <li>
-            <BitfinityButton />
+            <BitfinityButton bind:loading {toggleModal} />
           </li>
           <li>
-            <PlugButton />
+            <PlugButton bind:loading {toggleModal} />
           </li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-
-
-<style>
-</style>
