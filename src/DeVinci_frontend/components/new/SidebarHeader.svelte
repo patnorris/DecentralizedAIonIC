@@ -1,6 +1,16 @@
 <script>
+  import {
+    activeChatGlobal
+  } from "../../store";
+
   import newchaticon from "/newchat.svg";
   import devincilogo from "/devinci-logo.svg";
+
+  // User can select between chats (global variable is kept)
+  async function showNewChat() {
+    $activeChatGlobal = null;
+    return;
+  };
 
 </script>
 
@@ -8,7 +18,7 @@
   <a href="#/devinci">
       <img src={devincilogo} class="w-14 h-14 p-0 bg-gray-100 rounded-full" alt="devinci logo" />
   </a>
-  <button type="button" class="mr-auto  mt-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center mb-1">
+  <button type="button" on:click={showNewChat} class="mr-auto  mt-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center mb-1">
 <!--      <img src={newchaticon} class="w-5 mr-1 p-0 rounded-full" alt="new chat" />-->
       New chat
   </button>

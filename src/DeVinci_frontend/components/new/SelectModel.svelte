@@ -4,7 +4,6 @@
     store,
     chatModelGlobal,
     chatModelDownloadedGlobal,
-    activeChatGlobal,
     selectedAiModelId,
     deviceType
   } from "../../store";
