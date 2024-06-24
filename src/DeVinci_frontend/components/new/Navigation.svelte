@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { store } from "../../store";
   import InternetIdentityButton from "../InternetIdentityButton.svelte";
   import NfidButton from "../NfidButton.svelte";
   import BitfinityButton from "../BitfinityButton.svelte";
@@ -77,6 +78,12 @@
     }
   };
 
+  // User clicked on Logout
+  const logout = async () => {
+    await store.disconnect();
+    //open = false;
+  };
+
   onMount(() => {
     initializeModal();
     initializeDropdown();
@@ -111,7 +118,7 @@
       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Install app</a>
     </div>
     <div>
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Disconnect</a>
+      <a on:click={() => logout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Disconnect</a>
     </div>
   </div>
 </div>
