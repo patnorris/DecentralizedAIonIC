@@ -154,6 +154,22 @@ module {
     updatedSpaceData: ?Text;
   };
 
+  public type MemoryVectorMetadata = {
+    id: Int;
+  };
+
+  public type MemoryVector = {
+    content: Text;
+    embedding: [Float];
+    metadata: MemoryVectorMetadata;
+  };
+
+  public type MemoryVectorsStoredResult = Result<Bool, ApiError>;
+
+  public type MemoryVectorsResult = Result<[MemoryVector], ApiError>;
+
+  public type MemoryVectorsCheckResult = Result<Bool, ApiError>;
+
   public type SignUpFormInput = {
     emailAddress: Text; // provided by user on signup
     pageSubmittedFrom: Text; // capture for analytics

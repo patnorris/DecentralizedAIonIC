@@ -8,10 +8,11 @@
   <meta name='robots' content='index, follow'>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./serviceWorker/service-worker.js', { scope: '/' })
+        navigator.serviceWorker.register('./service-worker.js', { scope: '/' })
           .then((registration) => {
             console.log('Service Worker registered with scope:', registration);
           })

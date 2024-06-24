@@ -60,6 +60,7 @@ const canisterDefinitions = Object.entries(canisterIds).reduce(
   (acc, [key, val]) => ({
     ...acc,
     [`process.env.${key.toUpperCase()}_CANISTER_ID`]: JSON.stringify(val[networkName]),
+    [`process.env.CANISTER_ID_${key.toUpperCase()}`]: JSON.stringify(val[networkName]),
   }),
   {},
 );
@@ -112,10 +113,12 @@ const pwaOptions = {
   strategies: 'injectManifest',
   srcDir: 'src/DeVinci_frontend',
   filename: 'service-worker.ts',
-  outDir: './dist/serviceWorker',
+  outDir: './dist/',
   injectManifest: {
     //injectionPoint: undefined
-    rollupFormat: 'iife'
+    rollupFormat: 'iife',
+    globPatterns: ['**/*.{js,css,html,ico,png,svg,json,gif}'],
+    maximumFileSizeToCacheInBytes: 50000000, // Increase or decrease based on your needs
   },
   devOptions: {
     enabled: true

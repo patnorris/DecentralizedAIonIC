@@ -51,6 +51,8 @@ export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
 export let selectedAiModelId = writable(getDefaultAiModelId(deviceType === 'Android'));
 
+export let vectorStore = writable(null);
+
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
 const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)

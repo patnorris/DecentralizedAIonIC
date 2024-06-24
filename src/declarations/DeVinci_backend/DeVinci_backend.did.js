@@ -1,11 +1,15 @@
 export const idlFactory = ({ IDL }) => {
-  const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
     'InvalidTokenId' : IDL.Null,
     'Unauthorized' : IDL.Null,
     'Other' : IDL.Text,
   });
+  const MemoryVectorsCheckResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
+  });
+  const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
   const ChatCreationResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : ApiError });
   const Chat = IDL.Record({
     'id' : IDL.Text,
@@ -27,6 +31,16 @@ export const idlFactory = ({ IDL }) => {
     'Err' : ApiError,
   });
   const ChatsResult = IDL.Variant({ 'Ok' : IDL.Vec(Chat), 'Err' : ApiError });
+  const MemoryVectorMetadata = IDL.Record({ 'id' : IDL.Int });
+  const MemoryVector = IDL.Record({
+    'content' : IDL.Text,
+    'metadata' : MemoryVectorMetadata,
+    'embedding' : IDL.Vec(IDL.Float64),
+  });
+  const MemoryVectorsResult = IDL.Variant({
+    'Ok' : IDL.Vec(MemoryVector),
+    'Err' : ApiError,
+  });
   const UserSettings = IDL.Record({ 'selectedAiModelId' : IDL.Text });
   const UserSettingsResult = IDL.Variant({
     'Ok' : UserSettings,
@@ -36,6 +50,10 @@ export const idlFactory = ({ IDL }) => {
     'subscribedAt' : IDL.Nat64,
     'emailAddress' : IDL.Text,
     'pageSubmittedFrom' : IDL.Text,
+  });
+  const MemoryVectorsStoredResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
   });
   const SignUpFormInput = IDL.Record({
     'emailAddress' : IDL.Text,
@@ -51,11 +69,21 @@ export const idlFactory = ({ IDL }) => {
     'chatTitle' : IDL.Text,
   });
   const DeVinciBackend = IDL.Service({
+    'check_caller_has_memory_vectors_entry' : IDL.Func(
+        [],
+        [MemoryVectorsCheckResult],
+        ['query'],
+      ),
     'create_chat' : IDL.Func([IDL.Vec(Message)], [ChatCreationResult], []),
     'delete_chat' : IDL.Func([IDL.Text], [ChatResult], []),
     'delete_email_subscriber' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'get_caller_chat_history' : IDL.Func([], [ChatsPreviewResult], ['query']),
     'get_caller_chats' : IDL.Func([], [ChatsResult], ['query']),
+    'get_caller_memory_vectors' : IDL.Func(
+        [],
+        [MemoryVectorsResult],
+        ['query'],
+      ),
     'get_caller_settings' : IDL.Func([], [UserSettingsResult], ['query']),
     'get_chat' : IDL.Func([IDL.Text], [ChatResult], ['query']),
     'get_email_subscribers' : IDL.Func(
@@ -64,6 +92,11 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'store_user_chats_memory_vectors' : IDL.Func(
+        [IDL.Vec(MemoryVector)],
+        [MemoryVectorsStoredResult],
+        [],
+      ),
     'submit_signup_form' : IDL.Func([SignUpFormInput], [IDL.Text], []),
     'update_caller_settings' : IDL.Func(
         [UserSettings],
