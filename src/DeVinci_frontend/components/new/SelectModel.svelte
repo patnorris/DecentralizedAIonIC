@@ -11,7 +11,11 @@
 
   import SelectModelOption from './SelectModelOption.svelte';
 
-  const modelOptions = [
+  import { getAvailableAiModels } from "../../helpers/ai_model_helpers";
+
+  let availableAiModels = getAvailableAiModels(deviceType === 'Android');
+
+  /* const modelOptions = [
     {
       id: "TinyLlama",
       name: "models",
@@ -75,7 +79,7 @@
       performance: "Insane performance",
       size: "Very large size"
     }
-  ];
+  ]; */
 
   let chatModelDownloadInProgress = false;
   let chatModelDownloaded = false;
@@ -126,7 +130,7 @@
 </script>
 
   <ul class="grid w-full gap-2 md:grid-cols-2 px-4 mt-4">
-    {#each modelOptions as option}
+    {#each availableAiModels as option}
       <SelectModelOption
         id={option.id}
         name={option.name}
