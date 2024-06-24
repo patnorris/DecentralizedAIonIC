@@ -1,4 +1,14 @@
 <script lang="ts">
+  import * as webllm from "@mlc-ai/web-llm";
+  import {
+    store,
+    chatModelGlobal,
+    chatModelDownloadedGlobal,
+    activeChatGlobal,
+    selectedAiModelId,
+    deviceType
+  } from "../../store";
+
   import SelectModelOption from './SelectModelOption.svelte';
 
   const modelOptions = [
@@ -72,8 +82,8 @@
   chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   async function loadChatModel(modelOptionId) {
-    /* debugOutput += "###in loadChatModel###";
-    setLabel("debug-label", debugOutput); */
+    //debugOutput += "###in loadChatModel###";
+    //setLabel("debug-label", debugOutput);
     if (chatModelDownloadInProgress) {
       return;
     };
@@ -82,7 +92,7 @@
     };
     //console.log("Loading chat model...");
     chatModelDownloadInProgress = true;
-    if(!modelOptionId){
+    if (!modelOptionId) {
       modelOptionId = $selectedAiModelId;
     };
     if (process.env.NODE_ENV !== "development") {
@@ -94,24 +104,25 @@
           {type: 'module'}
         )); */
         //console.log("Using webllm");
-        $chatModelGlobal = new webllm.Engine();
+        $chatModelGlobal = new webllm.MLCEngine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
-        $chatModelGlobal = new webllm.Engine();
+        $chatModelGlobal = new webllm.MLCEngine();
       }      
     } else {
       //console.log("Using webllm");
-      $chatModelGlobal = new webllm.Engine();
+      $chatModelGlobal = new webllm.MLCEngine();
     };
 
-    const initProgressCallback = (report) => {
+    /* const initProgressCallback = (report) => {
       setLabel("init-label", report.text);
     };
-    $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+    $chatModelGlobal.setInitProgressCallback(initProgressCallback); */
     await $chatModelGlobal.reload(modelOptionId);
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
+
 </script>
 
   <ul class="grid w-full gap-2 md:grid-cols-2 px-4 mt-4">
