@@ -5,6 +5,21 @@
   import NfidButton from "../NfidButton.svelte";
   import BitfinityButton from "../BitfinityButton.svelte";
   import PlugButton from "../PlugButton.svelte";
+  import InstallToastNotification from '../InstallToastNotification.svelte';
+
+  let visibleInstallAppToast = false;
+
+  const showInstallAppToast = () => {
+    visibleInstallAppToast = true;
+    // Automatically hide the toast
+    setTimeout(() => {
+      visibleInstallAppToast = false;
+    }, 8000);
+  };
+
+  onMount(() => {
+    showInstallAppToast(); // Show toast on load
+  });
 
   let loading = ""; // this allows us to disable all other login buttons if one of them is clicked
 
@@ -115,7 +130,7 @@
       </li>
     </ul>
     <div>
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Install app</a>
+      <a on:click={() => showInstallAppToast()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Install app</a>
     </div>
     <div>
       <a on:click={() => logout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Disconnect</a>
@@ -161,3 +176,7 @@
     </div>
   </div>
 </div>
+
+{#if visibleInstallAppToast}
+  <InstallToastNotification />
+{/if}
