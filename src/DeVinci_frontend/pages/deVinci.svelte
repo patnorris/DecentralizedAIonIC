@@ -79,7 +79,7 @@
 
 <style global>
   .footer {
-      background: rgba(255,255,255,1);
-      padding-top: 10px;
+    background: rgba(255,255,255,1);
+    padding-top: 10px;
   }
 </style>
