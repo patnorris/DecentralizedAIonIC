@@ -17,10 +17,6 @@
     }, 8000);
   };
 
-  onMount(() => {
-    showInstallAppToast(); // Show toast on load
-  });
-
   let loading = ""; // this allows us to disable all other login buttons if one of them is clicked
 
   // Function to open the modal

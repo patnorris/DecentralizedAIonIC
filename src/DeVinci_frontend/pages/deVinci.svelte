@@ -3,6 +3,7 @@
   import SelectModel from "../components/new/SelectModel.svelte";
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
+  import ChatInterface from "../components/new/ChatInterface.svelte";
   import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
   import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
   import ChatBubbleDeVinciPDF from "../components/new/ChatBubbleDeVinciPDF.svelte";
@@ -65,15 +66,7 @@
         </div>
       </div>
     </header>
-    <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
-      <SelectModel />
-      <ChatBubbleUser />
-      <ChatBubbleDeVinci />
-      <ChatBubbleDeVinciPDF />
-    </div>
-    <footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
-      <ChatInput />
-    </footer>
+    <ChatInterface />
   </main>
 </div>
 
