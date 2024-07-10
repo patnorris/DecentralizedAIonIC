@@ -13,7 +13,7 @@ import {
   vectorStore,
 } from "../store";
 
-import { getResourceAsArray } from "./setup_knowledgebase";
+//import { getResourceAsArray } from "./setup_knowledgebase";
 
 let storeState;
 store.subscribe((value) => storeState = value);
@@ -27,7 +27,7 @@ let providedDataEntries;
  * Interface representing a vector in memory. It includes the content
  * (text), the corresponding embedding (vector), and any associated
  * metadata.
- */ 
+ */
 // from https://github.com/langchain-ai/langchainjs/blob/ad2da871c50728712fb913f9c68d1fe77084911e/langchain/src/vectorstores/memory.ts#L11
 interface MemoryVector {
   content: string;
@@ -68,7 +68,7 @@ export const getSearchVectorDbTool = async (pathToUploadedPdfInput) => {
   await generateEmbeddings();
   //vectorDbByTopic[selectedTopic] = vectorDbSearchTool; // add the initialized vector db for later retrieval
   return vectorDbSearchTool;
-}; 
+};
 
 const generateEmbeddings = async () => {
   if (!pathToUploadedPdf) {
@@ -125,9 +125,9 @@ const getDataEntries = async (pathToUploadedPdf) => {
       id: index,
       content: knowledgePages[index]
     };
-    dataEntries.push(dataEntry);      
+    dataEntries.push(dataEntry);
   };
-  
+
   return dataEntries;
 };
 
@@ -146,7 +146,7 @@ export const storeEmbeddings = async () => {
         return false;
       };
     } catch (error) {
-      console.error("Error storing memory vectors: ", error);        
+      console.error("Error storing memory vectors: ", error);
     };
     return true;
   } catch (error) {
@@ -164,7 +164,7 @@ const retrieveEmbeddings = async () => {
         retrievedMemVecs = getMemoryVectorsResponse.Ok;
       };
     } catch (error) {
-      console.error("Error retrieving memory vectors: ", error);        
+      console.error("Error retrieving memory vectors: ", error);
     };
     return retrievedMemVecs;
   } catch (error) {
@@ -203,7 +203,7 @@ export const loadExistingVectorStore = async () => {
       const end = performance.now() / 1000;
       console.log(`Debug: loadExistingVectorStore took ${(end - start).toFixed(2)}s`);
     } catch (error) {
-      console.error("Error loading retrieved vectors: ", error);        
+      console.error("Error loading retrieved vectors: ", error);
     };
     return retrievedMemVecs;
   } catch (error) {
