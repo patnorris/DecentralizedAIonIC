@@ -85,6 +85,7 @@
   chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   async function loadChatModel(modelOptionId) {
+    console.log("in loadChatModel modelOptionId", modelOptionId);
     //debugOutput += "###in loadChatModel###";
     //setLabel("debug-label", debugOutput);
     if (chatModelDownloadInProgress) {
@@ -93,13 +94,13 @@
     if (chatModelDownloaded === true && $chatModelGlobal) {
       return;
     };
-    //console.log("Loading chat model...");
+    console.log("Loading chat model...");
     chatModelDownloadInProgress = true;
     if (!modelOptionId) {
       modelOptionId = $selectedAiModelId;
     };
     if (process.env.NODE_ENV !== "development") {
-      //console.log("Using web worker");
+      console.log("Using web worker");
       try {
         /* TODO: fix
         chatModel = new webllm.ChatWorkerClient(new Worker(
@@ -113,7 +114,7 @@
         $chatModelGlobal = new webllm.MLCEngine();
       }      
     } else {
-      //console.log("Using webllm");
+      console.log("Using webllm");
       $chatModelGlobal = new webllm.MLCEngine();
     };
 
@@ -121,9 +122,11 @@
       setLabel("init-label", report.text);
     };
     $chatModelGlobal.setInitProgressCallback(initProgressCallback); */
+    console.log("in loadChatModel reload");
     await $chatModelGlobal.reload(modelOptionId);
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
+    console.log("in loadChatModel loaded");
   };
 
 </script>
@@ -138,7 +141,7 @@
         parameters={option.parameters}
         performance={option.performance}
         size={option.size}
-        on:click={() => loadChatModel(option.id)}
+        callbackLoadChatModel={loadChatModel}
       />
     {/each}
   </ul>
