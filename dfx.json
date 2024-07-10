@@ -25,7 +25,9 @@
       "remote": {
         "candid": "internet_identity.did",
         "id": {
-          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai",
+          "testing": "rdmx6-jaaaa-aaaaa-aaadq-cai",
+          "development": "rdmx6-jaaaa-aaaaa-aaadq-cai"
         }
       }
     }

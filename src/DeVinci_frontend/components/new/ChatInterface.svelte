@@ -19,7 +19,7 @@
     //loadExistingVectorStore,
     //checkUserHasKnowledgeBase
   } from "../../helpers/vector_database";
-  import spinner from "../assets/loading.gif";
+  //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBubbleDeVinci from "./ChatBubbleDeVinci.svelte";
   import ChatBubbleUser from "./ChatBubbleUser.svelte";
@@ -296,7 +296,7 @@
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   <SelectModel />
-  <ChatMessages />
+  <!-- <ChatMessages /> -->
   <!-- <ChatBubbleUser />
   <ChatBubbleDeVinci />
   <ChatBubbleDeVinciPDF /> -->
