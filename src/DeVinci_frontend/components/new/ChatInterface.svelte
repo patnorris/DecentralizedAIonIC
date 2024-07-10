@@ -12,7 +12,7 @@
   import Button from "../Button.svelte";
   import ChatBox from "../ChatBox.svelte";
   import ChatHistory from "../ChatHistory.svelte";
-  import InstallToastNotification from '../InstallToastNotification.svelte';
+  import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
