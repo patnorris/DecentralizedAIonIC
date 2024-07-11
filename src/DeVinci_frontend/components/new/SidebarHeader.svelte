@@ -16,9 +16,9 @@
 
 <div class="flex flex-col justify-center w-full items-center">
   <a href="#/devinci">
-      <img src={devincilogo} class="w-14 h-14 p-0 bg-gray-100 rounded-full" alt="devinci logo" />
+      <img src={devincilogo} class="w-14 h-14 p-0 rounded-full" alt="devinci logo" />
   </a>
-  <button type="button" on:click={showNewChat} class="mr-auto  mt-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center mb-1">
+  <button type="button" on:click={showNewChat} class="mr-auto  my-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
 <!--      <img src={newchaticon} class="w-5 mr-1 p-0 rounded-full" alt="new chat" />-->
       New chat
   </button>
@@ -28,7 +28,7 @@
   -->
   <ul class="flex flex-col w-full">
     <li class="relative group hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-200 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
+      <a href="#" class="truncate bg-gray-200 hover:bg-slate-100 flex flex-row items-center text-xs p-1.5 text-gray-500 w-full">
         Consider the ethical implications and potential benefits
       </a>
       <button class="delete-btn hidden absolute right-3.5 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs p-1.5 rounded-l">
@@ -36,7 +36,7 @@
       </button>
     </li>
     <li class="relative group hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-200 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
+      <a href="#" class="truncate bg-gray-200 hover:bg-slate-100 flex flex-row items-center text-xs p-1.5 text-gray-500 w-full">
         Discuss how globalization is impacting cultural
       </a>
       <button class="delete-btn hidden absolute right-3.5 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs p-1.5 rounded-l">
@@ -44,7 +44,7 @@
       </button>
     </li>
     <li class="relative group hover:bg-gray-400">
-      <a href="#" class="truncate bg-gray-200 flex flex-row items-center text-xs p-1.5 rounded-lg text-gray-500 w-full">
+      <a href="#" class="truncate bg-gray-200 hover:bg-slate-100 flex flex-row items-center text-xs p-1.5 text-gray-500 w-full">
         Talk about the latest developments in space exploration
       </a>
       <button class="delete-btn hidden absolute right-3.5 transform translate-x-1/2 -translate-y-1/2 top-1/2 bg-gray-500 hover:bg-red-600 text-white text-xs p-1.5 rounded-l">
