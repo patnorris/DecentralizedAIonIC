@@ -112,7 +112,7 @@
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
-      }      
+      }
     } else {
       console.log("Using webllm");
       $chatModelGlobal = new webllm.MLCEngine();
@@ -135,7 +135,7 @@
     {#each availableAiModels as option}
       <SelectModelOption
         id={option.id}
-        name={option.name}
+        name="selectModel"
         value={option.value}
         title={option.title}
         parameters={option.parameters}
