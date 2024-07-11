@@ -135,7 +135,7 @@
     {#each availableAiModels as option}
       <SelectModelOption
         id={option.id}
-        name="selectModel"
+        name="{option.name}"
         value={option.value}
         title={option.title}
         parameters={option.parameters}
