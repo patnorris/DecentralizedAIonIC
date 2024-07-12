@@ -1,0 +1,24 @@
+<script lang="ts">
+  import ChatBubbleUser from './ChatBubbleUser.svelte';
+  import ChatBubbleDeVinci from './ChatBubbleDeVinci.svelte';
+  import ChatBubbleDeVinciPdf from './ChatBubbleDeVinciPDF.svelte';
+
+  export let message;
+</script>
+
+<div class="message">
+  {#if message.name === 'You'}
+    <ChatBubbleUser messageContent={message.content} />
+  {:else if message.name === 'DeVinci'}
+    <ChatBubbleDeVinci messageContent={message.content} />
+  {/if}
+</div>
+
+<style>
+  .message {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+  }
+</style>

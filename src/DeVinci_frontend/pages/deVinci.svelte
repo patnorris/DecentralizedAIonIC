@@ -1,12 +1,7 @@
 <script lang="ts">
-  import ChatInput from "../components/new/ChatInput.svelte";
-  import SelectModel from "../components/new/SelectModel.svelte";
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
   import ChatInterface from "../components/new/ChatInterface.svelte";
-  import ChatBubbleDeVinci from "../components/new/ChatBubbleDeVinci.svelte";
-  import ChatBubbleUser from "../components/new/ChatBubbleUser.svelte";
-  import ChatBubbleDeVinciPDF from "../components/new/ChatBubbleDeVinciPDF.svelte";
 
   import { onMount } from 'svelte';
 

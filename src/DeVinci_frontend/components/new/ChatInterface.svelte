@@ -10,9 +10,8 @@
     deviceType
   } from "../../store";
   import Button from "../Button.svelte";
-  import ChatBox from "../ChatBox.svelte";
   import ChatHistory from "../ChatHistory.svelte";
-  import InstallToastNotification from './InstallToastNotification.svelte';
+  import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
@@ -21,10 +20,7 @@
   } from "../../helpers/vector_database";
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
-  import ChatBubbleDeVinci from "./ChatBubbleDeVinci.svelte";
-  import ChatBubbleUser from "./ChatBubbleUser.svelte";
-  import ChatInput from "./ChatInput.svelte";
-  import ChatBubbleDeVinciPDF from "./ChatBubbleDeVinciPDF.svelte";
+  import ChatBox from "./ChatBox.svelte";
 
   const workerPath = './worker.ts';
 
@@ -55,45 +51,6 @@
       throw Error("Cannot find label " + id);
     }
     label.innerText = text;
-  }
-
-  async function loadChatModel() {
-    //debugOutput += "###in loadChatModel###";
-    //setLabel("debug-label", debugOutput);
-    if (chatModelDownloadInProgress) {
-      return;
-    };
-    if (chatModelDownloaded === true && $chatModelGlobal) {
-      return;
-    };
-    //console.log("Loading chat model...");
-    chatModelDownloadInProgress = true;
-    if (process.env.NODE_ENV !== "development") {
-      //console.log("Using web worker");
-      try {
-        /* TODO: fix
-        chatModel = new webllm.ChatWorkerClient(new Worker(
-          new URL(workerPath, import.meta.url),
-          {type: 'module'}
-        )); */
-        //console.log("Using webllm");
-        $chatModelGlobal = new webllm.MLCEngine();
-      } catch (error) {
-        console.error("Error loading web worker: ", error);
-        $chatModelGlobal = new webllm.MLCEngine();
-      }      
-    } else {
-      //console.log("Using webllm");
-      $chatModelGlobal = new webllm.MLCEngine();
-    };
-
-    const initProgressCallback = (report) => {
-      setLabel("init-label", report.text);
-    };
-    $chatModelGlobal.setInitProgressCallback(initProgressCallback);
-    await $chatModelGlobal.reload($selectedAiModelId);
-    $chatModelDownloadedGlobal = true;
-    chatModelDownloadInProgress = false;
   };
 
   const generateProgressCallback = (_step: number, message: string) => {
@@ -296,14 +253,8 @@
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   <SelectModel />
-  <!-- <ChatMessages /> -->
-  <!-- <ChatBubbleUser />
-  <ChatBubbleDeVinci />
-  <ChatBubbleDeVinciPDF /> -->
+  <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
 </div>
-<footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
-  <ChatInput />
-</footer>
 
 {#if showToast}
   <InstallToastNotification />
