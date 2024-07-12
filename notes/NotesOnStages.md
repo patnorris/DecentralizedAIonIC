@@ -8,6 +8,8 @@ Process to create another stage:
 - Click on the new canister and then on Add Controller
 - Go to your local CLI and run: dfx identity get-principal
 - Copy the principal returned and paste it into the Add Controller field on the nns app, continue and confirm
+- To add the controller via dfx: e.g. dfx canister update-settings --add-controller <principal> --network development DeVinci_frontend
+- Double-check contollers (via dfx) with e.g. dfx canister info --network development DeVinci_frontend
 - Copy the id of the new canister
 - Paste the canister's id in the file canister_ids.json (under the new entry for the stage, the entry's ket needs to match the network name given in dfx.json) 
 - Create a new networks entry in dfx.json (with the network's name being the same key as given in canister_ids.json)
