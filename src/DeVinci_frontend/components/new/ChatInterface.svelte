@@ -41,6 +41,12 @@
   chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   let vectorDbSearchTool;
+  let useKnowledgeBase = false;
+
+  async function setVectorDbSearchTool(pathToInput) {
+    vectorDbSearchTool = await getSearchVectorDbTool(pathToInput);
+    useKnowledgeBase = true;
+  };
 
   // Debug Android
   //let debugOutput = "";
@@ -183,67 +189,6 @@
     throw new Error('An error occurred');
   };
 
-  // User can upload a pdf and a vector database is set up including the pdf's content
-  let pathToUploadedPdf = '';
-  let initiatedKnowledgeDatabase = false;
-  let loadingKnowledgeDatabase = false;
-  let useKnowledgeBase = false;
-  //let persistingCurrentEmbeddings = false;
-  //let userHasExistingKnowledgeBase = false;
-
-  function handleUseKnowledgeBaseToggle() {
-    useKnowledgeBase = !useKnowledgeBase;
-  };
-
-  async function uploadPdfToVectorDatabase() {
-    const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
-    if (fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      pathToUploadedPdf = URL.createObjectURL(file);
-      loadingKnowledgeDatabase = true;
-      vectorDbSearchTool = await getSearchVectorDbTool(pathToUploadedPdf);
-      initiatedKnowledgeDatabase = true;
-      loadingKnowledgeDatabase = false;
-      useKnowledgeBase = true;
-      alert("PDF uploaded and processed.");
-    } else {
-      alert("Please select a PDF file.");
-    };
-  };
-
-  // functionality to retrieve and store user's knowledge base
-  /* async function checkUserKnowledgeBase() {
-    console.log("DEBUG checkUserKnowledgeBase");
-    if(!$store.isAuthed){
-      userHasExistingKnowledgeBase = false;
-    };
-    let knowledgeBaseExists = await checkUserHasKnowledgeBase();
-    console.log("DEBUG checkUserKnowledgeBase knowledgeBaseExists ", knowledgeBaseExists);
-    userHasExistingKnowledgeBase = knowledgeBaseExists;
-  };
-
-  async function getPreviousEmbeddings() {
-    if(!$store.isAuthed){
-      return;
-    };
-    loadingKnowledgeDatabase = true;
-    await loadExistingVectorStore();
-    initiatedKnowledgeDatabase = true;
-    loadingKnowledgeDatabase = false;
-    useKnowledgeBase = true;
-    alert("Your Knowledge Base Was Loaded!");
-  };
-
-  async function persistCurrentEmbeddings() {
-    if(!$store.isAuthed){
-      return;
-    };
-    persistingCurrentEmbeddings = true;
-    await storeEmbeddings();
-    persistingCurrentEmbeddings = false;
-    alert("Your Knowledge Base Was Stored!");
-  }; */
-
 // User can select between chats (global variable is kept)
   async function showNewChat() {
     $activeChatGlobal = null;
@@ -253,7 +198,7 @@
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   <SelectModel />
-  <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} />
+  <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
 
 {#if showToast}

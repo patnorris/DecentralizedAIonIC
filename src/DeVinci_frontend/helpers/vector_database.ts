@@ -13,7 +13,7 @@ import {
   vectorStore,
 } from "../store";
 
-//import { getResourceAsArray } from "./setup_knowledgebase";
+import { getResourceAsArray } from "./setup_knowledgebase";
 
 let storeState;
 store.subscribe((value) => storeState = value);

@@ -5,8 +5,11 @@
 
   import Message from './Message.svelte';
 
+  import spinner from "../../assets/loading.gif";
+
   export let modelCallbackFunction;
   export let chatDisplayed;
+  export let callbackSearchVectorDbTool;
 
   let newMessageText = '';
   let messages = [];
@@ -108,6 +111,34 @@
     };
   };
 
+// User can upload a pdf and a vector database is set up including the pdf's content
+  let pathToUploadedPdf = '';
+  let initiatedKnowledgeDatabase = false;
+  let loadingKnowledgeDatabase = false;
+  let useKnowledgeBase = false;
+  //let persistingCurrentEmbeddings = false;
+  //let userHasExistingKnowledgeBase = false;
+
+  function handleUseKnowledgeBaseToggle() { //TODO
+    useKnowledgeBase = !useKnowledgeBase;
+  };
+
+  async function uploadPdfToVectorDatabase() {
+    const fileInput = document.getElementById('pdf_chat') as HTMLInputElement;
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      pathToUploadedPdf = URL.createObjectURL(file);
+      loadingKnowledgeDatabase = true;
+      await callbackSearchVectorDbTool(pathToUploadedPdf);
+      initiatedKnowledgeDatabase = true;
+      loadingKnowledgeDatabase = false;
+      useKnowledgeBase = true;
+      alert("PDF uploaded and processed.");
+    } else {
+      alert("Please select a PDF file.");
+    };
+  };
+
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
 
@@ -149,11 +180,15 @@
     <label for="chat" class="sr-only">Message DeVinci</label>
     <div class="flex items-center px-3 p-2 rounded-full bg-gray-200">
       <label for="pdf_chat">
-        <button type="button" class="inline-flex justify-center p-2 mr-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+        <button type="button" on:click={() => document.getElementById('pdf_chat').click()} class="inline-flex justify-center p-2 mr-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350v-350q-1-42-29.5-71T400-800q-42 0-71 29t-29 71v370q-1 71 49 120.5T470-160q70 0 119-49.5T640-330v-390h80v390Z"/></svg>
         </button>
       </label>
-      <input class="hidden text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 ml-2" id="pdf_chat" type="file">
+      <input id="pdf_chat" type="file" accept=".pdf" on:change={uploadPdfToVectorDatabase} class="hidden text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 ml-2">
+      {#if loadingKnowledgeDatabase}
+        <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
+        <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+      {/if}
       <input bind:value={newMessageText} type="text" id="chat" autofocus rows="1" on:keydown={handleInputKeyDown} class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message deVinci..." />
       {#if messageGenerationInProgress}
         <button disabled type="submit" on:click={sendMessage} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-600">
