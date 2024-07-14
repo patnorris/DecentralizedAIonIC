@@ -53,8 +53,8 @@
   }
 
   async function loadChatModel() {
-    //debugOutput += "###in loadChatModel###";
-    //setLabel("debug-label", debugOutput);
+   /*  debugOutput += "###in loadChatModel###";
+    setLabel("debug-label", debugOutput); */
     if (chatModelDownloadInProgress) {
       return;
     };
@@ -76,7 +76,7 @@
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
-      }      
+      };    
     } else {
       //console.log("Using webllm");
       $chatModelGlobal = new webllm.MLCEngine();
@@ -85,8 +85,16 @@
     const initProgressCallback = (report) => {
       setLabel("init-label", report.text);
     };
-    $chatModelGlobal.setInitProgressCallback(initProgressCallback);
-    await $chatModelGlobal.reload($selectedAiModelId);
+    try {
+      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      await $chatModelGlobal.reload($selectedAiModelId);
+    } catch (error) {
+      console.error("Error loading model: ", error);
+      /* debugOutput += "###error in loadChatModel###";
+      debugOutput += error;
+      setLabel("debug-label", debugOutput); */
+      throw error;
+    };
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
   };
