@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  //import { onMount } from "svelte";
   import { store } from "../store";
 
-  import { AuthClient } from "@dfinity/auth-client";
+  //import { AuthClient } from "@dfinity/auth-client";
 
   import spinner from "../assets/loading.gif";
   import Button from "./Button.svelte";
@@ -10,13 +10,17 @@
   export let loading;
   export let toggleModal;
   
-  onMount(async () => {
-    const authClient = await AuthClient.create();
-    if (await authClient.isAuthenticated()) {
-      console.log("NFID connection detected");
-      store.nfidConnect();
+  /* onMount(async () => {
+    // Accessing Local Storage to check login state
+    const isAuthed = localStorage.getItem('isAuthed');
+    if (isAuthed && isAuthed === "nfid"){
+      const authClient = await AuthClient.create();
+      if (await authClient.isAuthenticated()) {
+        console.log("NFID connection detected");
+        store.nfidConnect();
+      };
     };
-  });
+  }); */
 
   async function connect() {
     loading = "nfid";
