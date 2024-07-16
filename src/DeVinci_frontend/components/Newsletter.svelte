@@ -32,10 +32,11 @@
             <button type="submit" class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-gray-700 border-gray-600 sm:rounded-none sm:rounded-r-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300">Subscribe</button>
           </div>
         </div>
-        <div class="mx-auto max-w-screen-sm text-sm text-left text-gray-500 newsletter-form-footer dark:text-gray-300">deVinci 2024</div>
       </form>
       {#if message}
-        <h2>{message}</h2>
+        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+          <span class="font-medium">{message}</span>
+        </div>
       {/if}
     </div>
   </div>
