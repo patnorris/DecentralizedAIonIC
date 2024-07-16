@@ -17,8 +17,5 @@
 <style>
   .message {
     margin-bottom: 10px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 4px;
   }
 </style>

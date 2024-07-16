@@ -63,7 +63,7 @@
         messages = [...messages, { role: 'assistant', content: replyText, name: 'DeVinci' }];
         const promptFormattedForModel = [newMessageEntry]; // passing in the message history easily overwhelms the available device memory --> TODO: find good way to keep memory (as currently each message is like a new chat without the LLM knowing about any messages before)
         const reply = await modelCallbackFunction(promptFormattedForModel, generateProgressCallback);
-        messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }]; 
+        messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }];
       } catch (error) {
         console.error("Error getting response from model: ", error);
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
@@ -78,9 +78,9 @@
       if(chatDisplayed) {
         // Update chat
         try {
-          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend); 
+          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend);
         } catch (error) {
-          console.error("Error storing chat: ", error);        
+          console.error("Error storing chat: ", error);
         };
       } else {
         // New chat
@@ -102,7 +102,7 @@
             chatDisplayed = newChatPreview;
           };
         } catch (error) {
-          console.error("Error creating new chat: ", error);       
+          console.error("Error creating new chat: ", error);
         };
       };
     };
@@ -159,7 +159,6 @@
   .chatbox {
     width: 100%;
     height: 400px;
-    border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
   }
