@@ -27,7 +27,7 @@
   <div class="p-3 pt-1 pb-2">
 
     <div class="w-full bg-gray-200 my-1 rounded-full">
-      <div class="bg-[darkcyan] text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+      <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
     </div>
 
     <span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
