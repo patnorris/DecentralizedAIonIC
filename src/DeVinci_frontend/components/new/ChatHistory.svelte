@@ -51,7 +51,9 @@
 </script>
 
 {#if !hasLoadedChats}
-  <p id='chatsSubtext'>Retrieving Your Chats...</p>
+  <div id='chatsSubtext' class="p-4 w-full text-sm text-gray-800 rounded-lg bg-gray-50" role="alert">
+    <span class="font-medium">Retrieving your chats...</span>
+  </div>
   <p hidden>{loadUserChats()}</p>
 {:else}
   <ul class="flex flex-col w-full">
@@ -65,7 +67,7 @@
         </button>
       </li>
     {/each}
-  </ul>  
+  </ul>
 {/if}
 
 

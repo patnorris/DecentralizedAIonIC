@@ -26,7 +26,6 @@
     <!--      <img src={newchaticon} class="w-5 mr-1 p-0 rounded-full" alt="new chat" />-->
     New chat
   </button>
-
   {#if $store.isAuthed}
     <!--
     --- Show when user is logged and has saved chats
