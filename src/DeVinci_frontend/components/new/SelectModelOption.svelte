@@ -7,6 +7,64 @@
   export let performance;
   export let size;
   export let callbackLoadChatModel;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const spans = document.querySelectorAll(".performance-span");
+
+    // Define a mapping of performance to background colors
+    const backgroundColors = {
+      "Good": "#f9c490",
+      "Super Good": "#a1c490",
+      "Alright": "#f0e68c",
+      "Good for Chinese": "#76c7be",
+      "Great for Math": "rgb(237, 98, 98)",
+      "Insane": "rgb(203, 139, 208)",
+    };
+
+    // Function to set background color and save to localStorage
+    function setBackgroundColor(span) {
+      const performance = span.textContent.trim(); // Get the text content of the span and trim any whitespace
+      if (backgroundColors[performance]) {
+        const color = backgroundColors[performance];
+        span.style.backgroundColor = color;
+        // Save the color to localStorage
+        localStorage.setItem(`span-${performance}`, color);
+      }
+    }
+
+    // Function to load background color from localStorage
+    function loadBackgroundColor(span) {
+      const performance = span.textContent.trim();
+      const savedColor = localStorage.getItem(`span-${performance}`);
+      if (savedColor) {
+        span.style.backgroundColor = savedColor;
+      } else {
+        // If no saved color, set it
+        setBackgroundColor(span);
+      }
+    }
+
+    // Apply background color change to each span element
+    spans.forEach(span => loadBackgroundColor(span));
+  });
+
+  // Optional: Apply background colors on subsequent navigations
+  document.addEventListener('DOMContentLoaded', function() {
+    const observer = new MutationObserver(function() {
+      const spans = document.querySelectorAll(".performance-span");
+      spans.forEach(span => {
+        const performance = span.textContent.trim();
+        const savedColor = localStorage.getItem(`span-${performance}`);
+        if (savedColor) {
+          span.style.backgroundColor = savedColor;
+        }
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+
+
 </script>
 
 <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg">
@@ -16,7 +74,7 @@
       <div class="block">
         <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
         <div class="w-full text-sm font-normal">{parameters}</div>
-        <span class="text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 bg-[#f9c490] rounded border-2 border-[#151b1e]">{performance}</span>
+        <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
         <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
       </div>
       <svg class="w-5 h-5 ms-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -25,11 +83,9 @@
     </label>
   </div>
   <div class="p-3 pt-1 pb-2">
-
     <div class="w-full bg-gray-200 my-1 rounded-full">
       <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
     </div>
-
     <span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
       Downloaded
       <svg class="ml-0.5 w-3 h-3 text-yellow-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -43,4 +99,8 @@
 	.peer:checked + label svg {
 		color: rgb(176 196 222);
 	}
+
+  .performance-span {
+	  transition: background-color 3.3s ease-in-out; /* Adjust the duration and easing as needed */
+  }
 </style>
