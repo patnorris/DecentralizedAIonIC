@@ -96,10 +96,10 @@
       </li>
     </ul>
     <div>
-      <button on:click={() => showInstallAppToast()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Install app</button>
+      <button on:click={() => showInstallAppToast()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white w-full text-left">Install app</button>
     </div>
     <div>
-      <button on:click={() => logout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white">Disconnect</button>
+      <button on:click={() => logout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-white w-full text-left">Disconnect</button>
     </div>
   </div>
 </div>
