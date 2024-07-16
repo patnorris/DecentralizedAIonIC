@@ -11,7 +11,7 @@
 
 <li>
   <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" on:click={() => callbackLoadChatModel(id)} />
-  <label for={id} class="inline-flex items-center justify-between w-full p-3 text-[#151b1e] bg-[lightsteelblue] border-2 border-[#151b1e] rounded-lg cursor-pointer peer-checked:cursor-default peer-checked:bg-gray-100 peer-checked:border-[#f9c490] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-100">
+  <label for={id} class="inline-flex items-center justify-between w-full p-3 text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
     <div class="block">
       <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
       <div class="w-full text-sm font-normal">{parameters}</div>
@@ -26,6 +26,6 @@
 
 <style>
 	.peer:checked + label svg {
-		color: rgb(243, 244, 246);
+		color: rgb(176 196 222);
 	}
 </style>
