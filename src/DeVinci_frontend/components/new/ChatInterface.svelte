@@ -21,6 +21,7 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
+  import { marked } from "marked";
 
   const workerPath = './worker.ts';
 
@@ -34,7 +35,7 @@
       showToast = false;
     }, 8000);
   });
-  
+
 
   let chatModelDownloadInProgress = false;
   let chatModelDownloaded = false;
@@ -77,12 +78,12 @@
         try {
           const promptContent = prompt[0].content;
           let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
-          vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);  
+          vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
           try {
             for (let index = 0; index < vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase.length; index++) {
               const additionalEntry = vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase[index];
               additionalContentToProvide += "  ";
-              additionalContentToProvide += additionalEntry.content;  
+              additionalContentToProvide += additionalEntry.content;
             };
             // Compose the final prompt
             const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
@@ -95,8 +96,8 @@
             debugOutput += error.toString();
               debugOutput += error.name;
               debugOutput += error.message;
-            setLabel("debug-label", debugOutput);  */           
-          };  
+            setLabel("debug-label", debugOutput);  */
+          };
         } catch (error) {
           console.error("Error in getChatModelResponse getting vectorDbSearchToolResponse");
           console.error(error.toString());
@@ -137,7 +138,7 @@
               debugOutput += error.toString();
               debugOutput += error.name;
               debugOutput += error.message;
-              setLabel("debug-label", debugOutput);  */             
+              setLabel("debug-label", debugOutput);  */
             };
           };
         } catch (error) {
@@ -147,7 +148,7 @@
           debugOutput += error.toString();
           debugOutput += error.name;
           debugOutput += error.message;
-          setLabel("debug-label", debugOutput);  */          
+          setLabel("debug-label", debugOutput);  */
         };
       } catch (error) {
         console.error("Error in getChatModelResponse completion");
@@ -166,7 +167,7 @@
         /* debugOutput += " reply ";
         debugOutput += reply;
         setLabel("debug-label", debugOutput); */
-        return reply;        
+        return reply;
       } catch (error) {
         console.error("Error in getChatModelResponse reply");
         console.error(error.toString());
@@ -174,7 +175,7 @@
         debugOutput += error.toString();
               debugOutput += error.name;
               debugOutput += error.message;
-        setLabel("debug-label", debugOutput);    */      
+        setLabel("debug-label", debugOutput);    */
       };
     } catch (error) {
       console.error("Error in getChatModelResponse");
@@ -183,7 +184,7 @@
       debugOutput += error.toString();
               debugOutput += error.name;
               debugOutput += error.message;
-      setLabel("debug-label", debugOutput);   */    
+      setLabel("debug-label", debugOutput);   */
     };
     // if no reply was returned, an error occurred
     throw new Error('An error occurred');
@@ -195,6 +196,8 @@
     return;
   };
 </script>
+
+
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   <SelectModel />
