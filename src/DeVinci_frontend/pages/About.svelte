@@ -68,14 +68,12 @@
       <div class="flex justify-between px-4 mx-auto max-w-screen-xl ">
         <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
           <header class="mb-4 lg:mb-6 not-format">
-
-
             <!-- Breadcrumb -->
             <nav class="justify-between mb-8 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
               <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
                 <li>
                   <div class="flex items-center">
-                    <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">home</a>
+                    <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Home</a>
                   </div>
                 </li>
                 <li aria-current="page">
@@ -83,7 +81,7 @@
                     <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <a href="#" class="cursor-not-allowed text-gray-400 ms-1 text-sm font-medium">about</a>
+                    <a href="#" class="cursor-not-allowed text-gray-400 ms-1 text-sm font-medium">About</a>
                   </div>
                 </li>
               </ol>

@@ -49,18 +49,22 @@
 
     // Observer to apply background colors on subsequent navigations
     const observer = new MutationObserver(function() {
-      const spans = document.querySelectorAll(".performance-span");
-      spans.forEach(span => {
-        const performance = span.textContent.trim();
-        const savedColor = localStorage.getItem(`span-${performance}`);
-        if (savedColor) {
-          span.style.backgroundColor = savedColor;
-        }
-      });
+      // Add a delay before applying background colors
+      setTimeout(function() {
+        const spans = document.querySelectorAll(".performance-span");
+        spans.forEach(span => {
+          const performance = span.textContent.trim();
+          const savedColor = localStorage.getItem(`span-${performance}`);
+          if (savedColor) {
+            span.style.backgroundColor = savedColor;
+          }
+        });
+      }, 1000); // 1 second delay
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
   });
+
 
 
 

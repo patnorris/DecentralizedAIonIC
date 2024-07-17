@@ -89,6 +89,9 @@
   <div id="dropdownDots" class="absolute right-0 top-14 z-10 hidden bg-gray-100 divide-y divide-gray-200 rounded-lg shadow-2xl w-52 border-gray-200 border-4">
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
       <li>
+        <a href="/" class="block px-4 py-2 hover:bg-white">Home</a>
+      </li>
+      <li>
         <a href="/#/about" class="block px-4 py-2 hover:bg-white">About</a>
       </li>
       <li>
