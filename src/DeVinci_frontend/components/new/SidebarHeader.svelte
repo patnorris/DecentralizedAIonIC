@@ -23,7 +23,6 @@
   </a>
 
   <button disabled type="button" on:click={showNewChat} class="disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto  my-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
-    <!--      <img src={newchaticon} class="w-5 mr-1 p-0 rounded-full" alt="new chat" />-->
     New chat
   </button>
   {#if $store.isAuthed}
@@ -38,7 +37,4 @@
 	.group:hover .delete-btn {
 		display: flex;
 	}
-  .disabled {
-
-  }
 </style>
