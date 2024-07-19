@@ -113,25 +113,30 @@ export const createStore = ({
 
   const nfidConnect = async () => {
     authClient = await AuthClient.create();
-    await authClient.login({
-      onSuccess: async () => {
-        const identity = await authClient.getIdentity();
-        initNfid(identity);
-      },
-      identityProvider: "https://nfid.one" + AUTH_PATH,
-        /* process.env.DFX_NETWORK === "ic"
-          ? "https://nfid.one" + AUTH_PATH
-          : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
-      // Maximum authorization expiration is 30 days
-      maxTimeToLive: days * hours * nanosecondsPerHour,
-      windowOpenerFeatures: 
-        `left=${window.screen.width / 2 - 525 / 2}, `+
-        `top=${window.screen.height / 2 - 705 / 2},` +
-        `toolbar=0,location=0,menubar=0,width=525,height=705`,
-      // See https://docs.nfid.one/multiple-domains
-      // for instructions on how to use derivationOrigin
-      // derivationOrigin: "https://<canister_id>.ic0.app"
-    });
+    if (await authClient.isAuthenticated()) {
+      const identity = await authClient.getIdentity();
+      initNfid(identity);
+    } else {
+      await authClient.login({
+        onSuccess: async () => {
+          const identity = await authClient.getIdentity();
+          initNfid(identity);
+        },
+        identityProvider: "https://nfid.one" + AUTH_PATH,
+          /* process.env.DFX_NETWORK === "ic"
+            ? "https://nfid.one" + AUTH_PATH
+            : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
+        // Maximum authorization expiration is 30 days
+        maxTimeToLive: days * hours * nanosecondsPerHour,
+        windowOpenerFeatures: 
+          `left=${window.screen.width / 2 - 525 / 2}, `+
+          `top=${window.screen.height / 2 - 705 / 2},` +
+          `toolbar=0,location=0,menubar=0,width=525,height=705`,
+        // See https://docs.nfid.one/multiple-domains
+        // for instructions on how to use derivationOrigin
+        // derivationOrigin: "https://<canister_id>.ic0.app"
+      });
+    };
   };
 
   const initNfid = async (identity: Identity) => {
@@ -151,6 +156,8 @@ export const createStore = ({
 
     //let accounts = JSON.parse(await identity.accounts());
 
+    localStorage.setItem('isAuthed', "nfid"); // Set flag to indicate existing login for future sessions
+
     update((state) => ({
       ...state,
       backendActor,
@@ -163,22 +170,27 @@ export const createStore = ({
 
   const internetIdentityConnect = async () => {
     authClient = await AuthClient.create();
-    await authClient.login({
-      onSuccess: async () => {
-        const identity = await authClient.getIdentity();
-        initInternetIdentity(identity);
-      },
-      identityProvider:
-        process.env.DFX_NETWORK === "local"
-          ? `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`
-          : "https://identity.ic0.app/#authorize",
-      // Maximum authorization expiration is 30 days
-      maxTimeToLive: days * hours * nanosecondsPerHour,
-      windowOpenerFeatures: 
-        `left=${window.screen.width / 2 - 525 / 2}, `+
-        `top=${window.screen.height / 2 - 705 / 2},` +
-        `toolbar=0,location=0,menubar=0,width=525,height=705`,
-    });
+    if (await authClient.isAuthenticated()) {
+      const identity = await authClient.getIdentity();
+      initInternetIdentity(identity);
+    } else {
+      await authClient.login({
+        onSuccess: async () => {
+          const identity = await authClient.getIdentity();
+          initInternetIdentity(identity);
+        },
+        identityProvider:
+          process.env.DFX_NETWORK === "local"
+            ? `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`
+            : "https://identity.ic0.app/#authorize",
+        // Maximum authorization expiration is 30 days
+        maxTimeToLive: days * hours * nanosecondsPerHour,
+        windowOpenerFeatures:
+          `left=${window.screen.width / 2 - 525 / 2}, ` +
+          `top=${window.screen.height / 2 - 705 / 2},` +
+          `toolbar=0,location=0,menubar=0,width=525,height=705`,
+      });
+    };
   };
 
   const initInternetIdentity = async (identity: Identity) => {
@@ -197,6 +209,8 @@ export const createStore = ({
     await initUserSettings(backendActor);
 
     //let accounts = JSON.parse(await identity.accounts());
+
+    localStorage.setItem('isAuthed', "internetidentity"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -235,9 +249,10 @@ export const createStore = ({
 
     await initUserSettings(backendActor);
 
-    // the stoic agent provides an `accounts()` method that returns
-    // accounts associated with the principal
+    // the stoic agent provides an `accounts()` method that returns accounts associated with the principal
     let accounts = JSON.parse(await identity.accounts());
+
+    localStorage.setItem('isAuthed', "stoic"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -253,7 +268,7 @@ export const createStore = ({
     if (window.ic?.plug === undefined) {
       window.open("https://plugwallet.ooo/", "_blank");
       return;
-    }
+    };
 
     // check if plug is connected
     const plugConnected = await window.ic?.plug?.isConnected();
@@ -271,8 +286,8 @@ export const createStore = ({
       } catch (e) {
         console.warn(e);
         return;
-      }
-    }
+      };
+    };
 
     await initPlug();
   };
@@ -289,7 +304,7 @@ export const createStore = ({
       result
         ? console.log("agent created")
         : console.warn("agent creation failed");
-    }
+    };
     // check if createActor method is available
     if (!window.ic?.plug?.createActor) {
       console.warn("no createActor found");
@@ -304,7 +319,7 @@ export const createStore = ({
         );
         console.error(err);
       });
-    }
+    };
 
     const backendActor = (await window.ic?.plug.createActor({
       canisterId: backendCanisterId,
@@ -319,6 +334,8 @@ export const createStore = ({
     await initUserSettings(backendActor);
 
     const principal = await window.ic.plug.agent.getPrincipal();
+
+    localStorage.setItem('isAuthed', "plug"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -401,6 +418,8 @@ export const createStore = ({
 
     const principal = await window.ic.infinityWallet.getPrincipal();
 
+    localStorage.setItem('isAuthed', "bitfinity"); // Set flag to indicate existing login for future sessions
+
     update((state) => ({
       ...state,
       backendActor,
@@ -467,6 +486,32 @@ export const createStore = ({
     });
   };
 
+  const checkExistingLoginAndConnect = async () => {
+    // Check login state if user is already logged in
+    const isAuthed = localStorage.getItem('isAuthed'); // Accessing Local Storage to check login state
+    if (isAuthed){
+      const authClient = await AuthClient.create();
+      if (await authClient.isAuthenticated()) {
+        if (isAuthed === "nfid") {
+          console.log("NFID connection detected");
+          nfidConnect();
+        } else if (isAuthed === "internetidentity") {
+          console.log("Internet Identity connection detected");
+          internetIdentityConnect();
+        } else if (isAuthed === "plug") {
+          console.log("Plug connection detected");
+          plugConnect();
+        } else if (isAuthed === "bitfinity") {
+          console.log("Bitfinity connection detected");
+          bitfinityConnect();
+        } else if (isAuthed === "stoic") {
+          console.log("Stoic connection detected");
+          stoicConnect();
+        };
+      };
+    };
+  };
+
   return {
     subscribe,
     update,
@@ -476,6 +521,7 @@ export const createStore = ({
     bitfinityConnect,
     internetIdentityConnect,
     disconnect,
+    checkExistingLoginAndConnect,
   };
 };
 
