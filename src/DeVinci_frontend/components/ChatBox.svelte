@@ -5,7 +5,11 @@
 
   import Message from './Message.svelte';
   
-  import { getLocallyStoredChat, storeChatLocally } from "../helpers/localStorage";
+  import {
+    getLocallyStoredChat,
+    storeChatLocally,
+    storeLocalChangeToBeSynced
+  } from "../helpers/localStorage";
 
   export let modelCallbackFunction;
   export let chatDisplayed;
@@ -76,13 +80,24 @@
     if (storeChatToggle && $store.isAuthed) {
       // Get messages into format for backend
       const messagesFormattedForBackend = formatMessagesForBackend(messages);
-      // TODO: sync when back online
       if(chatDisplayed) {
         // Update chat
         try {
-          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend); 
+          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend);
+          // @ts-ignore
+          if (chatUpdatedResponse.Err) {
+            // @ts-ignore
+            console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
+            throw new Error("Err updating chat messages");
+          };
         } catch (error) {
-          console.error("Error storing chat: ", error);        
+          console.error("Error storing chat: ", error);
+          // Store locally and sync when back online
+          const syncObject = {
+            chatId: chatDisplayed.id,
+            chatMessages: messagesFormattedForBackend,
+          };
+          storeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
         };
       } else {
         // New chat
@@ -92,6 +107,7 @@
           if (chatCreatedResponse.Err) {
             // @ts-ignore
             console.error("Error message creating new chat: ", chatCreatedResponse.Err);
+            throw new Error("Err creating new chat");
           } else {
             // @ts-ignore
             let newChatId = chatCreatedResponse.Ok;
@@ -104,7 +120,11 @@
             chatDisplayed = newChatPreview;
           };
         } catch (error) {
-          console.error("Error creating new chat: ", error);       
+          console.error("Error creating new chat: ", error);
+          const syncObject = {
+            chatMessages: messagesFormattedForBackend,
+          };
+          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);     
         };
       };
     };
