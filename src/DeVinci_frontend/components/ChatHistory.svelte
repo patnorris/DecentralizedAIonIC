@@ -1,6 +1,8 @@
 <script lang="ts">
   import { store } from "../store";
 
+  import { getLocallyStoredChatHistory, storeChatHistoryLocally } from "../helpers/localStorage";
+
   export let selectedChat;
 
   let chats = [];
@@ -15,11 +17,30 @@
     };
     if (!showChats) {
       chatsRetrievalInProgress = true;
-      const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
-      // @ts-ignore
-      chats = retrievedChatsResponse.Ok;
-      chatsRetrievalInProgress = false;
+      try {
+        const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();      
+        // @ts-ignore
+        if (retrievedChatsResponse.Ok) {
+          // @ts-ignore
+          chats = retrievedChatsResponse.Ok;
+          // store chat history locally for offline usage
+          // @ts-ignore
+          storeChatHistoryLocally(retrievedChatsResponse.Ok);
+        } else {
+          // @ts-ignore
+          console.error("Error retrieving chat history: ", retrievedChatsResponse.Err);
+          // @ts-ignore
+          throw new Error("Error retrieving chat history: ", retrievedChatsResponse.Err);
+        };        
+      } catch (error) {
+        // Likely in offline usage
+        const storedChatHistory = getLocallyStoredChatHistory();
+        if (storedChatHistory) {
+          chats = storedChatHistory;
+        };
+      };
     };
+    chatsRetrievalInProgress = false;
     showChats = !showChats;    
   };
 

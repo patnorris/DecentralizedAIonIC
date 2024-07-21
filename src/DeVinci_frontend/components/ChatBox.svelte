@@ -4,6 +4,8 @@
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
+  
+  import { getLocallyStoredChat, storeChatLocally } from "../helpers/localStorage";
 
   export let modelCallbackFunction;
   export let chatDisplayed;
@@ -111,13 +113,33 @@
   let chatRetrievalInProgress = false;
 
   const loadChat = async () => {
+    chatRetrievalInProgress = true;
     if(chatDisplayed) {
-      chatRetrievalInProgress = true;
-      const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
-      // @ts-ignore
-      const chatHistory = chatHistoryResponse.Ok;
-      const formattedMessages = formatMessagesForUi(chatHistory.messages);
-      messages = formattedMessages;
+      try {
+        const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
+        // @ts-ignore
+        if (chatHistoryResponse.Ok) {
+          // @ts-ignore
+          const chatHistory = chatHistoryResponse.Ok;
+          const formattedMessages = formatMessagesForUi(chatHistory.messages);
+          messages = formattedMessages;
+          // store chat locally for offline usage
+          storeChatLocally(chatDisplayed.id, chatHistory.messages);
+        } else {
+          // @ts-ignore
+          console.error("Error loading chat: ", chatHistoryResponse.Err);
+          // @ts-ignore
+          throw new Error("Error loading chat: ", chatHistoryResponse.Err);
+        };        
+      } catch (error) {
+        // Likely in offline usage
+        const storedMessages = getLocallyStoredChat(chatDisplayed.id);
+        if (storedMessages) {
+          const formattedMessages = formatMessagesForUi(storedMessages);
+          messages = formattedMessages;
+        };
+      };
+      chatRetrievalInProgress = false;
     };
     // Fresh chat
   };

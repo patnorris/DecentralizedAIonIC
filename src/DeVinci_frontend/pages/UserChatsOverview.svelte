@@ -5,6 +5,8 @@
     import Footer from "../components/Footer.svelte";
     import LoginMenu from "../components/LoginMenu.svelte";
 
+    import { getLocallyStoredChatHistory, storeChatHistoryLocally } from "../helpers/localStorage";
+
     let chats = [];
     let hasLoadedChats = false;
     let chatsRetrievalInProgress = false;
@@ -18,20 +20,49 @@
             id: id,
             chatTitle: newTitle,
         };
-        const chatUpdatedResponse = await $store.backendActor.update_chat_metadata(updatedChatObject);
+        try {
+            const chatUpdatedResponse = await $store.backendActor.update_chat_metadata(updatedChatObject);
+        } catch (error) {
+            // only available if online
+            console.error("Error updating chat metadata: ", error);
+        };
     };
 
     const deleteChat = async (id) => {
         chats = chats.filter(chat => chat.id !== id);
         // Persist to backend
-        const chatDeletedResponse = await $store.backendActor.delete_chat(id);
+        try {
+            const chatDeletedResponse = await $store.backendActor.delete_chat(id);
+        } catch (error) {
+            // only available if online
+            console.error("Error deleting chat: ", error);
+        };
     };
 
     const loadUserChats = async () => {
         chatsRetrievalInProgress = true;
-        const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
-        // @ts-ignore
-        chats = retrievedChatsResponse.Ok;
+        try {
+            const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();      
+            // @ts-ignore
+            if (retrievedChatsResponse.Ok) {
+                // @ts-ignore
+                chats = retrievedChatsResponse.Ok;
+                // store chat history locally for offline usage
+                // @ts-ignore
+                storeChatHistoryLocally(retrievedChatsResponse.Ok);
+            } else {
+                // @ts-ignore
+                console.error("Error retrieving chat history: ", retrievedChatsResponse.Err);
+                // @ts-ignore
+                throw new Error("Error retrieving chat history: ", retrievedChatsResponse.Err);
+            };        
+        } catch (error) {
+            // Likely in offline usage
+            const storedChatHistory = getLocallyStoredChatHistory();
+            if (storedChatHistory) {
+                chats = storedChatHistory;
+            };
+        };
         chatsRetrievalInProgress = false;
         hasLoadedChats = true;
     };
