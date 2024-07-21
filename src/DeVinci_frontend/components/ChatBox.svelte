@@ -76,6 +76,7 @@
     if (storeChatToggle && $store.isAuthed) {
       // Get messages into format for backend
       const messagesFormattedForBackend = formatMessagesForBackend(messages);
+      // TODO: sync when back online
       if(chatDisplayed) {
         // Update chat
         try {

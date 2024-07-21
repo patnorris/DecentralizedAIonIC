@@ -40,14 +40,17 @@
     };
 
     const loadUserChats = async () => {
+        console.log("in loadUserChats ");
         chatsRetrievalInProgress = true;
         try {
-            const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();      
+            const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();
+            console.log("in loadUserChats retrievedChatsResponse ", retrievedChatsResponse);    
             // @ts-ignore
             if (retrievedChatsResponse.Ok) {
                 // @ts-ignore
                 chats = retrievedChatsResponse.Ok;
                 // store chat history locally for offline usage
+                console.log("in loadUserChats pre storeChatHistoryLocally "); 
                 // @ts-ignore
                 storeChatHistoryLocally(retrievedChatsResponse.Ok);
             } else {
@@ -55,10 +58,12 @@
                 console.error("Error retrieving chat history: ", retrievedChatsResponse.Err);
                 // @ts-ignore
                 throw new Error("Error retrieving chat history: ", retrievedChatsResponse.Err);
-            };        
+            };
         } catch (error) {
+            console.log("in loadUserChats catch error ", error); 
             // Likely in offline usage
             const storedChatHistory = getLocallyStoredChatHistory();
+            console.log("in loadUserChats storedChatHistory ", storedChatHistory); 
             if (storedChatHistory) {
                 chats = storedChatHistory;
             };

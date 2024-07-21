@@ -29,16 +29,22 @@ export function getLocallyStoredChat(chatId) {
 };
 
 export function storeChatHistoryLocally(chatHistory) {
+  console.log("in storeChatHistoryLocally chatHistory ", chatHistory);
   if (chatHistory) {
-    localStorage.setItem("chatHistoryStoredLocally", JSON.stringify(chatHistory));
+    function bigIntReplacer(_key, value) {
+      return typeof value === 'bigint' ? value.toString() : value;
+    };
+    localStorage.setItem("chatHistoryStoredLocally", JSON.stringify(chatHistory, bigIntReplacer));
   } else {
     return false;
   };
   return true;
 };
 
-export function getLocallyStoredChatHistory(chatId) {
+export function getLocallyStoredChatHistory() {
+  console.log("in getLocallyStoredChatHistory ");
   const chatHistory = localStorage.getItem("chatHistoryStoredLocally");
+  console.log("in getLocallyStoredChatHistory chatHistory ", chatHistory);
   if (chatHistory) {
     return JSON.parse(chatHistory);
   };
