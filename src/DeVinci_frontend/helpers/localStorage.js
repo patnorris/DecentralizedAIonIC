@@ -87,3 +87,76 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
     return false;
   };
 };
+
+export async function syncLocalChanges() {
+  console.log("in syncLocalChanges navigator.onLine ", navigator.onLine);
+  if (!navigator.onLine) {
+    return;
+  };
+  
+  const chatsToSyncStored = localStorage.getItem('localChatMessagesToSync');
+  console.log("in syncLocalChanges chatsToSyncStored ", chatsToSyncStored);
+  let chatsToUpdate = chatsToSyncStored ? JSON.parse(chatsToSyncStored) : {};
+  console.log("in syncLocalChanges chatsToUpdate ", chatsToUpdate);
+
+  const newChatsToSync = localStorage.getItem('newLocalChatToSync');
+  console.log("in syncLocalChanges newChatsToSync ", newChatsToSync);
+  let chatsToCreate = newChatsToSync ? JSON.parse(newChatsToSync) : [];
+  console.log("in syncLocalChanges chatsToCreate ", chatsToCreate);
+
+  // Temporary storage to handle failures
+  let failedUpdates = {};
+  let failedCreations = [];
+
+  // Sync existing chats
+  for (const chatId in chatsToUpdate) {
+    const messagesFormattedForBackend = chatsToUpdate[chatId];  // Assuming these are already formatted properly
+    try {
+      const chatUpdatedResponse = await storeState.backendActor.update_chat_messages(chatId, messagesFormattedForBackend);
+      if (chatUpdatedResponse.Err) {
+        console.error("Error message syncing chat messages: ", chatUpdatedResponse.Err);
+        // Store failed updates to retry later
+        failedUpdates[chatId] = messagesFormattedForBackend;
+      };
+    } catch (error) {
+      console.error("Failed to sync chat updates due to an error: ", error);
+      // Store failed updates to retry later
+      failedUpdates[chatId] = messagesFormattedForBackend;
+    };
+  };
+
+  // Sync new chats
+  for (const chatMessages of chatsToCreate) {
+    try {
+      const chatCreatedResponse = await storeState.backendActor.create_chat(chatMessages);
+      if (chatCreatedResponse.Err) {
+        console.error("Error message syncing new chat: ", chatCreatedResponse.Err);
+        // Store failed creations to retry later
+        failedCreations.push(chatMessages);
+      };
+    } catch (error) {
+      console.error("Failed to create new chat due to an error: ", error);
+      // Store failed creations to retry later
+      failedCreations.push(chatMessages);
+    };
+  };
+
+  // Update localStorage with failed items only
+  console.log("in syncLocalChanges failedUpdates ", failedUpdates);
+  if (Object.keys(failedUpdates).length > 0) {
+    localStorage.setItem('localChatMessagesToSync', JSON.stringify(failedUpdates));
+  } else {
+    localStorage.removeItem('localChatMessagesToSync');
+  };
+  console.log("in syncLocalChanges failedCreations ", failedCreations);
+  if (failedCreations.length > 0) {
+    localStorage.setItem('newLocalChatToSync', JSON.stringify(failedCreations));
+  } else {
+    localStorage.removeItem('newLocalChatToSync');
+  };
+
+  console.log("Sync process completed, with retries scheduled for failed items.");
+};
+
+window.addEventListener('online', syncLocalChanges);
+
