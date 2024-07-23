@@ -24,7 +24,9 @@
   onMount(async () => {
     // Check login state
     await store.checkExistingLoginAndConnect();
-    syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+    if ($store.isAuthed) {
+      syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+    };
   });
 </script>
 
