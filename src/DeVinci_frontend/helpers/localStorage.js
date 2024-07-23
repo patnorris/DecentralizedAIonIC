@@ -73,8 +73,20 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
       // newChatsToSync is a stringified array where each entry is a new chat to sync (as array of messages)
       if (newChatsToSync) {
         let arrayOfChats = JSON.parse(newChatsToSync);
-        arrayOfChats.push(storeObject.chatMessages);
+        // We need to check whether this chat is already included in the ones to sync (to avoid duplicates)
+        // Check if the current storeObject's first message content already exists in any stored chats
+        const existingChatIndex = arrayOfChats.findIndex(chat => 
+          chat.length > 0 && chat[0].content === storeObject.chatMessages[0].content
+        );
+        if (existingChatIndex !== -1) {
+          // If the chat exists, replace it with the new chatMessages
+          arrayOfChats[existingChatIndex] = storeObject.chatMessages;
+        } else {
+          // If the chat does not exist, add the new chatMessages to the array
+          arrayOfChats.push(storeObject.chatMessages);
+        };
         localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
+        console.log("in storeLocalChangeToBeSynced arrayOfChats ", arrayOfChats);
       } else {
         let newArrayForChats = [storeObject.chatMessages];
         localStorage.setItem(storeType, JSON.stringify(newArrayForChats));
