@@ -1,7 +1,11 @@
 <script lang="ts">
   import { store } from "../store";
 
-  import { getLocallyStoredChatHistory, storeChatHistoryLocally } from "../helpers/localStorage";
+  import {
+    getLocallyStoredChatHistory,
+    storeChatHistoryLocally,
+    syncLocalChanges
+  } from "../helpers/localStorage";
 
   export let selectedChat;
 
@@ -26,6 +30,7 @@
           // store chat history locally for offline usage
           // @ts-ignore
           storeChatHistoryLocally(retrievedChatsResponse.Ok);
+          syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
         } else {
           // @ts-ignore
           console.error("Error retrieving chat history: ", retrievedChatsResponse.Err);

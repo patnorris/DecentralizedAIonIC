@@ -5,7 +5,11 @@
     import Footer from "../components/Footer.svelte";
     import LoginMenu from "../components/LoginMenu.svelte";
 
-    import { getLocallyStoredChatHistory, storeChatHistoryLocally } from "../helpers/localStorage";
+    import {
+        getLocallyStoredChatHistory,
+        storeChatHistoryLocally,
+        syncLocalChanges
+    } from "../helpers/localStorage";
 
     let chats = [];
     let hasLoadedChats = false;
@@ -22,6 +26,7 @@
         };
         try {
             const chatUpdatedResponse = await $store.backendActor.update_chat_metadata(updatedChatObject);
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
         } catch (error) {
             // only available if online
             console.error("Error updating chat metadata: ", error);
@@ -33,6 +38,7 @@
         // Persist to backend
         try {
             const chatDeletedResponse = await $store.backendActor.delete_chat(id);
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
         } catch (error) {
             // only available if online
             console.error("Error deleting chat: ", error);
@@ -53,6 +59,7 @@
                 console.log("in loadUserChats pre storeChatHistoryLocally "); 
                 // @ts-ignore
                 storeChatHistoryLocally(retrievedChatsResponse.Ok);
+                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
             } else {
                 // @ts-ignore
                 console.error("Error retrieving chat history: ", retrievedChatsResponse.Err);

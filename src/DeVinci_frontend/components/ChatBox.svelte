@@ -8,7 +8,8 @@
   import {
     getLocallyStoredChat,
     storeChatLocally,
-    storeLocalChangeToBeSynced
+    storeLocalChangeToBeSynced,
+    syncLocalChanges,
   } from "../helpers/localStorage";
 
   export let modelCallbackFunction;
@@ -89,6 +90,8 @@
             // @ts-ignore
             console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
             throw new Error("Err updating chat messages");
+          } else {
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
           };
         } catch (error) {
           console.error("Error storing chat: ", error);
@@ -118,6 +121,7 @@
               chatTitle: "",
             };
             chatDisplayed = newChatPreview;
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
           };
         } catch (error) {
           console.error("Error creating new chat: ", error);
@@ -146,6 +150,7 @@
           messages = formattedMessages;
           // store chat locally for offline usage
           storeChatLocally(chatDisplayed.id, chatHistory.messages);
+          syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
         } else {
           // @ts-ignore
           console.error("Error loading chat: ", chatHistoryResponse.Err);

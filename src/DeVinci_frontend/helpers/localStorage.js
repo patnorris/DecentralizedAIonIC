@@ -88,6 +88,16 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
   };
 };
 
+export function setUserSettingsSyncFlag(flagType) {
+  console.log("in setUserSettingsSyncFlag storeType ", flagType);
+  if (flagType === "selectedAiModelId") {
+    localStorage.setItem("selectedAiModelIdNeedsSync", "true");
+    return true;
+  } else {
+    return false;
+  };
+};
+
 export async function syncLocalChanges() {
   console.log("in syncLocalChanges navigator.onLine ", navigator.onLine);
   if (!navigator.onLine) {
@@ -155,8 +165,38 @@ export async function syncLocalChanges() {
     localStorage.removeItem('newLocalChatToSync');
   };
 
-  console.log("Sync process completed, with retries scheduled for failed items.");
-};
+  // Sync user settings changes
+  const aiModelFlagToSyncStored = localStorage.getItem("selectedAiModelIdNeedsSync");
+  if (aiModelFlagToSyncStored === "true") {
+    const selectedAiModelIdToSync = localStorage.getItem("selectedAiModelId");
+    if (selectedAiModelIdToSync) {
+      const updatedSettingsObject = {
+        selectedAiModelId: selectedAiModelIdToSync,
+      };
+      try {
+        const settingsUpdatedResponse = await storeState.backendActor.update_caller_settings(updatedSettingsObject);            
+        // @ts-ignore
+        if (settingsUpdatedResponse.Err) {
+          // @ts-ignore
+          console.error("Error syncing user settings: ", settingsUpdatedResponse.Err);
+          // @ts-ignore
+          throw new Error("Error syncing user settings: ", settingsUpdatedResponse.Err);
+        } else {
+          localStorage.setItem("selectedAiModelIdNeedsSync", "false"); // sync successful
+        };
+      } catch (error) {
+        // @ts-ignore
+        console.error("Error syncing settings: ", error);
+        // Set flag to sync change later
+        setUserSettingsSyncFlag("selectedAiModelId");
+      };
+    } else {
+      // no AI model id to sync, so no sync necessary
+      localStorage.setItem("selectedAiModelIdNeedsSync", "false");
+    };    
+  };
 
-window.addEventListener('online', syncLocalChanges);
+  console.log("Sync process completed, with retries scheduled for failed items.");
+  return true;
+};
 

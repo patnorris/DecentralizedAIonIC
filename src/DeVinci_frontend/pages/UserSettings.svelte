@@ -12,6 +12,7 @@
     import LoginMenu from "../components/LoginMenu.svelte";
 
     import { getAvailableAiModels, getDefaultAiModelId } from "../helpers/ai_model_helpers";
+    import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
 
     let availableAiModels = getAvailableAiModels(deviceType === 'Android');
     let hasLoadedSettings = false;
@@ -29,10 +30,21 @@
         };
         try {
             const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);            
+            // @ts-ignore
+            if (settingsUpdatedResponse.Ok) {
+                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            } else {
+                // @ts-ignore
+                console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
+                // @ts-ignore
+                throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
+            };
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
         } catch (error) {
             // @ts-ignore
             console.error("Error updating settings: ", error);
-            // TODO: sync change
+            // Likely offline, so set flag to sync change later
+            setUserSettingsSyncFlag("selectedAiModelId");
         };
     };
 
@@ -54,6 +66,7 @@
                 // @ts-ignore
                 const userSelectedAiModelId = retrievedSettingsResponse.Ok.selectedAiModelId;
                 selectedAiModelId.set(userSelectedAiModelId);
+                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
             } else {
                 // @ts-ignore
                 console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
