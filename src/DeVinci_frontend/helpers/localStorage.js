@@ -110,6 +110,45 @@ export function setUserSettingsSyncFlag(flagType) {
   };
 };
 
+export function removeLocalChangeToBeSynced(storeType, storeObject) {
+  console.log("in removeLocalChangeToBeSynced storeType ", storeType);
+  console.log("in removeLocalChangeToBeSynced storeObject ", storeObject);
+  if (storeObject) {
+    if (storeType === "localChatMessagesToSync") {
+      const chatsToSyncStored = localStorage.getItem(storeType);
+      // chatsToSyncStored is a stringified dictionary where the chatId is the key and the chat's messages to sync (as array) the value
+      if (chatsToSyncStored) {
+        let dictionaryForChats = JSON.parse(chatsToSyncStored);
+        delete dictionaryForChats[storeObject.chatId];
+        localStorage.setItem(storeType, JSON.stringify(dictionaryForChats));
+      };
+      return true;
+    } else if (storeType === "newLocalChatToSync") {
+      let newChatsToSync = localStorage.getItem(storeType);
+      // newChatsToSync is a stringified array where each entry is a new chat to sync (as array of messages)
+      if (newChatsToSync) {
+        let arrayOfChats = JSON.parse(newChatsToSync);
+        // We need to check whether this chat is already included in the ones to sync (to avoid duplicates)
+        // Remove if the current storeObject's first message content already exists in any stored chats
+        const existingChatIndex = arrayOfChats.findIndex(chat => 
+          chat.length > 0 && chat[0].content === storeObject.chatMessages[0].content
+        );
+        if (existingChatIndex !== -1) {
+          // If the chat exists, remove it
+          arrayOfChats.splice(existingChatIndex, 1);
+        };
+        localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
+        console.log("in removeLocalChangeToBeSynced arrayOfChats ", arrayOfChats);
+      };
+      return true;
+    } else {
+      return false;
+    };
+  } else {
+    return false;
+  };
+};
+
 export async function syncLocalChanges() {
   console.log("in syncLocalChanges navigator.onLine ", navigator.onLine);
   if (!navigator.onLine) {

@@ -7,6 +7,7 @@
   
   import {
     getLocallyStoredChat,
+    removeLocalChangeToBeSynced,
     storeChatLocally,
     storeLocalChangeToBeSynced,
     syncLocalChanges,
@@ -91,6 +92,11 @@
             console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
             throw new Error("Err updating chat messages");
           } else {
+            // Remove this chat from chats to sync to avoid duplicates
+            const syncObject = {
+              chatId: chatDisplayed.id,
+            };
+            removeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
             syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
           };
         } catch (error) {
@@ -121,6 +127,11 @@
               chatTitle: "",
             };
             chatDisplayed = newChatPreview;
+            // TODO: remove the just created chat by its first message from new chats to sync to avoid duplicates
+            const syncObject = {
+              chatMessages: messagesFormattedForBackend,
+            };
+            removeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
             syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
           };
         } catch (error) {
@@ -128,7 +139,7 @@
           const syncObject = {
             chatMessages: messagesFormattedForBackend,
           };
-          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);     
+          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);    
         };
       };
     };
