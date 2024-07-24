@@ -1,13 +1,19 @@
 <script lang="ts">
-    import { store, selectedAiModelId, chatModelDownloadedGlobal, deviceType } from "../store";
+    import {
+        store,
+        selectedAiModelId,
+        chatModelDownloadedGlobal,
+        deviceType,
+        userSettings
+    } from "../store";
 
     import Topnav from "../components/Topnav.svelte";
     import Footer from "../components/Footer.svelte";
     import LoginMenu from "../components/LoginMenu.svelte";
 
-    import { getAvailableAiModels } from "../helpers/ai_model_helpers";
+    import { getAvailableAiModels, getDefaultAiModelId } from "../helpers/ai_model_helpers";
+    import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
 
-    let userSettings;
     let availableAiModels = getAvailableAiModels(deviceType === 'Android');
     let hasLoadedSettings = false;
 
@@ -16,13 +22,30 @@
             return;
         };
         // Change the model in the store
-        selectedAiModelId.set(id);
+        selectedAiModelId.set(id); // this also updates the locally stored model id
         chatModelDownloadedGlobal.set(false);
         // Persist to backend
         const updatedSettingsObject = {
             selectedAiModelId: id,
         };
-        const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);
+        try {
+            const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);            
+            // @ts-ignore
+            if (settingsUpdatedResponse.Ok) {
+                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            } else {
+                // @ts-ignore
+                console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
+                // @ts-ignore
+                throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
+            };
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+        } catch (error) {
+            // @ts-ignore
+            console.error("Error updating settings: ", error);
+            // Likely offline, so set flag to sync change later
+            setUserSettingsSyncFlag("selectedAiModelId");
+        };
     };
 
     const handleKeydown = (event, modelId) => {
@@ -33,14 +56,37 @@
     };
 
     const loadUserSettings = async () => {
-        const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
-        // @ts-ignore
-        if (retrievedSettingsResponse.Ok) {
+        try {
+            const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
+            console.log("in loadUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
             // @ts-ignore
-            userSettings = retrievedSettingsResponse.Ok;
-        } else {
-            // @ts-ignore
-            console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+            if (retrievedSettingsResponse.Ok) {
+                // @ts-ignore
+                userSettings.set(retrievedSettingsResponse.Ok);
+                // @ts-ignore
+                const userSelectedAiModelId = retrievedSettingsResponse.Ok.selectedAiModelId;
+                selectedAiModelId.set(userSelectedAiModelId);
+                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            } else {
+                // @ts-ignore
+                console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+                // @ts-ignore
+                throw new Error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+            };
+        } catch (error) {
+            console.error("Error in get_caller_settings: ", error);
+            console.log("in loadUserSettings local userSettings ", localStorage.getItem("userSettings"));
+            if (localStorage.getItem("userSettings")) {
+                console.log("get userSettings");
+                userSettings.set(localStorage.getItem("userSettings"));
+            };
+            console.log("in loadUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
+            if (localStorage.getItem("selectedAiModelId")) {
+                console.log("get selectedAiModelId");
+                selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
+            } else {
+                selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
+            };     
         };
         hasLoadedSettings = true;
     };

@@ -8,6 +8,8 @@
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
   import NotFound from "./pages/NotFound.svelte";
+  
+  import { syncLocalChanges } from "./helpers/localStorage";
 
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)
@@ -22,6 +24,9 @@
   onMount(async () => {
     // Check login state
     await store.checkExistingLoginAndConnect();
+    if ($store.isAuthed) {
+      syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+    };
   });
 </script>
 
