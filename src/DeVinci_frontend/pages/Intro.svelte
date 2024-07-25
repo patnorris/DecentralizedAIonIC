@@ -1,6 +1,5 @@
 <script lang="ts">
   import { deviceType, supportsWebGpu } from "../store";
-
   import Topnav from "../components/Topnav.svelte";
   import Footer from "../components/Footer.svelte";
   import ChatInterface from "../components/ChatInterface.svelte";

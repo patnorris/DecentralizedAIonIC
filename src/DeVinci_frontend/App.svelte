@@ -8,6 +8,7 @@
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
   import NotFound from "./pages/NotFound.svelte";
+  import deVinci from "./pages/deVinci.svelte";
   
   import { syncLocalChanges } from "./helpers/localStorage";
 
@@ -17,6 +18,7 @@
     "/mychats": UserChatsOverview,
     "/settings": UserSettings,
     "/about": About,
+    "/devinci": deVinci,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };

@@ -56,6 +56,8 @@ selectedAiModelId.subscribe((value) => localStorage.setItem("selectedAiModelId",
 
 export let vectorStore = writable(null);
 
+export let installAppDeferredPrompt = writable(null);
+
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
 const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)

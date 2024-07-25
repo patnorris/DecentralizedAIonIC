@@ -1,17 +1,22 @@
 <script>
   import { onMount } from 'svelte';
+  import {
+    installAppDeferredPrompt
+  } from "../../store";
 
   let deferredPrompt;
-  let showToast = false;
+  installAppDeferredPrompt.subscribe((value) => deferredPrompt = value); // needed to persist the prompt across reloads of this component
+
+  let showToast = true;
 
   onMount(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
-      deferredPrompt = e;
+      $installAppDeferredPrompt = e;
       // Update UI notify the user they can install the PWA
-      showToast = true;
+      //showToast = true;
     });
 
     window.addEventListener('appinstalled', () => {
@@ -37,15 +42,13 @@
 </script>
 
 {#if showToast}
-  <div class="toast flex items-center w-full max-w-xs p-4 text-gray-500 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
-    <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
-      <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.147 15.085a7.159 7.159 0 0 1-6.189 3.307A6.713 6.713 0 0 1 3.1 15.444c-2.679-4.513.287-8.737.888-9.548A4.373 4.373 0 0 0 5 1.608c1.287.953 6.445 3.218 5.537 10.5 1.5-1.122 2.706-3.01 2.853-6.14 1.433 1.049 3.993 5.395 1.757 9.117Z"/>
-      </svg>
-      <span class="sr-only">Fire icon</span>
-    </div>
-    <div class="ms-3 text-sm font-normal">This app can be installed and used offline!</div>
-    <button on:click={installPWA} type="button" class="bg-gray-400 ml-2 text-sm text-gray-100 p-1.5 hover:bg-gray-400 hover:text-gray-600 rounded-lg focus:ring-2 focus:ring-gray-300 inline-flex items-center justify-center">
+  <div class="toast flex items-center w-full max-w-md p-8 text-[#151b1e] bg-[lightsteelblue] rounded-lg shadow" role="alert">
+    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd"/>
+    </svg>
+
+    <div class="ms-3 text-md font-normal">This app can be installed and used offline.</div>
+    <button on:click={installPWA} type="button" class="bg-blue-50  rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-blue-200 ml-2 border-2 border-solid border-[#151b1e] text-sm text-[#151b1e] hover:text-gray-600  inline-flex items-center justify-center">
       Install
     </button>
   </div>

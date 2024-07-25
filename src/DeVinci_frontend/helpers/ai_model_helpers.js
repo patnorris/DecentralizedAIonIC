@@ -3,7 +3,7 @@ const availableAiModels = [
     id: 'gemma-2b-it-q4f32_1-MLC',
     name: 'Gemma',
     size: 'Small',
-    numberOfParameters: '2 billion',
+    parameters: '2 billion',
     performance: 'Good',
     default: true
   },
@@ -20,7 +20,7 @@ const availableAiModels = [
     id: 'Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC',
     name: 'Hermes 2 Pro Llama3',
     size: 'Large',
-    numberOfParameters: '8B billion',
+    parameters: '8B billion',
     performance: 'Super Good',
     default: false
   },
@@ -28,7 +28,7 @@ const availableAiModels = [
     id: 'Hermes-2-Pro-Mistral-7B-q4f16_1-MLC',
     name: 'Hermes 2 Pro Mistral',
     size: 'Large',
-    numberOfParameters: '7B billion',
+    parameters: '7B billion',
     performance: 'Super Good',
     default: false
   },
@@ -36,7 +36,7 @@ const availableAiModels = [
     id: 'Llama-3-8B-Instruct-q4f32_1-MLC',
     name: 'Llama3 8B',
     size: 'Large',
-    numberOfParameters: '8 billion',
+    parameters: '8 billion',
     performance: 'Super Good',
     default: false
   },
@@ -44,7 +44,7 @@ const availableAiModels = [
     id: 'Phi-3-mini-4k-instruct-q4f32_1-MLC',
     name: 'Phi3',
     size: 'Medium',
-    numberOfParameters: '3.8 billion',
+    parameters: '3.8 billion',
     performance: 'Very Good',
     default: false
   },
@@ -52,7 +52,7 @@ const availableAiModels = [
     id: 'TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC',
     name: 'TinyLlama',
     size: 'Very Small',
-    numberOfParameters: '1.1 billion',
+    parameters: '1.1 billion',
     performance: 'Alright',
     default: false
   },
@@ -60,7 +60,7 @@ const availableAiModels = [
     id: 'Qwen1.5-1.8B-Chat-q4f32_1-MLC',
     name: 'Qwen 1.5',
     size: 'Small',
-    numberOfParameters: '1.8 billion',
+    parameters: '1.8 billion',
     performance: 'Good for Chinese',
     default: false
   },
@@ -68,7 +68,7 @@ const availableAiModels = [
     id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC',
     name: 'Stable LM 2',
     size: 'Small',
-    numberOfParameters: '1.6 billion',
+    parameters: '1.6 billion',
     performance: 'Good',
     default: false
   },
@@ -76,7 +76,7 @@ const availableAiModels = [
     id: 'RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC',
     name: 'Red Pajama',
     size: 'Medium',
-    numberOfParameters: '3 billion',
+    parameters: '3 billion',
     performance: 'Alright',
     default: false
   },
@@ -84,7 +84,7 @@ const availableAiModels = [
     id: 'Mistral-7B-Instruct-v0.2-q4f16_1-MLC',
     name: 'Mistral',
     size: 'Large',
-    numberOfParameters: '7 billion',
+    parameters: '7 billion',
     performance: 'Very Good',
     default: false
   },
@@ -92,7 +92,7 @@ const availableAiModels = [
     id: 'Llama-3-70B-Instruct-q3f16_1-MLC',
     name: 'Llama3 70B',
     size: 'Gigantic',
-    numberOfParameters: '70 billion',
+    parameters: '70 billion',
     performance: 'Insane',
     default: false
   },
@@ -100,7 +100,7 @@ const availableAiModels = [
     id: 'WizardMath-7B-V1.1-q4f16_1-MLC',
     name: 'WizardMath',
     size: 'Large',
-    numberOfParameters: '7 billion',
+    parameters: '7 billion',
     performance: 'Great for Math',
     default: false
   },
@@ -119,7 +119,7 @@ const availableAiModels = [
     id: 'phi-2-q4f32_1-MLC-1k',
     name: 'Phi2',
     size: 'Smaller',
-    numberOfParameters: '2 billion',
+    parameters: '2 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -128,7 +128,7 @@ const availableAiModels = [
     id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k',
     name: 'Red Pajama',
     size: 'Medium',
-    numberOfParameters: '3 billion',
+    parameters: '3 billion',
     performance: 'Alright',
     default: false,
     android: true
@@ -137,7 +137,7 @@ const availableAiModels = [
     id: 'Phi-3-mini-4k-instruct-q4f32_1-MLC-1k',
     name: 'Phi3',
     size: 'Medium',
-    numberOfParameters: '3.8 billion',
+    parameters: '3.8 billion',
     performance: 'Very Good',
     default: false,
     android: true
@@ -146,7 +146,7 @@ const availableAiModels = [
     id: 'Llama-3-8B-Instruct-q4f32_1-MLC-1k',
     name: 'Llama3 8B',
     size: 'Large',
-    numberOfParameters: '8 billion',
+    parameters: '8 billion',
     performance: 'Super Good',
     default: false,
     android: true
@@ -195,7 +195,7 @@ const availableAiModels = [
     id: 'gemma-2b-it-q4f32_1-MLC-1k',
     name: 'Gemma',
     size: 'Smaller',
-    numberOfParameters: '2 billion',
+    parameters: '2 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -204,7 +204,7 @@ const availableAiModels = [
     id: 'Qwen1.5-1.8B-Chat-q4f32_1-MLC-1k',
     name: 'Qwen 1.5',
     size: 'Smaller',
-    numberOfParameters: '1.8 billion',
+    parameters: '1.8 billion',
     performance: 'Good for Chinese',
     default: false,
     android: true
@@ -213,7 +213,7 @@ const availableAiModels = [
     id: 'stablelm-2-zephyr-1_6b-q4f32_1-MLC-1k',
     name: 'Stable LM 2',
     size: 'Smaller',
-    numberOfParameters: '1.6 billion',
+    parameters: '1.6 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -222,7 +222,7 @@ const availableAiModels = [
     id: 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k',
     name: 'TinyLlama',
     size: 'Small',
-    numberOfParameters: '1.1 billion',
+    parameters: '1.1 billion',
     performance: 'Alright',
     default: false,
     android: true
