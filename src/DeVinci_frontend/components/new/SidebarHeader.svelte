@@ -11,6 +11,9 @@
 
   import { userHasDownloadedModel } from "../../helpers/localStorage";
 
+  // Reactive statement to check if the user has already downloaded at least one AI model
+  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+
   // User can select between chats (global variable is kept)
   async function showNewChat() {
     $activeChatGlobal = null;
@@ -23,7 +26,7 @@
   <a href="#/devinci">
       <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full bg-gray-50" alt="devinci logo" />
   </a>
-  {#if userHasDownloadedModel()}
+  {#if userHasDownloadedAtLeastOneModel}
     <button type="button" on:click={showNewChat} class="disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto  my-5 flex text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
       New chat
     </button>

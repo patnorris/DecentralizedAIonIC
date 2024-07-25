@@ -37,12 +37,15 @@ export function getLocalFlag(flagType) {
       let arrayOfModels = JSON.parse(modelFlagsStored);
       if (arrayOfModels) {
         return arrayOfModels;
+      } else {
+        return [];
       };
+    } else {
+      return [];
     };
   } else {
     return null;
   };
-  return null;
 };
 
 export function userHasDownloadedModel() {

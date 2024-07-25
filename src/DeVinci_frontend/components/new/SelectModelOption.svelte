@@ -12,6 +12,9 @@
   export let size;
   export let callbackLoadChatModel;
 
+  // Reactive statement to check if the ID is included in the already downloaded model IDs
+  $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
+
   document.addEventListener("DOMContentLoaded", function() {
     const spans = document.querySelectorAll(".performance-span");
 
@@ -90,7 +93,7 @@
     <div class="w-full bg-gray-200 my-1 rounded-full">
       <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
     </div>
-    {#if getLocalFlag("downloadedAiModels").includes(id)}
+    {#if isDownloaded}
       <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
         Downloaded
         <svg class="ml-0.5 w-3 h-3 text-[#151b1e]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

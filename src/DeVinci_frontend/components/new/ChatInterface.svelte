@@ -34,6 +34,8 @@
     }, 8000);
   });
 
+  // Reactive statement to check if the user has already downloaded at least one AI model
+  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
 
   let chatModelDownloadInProgress = false;
   let chatModelDownloaded = false;
@@ -198,8 +200,8 @@
 
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
-  {#if !userHasDownloadedModel()}
-    <SelectModel />    
+  {#if !userHasDownloadedAtLeastOneModel}
+    <SelectModel />
   {/if}
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
