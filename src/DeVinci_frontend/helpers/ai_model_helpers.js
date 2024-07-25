@@ -12,7 +12,7 @@ const availableAiModels = [
     id: "Qwen2-7B-Instruct-q4f16_1-MLC",
     name: 'Qwen2',
     size: 'Large',
-    numberOfParameters: '7 billion',
+    parameters: '7 billion',
     performance: 'Very Good',
     default: false
   },
@@ -110,7 +110,7 @@ const availableAiModels = [
     id: "Qwen2-1.5B-Instruct-q4f32_1-MLC",
     name: 'Qwen2 q4f32_1',
     size: 'Tiny',
-    numberOfParameters: '1.5 billion',
+    parameters: '1.5 billion',
     performance: 'Good',
     default: true,
     android: true
@@ -156,7 +156,7 @@ const availableAiModels = [
     id: "Qwen2-0.5B-Instruct-q4f16_1-MLC",
     name: 'Qwen2 q4f16_1',
     size: 'Tiny',
-    numberOfParameters: '0.5 billion',
+    parameters: '0.5 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -166,7 +166,7 @@ const availableAiModels = [
     id: "Qwen2-0.5B-Instruct-q0f16-MLC",
     name: 'Qwen2 q0f16',
     size: 'Tiny',
-    numberOfParameters: '0.5 billion',
+    parameters: '0.5 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -176,7 +176,7 @@ const availableAiModels = [
     id: "Qwen2-0.5B-Instruct-q0f32-MLC",
     name: 'Qwen2 q0f32',
     size: 'Tiny',
-    numberOfParameters: '0.5 billion',
+    parameters: '0.5 billion',
     performance: 'Good',
     default: false,
     android: true
@@ -186,7 +186,7 @@ const availableAiModels = [
     id: "Qwen2-1.5B-Instruct-q4f16_1-MLC",
     name: 'Qwen2 q4f16_1',
     size: 'Tiny',
-    numberOfParameters: '1.5 billion',
+    parameters: '1.5 billion',
     performance: 'Good',
     default: false,
     android: true
