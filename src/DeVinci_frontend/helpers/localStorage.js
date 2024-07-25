@@ -3,6 +3,32 @@ import { store } from "../store";
 let storeState;
 store.subscribe((value) => storeState = value);
 
+export function setLocalFlag(flagType, flagObject) {
+  if (flagType === "downloadedAiModels") {
+    const modelFlagsStored = localStorage.getItem(flagType);
+    // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+    if (modelFlagsStored) {
+      let arrayOfModels = JSON.parse(modelFlagsStored);
+      // Check if the model already exists in the array
+      const existingModelIndex = arrayOfModels.findIndex(modelId => 
+        modelId === flagObject.modelId
+      );
+      if (existingModelIndex === -1) {
+        // If the model does not exist, add its id to the array
+        arrayOfModels.push(flagObject.modelId);
+      };
+      localStorage.setItem(flagType, JSON.stringify(arrayOfModels));
+      console.log("in setLocalFlag arrayOfModels ", arrayOfModels);
+    } else {
+      let newArrayForModel = [flagObject.modelId];
+      localStorage.setItem(flagType, JSON.stringify(newArrayForModel));
+    };
+  } else {
+    return false;
+  };
+  return true;
+};
+
 export function storeChatLocally(chatId, chatMessages) {
   const chatsStored = localStorage.getItem("chatsStoredLocally");
   // chatsStored is a stringified dictionary where the chatId is the key and the chat's messages (as array) the value

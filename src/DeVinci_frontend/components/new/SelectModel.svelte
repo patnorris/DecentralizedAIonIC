@@ -11,7 +11,11 @@
   import SelectModelOption from './SelectModelOption.svelte';
 
   import { getAvailableAiModels } from "../../helpers/ai_model_helpers";
-  import { syncLocalChanges, setUserSettingsSyncFlag } from "../../helpers/localStorage";
+  import {
+    setLocalFlag,
+    syncLocalChanges,
+    setUserSettingsSyncFlag
+  } from "../../helpers/localStorage";
 
   let availableAiModels = getAvailableAiModels(deviceType === 'Android');
   let chatModelDownloadInProgress = false;
@@ -78,18 +82,32 @@
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
-      }
+      };
     } else {
       console.log("Using webllm");
       $chatModelGlobal = new webllm.MLCEngine();
     };
 
-    /* const initProgressCallback = (report) => {
-      setLabel("init-label", report.text);
+    const initProgressCallback = (report) => {
+      console.log("in initProgressCallback report ", report);
+      //setLabel("init-label", report.text);
     };
-    $chatModelGlobal.setInitProgressCallback(initProgressCallback); */
-    console.log("in loadChatModel reload");
-    await $chatModelGlobal.reload(modelOptionId);
+    try {
+      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      console.log("in loadChatModel reload");
+      await $chatModelGlobal.reload(modelOptionId);
+      // Set flag that this model has been downloaded
+      const flagObject = {
+        modelId: modelOptionId,
+      };
+      setLocalFlag("downloadedAiModels", flagObject);
+    } catch (error) {
+      console.error("Error loading model: ", error);
+      /* debugOutput += "###error in loadChatModel###";
+      debugOutput += error;
+      setLabel("debug-label", debugOutput); */
+      throw error;
+    };
     $chatModelDownloadedGlobal = true;
     chatModelDownloadInProgress = false;
     console.log("in loadChatModel loaded");
