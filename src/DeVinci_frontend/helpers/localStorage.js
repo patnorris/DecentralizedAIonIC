@@ -23,13 +23,26 @@ export function setLocalFlag(flagType, flagObject) {
       let newArrayForModel = [flagObject.modelId];
       localStorage.setItem(flagType, JSON.stringify(newArrayForModel));
     };
+  } else if (flagType === "aiModelDownloadingProgress") {
+    const modelDownloadProgressStored = localStorage.getItem(flagType);
+    // modelDownloadProgressStored is a stringified object where each key is a model id and the value the download progress
+    if (modelDownloadProgressStored) {
+      let modelsObject = JSON.parse(modelDownloadProgressStored);
+      modelsObject[flagObject.modelId] = flagObject.downloadProgress;
+      localStorage.setItem(flagType, JSON.stringify(modelsObject));
+    } else {
+      // First entry
+      let modelsObject = {};
+      modelsObject[flagObject.modelId] = flagObject.downloadProgress;
+      localStorage.setItem(flagType, JSON.stringify(modelsObject));      
+    };
   } else {
     return false;
   };
   return true;
 };
 
-export function getLocalFlag(flagType) {
+export function getLocalFlag(flagType, flagObject=null) {
   if (flagType === "downloadedAiModels") {
     const modelFlagsStored = localStorage.getItem(flagType);
     // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
@@ -42,6 +55,19 @@ export function getLocalFlag(flagType) {
       };
     } else {
       return [];
+    };
+  } else if (flagType === "aiModelDownloadingProgress") {
+    const modelDownloadProgressStored = localStorage.getItem(flagType);
+    // modelDownloadProgressStored is a stringified object where each key is a model id and the value the download progress
+    if (modelDownloadProgressStored) {
+      let modelsObject = JSON.parse(modelDownloadProgressStored);
+      if (modelsObject && modelsObject[flagObject.modelId]) {
+        return modelsObject[flagObject.modelId];
+      } else {
+        return 0;
+      };
+    } else {
+      return 0;
     };
   } else {
     return null;

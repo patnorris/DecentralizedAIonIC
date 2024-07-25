@@ -1,5 +1,17 @@
 <script>
+  import * as webllm from "@mlc-ai/web-llm";
+
   import {
+    store,
+    chatModelGlobal,
+    chatModelDownloadedGlobal,
+    selectedAiModelId,
+    deviceType
+  } from "../../store";
+  import {
+    setLocalFlag,
+    syncLocalChanges,
+    setUserSettingsSyncFlag,
     getLocalFlag
   } from "../../helpers/localStorage";
 
@@ -10,10 +22,20 @@
   export let parameters;
   export let performance;
   export let size;
-  export let callbackLoadChatModel;
+  export let chatModelDownloadInProgress;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
+
+  $: downloadProgress = getLocalFlag("aiModelDownloadingProgress", {modelId: id});
+  // $: downloadProgress = `${getLocalFlag("aiModelDownloadingProgress", {modelId: id})} %`;
+
+  let chatModelDownloaded = false;
+  chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
+
+  function toPercentage(floatValue, decimals = 2) {
+    return (floatValue * 100).toFixed(decimals);
+  };
 
   document.addEventListener("DOMContentLoaded", function() {
     const spans = document.querySelectorAll(".performance-span");
@@ -72,11 +94,113 @@
     observer.observe(document.body, { childList: true, subtree: true });
   });
 
+  const changeModel = async (id) => {
+    if ($selectedAiModelId === id) {
+      return;
+    };
+    // Change the model in the store
+    selectedAiModelId.set(id); // this also updates the locally stored model id
+    chatModelDownloadedGlobal.set(false);
+    // Persist to backend
+    const updatedSettingsObject = {
+      selectedAiModelId: id,
+    };
+    try {
+      const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);            
+      // @ts-ignore
+      if (settingsUpdatedResponse.Ok) {
+        syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+      } else {
+        // @ts-ignore
+        console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
+        // @ts-ignore
+        throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
+      };
+      syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+  } catch (error) {
+      // @ts-ignore
+      console.error("Error updating settings: ", error);
+      // Likely offline, so set flag to sync change later
+      setUserSettingsSyncFlag("selectedAiModelId");
+    };
+  };
+
+  async function loadChatModel(modelOptionId) {
+    console.log("in loadChatModel modelOptionId", modelOptionId);
+    //debugOutput += "###in loadChatModel###";
+    //setLabel("debug-label", debugOutput);
+    if (chatModelDownloadInProgress) {
+      return;
+    };
+    changeModel(modelOptionId);
+    if (chatModelDownloaded === true && $chatModelGlobal) {
+      return;
+    };
+    console.log("Loading chat model...");
+    chatModelDownloadInProgress = true;
+    if (!modelOptionId) {
+      modelOptionId = $selectedAiModelId;
+    };
+    if (process.env.NODE_ENV !== "development") {
+      console.log("Using web worker");
+      try {
+        /* TODO: fix
+        chatModel = new webllm.ChatWorkerClient(new Worker(
+          new URL(workerPath, import.meta.url),
+          {type: 'module'}
+        )); */
+        //console.log("Using webllm");
+        $chatModelGlobal = new webllm.MLCEngine();
+      } catch (error) {
+        console.error("Error loading web worker: ", error);
+        $chatModelGlobal = new webllm.MLCEngine();
+      };
+    } else {
+      console.log("Using webllm");
+      $chatModelGlobal = new webllm.MLCEngine();
+    };
+
+    const initProgressCallback = (report) => {
+      console.log("in initProgressCallback report ", report);
+      //setLabel("init-label", report.text);
+      if (report.progress) {
+        if (report.progress !== 0) {
+          downloadProgress = toPercentage(report.progress);
+          // Avoid setting the download progress for already downloaded models (which have progress as 0)
+          setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: report.progress});
+        } else {
+          downloadProgress = report.text;
+        };
+      } else {
+        downloadProgress = "Initiating...";
+      };
+    };
+    try {
+      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      console.log("in loadChatModel reload");
+      await $chatModelGlobal.reload(modelOptionId);
+      // Set flag that this model has been downloaded
+      const flagObject = {
+        modelId: modelOptionId,
+      };
+      setLocalFlag("downloadedAiModels", flagObject);
+    } catch (error) {
+      console.error("Error loading model: ", error);
+      /* debugOutput += "###error in loadChatModel###";
+      debugOutput += error;
+      setLabel("debug-label", debugOutput); */
+      throw error;
+    };
+    $chatModelDownloadedGlobal = true;
+    chatModelDownloadInProgress = false;
+    console.log("in loadChatModel loaded");
+  };
+
 </script>
 
 <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg">
   <div>
-    <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" on:click={() => callbackLoadChatModel(id)} />
+    <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" on:click={() => loadChatModel(id)} />
     <label for={id} class="inline-flex items-center justify-between w-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
       <div class="block">
         <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
@@ -90,9 +214,11 @@
     </label>
   </div>
   <div class="p-3 pt-1 pb-2">
-    <div class="w-full bg-gray-200 my-1 rounded-full">
-      <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
-    </div>
+    {#if downloadProgress && downloadProgress !== 0}
+      <div class="w-full bg-gray-200 my-1 rounded-full">
+        <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%">{downloadProgress}</div>
+      </div>
+    {/if}
     {#if isDownloaded}
       <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
         Downloaded
