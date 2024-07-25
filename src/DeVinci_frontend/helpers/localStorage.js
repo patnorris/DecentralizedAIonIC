@@ -29,6 +29,37 @@ export function setLocalFlag(flagType, flagObject) {
   return true;
 };
 
+export function getLocalFlag(flagType) {
+  if (flagType === "downloadedAiModels") {
+    const modelFlagsStored = localStorage.getItem(flagType);
+    // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+    if (modelFlagsStored) {
+      let arrayOfModels = JSON.parse(modelFlagsStored);
+      if (arrayOfModels) {
+        return arrayOfModels;
+      };
+    };
+  } else {
+    return null;
+  };
+  return null;
+};
+
+export function userHasDownloadedModel() {
+  const modelFlagsStored = localStorage.getItem("downloadedAiModels");
+  // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+  if (modelFlagsStored) {
+    let arrayOfModels = JSON.parse(modelFlagsStored);
+    if (arrayOfModels && arrayOfModels.length > 0) {
+      return true;
+    } else {
+      return false;
+    };
+  } else {
+    return false;
+  };
+};
+
 export function storeChatLocally(chatId, chatMessages) {
   const chatsStored = localStorage.getItem("chatsStoredLocally");
   // chatsStored is a stringified dictionary where the chatId is the key and the chat's messages (as array) the value

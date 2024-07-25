@@ -9,8 +9,6 @@
     selectedAiModelId,
     deviceType
   } from "../../store";
-  import Button from "../Button.svelte";
-  import ChatHistory from "../ChatHistory.svelte";
   import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
   import {
     getSearchVectorDbTool,
@@ -21,7 +19,7 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import { marked } from "marked";
+  import { userHasDownloadedModel } from "../../helpers/localStorage";
 
   const workerPath = './worker.ts';
 
@@ -200,7 +198,9 @@
 
 
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
-  <SelectModel />
+  {#if !userHasDownloadedModel()}
+    <SelectModel />    
+  {/if}
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
 
