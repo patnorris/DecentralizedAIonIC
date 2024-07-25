@@ -7,6 +7,15 @@ const availableAiModels = [
     performance: 'Good',
     default: true
   },
+  { //requires shader-f16
+    model: "https://huggingface.co/mlc-ai/Qwen2-7B-Instruct-q4f16_1-MLC",
+    id: "Qwen2-7B-Instruct-q4f16_1-MLC",
+    name: 'Qwen2',
+    size: 'Large',
+    numberOfParameters: '7 billion',
+    performance: 'Very Good',
+    default: false
+  },
   {
     id: 'Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC',
     name: 'Hermes 2 Pro Llama3',
@@ -97,12 +106,22 @@ const availableAiModels = [
   },
 // Android WebGPU models
   {
+    model: "https://huggingface.co/mlc-ai/Qwen2-1.5B-Instruct-q4f32_1-MLC",
+    id: "Qwen2-1.5B-Instruct-q4f32_1-MLC",
+    name: 'Qwen2 q4f32_1',
+    size: 'Tiny',
+    numberOfParameters: '1.5 billion',
+    performance: 'Good',
+    default: true,
+    android: true
+  },
+  {
     id: 'phi-2-q4f32_1-MLC-1k',
     name: 'Phi2',
     size: 'Smaller',
     parameters: '2 billion',
     performance: 'Good',
-    default: true,
+    default: false,
     android: true
   },
   {
@@ -132,6 +151,46 @@ const availableAiModels = [
     default: false,
     android: true
   },
+  /* {
+    model: "https://huggingface.co/mlc-ai/Qwen2-0.5B-Instruct-q4f16_1-MLC",
+    id: "Qwen2-0.5B-Instruct-q4f16_1-MLC",
+    name: 'Qwen2 q4f16_1',
+    size: 'Tiny',
+    numberOfParameters: '0.5 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    model: "https://huggingface.co/mlc-ai/Qwen2-0.5B-Instruct-q0f16-MLC",
+    id: "Qwen2-0.5B-Instruct-q0f16-MLC",
+    name: 'Qwen2 q0f16',
+    size: 'Tiny',
+    numberOfParameters: '0.5 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  {
+    model: "https://huggingface.co/mlc-ai/Qwen2-0.5B-Instruct-q0f32-MLC",
+    id: "Qwen2-0.5B-Instruct-q0f32-MLC",
+    name: 'Qwen2 q0f32',
+    size: 'Tiny',
+    numberOfParameters: '0.5 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  }, 
+  {
+    model: "https://huggingface.co/mlc-ai/Qwen2-1.5B-Instruct-q4f16_1-MLC",
+    id: "Qwen2-1.5B-Instruct-q4f16_1-MLC",
+    name: 'Qwen2 q4f16_1',
+    size: 'Tiny',
+    numberOfParameters: '1.5 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  }, */
   /* {
     id: 'gemma-2b-it-q4f32_1-MLC-1k',
     name: 'Gemma',

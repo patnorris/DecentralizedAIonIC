@@ -49,7 +49,10 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let activeChatGlobal = writable(null);
-export let selectedAiModelId = writable(getDefaultAiModelId(deviceType === 'Android'));
+export let userSettings = writable(localStorage.getItem("userSettings"));
+userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
+export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId"));
+selectedAiModelId.subscribe((value) => localStorage.setItem("selectedAiModelId", value));
 
 export let vectorStore = writable(null);
 
@@ -98,51 +101,97 @@ export const createStore = ({
   subscribe((value) => globalState = value);
 
   const initUserSettings = async (backendActor) => {
+    console.log("in initUserSettings backendActor ", backendActor);
     // Load the user's settings
       // Especially selected AI model to be used for chat
-    const retrievedSettingsResponse = await backendActor.get_caller_settings();
-    let userSettings;
-    // @ts-ignore
-    if (retrievedSettingsResponse.Ok) {
-      // @ts-ignore
-      userSettings = retrievedSettingsResponse.Ok;
-      const userSelectedAiModelId = userSettings.selectedAiModelId;
-      selectedAiModelId.set(userSelectedAiModelId);
+    if (navigator.onLine) {
+      console.log("The app is online!");
+      try {
+        const retrievedSettingsResponse = await backendActor.get_caller_settings();
+        console.log("in initUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
+        // @ts-ignore
+        if (retrievedSettingsResponse.Ok) {
+          userSettings.set(retrievedSettingsResponse.Ok);
+          const userSelectedAiModelId = retrievedSettingsResponse.Ok.selectedAiModelId;
+          selectedAiModelId.set(userSelectedAiModelId);
+        } else {
+          console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+          throw new Error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+        };
+      } catch (error) {
+        console.error("Error in get_caller_settings: ", error);
+        console.log("in initUserSettings local userSettings ", localStorage.getItem("userSettings"));
+        if (localStorage.getItem("userSettings")) {
+          console.log("get userSettings");
+          userSettings.set(localStorage.getItem("userSettings"));
+        };
+        console.log("in initUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
+        if (localStorage.getItem("selectedAiModelId")) {
+          console.log("get selectedAiModelId");
+          selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
+        } else {
+          selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
+        };     
+      };
     } else {
-      console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+      console.log("The app is offline.");
+      console.log("in initUserSettings local userSettings ", localStorage.getItem("userSettings"));
+      if (localStorage.getItem("userSettings")) {
+        console.log("get userSettings");
+        userSettings.set(localStorage.getItem("userSettings"));
+      };
+      console.log("in initUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
+      if (localStorage.getItem("selectedAiModelId")) {
+        console.log("get selectedAiModelId");
+        selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
+      } else {
+        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
+      };
     };
   };
 
   const nfidConnect = async () => {
+    console.log("in nfidConnect ");
     authClient = await AuthClient.create();
-    await authClient.login({
-      onSuccess: async () => {
-        const identity = await authClient.getIdentity();
-        initNfid(identity);
-      },
-      identityProvider: "https://nfid.one" + AUTH_PATH,
-        /* process.env.DFX_NETWORK === "ic"
-          ? "https://nfid.one" + AUTH_PATH
-          : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
-      // Maximum authorization expiration is 30 days
-      maxTimeToLive: days * hours * nanosecondsPerHour,
-      windowOpenerFeatures: 
-        `left=${window.screen.width / 2 - 525 / 2}, `+
-        `top=${window.screen.height / 2 - 705 / 2},` +
-        `toolbar=0,location=0,menubar=0,width=525,height=705`,
-      // See https://docs.nfid.one/multiple-domains
-      // for instructions on how to use derivationOrigin
-      // derivationOrigin: "https://<canister_id>.ic0.app"
-    });
+    console.log("in nfidConnect authClient ", authClient);
+    if (await authClient.isAuthenticated()) {
+      console.log("in nfidConnect isAuthenticated ");
+      const identity = await authClient.getIdentity();
+      console.log("in nfidConnect identity ", identity);
+      initNfid(identity);
+    } else {
+      console.log("in nfidConnect not Authenticated ");
+      await authClient.login({
+        onSuccess: async () => {
+          const identity = await authClient.getIdentity();
+          initNfid(identity);
+        },
+        identityProvider: "https://nfid.one" + AUTH_PATH,
+          /* process.env.DFX_NETWORK === "ic"
+            ? "https://nfid.one" + AUTH_PATH
+            : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
+        // Maximum authorization expiration is 30 days
+        maxTimeToLive: days * hours * nanosecondsPerHour,
+        windowOpenerFeatures: 
+          `left=${window.screen.width / 2 - 525 / 2}, `+
+          `top=${window.screen.height / 2 - 705 / 2},` +
+          `toolbar=0,location=0,menubar=0,width=525,height=705`,
+        // See https://docs.nfid.one/multiple-domains
+        // for instructions on how to use derivationOrigin
+        // derivationOrigin: "https://<canister_id>.ic0.app"
+      });
+    };
   };
 
   const initNfid = async (identity: Identity) => {
+    console.log("in initNfid identity ", identity);
     const backendActor = createBackendCanisterActor(backendCanisterId, {
       agentOptions: {
         identity,
         host: HOST,
       },
     });
+    console.log("in initNfid backendActor ", backendActor);
 
     if (!backendActor) {
       console.warn("couldn't create backend actor");
@@ -152,6 +201,8 @@ export const createStore = ({
     await initUserSettings(backendActor);
 
     //let accounts = JSON.parse(await identity.accounts());
+
+    localStorage.setItem('isAuthed', "nfid"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -165,22 +216,27 @@ export const createStore = ({
 
   const internetIdentityConnect = async () => {
     authClient = await AuthClient.create();
-    await authClient.login({
-      onSuccess: async () => {
-        const identity = await authClient.getIdentity();
-        initInternetIdentity(identity);
-      },
-      identityProvider:
-        process.env.DFX_NETWORK === "local"
-          ? `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`
-          : "https://identity.ic0.app/#authorize",
-      // Maximum authorization expiration is 30 days
-      maxTimeToLive: days * hours * nanosecondsPerHour,
-      windowOpenerFeatures: 
-        `left=${window.screen.width / 2 - 525 / 2}, `+
-        `top=${window.screen.height / 2 - 705 / 2},` +
-        `toolbar=0,location=0,menubar=0,width=525,height=705`,
-    });
+    if (await authClient.isAuthenticated()) {
+      const identity = await authClient.getIdentity();
+      initInternetIdentity(identity);
+    } else {
+      await authClient.login({
+        onSuccess: async () => {
+          const identity = await authClient.getIdentity();
+          initInternetIdentity(identity);
+        },
+        identityProvider:
+          process.env.DFX_NETWORK === "local"
+            ? `http://${process.env.INTERNET_IDENTITY_CANISTER_ID}.localhost:4943/#authorize`
+            : "https://identity.ic0.app/#authorize",
+        // Maximum authorization expiration is 30 days
+        maxTimeToLive: days * hours * nanosecondsPerHour,
+        windowOpenerFeatures:
+          `left=${window.screen.width / 2 - 525 / 2}, ` +
+          `top=${window.screen.height / 2 - 705 / 2},` +
+          `toolbar=0,location=0,menubar=0,width=525,height=705`,
+      });
+    };
   };
 
   const initInternetIdentity = async (identity: Identity) => {
@@ -199,6 +255,8 @@ export const createStore = ({
     await initUserSettings(backendActor);
 
     //let accounts = JSON.parse(await identity.accounts());
+
+    localStorage.setItem('isAuthed', "internetidentity"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -237,9 +295,10 @@ export const createStore = ({
 
     await initUserSettings(backendActor);
 
-    // the stoic agent provides an `accounts()` method that returns
-    // accounts associated with the principal
+    // the stoic agent provides an `accounts()` method that returns accounts associated with the principal
     let accounts = JSON.parse(await identity.accounts());
+
+    localStorage.setItem('isAuthed', "stoic"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -255,7 +314,7 @@ export const createStore = ({
     if (window.ic?.plug === undefined) {
       window.open("https://plugwallet.ooo/", "_blank");
       return;
-    }
+    };
 
     // check if plug is connected
     const plugConnected = await window.ic?.plug?.isConnected();
@@ -273,8 +332,8 @@ export const createStore = ({
       } catch (e) {
         console.warn(e);
         return;
-      }
-    }
+      };
+    };
 
     await initPlug();
   };
@@ -291,7 +350,7 @@ export const createStore = ({
       result
         ? console.log("agent created")
         : console.warn("agent creation failed");
-    }
+    };
     // check if createActor method is available
     if (!window.ic?.plug?.createActor) {
       console.warn("no createActor found");
@@ -306,7 +365,7 @@ export const createStore = ({
         );
         console.error(err);
       });
-    }
+    };
 
     const backendActor = (await window.ic?.plug.createActor({
       canisterId: backendCanisterId,
@@ -321,6 +380,8 @@ export const createStore = ({
     await initUserSettings(backendActor);
 
     const principal = await window.ic.plug.agent.getPrincipal();
+
+    localStorage.setItem('isAuthed', "plug"); // Set flag to indicate existing login for future sessions
 
     update((state) => ({
       ...state,
@@ -403,6 +464,8 @@ export const createStore = ({
 
     const principal = await window.ic.infinityWallet.getPrincipal();
 
+    localStorage.setItem('isAuthed', "bitfinity"); // Set flag to indicate existing login for future sessions
+
     update((state) => ({
       ...state,
       backendActor,
@@ -469,6 +532,38 @@ export const createStore = ({
     });
   };
 
+  const checkExistingLoginAndConnect = async () => {
+    console.log("in checkExistingLoginAndConnect");
+    // Check login state if user is already logged in
+    const isAuthed = localStorage.getItem('isAuthed'); // Accessing Local Storage to check login state
+    console.log("in checkExistingLoginAndConnect isAuthed ", isAuthed);
+    if (isAuthed) {
+      const authClient = await AuthClient.create();
+      console.log("in checkExistingLoginAndConnect authClient ", authClient);
+      if (await authClient.isAuthenticated()) {
+        console.log("in checkExistingLoginAndConnect isAuthenticated ");
+        if (isAuthed === "nfid") {
+          console.log("NFID connection detected");
+          nfidConnect();
+        } else if (isAuthed === "internetidentity") {
+          console.log("Internet Identity connection detected");
+          internetIdentityConnect();
+        } else if (isAuthed === "plug") {
+          console.log("Plug connection detected");
+          plugConnect();
+        } else if (isAuthed === "bitfinity") {
+          console.log("Bitfinity connection detected");
+          bitfinityConnect();
+        } else if (isAuthed === "stoic") {
+          console.log("Stoic connection detected");
+          stoicConnect();
+        };
+      };
+    } else {
+      selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
+    };
+  };
+
   return {
     subscribe,
     update,
@@ -478,6 +573,7 @@ export const createStore = ({
     bitfinityConnect,
     internetIdentityConnect,
     disconnect,
+    checkExistingLoginAndConnect,
   };
 };
 
