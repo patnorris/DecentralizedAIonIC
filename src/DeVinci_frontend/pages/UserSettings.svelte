@@ -1,94 +1,58 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import {
-        store,
-        selectedAiModelId,
-        chatModelDownloadedGlobal,
-        deviceType,
-        userSettings
-    } from "../store";
+  import { onMount } from 'svelte';
+  import {
+      store,
+      selectedAiModelId,
+      chatModelDownloadedGlobal,
+      deviceType,
+      userSettings
+  } from "../store";
 
-    import Topnav from "../components/Topnav.svelte";
-    import Footer from "../components/Footer.svelte";
-    import LoginMenu from "../components/LoginMenu.svelte";
-  
-    import Sidebar from "../components/new/Sidebar.svelte";
-    import Navigation from "../components/new/Navigation.svelte";
-    import SelectModel from "../components/new/SelectModel.svelte";
+  import Sidebar from "../components/new/Sidebar.svelte";
+  import Navigation from "../components/new/Navigation.svelte";
+  import SelectModel from "../components/new/SelectModel.svelte";
 
-    import devincilogo from "/devinci-logo.svg";
+  import devincilogo from "/devinci-logo.svg";
 
-    import { getAvailableAiModels, getDefaultAiModelId } from "../helpers/ai_model_helpers";
-    import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
+  import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
+  import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
 
-    let availableAiModels = getAvailableAiModels(deviceType === 'Android');
-    let hasLoadedSettings = false;
-
-    const changeModel = async (id) => {
-        if ($selectedAiModelId === id) {
-            return;
-        };
-        // Change the model in the store
-        selectedAiModelId.set(id); // this also updates the locally stored model id
-        chatModelDownloadedGlobal.set(false);
-        // Persist to backend
-        const updatedSettingsObject = {
-            selectedAiModelId: id,
-        };
-        try {
-            const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);            
-            // @ts-ignore
-            if (settingsUpdatedResponse.Ok) {
-                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
-            } else {
-                // @ts-ignore
-                console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
-                // @ts-ignore
-                throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
-            };
-            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
-        } catch (error) {
-            // @ts-ignore
-            console.error("Error updating settings: ", error);
-            // Likely offline, so set flag to sync change later
-            setUserSettingsSyncFlag("selectedAiModelId");
-        };
-    };
+  let hasLoadedSettings = false;
   
   const loadUserSettings = async () => {
-        try {
-            const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
-            console.log("in loadUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
-            // @ts-ignore
-            if (retrievedSettingsResponse.Ok) {
-                // @ts-ignore
-                userSettings.set(retrievedSettingsResponse.Ok);
-                // @ts-ignore
-                const userSelectedAiModelId = retrievedSettingsResponse.Ok.selectedAiModelId;
-                selectedAiModelId.set(userSelectedAiModelId);
-                syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
-            } else {
-                // @ts-ignore
-                console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
-                // @ts-ignore
-                throw new Error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
-            };
-        } catch (error) {
-            console.error("Error in get_caller_settings: ", error);
-            console.log("in loadUserSettings local userSettings ", localStorage.getItem("userSettings"));
-            if (localStorage.getItem("userSettings")) {
-                console.log("get userSettings");
-                userSettings.set(localStorage.getItem("userSettings"));
-            };
-            console.log("in loadUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
-            if (localStorage.getItem("selectedAiModelId")) {
-                console.log("get selectedAiModelId");
-                selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-            } else {
-                selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
-            };     
-        };
-        hasLoadedSettings = true;
+    try {
+      const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
+      console.log("in loadUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
+      // @ts-ignore
+      if (retrievedSettingsResponse.Ok) {
+        // @ts-ignore
+        userSettings.set(retrievedSettingsResponse.Ok);
+        // @ts-ignore
+        const userSelectedAiModelId = retrievedSettingsResponse.Ok.selectedAiModelId;
+        selectedAiModelId.set(userSelectedAiModelId);
+        syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+      } else {
+        // @ts-ignore
+        console.error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+        // @ts-ignore
+        throw new Error("Error retrieving user settings: ", retrievedSettingsResponse.Err);
+      };
+    } catch (error) {
+      console.error("Error in get_caller_settings: ", error);
+      console.log("in loadUserSettings local userSettings ", localStorage.getItem("userSettings"));
+      if (localStorage.getItem("userSettings")) {
+        console.log("get userSettings");
+        userSettings.set(localStorage.getItem("userSettings"));
+      };
+      console.log("in loadUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
+      if (localStorage.getItem("selectedAiModelId")) {
+        console.log("get selectedAiModelId");
+        selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
+      } else {
+        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
+      };
+    };
+    hasLoadedSettings = true;
   };
 
   onMount(() => {
@@ -168,47 +132,49 @@
             </li>
           </ol>
         </nav>
-        <!-- Opt-in-out saving chats -->
-        <div id="alert-additional-content-4" class="p-4 m-4 text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
-          <div class="flex items-center">
-            <svg class="w-6 h-6 text-yellow-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
-            </svg>
-            <span class="sr-only">Info</span>
-            <h3 class="text-lg font-medium"> Manage your chat data</h3>
-          </div>
-          <div class="mt-2 mb-4 text-sm">
-            To enhance your experience we offer you the choice to save your chat history. By opting in, your chat history will be saved. If you choose to opt out, your chat history will not be saved.
-          </div>
-          <div class="flex">
-            <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-              <li class="w-full  border-b border-gray-200 sm:border-b-0 sm:border-r">
-                <div class="flex items-center ps-3 ">
-                  <input id="horizontal-list-radio-license" type="radio" value="" name="list-radio" class=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
-                  <label for="horizontal-list-radio-license" class=" cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Save my chats </label>
-                </div>
-              </li>
-              <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-                <div class="flex items-center ps-3 cursor-pointer">
-                  <input id="horizontal-list-radio-id" type="radio" value="" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer">
-                  <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">Do not save my chats</label>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        {#if !$store.isAuthed}
+          <p>Please login to view and edit Your Settings.</p>
+        {:else}
+          {#if !hasLoadedSettings}
+            <p>Retrieving Your Settings...</p>
+            <p hidden>{loadUserSettings()}</p>
+          {:else}
+            <!-- Opt-in-out saving chats TODO: refactor into own component -->
+            <div id="alert-additional-content-4" class="p-4 m-4 text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
+              <div class="flex items-center">
+                <svg class="w-6 h-6 text-yellow-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <h3 class="text-lg font-medium"> Manage your chat data</h3>
+              </div>
+              <div class="mt-2 mb-4 text-sm">
+                To enhance your experience we offer you the choice to save your chat history. By opting in, your chat history will be saved. If you choose to opt out, your chat history will not be saved.
+              </div>
+              <div class="flex">
+                <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+                  <li class="w-full  border-b border-gray-200 sm:border-b-0 sm:border-r">
+                    <div class="flex items-center ps-3 ">
+                      <input id="horizontal-list-radio-license" type="radio" value="" name="list-radio" class=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                      <label for="horizontal-list-radio-license" class=" cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Save my chats </label>
+                    </div>
+                  </li>
+                  <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                    <div class="flex items-center ps-3 cursor-pointer">
+                      <input id="horizontal-list-radio-id" type="radio" value="" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer">
+                      <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">Do not save my chats</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {/if}
+        {/if}
         <SelectModel />
       </div>
     </main>
   </main>
 </div>
-
-<style global>
-	.footer {
-		background: rgba(255,255,255,1);
-		padding-top: 10px;
-	}
-</style>
 
 
 
