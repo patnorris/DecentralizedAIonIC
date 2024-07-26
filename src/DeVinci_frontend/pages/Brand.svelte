@@ -5,7 +5,9 @@
 
   import { onMount } from 'svelte';
 
-  import devincilogo from "/devinci-logo.svg";
+  import devincilogo from "/devinci.svg";
+  import devincilogosvgdownload from "/devinci.zip?url";
+  import devincilogopngdownload from "/devinci.png.zip?url";
 
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -87,7 +89,18 @@
               </ol>
             </nav>
           </header>
-          <p class="lead">Brand</p>
+          <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Logo</h1>
+          <div class="w-full mx-auto">
+            <img class="h-1/3 w-1/3 rounded-full mx-auto" src={devincilogo} alt="deVinci logo">
+            <div class="mt-12 flex justify-center">
+              <a href="{devincilogosvgdownload}" download class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Download SVG</a>
+              <a href="{devincilogopngdownload}" download  class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Download PNG</a>
+            </div>
+          </div>
+          <h1 class="my-14 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Color codification</h1>
+          <div class="bg-[#b0c4de] mb-4 h-24 w-24"></div>
+          <div class="bg-[#151b1e]  h-24 w-24"></div>
+
 
         </article>
       </div>
