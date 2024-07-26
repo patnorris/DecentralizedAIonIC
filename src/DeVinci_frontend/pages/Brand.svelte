@@ -68,7 +68,7 @@
 
     <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
       <div class="flex justify-between px-4 mx-auto max-w-screen-xl ">
-        <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+        <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
           <header class="mb-4 lg:mb-6 not-format">
             <!-- Breadcrumb -->
             <nav class="justify-between mb-8 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
@@ -98,15 +98,30 @@
             </div>
           </div>
           <h1 class="my-14 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Color codification</h1>
-          <div class="bg-[#b0c4de] mb-4 h-24 w-24"></div>
-          <div class="bg-[#151b1e]  h-24 w-24"></div>
+          <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Primary colors</h1>
+          
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 ">
+            <div class="bg-[#b0c4de] h-40 w-40"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">#b0c4de</h5>
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">rgb(176,196,222)</h5>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
+            <div class="bg-[#151b1e] h-40 w-40"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">#151b1e</h5>
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">rgb(21,27,30)</h5>
+            </div>
+          </div>
 
 
         </article>
       </div>
     </main>
 
-    <Newsletter />
+<!--    <Newsletter />-->
 
   </main>
 </div>
