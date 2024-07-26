@@ -48,6 +48,7 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
+export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
 export let userSettings = writable(localStorage.getItem("userSettings"));
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));

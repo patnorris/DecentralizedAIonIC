@@ -3,7 +3,6 @@
   import {
       store,
       selectedAiModelId,
-      chatModelDownloadedGlobal,
       deviceType,
       userSettings
   } from "../store";

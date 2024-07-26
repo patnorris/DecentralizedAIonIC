@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store } from "../../store";
+  import { store, chatModelIdInitiatedGlobal } from "../../store";
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
@@ -189,16 +189,17 @@
         <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
         <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
       {/if}
-      <input bind:value={newMessageText} type="text" id="chat" autofocus rows="1" on:keydown={handleInputKeyDown} class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message deVinci..." />
-      {#if messageGenerationInProgress}
-        <button disabled type="submit" on:click={sendMessage} class="inline-flex justify-center p-3 text-gray-600 rounded-full cursor-pointer hover:bg-gray-100">
+      {#if !$chatModelIdInitiatedGlobal || messageGenerationInProgress}
+        <input disabled type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " />
+        <button disabled type="submit" class="opacity-55 cursor-not-allowed inline-flex justify-center p-2 text-gray-600 rounded-full">
           <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
           </svg>
           <span class="sr-only">Send message</span>
         </button>
       {:else}
-        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={sendMessage} class="inline-flex opacity-55 cursor-not-allowed justify-center p-2 text-gray-600 rounded-full">
+        <input bind:value={newMessageText} on:keydown={handleInputKeyDown} type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message deVinci..." />
+        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={sendMessage} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-100">
           <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
           </svg>
@@ -212,7 +213,7 @@
 <style>
 	.has-text {
 		background-color: rgb(243 244 246);
-      cursor: pointer;
-      opacity: 1;
+    cursor: pointer;
+    opacity: 1;
 	}
 </style>
