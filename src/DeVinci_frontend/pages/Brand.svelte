@@ -99,8 +99,8 @@
           </div>
           <h1 class="my-14 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Color codification</h1>
           <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Primary colors</h1>
-          
-          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 ">
+
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
             <div class="bg-[#b0c4de] h-40 w-40"></div>
             <div class="flex flex-col justify-between p-4 leading-normal">
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">#b0c4de</h5>
@@ -108,13 +108,24 @@
             </div>
           </div>
 
-          <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
+          <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
             <div class="bg-[#151b1e] h-40 w-40"></div>
             <div class="flex flex-col justify-between p-4 leading-normal">
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">#151b1e</h5>
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700">rgb(21,27,30)</h5>
             </div>
           </div>
+
+          <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Secondary colors</h1>
+
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
+            <div class="bg-[#b0c4de] h-24 w-24"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#b0c4de</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(176,196,222)</h5>
+            </div>
+          </div>
+
 
 
         </article>
