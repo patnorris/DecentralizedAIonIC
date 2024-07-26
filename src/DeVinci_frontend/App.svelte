@@ -7,9 +7,10 @@
   import UserChatsOverview from "./pages/UserChatsOverview.svelte";
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
+  import Brand from "./pages/Brand.svelte";
   import NotFound from "./pages/NotFound.svelte";
   import deVinci from "./pages/deVinci.svelte";
-  
+
   import { syncLocalChanges } from "./helpers/localStorage";
 
   const routes = {
@@ -18,6 +19,7 @@
     "/mychats": UserChatsOverview,
     "/settings": UserSettings,
     "/about": About,
+    "/brand": Brand,
     "/devinci": deVinci,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
