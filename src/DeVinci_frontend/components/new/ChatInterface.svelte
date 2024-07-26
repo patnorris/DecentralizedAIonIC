@@ -2,12 +2,9 @@
   import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from 'svelte';
   import {
-    store,
     chatModelGlobal,
-    chatModelDownloadedGlobal,
     activeChatGlobal,
-    selectedAiModelId,
-    deviceType
+    chatModelIdInitiatedGlobal,
   } from "../../store";
   import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
   import {
@@ -19,7 +16,6 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import { userHasDownloadedModel } from "../../helpers/localStorage";
 
   const workerPath = './worker.ts';
 
@@ -33,13 +29,6 @@
       showToast = false;
     }, 8000);
   });
-
-  // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
-
-  let chatModelDownloadInProgress = false;
-  let chatModelDownloaded = false;
-  chatModelDownloadedGlobal.subscribe((value) => chatModelDownloaded = value);
 
   let vectorDbSearchTool;
   let useKnowledgeBase = false;
@@ -197,11 +186,9 @@
   };
 </script>
 
-
-
 <div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
-  {#if !userHasDownloadedAtLeastOneModel}
-    <SelectModel />
+  {#if !$chatModelIdInitiatedGlobal}
+    <SelectModel onlyShowDownloadedModels={true}/>
   {/if}
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
