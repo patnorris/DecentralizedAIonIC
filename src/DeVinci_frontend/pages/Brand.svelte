@@ -75,7 +75,7 @@
               <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
                 <li>
                   <div class="flex items-center">
-                    <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Home</a>
+                    <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Chat</a>
                   </div>
                 </li>
                 <li aria-current="page">

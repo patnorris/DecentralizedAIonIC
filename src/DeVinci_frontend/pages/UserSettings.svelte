@@ -17,7 +17,7 @@
   import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
 
   let hasLoadedSettings = false;
-  
+
   const loadUserSettings = async () => {
     try {
       const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
@@ -118,7 +118,7 @@
           <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
             <li>
               <div class="flex items-center">
-                <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Home</a>
+                <a href="/" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Chat</a>
               </div>
             </li>
             <li aria-current="page">
@@ -132,10 +132,14 @@
           </ol>
         </nav>
         {#if !$store.isAuthed}
-          <p>Please login to view and edit Your Settings.</p>
+          <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
+            Please connect to view and edit your settings.
+          </div>
         {:else}
           {#if !hasLoadedSettings}
-            <p>Retrieving Your Settings...</p>
+            <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
+              Retrieving your settings...
+            </div>
             <p hidden>{loadUserSettings()}</p>
           {:else}
             <!-- Opt-in-out saving chats TODO: refactor into own component -->
