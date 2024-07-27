@@ -119,15 +119,33 @@
           <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Secondary colors</h1>
 
           <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
-            <div class="bg-[#b0c4de] h-24 w-24"></div>
+            <div class="bg-[#f9c490] h-28 w-28"></div>
             <div class="flex flex-col justify-between p-4 leading-normal">
-              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#b0c4de</h5>
-              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(176,196,222)</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#f9c490</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(249, 196, 144)</h5>
             </div>
           </div>
-
-
-
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
+            <div class="bg-[#a1c490] h-28 w-28"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#a1c490</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(161, 196, 144)</h5>
+            </div>
+          </div>
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
+            <div class="bg-[#f0e68c] h-28 w-28"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#f0e68c</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(240, 230, 140)</h5>
+            </div>
+          </div>
+          <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
+            <div class="bg-[#cb8bd0] h-28 w-28"></div>
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">#cb8bd0</h5>
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(203, 139, 208)</h5>
+            </div>
+          </div>
         </article>
       </div>
     </main>
