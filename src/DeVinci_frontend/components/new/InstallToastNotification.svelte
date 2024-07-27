@@ -48,7 +48,7 @@
     </svg>
 
     <div class="ms-3 text-md font-normal">This app can be installed and used offline.</div>
-    <button on:click={installPWA} type="button" class="bg-blue-50  rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-blue-200 ml-2 border-2 border-solid border-[#151b1e] text-sm text-[#151b1e] hover:text-gray-600  inline-flex items-center justify-center">
+    <button on:click={installPWA} type="button" class="bg-blue-50 rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white ml-2 border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
       Install
     </button>
   </div>

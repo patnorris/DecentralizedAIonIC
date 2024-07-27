@@ -24,7 +24,7 @@
 
 <div class="flex flex-col justify-center w-full items-center">
   <a href="#/devinci">
-      <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full bg-gray-50" alt="devinci logo" />
+      <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full" alt="devinci logo" />
   </a>
   {#if userHasDownloadedAtLeastOneModel}
     <button type="button" on:click={showNewChat} class="disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto w-full my-5 flex justify-center text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
