@@ -66,7 +66,7 @@
 	  animation: rotate 360s linear infinite;
   }
 
-  
+
   .tooltip-toggle {
 	  cursor: pointer;
 	  position: relative;
@@ -79,7 +79,7 @@
 	  border-radius: 5px;
 	  color: #fff;
 	  content: attr(aria-label);
-	  padding: 1rem;
+	  padding: 0.7rem;
 	  text-transform: none;
 	  transition: all 0.5s ease;
 	  width: 140px;
