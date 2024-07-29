@@ -54,6 +54,14 @@
     hasLoadedSettings = true;
   };
 
+  let saveChats = ''; // This will hold the value of the selected option
+
+  // Function to be called whenever the selection changes
+  function handleSelectionChange() {
+    console.log('Selection changed to:', saveChats);
+    // Additional logic based on the selection can be implemented here
+  };
+
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const chat = document.getElementById('chat');
@@ -156,16 +164,34 @@
               </div>
               <div class="flex">
                 <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-                  <li class="w-full  border-b border-gray-200 sm:border-b-0 sm:border-r">
-                    <div class="flex items-center ps-3 ">
-                      <input id="horizontal-list-radio-license" type="radio" value="" name="list-radio" class=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
-                      <label for="horizontal-list-radio-license" class=" cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Save my chats </label>
+                  <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                    <div class="flex items-center ps-3">
+                      <input 
+                        id="horizontal-list-radio-license" 
+                        type="radio" 
+                        value="save" 
+                        name="list-radio" 
+                        class="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                        bind:group={saveChats} 
+                        on:change={handleSelectionChange}>
+                      <label for="horizontal-list-radio-license" class="cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        Save my chats
+                      </label>
                     </div>
                   </li>
                   <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
                     <div class="flex items-center ps-3 cursor-pointer">
-                      <input id="horizontal-list-radio-id" type="radio" value="" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer">
-                      <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">Do not save my chats</label>
+                      <input 
+                        id="horizontal-list-radio-id" 
+                        type="radio" 
+                        value="doNotSave" 
+                        name="list-radio" 
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer"
+                        bind:group={saveChats} 
+                        on:change={handleSelectionChange}>
+                      <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">
+                        Do not save my chats
+                      </label>
                     </div>
                   </li>
                 </ul>
