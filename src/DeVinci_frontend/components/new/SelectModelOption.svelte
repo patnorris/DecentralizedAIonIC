@@ -220,7 +220,7 @@
     <div class="p-3 pt-1 pb-2">
       {#if downloadProgress && downloadProgress !== 0}
         <div class="w-full bg-gray-200 my-1 rounded-full">
-          <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 45%">{downloadProgress}</div>
+          <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{downloadProgress}</div>
         </div>
       {/if}
       {#if isDownloaded}
