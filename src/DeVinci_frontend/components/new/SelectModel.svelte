@@ -9,6 +9,7 @@
   import { userHasDownloadedModel } from "../../helpers/localStorage";
 
   export let onlyShowDownloadedModels = false;
+  export let autoInitiateSelectedModel = false;
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
@@ -31,6 +32,7 @@
           size={option.size}
           bind:chatModelDownloadInProgress
           onlyShowIfDownloaded={onlyShowDownloadedModels}
+          autoInitiateIfModelSelected={autoInitiateSelectedModel}
         />
       {:else}
         <SelectModelOption
