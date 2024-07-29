@@ -108,8 +108,7 @@
           <p class="my-4">In an era where data privacy and trustworthiness are highly valued, DeVinci stands at the forefront. It provides a personalized AI assistant experience that not only safeguards user privacy but also ensures unbiased, honest interactions. With DeVinci, you can have meaningful conversations, ask questions, seek help, and feel confident that your AI assistant truly has your best interests at heart.</p>
           <p class="my-4">We hope you enjoy your interactions with DeVinci and that it'll be highly useful to you as your favorite AI assistant. For any feedback or questions, please get in touch with us. Thank you for using our app and DeVinci!</p>
           <h3 class="font-bold">Credits</h3>
-          <p>Running DeVinci in your browser is enabled by the great open-source project <a href='https://webllm.mlc.ai/' target='_blank' rel="noreferrer" class='underline'>Web LLM</a></p>
-          <p>Serving this app and hosting your data securely and in a decentralized way is made possible by the <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a></p>
+          <p>Vector graphics sponsored by <a href="https://www.freepik.com/">Freepik.</a> Running DeVinci in your browser is enabled by the great open-source project <a href='https://webllm.mlc.ai/' target='_blank' rel="noreferrer" class='underline'>Web LLM.</a> Serving this app and hosting your data securely and in a decentralized way is made possible by the <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a></p>
         </article>
       </div>
     </main>
