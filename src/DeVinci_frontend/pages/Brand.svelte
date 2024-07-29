@@ -1,7 +1,7 @@
 <script lang="ts">
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
-  import Newsletter from "../components/Newsletter.svelte";
+  import Footer from "../components/new/Footer.svelte";
 
   import { onMount } from 'svelte';
 
@@ -149,17 +149,12 @@
         </article>
       </div>
     </main>
-
-<!--    <Newsletter />-->
-
+    <Footer />
   </main>
 </div>
 
-<style global>
-	.footer {
-		background: rgba(255,255,255,1);
-		padding-top: 10px;
-	}
+<style>
+
 </style>
 
 

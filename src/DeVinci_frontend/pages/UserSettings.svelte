@@ -10,6 +10,7 @@
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
   import SelectModel from "../components/new/SelectModel.svelte";
+  import Footer from "../components/new/Footer.svelte";
 
   import devincilogo from "/devinci-logo.svg";
 
@@ -166,13 +167,13 @@
                 <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
                   <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
                     <div class="flex items-center ps-3">
-                      <input 
-                        id="horizontal-list-radio-license" 
-                        type="radio" 
-                        value="save" 
-                        name="list-radio" 
+                      <input
+                        id="horizontal-list-radio-license"
+                        type="radio"
+                        value="save"
+                        name="list-radio"
                         class="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
-                        bind:group={saveChats} 
+                        bind:group={saveChats}
                         on:change={handleSelectionChange}>
                       <label for="horizontal-list-radio-license" class="cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                         Save my chats
@@ -181,13 +182,13 @@
                   </li>
                   <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
                     <div class="flex items-center ps-3 cursor-pointer">
-                      <input 
-                        id="horizontal-list-radio-id" 
-                        type="radio" 
-                        value="doNotSave" 
-                        name="list-radio" 
+                      <input
+                        id="horizontal-list-radio-id"
+                        type="radio"
+                        value="doNotSave"
+                        name="list-radio"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer"
-                        bind:group={saveChats} 
+                        bind:group={saveChats}
                         on:change={handleSelectionChange}>
                       <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">
                         Do not save my chats
@@ -202,6 +203,7 @@
         <SelectModel />
       </div>
     </main>
+    <Footer />
   </main>
 </div>
 

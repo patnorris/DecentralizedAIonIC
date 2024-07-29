@@ -8,17 +8,17 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full">
       <div class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#f9c490] rounded-lg">
         <div class="inline-flex items-center justify-between w-full p-3 peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
-          <p class="w-full text-[#151b1e] text-sm font-normal">Recommend a good book.</p>
+          <p class="w-full text-[#151b1e] text-sm font-normal">Recommend a good book</p>
         </div>
       </div>
       <div class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#a1c490] rounded-lg">
         <div class="inline-flex items-center justify-between w-full p-3 peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
-          <p class="w-full text-[#151b1e] text-sm font-normal">Explain quantum physics.</p>
+          <p class="w-full text-[#151b1e] text-sm font-normal">Explain quantum physics</p>
         </div>
       </div>
       <div class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#f0e68c] rounded-lg">
         <div class="inline-flex items-center justify-between w-full p-3 peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
-          <p class="w-full text-[#151b1e] text-sm font-normal">Share a fun fact.</p>
+          <p class="w-full text-[#151b1e] text-sm font-normal">Share a fun fact</p>
         </div>
       </div>
         <div class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#cb8bd0] rounded-lg">
@@ -28,8 +28,6 @@
         </div>
       </div>
   </div>
-
-
 </div>
 
 <style>

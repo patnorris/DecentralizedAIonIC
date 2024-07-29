@@ -2,10 +2,10 @@
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
   import Newsletter from "../components/Newsletter.svelte";
+  import Footer from "../components/new/Footer.svelte";
+  import devincilogo from "/devinci-logo.svg";
 
   import { onMount } from 'svelte';
-
-  import devincilogo from "/devinci-logo.svg";
 
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -114,6 +114,7 @@
     </main>
 
     <Newsletter />
+    <Footer />
 
   </main>
 </div>
