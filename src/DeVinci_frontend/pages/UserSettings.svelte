@@ -111,10 +111,10 @@
       </div>
     </header>
 
-    <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
+    <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
       <div class="flex flex-col justify-between px-4 mx-auto max-w-screen-xl ">
         <!-- Breadcrumb -->
-        <nav class="justify-between m-4 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+        <nav class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
           <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
             <li>
               <div class="flex items-center">

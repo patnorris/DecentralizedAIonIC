@@ -35,61 +35,63 @@
   };
 
   document.addEventListener("DOMContentLoaded", function() {
-    const spans = document.querySelectorAll(".performance-span");
+    setTimeout(function() {
+      const spans = document.querySelectorAll(".performance-span");
 
-    // Define a mapping of performance to background colors
-    const backgroundColors = {
-      "Good": "#f9c490",
-      "Super Good": "#a1c490",
-      "Alright": "#f0e68c",
-      "Good for Chinese": "#76c7be",
-      "Great for Math": "rgb(237, 98, 98)",
-      "Insane": "rgb(203, 139, 208)",
-    };
+      // Define a mapping of performance to background colors
+      const backgroundColors = {
+        "Good": "#f9c490",
+        "Super Good": "#a1c490",
+        "Alright": "#f0e68c",
+        "Good for Chinese": "#76c7be",
+        "Great for Math": "rgb(237, 98, 98)",
+        "Insane": "rgb(203, 139, 208)",
+      };
 
-    // Function to set background color and save to localStorage
-    function setBackgroundColor(span) {
-      const performance = span.textContent.trim(); // Get the text content of the span and trim any whitespace
-      if (backgroundColors[performance]) {
-        const color = backgroundColors[performance];
-        span.style.backgroundColor = color;
-        // Save the color to localStorage
-        localStorage.setItem(`span-${performance}`, color);
+      // Function to set background color and save to localStorage
+      function setBackgroundColor(span) {
+        const performance = span.textContent.trim(); // Get the text content of the span and trim any whitespace
+        if (backgroundColors[performance]) {
+          const color = backgroundColors[performance];
+          span.style.backgroundColor = color;
+          // Save the color to localStorage
+          localStorage.setItem(`span-${performance}`, color);
+        }
       }
-    }
 
-    // Function to load background color from localStorage
-    function loadBackgroundColor(span) {
-      const performance = span.textContent.trim();
-      const savedColor = localStorage.getItem(`span-${performance}`);
-      if (savedColor) {
-        span.style.backgroundColor = savedColor;
-      } else {
-        // If no saved color, set it
-        setBackgroundColor(span);
+      // Function to load background color from localStorage
+      function loadBackgroundColor(span) {
+        const performance = span.textContent.trim();
+        const savedColor = localStorage.getItem(`span-${performance}`);
+        if (savedColor) {
+          span.style.backgroundColor = savedColor;
+        } else {
+          // If no saved color, set it
+          setBackgroundColor(span);
+        }
       }
-    }
 
-    // Apply background color change to each span element
-    spans.forEach(span => loadBackgroundColor(span));
+      // Apply background color change to each span element
+      spans.forEach(span => loadBackgroundColor(span));
 
-    // Observer to apply background colors on subsequent navigations
-    const observer = new MutationObserver(function() {
-      // Add a delay before applying background colors
-      setTimeout(function() {
-        const spans = document.querySelectorAll(".performance-span");
-        spans.forEach(span => {
-          const performance = span.textContent.trim();
-          const savedColor = localStorage.getItem(`span-${performance}`);
-          if (savedColor) {
-            span.style.backgroundColor = savedColor;
+      // Observer to apply background colors on subsequent navigations
+      const observer = new MutationObserver(function(mutationsList, observer) {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList' && mutation.addedNodes.length) {
+            mutation.addedNodes.forEach(node => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const newSpans = node.querySelectorAll(".performance-span");
+                newSpans.forEach(span => loadBackgroundColor(span));
+              }
+            });
           }
-        });
-      }, 1000); // 1 second delay
-    });
+        }
+      });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }, 100); // 100ms delay
   });
+
 
   const updateUserSettings = async (modelId) => {
     // Persist to backend
@@ -97,7 +99,7 @@
       selectedAiModelId: modelId,
     };
     try {
-      const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);            
+      const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);
       // @ts-ignore
       if (settingsUpdatedResponse.Ok) {
         syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online

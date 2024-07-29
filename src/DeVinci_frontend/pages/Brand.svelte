@@ -66,7 +66,7 @@
       </div>
     </header>
 
-    <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
+    <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
       <div class="flex justify-between px-4 mx-auto max-w-screen-xl ">
         <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
           <header class="mb-4 lg:mb-6 not-format">
@@ -97,7 +97,7 @@
               <a href="{devincilogopngdownload}" download  class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Download PNG</a>
             </div>
           </div>
-          <h1 class="my-14 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Color codification</h1>
+          <h1 class="my-14 mt-32 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Color codification</h1>
           <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Primary colors</h1>
 
           <div class="flex flex-col items-center bg-white mb-2 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl">
