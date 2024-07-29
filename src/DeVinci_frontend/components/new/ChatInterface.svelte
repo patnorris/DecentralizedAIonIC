@@ -39,6 +39,20 @@
     useKnowledgeBase = true;
   };
 
+  const scrollToBottom = () => {
+    console.log("in ChatInterface scrollToBottom ");
+    const chatInterfaceNode = document.getElementById("chatinterface");
+    console.log("in ChatInterface scrollToBottom chatInterfaceNode ", chatInterfaceNode);
+    console.log("in ChatInterface scrollToBottom chatInterfaceNode.scrollHeight ", chatInterfaceNode.scrollHeight);
+		const scroll = () => chatInterfaceNode.scroll({
+			top: chatInterfaceNode.scrollHeight,
+			behavior: 'smooth',
+		});
+		scroll();
+
+		return { update: scroll }
+	};
+
   // Debug Android
   //let debugOutput = "";
 
@@ -55,6 +69,7 @@
   };
 
   async function getChatModelResponse(prompt, progressCallback = generateProgressCallback) {
+    scrollToBottom();
     try {
       /* debugOutput = "###in getChatModelResponse###";
       debugOutput += JSON.stringify(prompt);
@@ -187,9 +202,9 @@
   };
 </script>
 
-<div class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
+<div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
-    <SelectModel onlyShowDownloadedModels={true}/>
+    <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
   <StartUpChatPanel />
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>

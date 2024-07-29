@@ -18,6 +18,18 @@
 
   let messageGenerationInProgress = false;
 
+  const scrollToBottom = node => {
+    console.log("in ChatBox scrollToBottom node ", node);
+    console.log("in ChatBox scrollToBottom node.scrollHeight ", node.scrollHeight);
+		const scroll = () => node.scroll({
+			top: node.scrollHeight,
+			behavior: 'smooth',
+		});
+		scroll();
+
+		return { update: scroll }
+	};
+
 // Toggle whether user wants their messages to be stored
   let storeChatToggle = true;
 
@@ -169,7 +181,7 @@
   </div>
 {/if} -->
 
-<div class="messages">
+<div class="messages h-full" style="overflow:auto;" use:scrollToBottom={messages}>
   {#each messages as message (message.content)}
     <Message {message} />
   {/each}

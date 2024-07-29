@@ -13,6 +13,7 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../../helpers/localStorage";
+    import { onMount } from "svelte";
 
   export let id;
   export let name;
@@ -23,6 +24,7 @@
   export let size;
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
+  export let autoInitiateIfModelSelected = false;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
@@ -198,6 +200,19 @@
     chatModelDownloadInProgress = false;
     console.log("in loadChatModel loaded");
   };
+
+  onMount(async () => {
+    console.log("in SelectedModelOption onMount autoInitiateIfModelSelected ", autoInitiateIfModelSelected);
+    console.log("in SelectedModelOption onMount id ", id);
+    console.log("in SelectedModelOption onMount $selectedAiModelId ", $selectedAiModelId);
+    if (autoInitiateIfModelSelected) {
+      // Initiate the model without the user having to click
+      // if this model is the currently selected one
+      if ($selectedAiModelId === id) {
+        loadChatModel(id);
+      };
+    };
+  });
 
 </script>
 
