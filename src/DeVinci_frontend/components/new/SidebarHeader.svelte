@@ -62,10 +62,8 @@
 	  height: 64px; /* h-16 in Tailwind CSS */
 	  padding: 0; /* p-0 in Tailwind CSS */
 	  border-radius: 50%; /* rounded-full in Tailwind CSS */
-	  background-color: #f9fafb; /* bg-gray-50 in Tailwind CSS */
 	  animation: rotate 360s linear infinite;
   }
-
 
   .tooltip-toggle {
 	  cursor: pointer;
