@@ -217,10 +217,10 @@
 </script>
 
 {#if !onlyShowIfDownloaded || isDownloaded}
-  <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg">
+  <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
     <div>
       <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" on:click={() => loadChatModel(id)} />
-      <label for={id} class="inline-flex items-center justify-between w-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-gray-50">
+      <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
         <div class="block">
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
           <div class="w-full text-sm font-normal">{parameters}</div>
