@@ -1,4 +1,7 @@
-import { store } from "../store";
+import {
+  store,
+  saveChatsUserSelection
+} from "../store";
 
 let storeState;
 store.subscribe((value) => storeState = value);
@@ -36,6 +39,13 @@ export function setLocalFlag(flagType, flagObject) {
       modelsObject[flagObject.modelId] = flagObject.downloadProgress;
       localStorage.setItem(flagType, JSON.stringify(modelsObject));      
     };
+  } else if (flagType === "saveChatsUserSelection") {
+    // Flag to indicate whether the user selected to store the chats or not
+    if (flagObject.saveChats) {
+      saveChatsUserSelection.set(flagObject.saveChats); // automatically updates localStorage flag
+    } else {
+      return false;          
+    };
   } else {
     return false;
   };
@@ -68,6 +78,14 @@ export function getLocalFlag(flagType, flagObject=null) {
       };
     } else {
       return 0;
+    };
+  } else if (flagType === "saveChatsUserSelection") {
+    // Flag to indicate whether the user selected to store the chats or not
+    const saveChatsFlag = localStorage.getItem(flagType); //flag value is a string
+    if (saveChatsFlag) {
+      return saveChatsFlag;
+    } else {
+      return null;          
     };
   } else {
     return null;

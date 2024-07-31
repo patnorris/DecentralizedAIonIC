@@ -15,7 +15,12 @@
   import devincilogo from "/devinci-logo.svg";
 
   import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
-  import { syncLocalChanges, setUserSettingsSyncFlag } from "../helpers/localStorage";
+  import {
+    syncLocalChanges,
+    setUserSettingsSyncFlag,
+    setLocalFlag,
+    getLocalFlag
+  } from "../helpers/localStorage";
 
   let hasLoadedSettings = false;
 
@@ -55,12 +60,13 @@
     hasLoadedSettings = true;
   };
 
-  let saveChats = ''; // This will hold the value of the selected option
+  // Holds the value of the selected option whether to store chats or not
+  let saveChats = getLocalFlag("saveChatsUserSelection") || "save"; // default is save
 
-  // Function to be called whenever the selection changes
+  // Function to be called whenever the chat storage selection changes
   function handleSelectionChange() {
     console.log('Selection changed to:', saveChats);
-    // Additional logic based on the selection can be implemented here
+    setLocalFlag("saveChatsUserSelection", {saveChats: saveChats});
   };
 
   onMount(() => {
