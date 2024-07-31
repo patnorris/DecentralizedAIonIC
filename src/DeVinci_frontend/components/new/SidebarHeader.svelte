@@ -1,4 +1,5 @@
 <script>
+  import { location, push } from 'svelte-spa-router';
   import {
     store,
     activeChatGlobal
@@ -17,6 +18,10 @@
   // User can select between chats (global variable is kept)
   async function showNewChat() {
     $activeChatGlobal = null;
+    if ($location !== "/devinci") {
+      console.log("in showNewChat location ", $location);
+      push('/devinci');
+    };
     return;
   };
 
@@ -31,7 +36,7 @@
       New chat
     </button>
   {:else}
-    <button disabled aria-label="Choose a model first." type="button" on:click={showNewChat} class="tooltip-toggle disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto w-full my-5 flex justify-center text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
+    <button disabled aria-label="Choose a model first." type="button" class="tooltip-toggle disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto w-full my-5 flex justify-center text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
       New chat
     </button>
   {/if}
