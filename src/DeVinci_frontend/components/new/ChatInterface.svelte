@@ -1,5 +1,4 @@
 <script lang="ts">
-  import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from 'svelte';
   import {
     chatModelGlobal,
@@ -18,17 +17,36 @@
   import ChatBox from "./ChatBox.svelte";
   import StartUpChatPanel from "./StartUpChatPanel.svelte";
 
+  import { userHasDownloadedModel } from "../../helpers/localStorage";
+
+  // Reactive statement to check if the user has already downloaded at least one AI model
+  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+
   const workerPath = './worker.ts';
 
   let showToast = false;
 
-  onMount(() => {
-    showToast = true; // Show toast on load
+  function isPWAInstalled() {
+    return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
+  };
 
-    // Automatically hide the toast
-    setTimeout(() => {
-      showToast = false;
-    }, 8000);
+  onMount(() => {
+    if (!userHasDownloadedAtLeastOneModel && !isPWAInstalled()) {
+      // Check if the toast has already been shown in this session
+      const hasShownToast = sessionStorage.getItem('hasShownToast');
+
+      if (!hasShownToast) {
+        showToast = true; // Show toast on load
+
+        // Set in sessionStorage that the toast has been shown
+        sessionStorage.setItem('hasShownToast', 'true');
+
+        // Automatically hide the toast after 8 seconds
+        setTimeout(() => {
+          showToast = false;
+        }, 8000);
+      };
+    };
   });
 
   let vectorDbSearchTool;
@@ -209,7 +227,9 @@
   {#if $chatModelIdInitiatedGlobal}
     <StartUpChatPanel />
   {/if}
-  <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+  {#if userHasDownloadedAtLeastOneModel}
+    <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+  {/if}
 </div>
 
 {#if showToast}
