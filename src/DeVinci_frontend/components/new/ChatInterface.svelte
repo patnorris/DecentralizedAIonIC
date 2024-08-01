@@ -16,7 +16,6 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import StartUpChatPanel from "./StartUpChatPanel.svelte";
 
   const workerPath = './worker.ts';
 
@@ -206,9 +205,7 @@
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
-  {#if $chatModelIdInitiatedGlobal}
-    <StartUpChatPanel />
-  {/if}
+
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
 

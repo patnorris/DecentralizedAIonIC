@@ -3,7 +3,7 @@
 </script>
 
 <div>
-  <div class="flex flex-col justify-center w-full items-center h-[calc(80vh-100px)]">
+  <div class="flex flex-col justify-center w-full items-center">
       <img src={devincilogo} class="rotating-image w-16 h-16 p-0 m-8 rounded-full" alt="devinci logo" />
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full">
       <div class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#f9c490] rounded-lg">

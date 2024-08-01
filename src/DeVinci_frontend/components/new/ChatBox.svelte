@@ -4,6 +4,7 @@
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
+  import StartUpChatPanel from "./StartUpChatPanel.svelte";
 
   import spinner from "../../assets/loading.gif";
 
@@ -181,7 +182,10 @@
   </div>
 {/if} -->
 
-<div class="messages h-full" style="overflow:auto;" use:scrollToBottom={messages}>
+<div class="messages h-[calc(100vh-164px)]" style="overflow:auto;" use:scrollToBottom={messages}>
+  {#if $chatModelIdInitiatedGlobal}
+    <StartUpChatPanel />
+  {/if}
   {#each messages as message (message.content)}
     <Message {message} />
   {/each}
