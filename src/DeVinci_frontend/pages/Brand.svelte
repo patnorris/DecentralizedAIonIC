@@ -146,6 +146,23 @@
               <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">rgb(203, 139, 208)</h5>
             </div>
           </div>
+
+          <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl dark:text-white">Typography</h1>
+
+          <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">Sans-serif </h5>
+          <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+<code>font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";</code>
+          </pre>
+          <h5 class="my-4 text-xl font-bold tracking-tight text-gray-500">Serif </h5>
+          <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+<code>font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;</code>
+          </pre>
+
+          <h5 class="my-4 text-xl font-bold tracking-tight text-gray-500">Mono </h5>
+          <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+<code>font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;</code>
+          </pre>
+
         </article>
       </div>
     </main>
