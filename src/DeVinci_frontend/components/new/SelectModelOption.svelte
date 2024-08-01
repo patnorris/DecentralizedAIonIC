@@ -1,5 +1,6 @@
 <script>
   import * as webllm from "@mlc-ai/web-llm";
+  import { location, push } from 'svelte-spa-router';
 
   import {
     store,
@@ -199,6 +200,10 @@
     $chatModelIdInitiatedGlobal = modelOptionId;
     chatModelDownloadInProgress = false;
     console.log("in loadChatModel loaded");
+    if ($location !== "/devinci") {
+      console.log("in loadChatModel location ", $location);
+      push('/devinci');
+    };
   };
 
   onMount(async () => {
