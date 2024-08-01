@@ -177,7 +177,7 @@
           downloadProgress = report.text;
         };
       } else {
-        downloadProgress = "Initiating...";
+        downloadProgress = "Initiating... please wait...";
       };
     };
     try {
