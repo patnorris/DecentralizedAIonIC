@@ -206,7 +206,9 @@
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
-  <StartUpChatPanel />
+  {#if $chatModelIdInitiatedGlobal}
+    <StartUpChatPanel />
+  {/if}
   <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
 </div>
 
