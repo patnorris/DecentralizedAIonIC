@@ -183,7 +183,7 @@
 {/if} -->
 
 <div class="messages h-[calc(100vh-164px)]" style="overflow:auto;" use:scrollToBottom={messages}>
-  {#if $chatModelIdInitiatedGlobal}
+  {#if $chatModelIdInitiatedGlobal && messages.length === 0}
     <StartUpChatPanel />
   {/if}
   {#each messages as message (message.content)}
