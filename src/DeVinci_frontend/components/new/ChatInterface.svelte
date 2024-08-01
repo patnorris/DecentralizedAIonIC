@@ -15,7 +15,6 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import StartUpChatPanel from "./StartUpChatPanel.svelte";
 
   import { userHasDownloadedModel } from "../../helpers/localStorage";
 
@@ -223,9 +222,6 @@
 <div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
-  {/if}
-  {#if $chatModelIdInitiatedGlobal}
-    <StartUpChatPanel />
   {/if}
   {#if userHasDownloadedAtLeastOneModel}
     <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
