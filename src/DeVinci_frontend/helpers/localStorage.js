@@ -40,8 +40,10 @@ export function setLocalFlag(flagType, flagObject) {
       localStorage.setItem(flagType, JSON.stringify(modelsObject));      
     };
   } else if (flagType === "saveChatsUserSelection") {
+    console.log("in setLocalFlag saveChatsUserSelection ", flagObject.saveChats);
     // Flag to indicate whether the user selected to store the chats or not
-    if (flagObject.saveChats) {
+    if (flagObject.saveChats !== null) {
+      console.log("in setLocalFlag saveChatsUserSelection before set");
       saveChatsUserSelection.set(flagObject.saveChats); // automatically updates localStorage flag
     } else {
       return false;          
@@ -80,12 +82,14 @@ export function getLocalFlag(flagType, flagObject=null) {
       return 0;
     };
   } else if (flagType === "saveChatsUserSelection") {
+    console.log("in getLocalFlag saveChatsUserSelection");
     // Flag to indicate whether the user selected to store the chats or not
-    const saveChatsFlag = localStorage.getItem(flagType); //flag value is a string
-    if (saveChatsFlag) {
-      return saveChatsFlag;
+    const saveChatsFlag = localStorage.getItem(flagType); //flag value is a stringified Bool
+    console.log("in getLocalFlag saveChatsUserSelection saveChatsFlag ", saveChatsFlag);
+    if (saveChatsFlag === "false") {
+      return false;
     } else {
-      return null;          
+      return true;
     };
   } else {
     return null;

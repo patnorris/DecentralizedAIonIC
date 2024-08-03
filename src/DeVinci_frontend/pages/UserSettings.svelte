@@ -61,12 +61,17 @@
   };
 
   // Holds the value of the selected option whether to store chats or not
-  let saveChats = getLocalFlag("saveChatsUserSelection") || "save"; // default is save
+  let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
 
   // Function to be called whenever the chat storage selection changes
   function handleSelectionChange() {
     console.log('Selection changed to:', saveChats);
-    setLocalFlag("saveChatsUserSelection", {saveChats: saveChats});
+    let saveChatsValue = true;
+    if (saveChats === "doNotSave") {
+      saveChatsValue = false;
+    };
+    console.log('i.e.:', saveChatsValue);
+    setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
   };
 
   onMount(() => {

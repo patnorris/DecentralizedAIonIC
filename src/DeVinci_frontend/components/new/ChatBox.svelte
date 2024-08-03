@@ -8,6 +8,10 @@
 
   import spinner from "../../assets/loading.gif";
 
+  import {
+    getLocalFlag
+  } from "../../helpers/localStorage";
+
   export let modelCallbackFunction;
   export let chatDisplayed;
   export let callbackSearchVectorDbTool;
@@ -31,12 +35,8 @@
 		return { update: scroll }
 	};
 
-// Toggle whether user wants their messages to be stored
-  let storeChatToggle = true;
-
-  function handleStoreChatToggle() {
-    storeChatToggle = !storeChatToggle;
-  };
+// Whether user wants their messages to be stored
+  let saveChats = getLocalFlag("saveChatsUserSelection"); // default is save
 
   function formatMessagesForBackend(messagesToFormat) {
     // Map each message to a new format
@@ -88,7 +88,7 @@
     }
     messageGenerationInProgress = false;
     // Store chat
-    if (storeChatToggle && $store.isAuthed) {
+    if (saveChats && $store.isAuthed) {
       // Get messages into format for backend
       const messagesFormattedForBackend = formatMessagesForBackend(messages);
       if(chatDisplayed) {
