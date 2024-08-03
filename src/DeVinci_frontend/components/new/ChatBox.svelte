@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store, chatModelIdInitiatedGlobal } from "../../store";
+  import { store, chatModelIdInitiatedGlobal, chatModelGlobal } from "../../store";
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
@@ -156,6 +156,13 @@
   let chatRetrievalInProgress = false;
 
   const loadChat = async () => {
+    if($chatModelGlobal) {
+      try {
+        await $chatModelGlobal.interruptGenerate(); // stop any previously triggered answer generations to not interfere in this chat        
+      } catch (error) {
+        console.error("Error stopping the answer generation on loading chat ", error);        
+      };
+    };
     if(chatDisplayed) {
       chatRetrievalInProgress = true;
       const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);

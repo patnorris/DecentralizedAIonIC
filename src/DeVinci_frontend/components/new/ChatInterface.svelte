@@ -211,12 +211,6 @@
     // if no reply was returned, an error occurred
     throw new Error('An error occurred');
   };
-
-// User can select between chats (global variable is kept)
-  async function showNewChat() {
-    $activeChatGlobal = null;
-    return;
-  };
 </script>
 
 <div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
@@ -224,7 +218,9 @@
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
   {#if userHasDownloadedAtLeastOneModel}
-    <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+    {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+    {/key}
   {/if}
 </div>
 
