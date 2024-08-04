@@ -72,8 +72,11 @@
     };
   };
 
-  async function sendMessage() {
+  async function sendMessage(messageTextInput=null) {
     messageGenerationInProgress = true;
+    if(messageTextInput){
+      newMessageText = messageTextInput;
+    };
     if(newMessageText.trim() !== '') {
       const newPrompt = newMessageText.trim();
       const newMessageEntry = { role: 'user', content: newPrompt, name: 'You' };
@@ -246,7 +249,7 @@
 
 <div class="messages h-[calc(100vh-164px)]" style="overflow:auto;" use:scrollToBottom={messages}>
   {#if $chatModelIdInitiatedGlobal && messages.length === 0}
-    <StartUpChatPanel />
+    <StartUpChatPanel sendMessageCallbackFunction={sendMessage} />
   {/if}
   {#each messages as message (message.content)}
     <Message {message} />
