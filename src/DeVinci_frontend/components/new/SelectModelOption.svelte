@@ -1,5 +1,6 @@
 <script>
   import * as webllm from "@mlc-ai/web-llm";
+  import { onMount } from "svelte";
   import { location, push } from 'svelte-spa-router';
 
   import {
@@ -14,7 +15,6 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../../helpers/localStorage";
-    import { onMount } from "svelte";
 
   export let id;
   export let name;
