@@ -9,7 +9,12 @@
   import spinner from "../../assets/loading.gif";
 
   import {
-    getLocalFlag
+    getLocalFlag,
+    getLocallyStoredChat,
+    removeLocalChangeToBeSynced,
+    storeChatLocally,
+    storeLocalChangeToBeSynced,
+    syncLocalChanges,
   } from "../../helpers/localStorage";
 
   export let modelCallbackFunction;
@@ -77,15 +82,14 @@
       newMessageText = '';
       try {
         messages = [...messages, { role: 'assistant', content: replyText, name: 'DeVinci' }];
-        const promptFormattedForModel = [newMessageEntry]; // passing in the message history easily overwhelms the available device memory --> TODO: find good way to keep memory (as currently each message is like a new chat without the LLM knowing about any messages before)
-        const reply = await modelCallbackFunction(promptFormattedForModel, generateProgressCallback);
+        const reply = await modelCallbackFunction(messageHistoryWithPrompt.slice(-5), generateProgressCallback); // passing in much of the message history easily overwhelms the available device memory
         messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }];
       } catch (error) {
         console.error("Error getting response from model: ", error);
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
       }
       replyText = 'Thinking...';
-    }
+    };
     messageGenerationInProgress = false;
     // Store chat
     if (saveChats && $store.isAuthed) {
