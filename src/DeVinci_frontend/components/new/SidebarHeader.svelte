@@ -17,7 +17,11 @@
 
   // User can select between chats (global variable is kept)
   async function showNewChat() {
-    $activeChatGlobal = null;
+    if ($activeChatGlobal !== null) {
+      $activeChatGlobal = null;
+    } else {
+      $activeChatGlobal = false;
+    };
     if ($location !== "/devinci") {
       console.log("in showNewChat location ", $location);
       push('/devinci');

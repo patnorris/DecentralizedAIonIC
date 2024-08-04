@@ -1,12 +1,12 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { deviceType, supportsWebGpu } from "../store";
+  
   import Sidebar from "../components/new/Sidebar.svelte";
   import Navigation from "../components/new/Navigation.svelte";
   import ChatInterface from "../components/new/ChatInterface.svelte";
   import UnsupportedBrowserBanner from "../components/new/UnsupportedBrowserBanner.svelte";
   import UnsupportedDeviceBanner from "../components/new/UnsupportedDeviceBanner.svelte";
-
-  import { onMount } from 'svelte';
-  import { deviceType, supportsWebGpu } from "../store";
 
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
