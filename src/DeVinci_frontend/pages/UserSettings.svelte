@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import {
-      store,
-      selectedAiModelId,
-      deviceType,
-      userSettings
+    store,
+    selectedAiModelId,
+    deviceType,
+    userSettings
   } from "../store";
 
   import Sidebar from "../components/new/Sidebar.svelte";
