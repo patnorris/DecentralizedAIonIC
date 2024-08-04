@@ -99,8 +99,27 @@
         // Update chat
         try {
           const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend);
+          // @ts-ignore
+          if (chatUpdatedResponse.Err) {
+            // @ts-ignore
+            console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
+            throw new Error("Err updating chat messages");
+          } else {
+            // Remove this chat from chats to sync to avoid duplicates
+            const syncObject = {
+              chatId: chatDisplayed.id,
+            };
+            removeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+          };
         } catch (error) {
           console.error("Error storing chat: ", error);
+          // Store locally and sync when back online
+          const syncObject = {
+            chatId: chatDisplayed.id,
+            chatMessages: messagesFormattedForBackend,
+          };
+          storeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
         };
       } else {
         // New chat
@@ -110,6 +129,7 @@
           if (chatCreatedResponse.Err) {
             // @ts-ignore
             console.error("Error message creating new chat: ", chatCreatedResponse.Err);
+            throw new Error("Err creating new chat");
           } else {
             // @ts-ignore
             let newChatId = chatCreatedResponse.Ok;
@@ -120,9 +140,19 @@
               chatTitle: "",
             };
             chatDisplayed = newChatPreview;
+            // Remove the just created chat by its first message from new chats to sync to avoid duplicates
+            const syncObject = {
+              chatMessages: messagesFormattedForBackend,
+            };
+            removeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
+            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
           };
         } catch (error) {
           console.error("Error creating new chat: ", error);
+          const syncObject = {
+            chatMessages: messagesFormattedForBackend,
+          };
+          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
         };
       };
     };
@@ -167,14 +197,35 @@
         console.error("Error stopping the answer generation on loading chat ", error);        
       };
     };
+    chatRetrievalInProgress = true;
     if(chatDisplayed) {
-      chatRetrievalInProgress = true;
-      const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
-      // @ts-ignore
-      const chatHistory = chatHistoryResponse.Ok;
-      const formattedMessages = formatMessagesForUi(chatHistory.messages);
-      messages = formattedMessages;
+      try {
+        const chatHistoryResponse = await $store.backendActor.get_chat(chatDisplayed.id);
+        // @ts-ignore
+        if (chatHistoryResponse.Ok) {
+          // @ts-ignore
+          const chatHistory = chatHistoryResponse.Ok;
+          const formattedMessages = formatMessagesForUi(chatHistory.messages);
+          messages = formattedMessages;
+          // store chat locally for offline usage
+          storeChatLocally(chatDisplayed.id, chatHistory.messages);
+          syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+        } else {
+          // @ts-ignore
+          console.error("Error loading chat: ", chatHistoryResponse.Err);
+          // @ts-ignore
+          throw new Error("Error loading chat: ", chatHistoryResponse.Err);
+        };        
+      } catch (error) {
+        // Likely in offline usage
+        const storedMessages = getLocallyStoredChat(chatDisplayed.id);
+        if (storedMessages) {
+          const formattedMessages = formatMessagesForUi(storedMessages);
+          messages = formattedMessages;
+        };
+      };
     };
+    chatRetrievalInProgress = false;
     // Fresh chat
   };
 
