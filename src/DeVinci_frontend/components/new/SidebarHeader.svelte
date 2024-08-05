@@ -8,7 +8,7 @@
   import ChatHistory from "./ChatHistory.svelte";
 
   import newchaticon from "/newchat.svg";
-  import devincilogo from "/devinci-logo.svg";
+  import applogo from "/outlierventures_logo.jpeg";
 
   import { userHasDownloadedModel } from "../../helpers/localStorage";
 
@@ -22,9 +22,9 @@
     } else {
       $activeChatGlobal = false;
     };
-    if ($location !== "/devinci") {
+    if ($location !== "/outlierventuresdeai") {
       console.log("in showNewChat location ", $location);
-      push('/devinci');
+      push('/outlierventuresdeai');
     };
     return;
   };
@@ -32,8 +32,8 @@
 </script>
 
 <div class="flex flex-col justify-center w-full items-center">
-  <a href="#/devinci">
-      <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full" alt="devinci logo" />
+  <a href="#/outlierventuresdeai">
+      <img src={applogo} class="rotating-image w-16 h-16 p-0 rounded-full" alt="app logo" />
   </a>
   {#if userHasDownloadedAtLeastOneModel}
     <button type="button" on:click={showNewChat} class="disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-800 mr-auto w-full my-5 flex justify-center text-gray-800 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-full text-xs px-3 py-1.5 text-center">
@@ -71,7 +71,7 @@
 	  height: 64px; /* h-16 in Tailwind CSS */
 	  padding: 0; /* p-0 in Tailwind CSS */
 	  border-radius: 50%; /* rounded-full in Tailwind CSS */
-	  animation: rotate 360s linear infinite;
+	  /* animation: rotate 360s linear infinite; */
   }
 
   .tooltip-toggle {
