@@ -152,9 +152,9 @@
     const customAppConfig= {
       model_list: [
         {
-          model: "https://yi77p-fyaaa-aaaap-qblxa-cai.icp0.io/gemma-2b/",
+          model: "https://xfl6h-3qaaa-aaaai-acq3a-cai.raw.icp0.io/gemma-2b/",
           model_id: "gemma-2b-it-q4f32_1-MLC",
-          model_lib: "https://yi77p-fyaaa-aaaap-qblxa-cai.icp0.io/gemma-2b/gemma-2b-it-q4f32_1-ctx4k_cs1k-webgpu.wasm",
+          model_lib: "https://xfl6h-3qaaa-aaaai-acq3a-cai.raw.icp0.io/gemma-2b/gemma-2b-it-q4f32_1-ctx4k_cs1k-webgpu.wasm",
         },
         // Add your own models here...
       ],
