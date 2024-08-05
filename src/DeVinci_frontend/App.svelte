@@ -20,7 +20,7 @@
     "/settings": UserSettings,
     "/about": About,
     "/brand": Brand,
-    "/outlierventuresdeai": deVinci,
+    "/devinci": deVinci,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };

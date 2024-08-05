@@ -1,5 +1,5 @@
 <script lang="ts">
-  import devincilogo from "/outlierventures_logo.jpeg";
+  import devincilogo from "/devinci-logo.svg";
 
   export let sendMessageCallbackFunction;
 
