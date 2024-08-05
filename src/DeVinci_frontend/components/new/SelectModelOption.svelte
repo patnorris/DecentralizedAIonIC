@@ -1,5 +1,7 @@
 <script>
   import * as webllm from "@mlc-ai/web-llm";
+  import { onMount } from "svelte";
+  import { location, push } from 'svelte-spa-router';
 
   import {
     store,
@@ -13,7 +15,6 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../../helpers/localStorage";
-    import { onMount } from "svelte";
 
   export let id;
   export let name;
@@ -31,6 +32,8 @@
 
   $: downloadProgress = getLocalFlag("aiModelDownloadingProgress", {modelId: id});
   // $: downloadProgress = `${getLocalFlag("aiModelDownloadingProgress", {modelId: id})} %`;
+  let initiateText;
+  let downloadText;
 
   function toPercentage(floatValue, decimals = 2) {
     return (floatValue * 100).toFixed(decimals);
@@ -168,16 +171,20 @@
     const initProgressCallback = (report) => {
       console.log("in initProgressCallback report ", report);
       //setLabel("init-label", report.text);
-      if (report.progress) {
-        if (report.progress !== 0) {
-          downloadProgress = toPercentage(report.progress);
-          // Avoid setting the download progress for already downloaded models (which have progress as 0)
-          setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: report.progress});
-        } else {
-          downloadProgress = report.text;
-        };
+      if (isDownloaded) {
+        // Avoid setting the download progress for already downloaded models (which have progress as 0)
+        initiateText = "Initiating... please wait.";
       } else {
-        downloadProgress = "Initiating...";
+        if (report.progress) {
+          if (report.progress !== 0) {
+            downloadProgress = toPercentage(report.progress);
+            setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: toPercentage(report.progress)});
+          } else {
+            downloadText = report.text;
+          };
+        } else {
+          downloadText = "Downloading... please wait.";
+        };
       };
     };
     try {
@@ -199,6 +206,10 @@
     $chatModelIdInitiatedGlobal = modelOptionId;
     chatModelDownloadInProgress = false;
     console.log("in loadChatModel loaded");
+    if ($location !== "/devinci") {
+      console.log("in loadChatModel location ", $location);
+      push('/devinci');
+    };
   };
 
   onMount(async () => {
@@ -233,18 +244,30 @@
       </label>
     </div>
     <div class="p-3 pt-1 pb-2">
-      {#if downloadProgress && downloadProgress !== 0}
-        <div class="w-full bg-gray-200 my-1 rounded-full">
-          <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{downloadProgress}</div>
-        </div>
-      {/if}
       {#if isDownloaded}
+        {#if initiateText}
+          <div class="w-full bg-gray-200 my-1 rounded-full">
+            <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{initiateText}</div>
+          </div>
+        {/if}
         <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
           Downloaded
           <svg class="ml-0.5 w-3 h-3 text-[#151b1e]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
           </svg>
         </span>
+      {:else if downloadProgress}
+        {#if downloadProgress !== 0}
+          <div class="w-full bg-gray-200 my-1 rounded-full">
+            <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: {downloadProgress}%;">
+              {downloadProgress}%
+            </div>
+          </div>
+        {:else if downloadText}
+          <div class="w-full bg-gray-200 my-1 rounded-full">
+            <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{downloadText}</div>
+          </div>
+        {/if}
       {/if}
     </div>
   </li>

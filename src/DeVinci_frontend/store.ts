@@ -54,7 +54,7 @@ export let userSettings = writable(localStorage.getItem("userSettings"));
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId"));
 selectedAiModelId.subscribe((value) => localStorage.setItem("selectedAiModelId", value));
-export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") || "save"); // values: "save" or "doNotSave" with "save" as default
+export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
 saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
 export let vectorStore = writable(null);

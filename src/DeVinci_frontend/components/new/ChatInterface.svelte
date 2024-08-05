@@ -1,5 +1,4 @@
 <script lang="ts">
-  import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from 'svelte';
   import {
     chatModelGlobal,
@@ -16,19 +15,37 @@
   //import spinner from "../../assets/loading.gif";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import StartUpChatPanel from "./StartUpChatPanel.svelte";
+
+  import { userHasDownloadedModel } from "../../helpers/localStorage";
+
+  // Reactive statement to check if the user has already downloaded at least one AI model
+  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
 
   const workerPath = './worker.ts';
 
   let showToast = false;
 
-  onMount(() => {
-    showToast = true; // Show toast on load
+  function isPWAInstalled() {
+    return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
+  };
 
-    // Automatically hide the toast
-    setTimeout(() => {
-      showToast = false;
-    }, 8000);
+  onMount(() => {
+    if (!userHasDownloadedAtLeastOneModel && !isPWAInstalled()) {
+      // Check if the toast has already been shown in this session
+      const hasShownToast = sessionStorage.getItem('hasShownToast');
+
+      if (!hasShownToast) {
+        showToast = true; // Show toast on load
+
+        // Set in sessionStorage that the toast has been shown
+        sessionStorage.setItem('hasShownToast', 'true');
+
+        // Automatically hide the toast after 8 seconds
+        setTimeout(() => {
+          showToast = false;
+        }, 8000);
+      };
+    };
   });
 
   let vectorDbSearchTool;
@@ -194,20 +211,17 @@
     // if no reply was returned, an error occurred
     throw new Error('An error occurred');
   };
-
-// User can select between chats (global variable is kept)
-  async function showNewChat() {
-    $activeChatGlobal = null;
-    return;
-  };
 </script>
 
 <div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
-  <StartUpChatPanel />
-  <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+  {#if userHasDownloadedAtLeastOneModel}
+    {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+      <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
+    {/key}
+  {/if}
 </div>
 
 {#if showToast}
