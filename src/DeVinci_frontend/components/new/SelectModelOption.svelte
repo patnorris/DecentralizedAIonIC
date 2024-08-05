@@ -206,9 +206,9 @@
     $chatModelIdInitiatedGlobal = modelOptionId;
     chatModelDownloadInProgress = false;
     console.log("in loadChatModel loaded");
-    if ($location !== "/devinci") {
+    if ($location !== "/outlierventuresdeai") {
       console.log("in loadChatModel location ", $location);
-      push('/devinci');
+      push('/outlierventuresdeai');
     };
   };
 

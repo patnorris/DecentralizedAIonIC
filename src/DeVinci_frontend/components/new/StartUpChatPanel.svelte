@@ -9,10 +9,10 @@
   };
 
   // Sample prompts
-  const samplePrompt1 = 'Recommend a good book';
-  const samplePrompt2 = 'Explain quantum physics';
-  const samplePrompt3 = 'Share a fun fact';
-  const samplePrompt4 = 'How to cook pasta?';
+  const samplePrompt1 = 'Summarize their pitch deck';
+  const samplePrompt2 = 'Explain current market conditions';
+  const samplePrompt3 = 'What is their Go-to-market strategy';
+  const samplePrompt4 = 'Who are the founders?';
 </script>
 
 <div>
