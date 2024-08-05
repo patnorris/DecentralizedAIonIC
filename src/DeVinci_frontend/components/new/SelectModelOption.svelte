@@ -149,6 +149,16 @@
     if (!modelOptionId) {
       modelOptionId = $selectedAiModelId;
     };
+    const customAppConfig= {
+      model_list: [
+        {
+          model: "https://yi77p-fyaaa-aaaap-qblxa-cai.icp0.io/gemma-2b/",
+          model_id: "gemma-2b-it-q4f32_1-MLC",
+          model_lib: "https://yi77p-fyaaa-aaaap-qblxa-cai.icp0.io/gemma-2b/gemma-2b-it-q4f32_1-ctx4k_cs1k-webgpu.wasm",
+        },
+        // Add your own models here...
+      ],
+    };
     if (process.env.NODE_ENV !== "development") {
       console.log("Using web worker");
       try {
@@ -158,14 +168,14 @@
           {type: 'module'}
         )); */
         //console.log("Using webllm");
-        $chatModelGlobal = new webllm.MLCEngine();
+        $chatModelGlobal = new webllm.MLCEngine({ appConfig: customAppConfig });
       } catch (error) {
         console.error("Error loading web worker: ", error);
-        $chatModelGlobal = new webllm.MLCEngine();
+        $chatModelGlobal = new webllm.MLCEngine({ appConfig: customAppConfig });
       };
     } else {
       console.log("Using webllm");
-      $chatModelGlobal = new webllm.MLCEngine();
+      $chatModelGlobal = new webllm.MLCEngine({ appConfig: customAppConfig });
     };
 
     const initProgressCallback = (report) => {

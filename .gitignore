@@ -119,3 +119,5 @@ dist-ssr
 *.onnx_data
 *checkpoint
 *-ubyte
+
+src/DeVinci_frontend/assets/gemma-2b/*
