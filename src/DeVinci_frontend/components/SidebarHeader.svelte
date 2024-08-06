@@ -3,14 +3,14 @@
   import {
     store,
     activeChatGlobal
-  } from "../../store";
+  } from "../store";
 
   import ChatHistory from "./ChatHistory.svelte";
 
   import newchaticon from "/newchat.svg";
   import devincilogo from "/devinci-logo.svg";
 
-  import { userHasDownloadedModel } from "../../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/localStorage";
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();

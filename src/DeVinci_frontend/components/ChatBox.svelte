@@ -1,11 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store } from "../store";
+  import { store, chatModelIdInitiatedGlobal, chatModelGlobal } from "../store";
   import { now } from "svelte/internal";
 
-  import Message from './Message.svelte';
-  
+  import Message from './new/Message.svelte';
+  import StartUpChatPanel from "./new/StartUpChatPanel.svelte";
+
+  import spinner from "../../assets/loading.gif";
+
   import {
+    getLocalFlag,
     getLocallyStoredChat,
     removeLocalChangeToBeSynced,
     storeChatLocally,
@@ -15,6 +19,7 @@
 
   export let modelCallbackFunction;
   export let chatDisplayed;
+  export let callbackSearchVectorDbTool;
 
   let newMessageText = '';
   let messages = [];
@@ -23,12 +28,20 @@
 
   let messageGenerationInProgress = false;
 
-// Toggle whether user wants their messages to be stored
-  let storeChatToggle = true;
+  const scrollToBottom = node => {
+    console.log("in ChatBox scrollToBottom node ", node);
+    console.log("in ChatBox scrollToBottom node.scrollHeight ", node.scrollHeight);
+		const scroll = () => node.scroll({
+			top: node.scrollHeight,
+			behavior: 'smooth',
+		});
+		scroll();
 
-  function handleStoreChatToggle() {
-    storeChatToggle = !storeChatToggle;
-  };
+		return { update: scroll }
+	};
+
+// Whether user wants their messages to be stored
+  let saveChats = getLocalFlag("saveChatsUserSelection"); // default is save
 
   function formatMessagesForBackend(messagesToFormat) {
     // Map each message to a new format
@@ -59,8 +72,11 @@
     };
   };
 
-  async function sendMessage() {
+  async function sendMessage(messageTextInput=null) {
     messageGenerationInProgress = true;
+    if(messageTextInput){
+      newMessageText = messageTextInput;
+    };
     if(newMessageText.trim() !== '') {
       const newPrompt = newMessageText.trim();
       const newMessageEntry = { role: 'user', content: newPrompt, name: 'You' };
@@ -76,10 +92,10 @@
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
       }
       replyText = 'Thinking...';
-    }
+    };
     messageGenerationInProgress = false;
     // Store chat
-    if (storeChatToggle && $store.isAuthed) {
+    if (saveChats && $store.isAuthed) {
       // Get messages into format for backend
       const messagesFormattedForBackend = formatMessagesForBackend(messages);
       if(chatDisplayed) {
@@ -127,7 +143,7 @@
               chatTitle: "",
             };
             chatDisplayed = newChatPreview;
-            // TODO: remove the just created chat by its first message from new chats to sync to avoid duplicates
+            // Remove the just created chat by its first message from new chats to sync to avoid duplicates
             const syncObject = {
               chatMessages: messagesFormattedForBackend,
             };
@@ -145,10 +161,45 @@
     };
   };
 
+// User can upload a pdf and a vector database is set up including the pdf's content
+  let pathToUploadedPdf = '';
+  let initiatedKnowledgeDatabase = false;
+  let loadingKnowledgeDatabase = false;
+  let useKnowledgeBase = false;
+  //let persistingCurrentEmbeddings = false;
+  //let userHasExistingKnowledgeBase = false;
+
+  function handleUseKnowledgeBaseToggle() { //TODO
+    useKnowledgeBase = !useKnowledgeBase;
+  };
+
+  async function uploadPdfToVectorDatabase() {
+    const fileInput = document.getElementById('pdf_chat') as HTMLInputElement;
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      pathToUploadedPdf = URL.createObjectURL(file);
+      loadingKnowledgeDatabase = true;
+      await callbackSearchVectorDbTool(pathToUploadedPdf);
+      initiatedKnowledgeDatabase = true;
+      loadingKnowledgeDatabase = false;
+      useKnowledgeBase = true;
+      alert("PDF uploaded and processed.");
+    } else {
+      alert("Please select a PDF file.");
+    };
+  };
+
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
 
   const loadChat = async () => {
+    if($chatModelGlobal) {
+      try {
+        await $chatModelGlobal.interruptGenerate(); // stop any previously triggered answer generations to not interfere in this chat        
+      } catch (error) {
+        console.error("Error stopping the answer generation on loading chat ", error);        
+      };
+    };
     chatRetrievalInProgress = true;
     if(chatDisplayed) {
       try {
@@ -176,15 +227,15 @@
           messages = formattedMessages;
         };
       };
-      chatRetrievalInProgress = false;
     };
+    chatRetrievalInProgress = false;
     // Fresh chat
   };
 
   onMount(loadChat);
 </script>
 
-{#if !$store.isAuthed}
+<!-- TODO: {#if !$store.isAuthed}
   <div>
     <p>Please note that you may only store chats (and access additional features) if you log in.</p>
   </div>
@@ -194,49 +245,56 @@
     <input type="checkbox" bind:checked={storeChatToggle} on:click={handleStoreChatToggle} />
     <span>{storeChatToggle ? 'YES' : 'NO'}</span>
   </div>
-{/if}
+{/if} -->
 
-<div class="chatbox">
-  <div class="messages">
-    {#each messages as message (message.content)}
-      <Message {message} />
-    {/each}
-  </div>
-
-  <div class="message-input">
-    <input bind:value={newMessageText} on:keydown={handleInputKeyDown} placeholder="Type your message here..." />
-    {#if messageGenerationInProgress}
-      <button disabled on:click={sendMessage}>Send</button>
-    {:else}
-      <button on:click={sendMessage}>Send</button>
-    {/if}
-  </div>
+<div class="messages h-[calc(100vh-164px)]" style="overflow:auto;" use:scrollToBottom={messages}>
+  {#if $chatModelIdInitiatedGlobal && messages.length === 0}
+    <StartUpChatPanel sendMessageCallbackFunction={sendMessage} />
+  {/if}
+  {#each messages as message (message.content)}
+    <Message {message} />
+  {/each}
 </div>
 
+<footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
+  <form class="w-full max-w-2xl mx-auto px-1 sm:px-0">
+    <label for="chat" class="sr-only">Message DeVinci</label>
+    <div class="flex items-center px-3 p-2 rounded-full bg-gray-200">
+      <label for="pdf_chat">
+        <button type="button" on:click={() => document.getElementById('pdf_chat').click()} class="inline-flex justify-center p-2 text-gray-500 rounded-full cursor-pointer hover:text-gray-900 hover:bg-gray-100">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350v-350q-1-42-29.5-71T400-800q-42 0-71 29t-29 71v370q-1 71 49 120.5T470-160q70 0 119-49.5T640-330v-390h80v390Z"/></svg>
+        </button>
+      </label>
+      <input id="pdf_chat" type="file" accept=".pdf" on:change={uploadPdfToVectorDatabase} class="hidden text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 ml-2">
+      {#if loadingKnowledgeDatabase}
+        <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
+        <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
+      {/if}
+      {#if !$chatModelIdInitiatedGlobal || messageGenerationInProgress}
+        <input disabled type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " />
+        <button disabled type="submit" class="opacity-55 cursor-not-allowed inline-flex justify-center p-2 text-gray-600 rounded-full">
+          <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+            <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
+          </svg>
+          <span class="sr-only">Send message</span>
+        </button>
+      {:else}
+        <input bind:value={newMessageText} on:keydown={handleInputKeyDown} type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message deVinci..." />
+        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={() => {sendMessage()}} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-100">
+          <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+            <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
+          </svg>
+          <span class="sr-only">Send message</span>
+        </button>
+      {/if}
+    </div>
+  </form>
+</footer>
+
 <style>
-  .chatbox {
-    width: 100%;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
-  }
-
-  .message-input {
-    height: 60px;
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-  }
-
-  .message-input input {
-    height: 40px;
-    flex-grow: 1;
-    margin-right: 10px;
-  }
+	.has-text {
+		background-color: rgb(243 244 246);
+    cursor: pointer;
+    opacity: 1;
+	}
 </style>

@@ -8,13 +8,13 @@
     chatModelGlobal,
     selectedAiModelId,
     chatModelIdInitiatedGlobal
-  } from "../../store";
+  } from "../store";
   import {
     setLocalFlag,
     syncLocalChanges,
     setUserSettingsSyncFlag,
     getLocalFlag
-  } from "../../helpers/localStorage";
+  } from "../helpers/localStorage";
 
   export let id;
   export let name;

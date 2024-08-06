@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { marked } from 'marked';
+  import ChatBubbleUser from './ChatBubbleUser.svelte';
+  import ChatBubbleDeVinci from './ChatBubbleDeVinci.svelte';
+  import ChatBubbleDeVinciPdf from './ChatBubbleDeVinciPDF.svelte';
 
   export let message;
 </script>
 
 <div class="message">
-  <p><strong>{message.name}</strong></p>
-  <p>{@html marked(message.content)}</p>
+  {#if message.name === 'You'}
+    <ChatBubbleUser messageContent={message.content} />
+  {:else if message.name === 'DeVinci'}
+    <ChatBubbleDeVinci messageContent={message.content} />
+  {/if}
 </div>
 
 <style>
   .message {
     margin-bottom: 10px;
-    padding: 10px;
   }
 </style>

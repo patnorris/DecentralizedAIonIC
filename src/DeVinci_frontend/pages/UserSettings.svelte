@@ -7,10 +7,10 @@
     userSettings
   } from "../store";
 
-  import Sidebar from "../components/new/Sidebar.svelte";
-  import Navigation from "../components/new/Navigation.svelte";
-  import SelectModel from "../components/new/SelectModel.svelte";
-  import Footer from "../components/new/Footer.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
+  import Navigation from "../components/Navigation.svelte";
+  import SelectModel from "../components/SelectModel.svelte";
+  import Footer from "../components/Footer.svelte";
 
   import devincilogo from "/devinci-logo.svg";
 

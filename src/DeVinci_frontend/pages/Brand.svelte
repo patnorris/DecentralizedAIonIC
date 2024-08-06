@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Sidebar from "../components/new/Sidebar.svelte";
-  import Navigation from "../components/new/Navigation.svelte";
-  import Footer from "../components/new/Footer.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
+  import Navigation from "../components/Navigation.svelte";
+  import Footer from "../components/Footer.svelte";
 
   import { onMount } from 'svelte';
 

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Sidebar from "../components/new/Sidebar.svelte";
-  import Navigation from "../components/new/Navigation.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
+  import Navigation from "../components/Navigation.svelte";
   import Newsletter from "../components/Newsletter.svelte";
-  import Footer from "../components/new/Footer.svelte";
+  import Footer from "../components/Footer.svelte";
   import devincilogo from "/devinci-logo.svg";
 
   import { onMount } from 'svelte';
