@@ -1,7 +1,115 @@
-import { store } from "../store";
+import {
+  store,
+  saveChatsUserSelection
+} from "../store";
 
 let storeState;
 store.subscribe((value) => storeState = value);
+
+export function setLocalFlag(flagType, flagObject) {
+  if (flagType === "downloadedAiModels") {
+    const modelFlagsStored = localStorage.getItem(flagType);
+    // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+    if (modelFlagsStored) {
+      let arrayOfModels = JSON.parse(modelFlagsStored);
+      // Check if the model already exists in the array
+      const existingModelIndex = arrayOfModels.findIndex(modelId => 
+        modelId === flagObject.modelId
+      );
+      if (existingModelIndex === -1) {
+        // If the model does not exist, add its id to the array
+        arrayOfModels.push(flagObject.modelId);
+      };
+      localStorage.setItem(flagType, JSON.stringify(arrayOfModels));
+      console.log("in setLocalFlag arrayOfModels ", arrayOfModels);
+    } else {
+      let newArrayForModel = [flagObject.modelId];
+      localStorage.setItem(flagType, JSON.stringify(newArrayForModel));
+    };
+  } else if (flagType === "aiModelDownloadingProgress") {
+    const modelDownloadProgressStored = localStorage.getItem(flagType);
+    // modelDownloadProgressStored is a stringified object where each key is a model id and the value the download progress
+    if (modelDownloadProgressStored) {
+      let modelsObject = JSON.parse(modelDownloadProgressStored);
+      modelsObject[flagObject.modelId] = flagObject.downloadProgress;
+      localStorage.setItem(flagType, JSON.stringify(modelsObject));
+    } else {
+      // First entry
+      let modelsObject = {};
+      modelsObject[flagObject.modelId] = flagObject.downloadProgress;
+      localStorage.setItem(flagType, JSON.stringify(modelsObject));      
+    };
+  } else if (flagType === "saveChatsUserSelection") {
+    console.log("in setLocalFlag saveChatsUserSelection ", flagObject.saveChats);
+    // Flag to indicate whether the user selected to store the chats or not
+    if (flagObject.saveChats !== null) {
+      console.log("in setLocalFlag saveChatsUserSelection before set");
+      saveChatsUserSelection.set(flagObject.saveChats); // automatically updates localStorage flag
+    } else {
+      return false;          
+    };
+  } else {
+    return false;
+  };
+  return true;
+};
+
+export function getLocalFlag(flagType, flagObject=null) {
+  if (flagType === "downloadedAiModels") {
+    const modelFlagsStored = localStorage.getItem(flagType);
+    // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+    if (modelFlagsStored) {
+      let arrayOfModels = JSON.parse(modelFlagsStored);
+      if (arrayOfModels) {
+        return arrayOfModels;
+      } else {
+        return [];
+      };
+    } else {
+      return [];
+    };
+  } else if (flagType === "aiModelDownloadingProgress") {
+    const modelDownloadProgressStored = localStorage.getItem(flagType);
+    // modelDownloadProgressStored is a stringified object where each key is a model id and the value the download progress
+    if (modelDownloadProgressStored) {
+      let modelsObject = JSON.parse(modelDownloadProgressStored);
+      if (modelsObject && modelsObject[flagObject.modelId]) {
+        return modelsObject[flagObject.modelId];
+      } else {
+        return 0;
+      };
+    } else {
+      return 0;
+    };
+  } else if (flagType === "saveChatsUserSelection") {
+    console.log("in getLocalFlag saveChatsUserSelection");
+    // Flag to indicate whether the user selected to store the chats or not
+    const saveChatsFlag = localStorage.getItem(flagType); //flag value is a stringified Bool
+    console.log("in getLocalFlag saveChatsUserSelection saveChatsFlag ", saveChatsFlag);
+    if (saveChatsFlag === "false") {
+      return false;
+    } else {
+      return true;
+    };
+  } else {
+    return null;
+  };
+};
+
+export function userHasDownloadedModel() {
+  const modelFlagsStored = localStorage.getItem("downloadedAiModels");
+  // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
+  if (modelFlagsStored) {
+    let arrayOfModels = JSON.parse(modelFlagsStored);
+    if (arrayOfModels && arrayOfModels.length > 0) {
+      return true;
+    } else {
+      return false;
+    };
+  } else {
+    return false;
+  };
+};
 
 export function storeChatLocally(chatId, chatMessages) {
   const chatsStored = localStorage.getItem("chatsStoredLocally");

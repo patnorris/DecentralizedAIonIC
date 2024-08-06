@@ -81,10 +81,16 @@ Hot reloads with every UI change
 ## Deployment to the Internet Computer mainnet
 Deploy the code as canisters to the live IC where it's accessible via regular Web browsers.
 
+### Development Stage
+```bash
+dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
+dfx deploy --network development DeVinci_frontend
+```
+
 ### Testing Stage
 ```bash
 dfx deploy --network testing --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
-dfx deploy --network testing
+dfx deploy --network testing DeVinci_frontend
 ```
 For setting up stages, see [Notes on Stages](./notes/NotesOnStages.md)
 
@@ -98,7 +104,7 @@ Deploy to Mainnet (live IC):
 Ensure that all changes needed for Mainnet deployment have been made (e.g. define HOST in store.ts)
 ```bash
 dfx deploy --network ic --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
-dfx deploy --network ic
+dfx deploy --network ic DeVinci_frontend
 ```
 In case there are authentication issues, you could try this command
 (Note that only authorized identities which are set up as canister controllers may deploy the production canisters)

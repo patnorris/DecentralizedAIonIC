@@ -70,7 +70,7 @@
       try {
         messages = [...messages, { role: 'assistant', content: replyText, name: 'DeVinci' }];
         const reply = await modelCallbackFunction(messageHistoryWithPrompt.slice(-5), generateProgressCallback); // passing in much of the message history easily overwhelms the available device memory
-        messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }]; 
+        messages = [...messages.slice(0, -1), { role: 'assistant', content: reply, name: 'DeVinci' }];
       } catch (error) {
         console.error("Error getting response from model: ", error);
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
@@ -139,7 +139,7 @@
           const syncObject = {
             chatMessages: messagesFormattedForBackend,
           };
-          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);    
+          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
         };
       };
     };
@@ -217,7 +217,6 @@
   .chatbox {
     width: 100%;
     height: 400px;
-    border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
   }

@@ -48,13 +48,18 @@ export const supportsWebGpu = navigator.gpu !== undefined;
 
 export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
+export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
 export let userSettings = writable(localStorage.getItem("userSettings"));
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId"));
 selectedAiModelId.subscribe((value) => localStorage.setItem("selectedAiModelId", value));
+export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
+saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
 export let vectorStore = writable(null);
+
+export let installAppDeferredPrompt = writable(null);
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";

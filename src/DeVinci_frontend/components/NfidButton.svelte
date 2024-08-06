@@ -5,7 +5,7 @@
   //import { AuthClient } from "@dfinity/auth-client";
 
   import spinner from "../assets/loading.gif";
-  import Button from "./Button.svelte";
+  import nfidlogo from "/nfid.webp"
 
   export let loading;
   export let toggleModal;
@@ -30,14 +30,15 @@
   };
 </script>
 
-<Button
+<a
+  class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow cursor-pointer"
   on:click={connect}
   disabled={loading}
-  style={"lg:h-16 2xl:h-20 lg:rounded-[55px]"}
 >
   {#if loading === "nfid"}
     <img class="h-6 block" src={spinner} alt="loading animation" />
   {:else}
-    NFID (incl. Google)
+    <img class="h-5" src={nfidlogo}  alt="nfid wallet" />
+    <span class="flex-1 ms-3 whitespace-nowrap">NFID (incl. Google)</span>
   {/if}
-</Button>
+</a>
