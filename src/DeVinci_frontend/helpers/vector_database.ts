@@ -106,6 +106,7 @@ const searchEmbeddings = async (text: string) => {
     if (!vectorStoreState) {
       await generateEmbeddings();
     };
+    console.log("Debug searchEmbeddings text ", text);
 
     const searchResult = await vectorStoreState.similaritySearch(text, 1); // returns 1 entry
 
@@ -119,7 +120,8 @@ const searchEmbeddings = async (text: string) => {
 
 const getDataEntries = async (pathToUploadedPdf) => {
   const dataEntries = [];
-  const knowledgePages : [] = await getResourceAsArray(pathToUploadedPdf);
+  const knowledgePages: [] = await getResourceAsArray(pathToUploadedPdf);
+  console.log("Debug getDataEntries knowledgePages ", knowledgePages);
   for (let index = 0; index < knowledgePages.length; index++) {
     const dataEntry = {
       id: index,
@@ -127,7 +129,7 @@ const getDataEntries = async (pathToUploadedPdf) => {
     };
     dataEntries.push(dataEntry);
   };
-
+  console.log("Debug getDataEntries dataEntries ", dataEntries);
   return dataEntries;
 };
 

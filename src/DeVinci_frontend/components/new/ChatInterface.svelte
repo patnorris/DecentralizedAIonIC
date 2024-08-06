@@ -91,6 +91,9 @@
       /* debugOutput = "###in getChatModelResponse###";
       debugOutput += JSON.stringify(prompt);
       setLabel("debug-label", debugOutput); */
+      console.log("DEBUG in getChatModelResponse prompt ", prompt);
+      console.log("DEBUG in getChatModelResponse vectorDbSearchTool ", vectorDbSearchTool);
+      console.log("DEBUG in getChatModelResponse useKnowledgeBase ", useKnowledgeBase);
       if (vectorDbSearchTool && useKnowledgeBase) {
         /* debugOutput += " useKnowledgeBase ";
         setLabel("debug-label", debugOutput); */
@@ -98,7 +101,8 @@
         let additionalContentToProvide = "";
         additionalContentToProvide = " Additional content (use this if relevant to the User Prompt): ";
         try {
-          const promptContent = prompt[0].content;
+          const promptContent = prompt[prompt.length - 1].content;
+          console.log("DEBUG in getChatModelResponse promptContent ", promptContent);
           let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
           vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
           try {
@@ -110,7 +114,7 @@
             // Compose the final prompt
             const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
             prompt = [...prompt, additionalContentEntry];
-            //console.log("DEBUG additionalContentEntry ", additionalContentEntry);
+            console.log("DEBUG additionalContentEntry ", additionalContentEntry);
           } catch (error) {
             console.error("Error in getChatModelResponse final prompt and additionalContentEntry");
             console.error(error.toString());
@@ -137,6 +141,7 @@
         setLabel("debug-label", debugOutput); */
         let curMessage = "";
         let stepCount = 0;
+        console.log("DEBUG in getChatModelResponse prompt ", prompt);
         const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
         /* debugOutput += " completion ";
         debugOutput += JSON.stringify(completion);
