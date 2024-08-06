@@ -3,10 +3,10 @@
   import { store, chatModelIdInitiatedGlobal, chatModelGlobal } from "../store";
   import { now } from "svelte/internal";
 
-  import Message from './new/Message.svelte';
-  import StartUpChatPanel from "./new/StartUpChatPanel.svelte";
+  import Message from './Message.svelte';
+  import StartUpChatPanel from "./StartUpChatPanel.svelte";
 
-  import spinner from "../../assets/loading.gif";
+  import spinner from "../assets/loading.gif";
 
   import {
     getLocalFlag,
