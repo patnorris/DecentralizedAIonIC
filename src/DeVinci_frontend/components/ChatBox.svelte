@@ -29,8 +29,6 @@
   let messageGenerationInProgress = false;
 
   const scrollToBottom = node => {
-    console.log("in ChatBox scrollToBottom node ", node);
-    console.log("in ChatBox scrollToBottom node.scrollHeight ", node.scrollHeight);
 		const scroll = () => node.scroll({
 			top: node.scrollHeight,
 			behavior: 'smooth',
@@ -183,7 +181,7 @@
       initiatedKnowledgeDatabase = true;
       loadingKnowledgeDatabase = false;
       useKnowledgeBase = true;
-      alert("PDF uploaded and processed.");
+      alert("PDF processed and ready to use!");
     } else {
       alert("Please select a PDF file.");
     };

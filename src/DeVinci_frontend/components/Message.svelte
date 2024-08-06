@@ -1,7 +1,6 @@
 <script lang="ts">
   import ChatBubbleUser from './ChatBubbleUser.svelte';
   import ChatBubbleDeVinci from './ChatBubbleDeVinci.svelte';
-  import ChatBubbleDeVinciPdf from './ChatBubbleDeVinciPDF.svelte';
 
   export let message;
 </script>

@@ -8,7 +8,7 @@
 
   export let toggleModal;
 
-  let loading = ""; // this allows us to disable both buttons if one of them is clicked
+  let loading = ""; // this allows us to disable all buttons if one of them is clicked
 
   // Main function to initialize modal functionality
   const initializeModal = () => {
@@ -17,14 +17,14 @@
     window.addEventListener('click', (event) => {
       if (event.target === modal) {
         toggleModal();
-      }
+      };
     });
 
     // Close modal on 'Escape' key press
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         toggleModal();
-      }
+      };
     });
   };
 

@@ -7,7 +7,6 @@
 
   import ChatHistory from "./ChatHistory.svelte";
 
-  import newchaticon from "/newchat.svg";
   import devincilogo from "/devinci-logo.svg";
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
@@ -23,7 +22,6 @@
       $activeChatGlobal = false;
     };
     if ($location !== "/") {
-      console.log("in showNewChat location ", $location);
       push('/');
     };
     return;

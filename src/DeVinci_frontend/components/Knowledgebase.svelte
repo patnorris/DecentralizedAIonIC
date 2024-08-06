@@ -1,7 +1,3 @@
-<script lang="ts">
-
-</script>
-
 <div class="z-50 w-full relative">
     <form class="w-full mx-auto flex flex-row flex-grow">
         <label for="pdf_input">

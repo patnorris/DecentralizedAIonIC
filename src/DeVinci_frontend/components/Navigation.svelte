@@ -7,7 +7,6 @@
   let visibleInstallAppToast = false;
 
   const showInstallAppToast = () => {
-    console.log("in showInstallAppToast");
     visibleInstallAppToast = true;
     // Automatically hide the toast
     setTimeout(() => {
@@ -39,17 +38,15 @@
     if (dropdownMenuIconButton && dropdownDots) {
       dropdownMenuIconButton.addEventListener('click', function (event) {
         event.stopPropagation();
-        console.log('Dropdown button clicked');
         dropdownDots.classList.toggle('hidden');
       });
 
       document.body.addEventListener('click', function (event) {
         if (!dropdownDots.contains(event.target) && !dropdownMenuIconButton.contains(event.target)) {
           if (!dropdownDots.classList.contains('hidden')) {
-            console.log('Clicked outside dropdown');
             dropdownDots.classList.add('hidden');
-          }
-        }
+          };
+        };
       });
 
       dropdownDots.addEventListener('click', function (event) {
@@ -60,9 +57,7 @@
 
   // User clicked on Logout
   const logout = async () => {
-    console.log("in logout");
     await store.disconnect();
-    //open = false;
   };
 
   onMount(() => {

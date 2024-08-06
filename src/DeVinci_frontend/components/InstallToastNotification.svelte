@@ -7,7 +7,7 @@
   let deferredPrompt;
   installAppDeferredPrompt.subscribe((value) => deferredPrompt = value); // needed to persist the prompt across reloads of this component
 
-  let showToast = true;
+  let showToast = true; // Notify the user they can install the PWA
 
   onMount(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -15,8 +15,6 @@
       e.preventDefault();
       // Stash the event so it can be triggered later.
       $installAppDeferredPrompt = e;
-      // Update UI notify the user they can install the PWA
-      //showToast = true;
     });
 
     window.addEventListener('appinstalled', () => {
@@ -30,15 +28,14 @@
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response to the install prompt: ${outcome}`);
       if (outcome === 'accepted') {
         console.log('User accepted the A2HS prompt');
       } else {
         console.log('User dismissed the A2HS prompt');
-      }
+      };
       deferredPrompt = null;
-    }
-  }
+    };
+  };
 </script>
 
 {#if showToast}

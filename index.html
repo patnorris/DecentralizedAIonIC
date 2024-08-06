@@ -17,7 +17,7 @@
             console.log('Service Worker registered with scope:', registration);
           })
           .catch((error) => {
-            console.log('Service Worker registration failed:', error);
+            console.error('Service Worker registration failed:', error);
           });
       });
     };

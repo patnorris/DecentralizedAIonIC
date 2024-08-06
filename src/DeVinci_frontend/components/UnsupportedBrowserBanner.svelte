@@ -1,6 +1,6 @@
 <script>
-    import { webGpuSupportedBrowsers } from "../store";
-    import devincilogo from "/devinci-logo.svg";
+  import { webGpuSupportedBrowsers } from "../store";
+  import devincilogo from "/devinci-logo.svg";
 </script>
 
 <div class="flex flex-col justify-center w-full max-w-xl h-lvh items-center mx-auto px-4">

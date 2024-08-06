@@ -1,7 +1,7 @@
 <script lang="ts">
   import SidebarHeader from "./SidebarHeader.svelte";
   import SidebarFooter from "./SidebarFooter.svelte";
-  //import Knowledgebase from "./Knowledgebase.svelte";
+  //import Knowledgebase from "./Knowledgebase.svelte"; TODO
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
 
@@ -14,5 +14,4 @@
     {#if !userHasDownloadedAtLeastOneModel}
       <SidebarFooter />
     {/if}
-    <!-- <Knowledgebase /> -->
 </div>

@@ -18,9 +18,6 @@
 {/if}
 
 <style>
-  /* :global(html) {
-      background: #1d1d2f;
-  } */
   div {
     z-index: 10;
     position: relative;

@@ -14,17 +14,17 @@
     function toggleSidebar(event) {
       event.stopPropagation();
       chat.classList.toggle('-translate-x-full');
-    }
+    };
 
     function closeSidebar(event) {
       if (!chat.contains(event.target) && !sidebarToggle.contains(event.target)) {
         chat.classList.add('-translate-x-full');
-      }
-    }
+      };
+    };
 
     function stopPropagation(event) {
       event.stopPropagation();
-    }
+    };
 
     sidebarToggle.addEventListener('click', toggleSidebar);
     document.body.addEventListener('click', closeSidebar);

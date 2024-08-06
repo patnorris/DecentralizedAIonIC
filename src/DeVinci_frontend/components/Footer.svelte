@@ -1,9 +1,3 @@
-<script lang="ts">
-  import devincilogo from "/devinci-logo.svg";
-</script>
-
-
-
 <footer class="bg-gray-300 dark:bg-gray-900">
   <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
     <div class="sm:flex sm:items-center sm:justify-between">
@@ -19,7 +13,3 @@
     </div>
   </div>
 </footer>
-
-<style>
-
-</style>
