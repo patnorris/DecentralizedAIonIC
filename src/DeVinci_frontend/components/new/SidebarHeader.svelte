@@ -22,9 +22,9 @@
     } else {
       $activeChatGlobal = false;
     };
-    if ($location !== "/devinci") {
+    if ($location !== "/") {
       console.log("in showNewChat location ", $location);
-      push('/devinci');
+      push('/');
     };
     return;
   };
@@ -32,7 +32,7 @@
 </script>
 
 <div class="flex flex-col justify-center w-full items-center">
-  <a href="#/devinci">
+  <a href="/">
       <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full" alt="devinci logo" />
   </a>
   {#if userHasDownloadedAtLeastOneModel}
