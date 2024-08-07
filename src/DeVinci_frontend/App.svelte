@@ -3,8 +3,7 @@
   import { onMount } from "svelte";
   import { store } from "./store";
 
-  import Intro from "./pages/Intro.svelte";
-  import UserChatsOverview from "./pages/UserChatsOverview.svelte";
+  // import UserChatsOverview from "./pages/UserChatsOverview.svelte";
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
   import Brand from "./pages/Brand.svelte";
@@ -15,12 +14,11 @@
 
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)
-    "/": Intro,
-    "/mychats": UserChatsOverview,
+    "/": deVinci,
+    //"/mychats": UserChatsOverview, TODO
     "/settings": UserSettings,
     "/about": About,
     "/brand": Brand,
-    "/outlierventuresdeai": deVinci,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };

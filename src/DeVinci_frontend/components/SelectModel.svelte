@@ -1,12 +1,12 @@
 <script lang="ts">
   import {
     deviceType
-  } from "../../store";
+  } from "../store";
 
   import SelectModelOption from './SelectModelOption.svelte';
 
-  import { getAvailableAiModels } from "../../helpers/ai_model_helpers";
-  import { userHasDownloadedModel } from "../../helpers/localStorage";
+  import { getAvailableAiModels } from "../helpers/ai_model_helpers";
+  import { userHasDownloadedModel } from "../helpers/localStorage";
 
   export let onlyShowDownloadedModels = false;
   export let autoInitiateSelectedModel = false;

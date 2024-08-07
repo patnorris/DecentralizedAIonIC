@@ -1,8 +1,7 @@
 import { DynamicTool } from "langchain/tools";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { TextLoader } from "langchain/document_loaders/fs/text";
 
-// Import @tensorflow/tfjs-core
+// Needed Import @tensorflow/tfjs-core
 import * as tf from '@tensorflow/tfjs-core';
 // Adds the WebGL backend to the global backend registry.
 import '@tensorflow/tfjs-backend-webgl';
@@ -97,7 +96,7 @@ const generateEmbeddings = async () => {
     const end = performance.now() / 1000;
     console.log(`Debug: generateEmbeddings took ${(end - start).toFixed(2)}s`);
   } catch (error) {
-    console.error("Error in generateEmbeddings: ", error)
+    console.error("Error in generateEmbeddings: ", error);
   };
 };
 
@@ -119,7 +118,7 @@ const searchEmbeddings = async (text: string) => {
 
 const getDataEntries = async (pathToUploadedPdf) => {
   const dataEntries = [];
-  const knowledgePages : [] = await getResourceAsArray(pathToUploadedPdf);
+  const knowledgePages: [] = await getResourceAsArray(pathToUploadedPdf);
   for (let index = 0; index < knowledgePages.length; index++) {
     const dataEntry = {
       id: index,
@@ -127,21 +126,17 @@ const getDataEntries = async (pathToUploadedPdf) => {
     };
     dataEntries.push(dataEntry);
   };
-
   return dataEntries;
 };
 
 export const storeEmbeddings = async () => {
-  console.log("Debug storeEmbeddings ");
   if (!vectorStoreState) {
     return;
   };
   try {
     const memVecs = vectorStoreState.memoryVectors;
-    console.log("Debug storeEmbeddings memVecs ", memVecs);
     try {
       const storeMemoryVectorsResponse = await storeState.backendActor.store_user_chats_memory_vectors(memVecs);
-      console.log("Debug storeEmbeddings storeMemoryVectorsResponse ", storeMemoryVectorsResponse);
       if (!storeMemoryVectorsResponse.Ok) {
         return false;
       };
@@ -159,7 +154,6 @@ const retrieveEmbeddings = async () => {
     let retrievedMemVecs = [];
     try {
       const getMemoryVectorsResponse = await storeState.backendActor.get_caller_memory_vectors();
-      console.log("Debug retrieveEmbeddings getMemoryVectorsResponse ", getMemoryVectorsResponse);
       if (getMemoryVectorsResponse.Ok) {
         retrievedMemVecs = getMemoryVectorsResponse.Ok;
       };
@@ -173,10 +167,8 @@ const retrieveEmbeddings = async () => {
 };
 
 export const loadExistingVectorStore = async () => {
-  console.log("Debug loadExistingVectorStore ");
   try {
     let retrievedMemVecs = await retrieveEmbeddings();
-    console.log("Debug loadExistingVectorStore retrievedMemVecs ", retrievedMemVecs);
     try {
       const start = performance.now() / 1000;
 
@@ -191,12 +183,8 @@ export const loadExistingVectorStore = async () => {
         metadata,
         embeddings,
       );
-      console.log("Debug loadExistingVectorStore vectorStoreState ", vectorStoreState);
-      console.log("Debug loadExistingVectorStore vectorStoreState.memoryVectors ", vectorStoreState.memoryVectors);
-
+      
       vectorStoreState.memoryVectors = retrievedMemVecs;
-
-      console.log("Debug loadExistingVectorStore vectorStoreState.memoryVectors after ", vectorStoreState.memoryVectors);
 
       vectorStore.set(vectorStoreState);
 
@@ -212,12 +200,9 @@ export const loadExistingVectorStore = async () => {
 };
 
 export const checkUserHasKnowledgeBase = async () => {
-  console.log("Debug checkUserHasKnowledgeBase ");
   try {
     const checkResponse = await storeState.backendActor.check_caller_has_memory_vectors_entry();
-    console.log("Debug checkUserHasKnowledgeBase checkResponse ", checkResponse);
     if (checkResponse.Ok) {
-      console.log("Debug checkUserHasKnowledgeBase checkResponse.Ok ", checkResponse.Ok);
       return checkResponse.Ok;
     } else {
       return false;
