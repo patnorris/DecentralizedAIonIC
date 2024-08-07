@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { deviceType, supportsWebGpu } from "../store";
-  
+
   import Sidebar from "../components/Sidebar.svelte";
   import Navigation from "../components/Navigation.svelte";
   import ChatInterface from "../components/ChatInterface.svelte";
@@ -76,5 +76,6 @@
   .footer {
     background: rgba(255,255,255,1);
     padding-top: 10px;
+    padding-bottom: 10px;
   }
 </style>
