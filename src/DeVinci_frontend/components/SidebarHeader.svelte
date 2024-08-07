@@ -7,7 +7,7 @@
 
   import ChatHistory from "./ChatHistory.svelte";
 
-  import devincilogo from "/devinci-logo.svg";
+  import devincilogo from "/outlierventures_logo.jpeg";
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
 
@@ -69,7 +69,7 @@
 	  height: 64px; /* h-16 in Tailwind CSS */
 	  padding: 0; /* p-0 in Tailwind CSS */
 	  border-radius: 50%; /* rounded-full in Tailwind CSS */
-	  animation: rotate 360s linear infinite;
+	  /* animation: rotate 360s linear infinite; */
   }
 
   .tooltip-toggle {
