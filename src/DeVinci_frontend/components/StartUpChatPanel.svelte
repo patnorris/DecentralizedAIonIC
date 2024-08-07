@@ -1,10 +1,9 @@
 <script lang="ts">
-  import devincilogo from "/outlierventures_logo.jpeg";
+  import devincilogo from "/devinci-logo.svg";
 
   export let sendMessageCallbackFunction;
 
   function sendMessage(message) {
-    console.log("in startup chat pannel sendMessage message ", message);
     sendMessageCallbackFunction(message);
   };
 

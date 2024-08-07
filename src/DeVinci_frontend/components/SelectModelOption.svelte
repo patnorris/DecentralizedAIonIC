@@ -8,13 +8,13 @@
     chatModelGlobal,
     selectedAiModelId,
     chatModelIdInitiatedGlobal
-  } from "../../store";
+  } from "../store";
   import {
     setLocalFlag,
     syncLocalChanges,
     setUserSettingsSyncFlag,
     getLocalFlag
-  } from "../../helpers/localStorage";
+  } from "../helpers/localStorage";
 
   export let id;
   export let name;
@@ -31,7 +31,7 @@
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
 
   $: downloadProgress = getLocalFlag("aiModelDownloadingProgress", {modelId: id});
-  // $: downloadProgress = `${getLocalFlag("aiModelDownloadingProgress", {modelId: id})} %`;
+  
   let initiateText;
   let downloadText;
 
@@ -61,8 +61,8 @@
           span.style.backgroundColor = color;
           // Save the color to localStorage
           localStorage.setItem(`span-${performance}`, color);
-        }
-      }
+        };
+      };
 
       // Function to load background color from localStorage
       function loadBackgroundColor(span) {
@@ -73,8 +73,8 @@
         } else {
           // If no saved color, set it
           setBackgroundColor(span);
-        }
-      }
+        };
+      };
 
       // Apply background color change to each span element
       spans.forEach(span => loadBackgroundColor(span));
@@ -87,16 +87,15 @@
               if (node.nodeType === Node.ELEMENT_NODE) {
                 const newSpans = node.querySelectorAll(".performance-span");
                 newSpans.forEach(span => loadBackgroundColor(span));
-              }
+              };
             });
-          }
-        }
+          };
+        };
       });
 
       observer.observe(document.body, { childList: true, subtree: true });
     }, 100); // 100ms delay
   });
-
 
   const updateUserSettings = async (modelId) => {
     // Persist to backend
@@ -134,9 +133,6 @@
   };
 
   async function loadChatModel(modelOptionId) {
-    console.log("in loadChatModel modelOptionId", modelOptionId);
-    //debugOutput += "###in loadChatModel###";
-    //setLabel("debug-label", debugOutput);
     if (chatModelDownloadInProgress) {
       return;
     };
@@ -169,8 +165,6 @@
     };
 
     const initProgressCallback = (report) => {
-      console.log("in initProgressCallback report ", report);
-      //setLabel("init-label", report.text);
       if (isDownloaded) {
         // Avoid setting the download progress for already downloaded models (which have progress as 0)
         initiateText = "Initiating... please wait.";
@@ -189,7 +183,6 @@
     };
     try {
       $chatModelGlobal.setInitProgressCallback(initProgressCallback);
-      console.log("in loadChatModel reload");
       await $chatModelGlobal.reload(modelOptionId);
       // Set flag that this model has been downloaded
       const flagObject = {
@@ -198,24 +191,16 @@
       setLocalFlag("downloadedAiModels", flagObject);
     } catch (error) {
       console.error("Error loading model: ", error);
-      /* debugOutput += "###error in loadChatModel###";
-      debugOutput += error;
-      setLabel("debug-label", debugOutput); */
       throw error;
     };
     $chatModelIdInitiatedGlobal = modelOptionId;
     chatModelDownloadInProgress = false;
-    console.log("in loadChatModel loaded");
-    if ($location !== "/devinci") {
-      console.log("in loadChatModel location ", $location);
-      push('/devinci');
+    if ($location !== "/") {
+      push('/');
     };
   };
 
   onMount(async () => {
-    console.log("in SelectedModelOption onMount autoInitiateIfModelSelected ", autoInitiateIfModelSelected);
-    console.log("in SelectedModelOption onMount id ", id);
-    console.log("in SelectedModelOption onMount $selectedAiModelId ", $selectedAiModelId);
     if (autoInitiateIfModelSelected) {
       // Initiate the model without the user having to click
       // if this model is the currently selected one

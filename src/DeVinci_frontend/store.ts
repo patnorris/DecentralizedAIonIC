@@ -63,7 +63,7 @@ export let installAppDeferredPrompt = writable(null);
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
-const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change to faviconFutureWebInitiative (once deployed with OIM)
+const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change
 //"https%3A%2F%2Fx6occ%2Dbiaaa%2Daaaai%2Dacqzq%2Dcai.icp0.io%2Ffavicon.ico"
 //"https%3A%2F%2Fx6occ-biaaa-aaaai-acqzq-cai.icp0.io%2FFutureWebInitiative%5Fimg.png";
 const AUTH_PATH = "/authenticate/?applicationName="+APPLICATION_NAME+"&applicationLogo="+APPLICATION_LOGO_URL+"#authorize";
@@ -104,14 +104,11 @@ export const createStore = ({
   subscribe((value) => globalState = value);
 
   const initUserSettings = async (backendActor) => {
-    console.log("in initUserSettings backendActor ", backendActor);
     // Load the user's settings
       // Especially selected AI model to be used for chat
     if (navigator.onLine) {
-      console.log("The app is online!");
       try {
         const retrievedSettingsResponse = await backendActor.get_caller_settings();
-        console.log("in initUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
         // @ts-ignore
         if (retrievedSettingsResponse.Ok) {
           userSettings.set(retrievedSettingsResponse.Ok);
@@ -123,29 +120,20 @@ export const createStore = ({
         };
       } catch (error) {
         console.error("Error in get_caller_settings: ", error);
-        console.log("in initUserSettings local userSettings ", localStorage.getItem("userSettings"));
         if (localStorage.getItem("userSettings")) {
-          console.log("get userSettings");
           userSettings.set(localStorage.getItem("userSettings"));
         };
-        console.log("in initUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
         if (localStorage.getItem("selectedAiModelId")) {
-          console.log("get selectedAiModelId");
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
         } else {
           selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
         };     
       };
     } else {
-      console.log("The app is offline.");
-      console.log("in initUserSettings local userSettings ", localStorage.getItem("userSettings"));
       if (localStorage.getItem("userSettings")) {
-        console.log("get userSettings");
         userSettings.set(localStorage.getItem("userSettings"));
       };
-      console.log("in initUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
       if (localStorage.getItem("selectedAiModelId")) {
-        console.log("get selectedAiModelId");
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
       } else {
         selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
@@ -154,16 +142,11 @@ export const createStore = ({
   };
 
   const nfidConnect = async () => {
-    console.log("in nfidConnect ");
     authClient = await AuthClient.create();
-    console.log("in nfidConnect authClient ", authClient);
     if (await authClient.isAuthenticated()) {
-      console.log("in nfidConnect isAuthenticated ");
       const identity = await authClient.getIdentity();
-      console.log("in nfidConnect identity ", identity);
       initNfid(identity);
     } else {
-      console.log("in nfidConnect not Authenticated ");
       await authClient.login({
         onSuccess: async () => {
           const identity = await authClient.getIdentity();
@@ -187,14 +170,12 @@ export const createStore = ({
   };
 
   const initNfid = async (identity: Identity) => {
-    console.log("in initNfid identity ", identity);
     const backendActor = createBackendCanisterActor(backendCanisterId, {
       agentOptions: {
         identity,
         host: HOST,
       },
     });
-    console.log("in initNfid backendActor ", backendActor);
 
     if (!backendActor) {
       console.warn("couldn't create backend actor");
@@ -215,6 +196,8 @@ export const createStore = ({
       accountId: null,
       isAuthed: "nfid",
     }));
+
+    console.log("nfid is authed");
   };
 
   const internetIdentityConnect = async () => {
@@ -269,6 +252,8 @@ export const createStore = ({
       accountId: null,
       isAuthed: "internetidentity",
     }));
+
+    console.log("internetidentity is authed");
   };
 
   const stoicConnect = () => {
@@ -310,6 +295,8 @@ export const createStore = ({
       accountId: accounts[0].address, // we take the default account associated with the identity
       isAuthed: "stoic",
     }));
+
+    console.log("stoic is authed");
   };
 
   const plugConnect = async () => {
@@ -536,15 +523,11 @@ export const createStore = ({
   };
 
   const checkExistingLoginAndConnect = async () => {
-    console.log("in checkExistingLoginAndConnect");
     // Check login state if user is already logged in
     const isAuthed = localStorage.getItem('isAuthed'); // Accessing Local Storage to check login state
-    console.log("in checkExistingLoginAndConnect isAuthed ", isAuthed);
     if (isAuthed) {
       const authClient = await AuthClient.create();
-      console.log("in checkExistingLoginAndConnect authClient ", authClient);
       if (await authClient.isAuthenticated()) {
-        console.log("in checkExistingLoginAndConnect isAuthenticated ");
         if (isAuthed === "nfid") {
           console.log("NFID connection detected");
           nfidConnect();

@@ -7,17 +7,14 @@
     userSettings
   } from "../store";
 
-  import Sidebar from "../components/new/Sidebar.svelte";
-  import Navigation from "../components/new/Navigation.svelte";
-  import SelectModel from "../components/new/SelectModel.svelte";
-  import Footer from "../components/new/Footer.svelte";
-
-  import devincilogo from "/devinci-logo.svg";
+  import Sidebar from "../components/Sidebar.svelte";
+  import Navigation from "../components/Navigation.svelte";
+  import SelectModel from "../components/SelectModel.svelte";
+  import Footer from "../components/Footer.svelte";
 
   import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
   import {
     syncLocalChanges,
-    setUserSettingsSyncFlag,
     setLocalFlag,
     getLocalFlag
   } from "../helpers/localStorage";
@@ -27,7 +24,6 @@
   const loadUserSettings = async () => {
     try {
       const retrievedSettingsResponse = await $store.backendActor.get_caller_settings();
-      console.log("in loadUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
       // @ts-ignore
       if (retrievedSettingsResponse.Ok) {
         // @ts-ignore
@@ -44,14 +40,10 @@
       };
     } catch (error) {
       console.error("Error in get_caller_settings: ", error);
-      console.log("in loadUserSettings local userSettings ", localStorage.getItem("userSettings"));
       if (localStorage.getItem("userSettings")) {
-        console.log("get userSettings");
         userSettings.set(localStorage.getItem("userSettings"));
       };
-      console.log("in loadUserSettings local selectedAiModelId ", localStorage.getItem("selectedAiModelId"));
       if (localStorage.getItem("selectedAiModelId")) {
-        console.log("get selectedAiModelId");
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
       } else {
         selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
@@ -65,12 +57,10 @@
 
   // Function to be called whenever the chat storage selection changes
   function handleSelectionChange() {
-    console.log('Selection changed to:', saveChats);
     let saveChatsValue = true;
     if (saveChats === "doNotSave") {
       saveChatsValue = false;
     };
-    console.log('i.e.:', saveChatsValue);
     setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
   };
 
@@ -81,17 +71,17 @@
     function toggleSidebar(event) {
       event.stopPropagation();
       chat.classList.toggle('-translate-x-full');
-    }
+    };
 
     function closeSidebar(event) {
       if (!chat.contains(event.target) && !sidebarToggle.contains(event.target)) {
         chat.classList.add('-translate-x-full');
-      }
-    }
+      };
+    };
 
     function stopPropagation(event) {
       event.stopPropagation();
-    }
+    };
 
     sidebarToggle.addEventListener('click', toggleSidebar);
     document.body.addEventListener('click', closeSidebar);
