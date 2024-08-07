@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { deviceType, supportsWebGpu } from "../store";
-  
-  import Sidebar from "../components/new/Sidebar.svelte";
-  import Navigation from "../components/new/Navigation.svelte";
-  import ChatInterface from "../components/new/ChatInterface.svelte";
-  import UnsupportedBrowserBanner from "../components/new/UnsupportedBrowserBanner.svelte";
-  import UnsupportedDeviceBanner from "../components/new/UnsupportedDeviceBanner.svelte";
+
+  import Sidebar from "../components/Sidebar.svelte";
+  import Navigation from "../components/Navigation.svelte";
+  import ChatInterface from "../components/ChatInterface.svelte";
+  import UnsupportedBrowserBanner from "../components/UnsupportedBrowserBanner.svelte";
+  import UnsupportedDeviceBanner from "../components/UnsupportedDeviceBanner.svelte";
 
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -15,17 +15,17 @@
     function toggleSidebar(event) {
       event.stopPropagation();
       chat.classList.toggle('-translate-x-full');
-    }
+    };
 
     function closeSidebar(event) {
       if (!chat.contains(event.target) && !sidebarToggle.contains(event.target)) {
         chat.classList.add('-translate-x-full');
-      }
-    }
+      };
+    };
 
     function stopPropagation(event) {
       event.stopPropagation();
-    }
+    };
 
     sidebarToggle.addEventListener('click', toggleSidebar);
     document.body.addEventListener('click', closeSidebar);
@@ -54,7 +54,7 @@
       <header class="header bg-white shadow py-2 px-4">
         <div class="header-content flex items-center flex-row">
           <!--
-          -- triggers sidebar on small devices
+          -- triggers sidebar on small devices TODO: own component (also use it on other pages then)
           -->
           <button id="sidebarToggle" data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span class="sr-only">Open sidebar</span>
@@ -72,11 +72,10 @@
   </div>
 {/if}
 
-
-
 <style global>
   .footer {
     background: rgba(255,255,255,1);
     padding-top: 10px;
+    padding-bottom: 10px;
   }
 </style>

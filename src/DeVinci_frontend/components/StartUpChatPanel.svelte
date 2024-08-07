@@ -4,7 +4,6 @@
   export let sendMessageCallbackFunction;
 
   function sendMessage(message) {
-    console.log("in startup chat pannel sendMessage message ", message);
     sendMessageCallbackFunction(message);
   };
 

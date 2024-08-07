@@ -3,14 +3,13 @@
   import {
     store,
     activeChatGlobal
-  } from "../../store";
+  } from "../store";
 
   import ChatHistory from "./ChatHistory.svelte";
 
-  import newchaticon from "/newchat.svg";
   import devincilogo from "/devinci-logo.svg";
 
-  import { userHasDownloadedModel } from "../../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/localStorage";
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
@@ -22,9 +21,8 @@
     } else {
       $activeChatGlobal = false;
     };
-    if ($location !== "/devinci") {
-      console.log("in showNewChat location ", $location);
-      push('/devinci');
+    if ($location !== "/") {
+      push('/');
     };
     return;
   };
@@ -32,7 +30,7 @@
 </script>
 
 <div class="flex flex-col justify-center w-full items-center">
-  <a href="#/devinci">
+  <a href="/">
       <img src={devincilogo} class="rotating-image w-16 h-16 p-0 rounded-full" alt="devinci logo" />
   </a>
   {#if userHasDownloadedAtLeastOneModel}

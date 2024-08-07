@@ -21,7 +21,6 @@ export function setLocalFlag(flagType, flagObject) {
         arrayOfModels.push(flagObject.modelId);
       };
       localStorage.setItem(flagType, JSON.stringify(arrayOfModels));
-      console.log("in setLocalFlag arrayOfModels ", arrayOfModels);
     } else {
       let newArrayForModel = [flagObject.modelId];
       localStorage.setItem(flagType, JSON.stringify(newArrayForModel));
@@ -40,10 +39,8 @@ export function setLocalFlag(flagType, flagObject) {
       localStorage.setItem(flagType, JSON.stringify(modelsObject));      
     };
   } else if (flagType === "saveChatsUserSelection") {
-    console.log("in setLocalFlag saveChatsUserSelection ", flagObject.saveChats);
     // Flag to indicate whether the user selected to store the chats or not
     if (flagObject.saveChats !== null) {
-      console.log("in setLocalFlag saveChatsUserSelection before set");
       saveChatsUserSelection.set(flagObject.saveChats); // automatically updates localStorage flag
     } else {
       return false;          
@@ -82,10 +79,8 @@ export function getLocalFlag(flagType, flagObject=null) {
       return 0;
     };
   } else if (flagType === "saveChatsUserSelection") {
-    console.log("in getLocalFlag saveChatsUserSelection");
     // Flag to indicate whether the user selected to store the chats or not
-    const saveChatsFlag = localStorage.getItem(flagType); //flag value is a stringified Bool
-    console.log("in getLocalFlag saveChatsUserSelection saveChatsFlag ", saveChatsFlag);
+    const saveChatsFlag = localStorage.getItem(flagType); // flag value is a stringified Bool
     if (saveChatsFlag === "false") {
       return false;
     } else {
@@ -137,7 +132,6 @@ export function getLocallyStoredChat(chatId) {
 };
 
 export function storeChatHistoryLocally(chatHistory) {
-  console.log("in storeChatHistoryLocally chatHistory ", chatHistory);
   if (chatHistory) {
     function bigIntReplacer(_key, value) {
       return typeof value === 'bigint' ? value.toString() : value;
@@ -150,9 +144,7 @@ export function storeChatHistoryLocally(chatHistory) {
 };
 
 export function getLocallyStoredChatHistory() {
-  console.log("in getLocallyStoredChatHistory ");
   const chatHistory = localStorage.getItem("chatHistoryStoredLocally");
-  console.log("in getLocallyStoredChatHistory chatHistory ", chatHistory);
   if (chatHistory) {
     return JSON.parse(chatHistory);
   };
@@ -160,8 +152,6 @@ export function getLocallyStoredChatHistory() {
 };
 
 export function storeLocalChangeToBeSynced(storeType, storeObject) {
-  console.log("in storeLocalChangeToBeSynced storeType ", storeType);
-  console.log("in storeLocalChangeToBeSynced storeObject ", storeObject);
   if (storeObject) {
     if (storeType === "localChatMessagesToSync") {
       const chatsToSyncStored = localStorage.getItem(storeType);
@@ -194,7 +184,6 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
           arrayOfChats.push(storeObject.chatMessages);
         };
         localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
-        console.log("in storeLocalChangeToBeSynced arrayOfChats ", arrayOfChats);
       } else {
         let newArrayForChats = [storeObject.chatMessages];
         localStorage.setItem(storeType, JSON.stringify(newArrayForChats));
@@ -209,7 +198,6 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
 };
 
 export function setUserSettingsSyncFlag(flagType) {
-  console.log("in setUserSettingsSyncFlag storeType ", flagType);
   if (flagType === "selectedAiModelId") {
     localStorage.setItem("selectedAiModelIdNeedsSync", "true");
     return true;
@@ -219,8 +207,6 @@ export function setUserSettingsSyncFlag(flagType) {
 };
 
 export function removeLocalChangeToBeSynced(storeType, storeObject) {
-  console.log("in removeLocalChangeToBeSynced storeType ", storeType);
-  console.log("in removeLocalChangeToBeSynced storeObject ", storeObject);
   if (storeObject) {
     if (storeType === "localChatMessagesToSync") {
       const chatsToSyncStored = localStorage.getItem(storeType);
@@ -246,7 +232,6 @@ export function removeLocalChangeToBeSynced(storeType, storeObject) {
           arrayOfChats.splice(existingChatIndex, 1);
         };
         localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
-        console.log("in removeLocalChangeToBeSynced arrayOfChats ", arrayOfChats);
       };
       return true;
     } else {
@@ -258,25 +243,21 @@ export function removeLocalChangeToBeSynced(storeType, storeObject) {
 };
 
 export async function syncLocalChanges() {
-  console.log("in syncLocalChanges navigator.onLine ", navigator.onLine);
   if (!navigator.onLine) {
     return;
   };
   
   const chatsToSyncStored = localStorage.getItem('localChatMessagesToSync');
-  console.log("in syncLocalChanges chatsToSyncStored ", chatsToSyncStored);
   let chatsToUpdate = chatsToSyncStored ? JSON.parse(chatsToSyncStored) : {};
-  console.log("in syncLocalChanges chatsToUpdate ", chatsToUpdate);
 
   const newChatsToSync = localStorage.getItem('newLocalChatToSync');
-  console.log("in syncLocalChanges newChatsToSync ", newChatsToSync);
   let chatsToCreate = newChatsToSync ? JSON.parse(newChatsToSync) : [];
-  console.log("in syncLocalChanges chatsToCreate ", chatsToCreate);
 
   // Temporary storage to handle failures
   let failedUpdates = {};
   let failedCreations = [];
 
+  console.log("syncing local changes to the backend");
   // Sync existing chats
   for (const chatId in chatsToUpdate) {
     const messagesFormattedForBackend = chatsToUpdate[chatId];  // Assuming these are already formatted properly
@@ -311,13 +292,11 @@ export async function syncLocalChanges() {
   };
 
   // Update localStorage with failed items only
-  console.log("in syncLocalChanges failedUpdates ", failedUpdates);
   if (Object.keys(failedUpdates).length > 0) {
     localStorage.setItem('localChatMessagesToSync', JSON.stringify(failedUpdates));
   } else {
     localStorage.removeItem('localChatMessagesToSync');
   };
-  console.log("in syncLocalChanges failedCreations ", failedCreations);
   if (failedCreations.length > 0) {
     localStorage.setItem('newLocalChatToSync', JSON.stringify(failedCreations));
   } else {
