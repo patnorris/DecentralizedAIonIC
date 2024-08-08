@@ -9,9 +9,9 @@
 
   // Sample prompts
   const samplePrompt1 = 'Recommend a good book';
-  const samplePrompt2 = 'Explain quantum physics';
-  const samplePrompt3 = 'Share a fun fact';
-  const samplePrompt4 = 'How to cook pasta?';
+  const samplePrompt2 = 'What is decentralized AI?';
+  const samplePrompt3 = 'Tell a funny joke';
+  const samplePrompt4 = 'Who is Satoshi Nakamoto?';
 </script>
 
 <div>
