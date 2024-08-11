@@ -1,0 +1,12 @@
+type PlainDoc = record { content : text };
+type VecDoc = record { content : text; embeddings : vec float32 };
+type VecQuery = variant { Embeddings : vec float32 };
+service : (opt principal, opt text, opt principal) -> {
+  add : (VecDoc) -> (text);
+  check_cycles_and_topup : () -> ();
+  delete : (VecDoc) -> ();
+  get_owner : () -> (opt principal) query;
+  search : (VecQuery, nat64) -> (opt vec PlainDoc) query;
+  size : () -> (nat64) query;
+  update_owner : (principal) -> ();
+}
