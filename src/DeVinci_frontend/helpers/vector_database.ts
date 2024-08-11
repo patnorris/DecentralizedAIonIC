@@ -211,3 +211,41 @@ export const checkUserHasKnowledgeBase = async () => {
     console.error("Error in checkUserHasKnowledgeBase: ", error)
   };
 };
+
+export const addToUserKnowledgebase = async (newKnowledge) => {
+  const embeddingsModel = new TensorFlowEmbeddings();
+  const embeddingResult = await embeddingsModel.embedQuery(newKnowledge);
+  try {
+    const addInput = {
+      content: newKnowledge,
+      embedding: embeddingResult,
+    };
+    const addResponse = await storeState.backendActor.add_to_user_knowledgebase(addInput);
+    if (addResponse.Ok) {
+      return addResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in addToUserKnowledgebase: ", error)
+  };
+};
+
+export const searchUserKnowledgebase = async (searchText) => {
+  const embeddingsModel = new TensorFlowEmbeddings();
+  const embeddingResult = await embeddingsModel.embedQuery(searchText);
+  try {
+    const searchInput = {
+      content: searchText,
+      embedding: embeddingResult,
+    };
+    const searchResponse = await storeState.backendActor.search_user_knowledgebase(searchInput);
+    if (searchResponse.Ok) {
+      return searchResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in searchUserKnowledgebase: ", error)
+  };
+};
