@@ -1,9 +1,14 @@
 export const idlFactory = ({ IDL }) => {
+  const Embeddings = IDL.Vec(IDL.Float64);
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
     'InvalidTokenId' : IDL.Null,
     'Unauthorized' : IDL.Null,
     'Other' : IDL.Text,
+  });
+  const MemoryVectorsStoredResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
   });
   const MemoryVectorsCheckResult = IDL.Variant({
     'Ok' : IDL.Bool,
@@ -35,7 +40,7 @@ export const idlFactory = ({ IDL }) => {
   const MemoryVector = IDL.Record({
     'content' : IDL.Text,
     'metadata' : MemoryVectorMetadata,
-    'embedding' : IDL.Vec(IDL.Float64),
+    'embedding' : Embeddings,
   });
   const MemoryVectorsResult = IDL.Variant({
     'Ok' : IDL.Vec(MemoryVector),
@@ -51,8 +56,8 @@ export const idlFactory = ({ IDL }) => {
     'emailAddress' : IDL.Text,
     'pageSubmittedFrom' : IDL.Text,
   });
-  const MemoryVectorsStoredResult = IDL.Variant({
-    'Ok' : IDL.Bool,
+  const SearchKnowledgeBaseResult = IDL.Variant({
+    'Ok' : IDL.Text,
     'Err' : ApiError,
   });
   const SignUpFormInput = IDL.Record({
@@ -69,6 +74,11 @@ export const idlFactory = ({ IDL }) => {
     'chatTitle' : IDL.Text,
   });
   const DeVinciBackend = IDL.Service({
+    'add_to_user_knowledgebase' : IDL.Func(
+        [IDL.Text, Embeddings],
+        [MemoryVectorsStoredResult],
+        [],
+      ),
     'check_caller_has_memory_vectors_entry' : IDL.Func(
         [],
         [MemoryVectorsCheckResult],
@@ -92,6 +102,11 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'search_user_knowledgebase' : IDL.Func(
+        [Embeddings],
+        [SearchKnowledgeBaseResult],
+        [],
+      ),
     'store_user_chats_memory_vectors' : IDL.Func(
         [IDL.Vec(MemoryVector)],
         [MemoryVectorsStoredResult],
