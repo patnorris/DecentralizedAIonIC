@@ -13,18 +13,18 @@ pub fn assert_owner() -> Result<(), String> {
     }
 }
 
-pub fn is_controller() -> Result<(), String> {
-    STATE.with(|state| {
+/* pub fn is_controller() -> Result<(), String> {
+    RUNTIME_STATE.with(|state| {
         if state
             .borrow()
             .data
             .canister_settings
             .controllers
-            .contains(&state.borrow().env.caller())
+            .contains(caller())
         {
             Ok(())
         } else {
             Err("You are not a controller".to_string())
         }
     })
-}
+} */
