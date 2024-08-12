@@ -160,7 +160,7 @@ module {
 
   public type MemoryVector = {
     content: Text;
-    embedding: [Float];
+    embedding: Embeddings;
     metadata: MemoryVectorMetadata;
   };
 
@@ -169,6 +169,10 @@ module {
   public type MemoryVectorsResult = Result<[MemoryVector], ApiError>;
 
   public type MemoryVectorsCheckResult = Result<Bool, ApiError>;
+
+  public type Embeddings = [Float];
+
+  public type SearchKnowledgeBaseResult = Result<Text, ApiError>;
 
   public type SignUpFormInput = {
     emailAddress: Text; // provided by user on signup
