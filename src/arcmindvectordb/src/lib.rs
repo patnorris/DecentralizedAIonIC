@@ -4,7 +4,7 @@ use std::{cell::RefCell, time::Duration};
 use serde::Serialize;
 
 mod guards;
-use guards::assert_owner;
+use guards::is_controller;
 
 // Candid
 use candid::{candid_method, Principal};
@@ -81,7 +81,8 @@ fn init_stable_vec_content() -> StableVec<VecDoc, Memory> {
 }
 
 // Vector DB main functions
-#[update(guard = "assert_owner")]
+//#[update(guard = "assert_owner")]
+#[update(guard = "is_controller")]
 #[candid_method(update)]
 pub fn add(doc: VecDoc) -> String {
     let embeddings = normalize_embeddings(doc.embeddings.clone());
@@ -108,7 +109,8 @@ pub fn add(doc: VecDoc) -> String {
     return "success".to_string();
 }
 
-#[query(guard = "assert_owner")]
+//#[update(guard = "assert_owner")]
+#[update(guard = "is_controller")]
 #[candid_method(query)]
 pub fn search(vec_query: VecQuery, k: usize) -> Option<Vec<PlainDoc>> {
     let mut query: Vec<f32> = match vec_query {
@@ -131,7 +133,8 @@ pub fn search(vec_query: VecQuery, k: usize) -> Option<Vec<PlainDoc>> {
     Some(result)
 }
 
-#[update(guard = "assert_owner")]
+//#[update(guard = "assert_owner")]
+#[update(guard = "is_controller")]
 #[candid_method(update)]
 pub fn delete(doc: VecDoc) {
     let mut embeddings = doc.embeddings.clone();
@@ -181,7 +184,8 @@ fn init_index() {
     });
 }
 
-#[query(guard = "assert_owner")]
+//#[update(guard = "assert_owner")]
+#[update(guard = "is_controller")]
 #[candid_method(query)]
 pub fn size() -> usize {
     return PLAIN_MAP.with(|plain_map| plain_map.borrow().len());
@@ -227,7 +231,8 @@ pub fn get_owner() -> Option<Principal> {
     STATE.with(|state| (*state.borrow()).owner)
 }
 
-#[update(guard = "assert_owner")]
+//#[update(guard = "assert_owner")]
+#[update(guard = "is_controller")]
 #[candid_method(update)]
 pub fn update_owner(new_owner: Principal) {
     STATE.with(|state| {
