@@ -25,7 +25,7 @@ mod embeddings;
 use embeddings::{normalize_embeddings, EMBEDDING_SIZE};
 
 const BUCKET_SIZE: usize = 32;
-pub type Tree = KdTree<f32, u64, EMBEDDING_SIZE, BUCKET_SIZE, u16>;
+pub type Tree = KdTree<f64, u64, EMBEDDING_SIZE, BUCKET_SIZE, u16>;
 use std::collections::HashMap;
 pub type PlainMap = HashMap<u64, PlainDoc>;
 
@@ -86,7 +86,7 @@ fn init_stable_vec_content() -> StableVec<VecDoc, Memory> {
 #[candid_method(update)]
 pub fn add(doc: VecDoc) -> String {
     let embeddings = normalize_embeddings(doc.embeddings.clone());
-    let query: &[f32; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
+    let query: &[f64; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
     let plain_doc = PlainDoc {
         content: doc.content.to_owned(),
     };
@@ -113,12 +113,12 @@ pub fn add(doc: VecDoc) -> String {
 #[query()]
 #[candid_method(query)]
 pub fn search(vec_query: VecQuery, k: usize) -> Option<Vec<PlainDoc>> {
-    let mut query: Vec<f32> = match vec_query {
+    let mut query: Vec<f64> = match vec_query {
         VecQuery::Embeddings(q) => q.to_owned(),
     };
     query.resize(EMBEDDING_SIZE, 0.0);
 
-    let query: &[f32; EMBEDDING_SIZE] = &query.try_into().unwrap();
+    let query: &[f64; EMBEDDING_SIZE] = &query.try_into().unwrap();
     let neighbors = TREE.with(|tree| tree.borrow().nearest_n(query, k, &squared_euclidean));
     let plain_map = PLAIN_MAP.with(|plain_map| plain_map.borrow().clone());
 
@@ -140,7 +140,7 @@ pub fn delete(doc: VecDoc) {
     let mut embeddings = doc.embeddings.clone();
     embeddings.resize(EMBEDDING_SIZE, 0.0);
 
-    let query: &[f32; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
+    let query: &[f64; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
     let id = hash(&PlainDoc {
         content: doc.content.to_owned(),
     });
@@ -173,7 +173,7 @@ fn init_index() {
         let mut tree = tree.borrow_mut();
         for doc in vec_content.iter() {
             let embeddings = normalize_embeddings(doc.embeddings.clone());
-            let query: &[f32; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
+            let query: &[f64; EMBEDDING_SIZE] = &embeddings.try_into().unwrap();
             let plain_doc = PlainDoc {
                 content: doc.content.to_owned(),
             };

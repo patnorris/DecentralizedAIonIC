@@ -431,7 +431,12 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     let result = await knowledgebaseCanister.search(#Embeddings(embeddings), 1);
     switch (result) {
       case (null) { return #Err(#Other("none found")); };
-      case (?resultDocs) { return #Ok(resultDocs[0].content); };
+      case (?resultDocs) {
+        if (resultDocs.size() > 0) {
+          return #Ok(resultDocs[0].content);
+        };
+        return #Err(#Other("none found"));
+      };
     };   
   };
 

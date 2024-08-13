@@ -106,12 +106,12 @@
         </svg>
         <span class="sr-only">Search Knowledgebase</span>
       </button>
-      {#if searchResult}
-        <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
-          {searchResult}
-        </div>
-      {/if}
     </div>
+    {#if searchResult}
+      <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
+        {searchResult}
+      </div>
+    {/if}
   </main>
 </div>
 

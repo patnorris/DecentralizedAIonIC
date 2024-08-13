@@ -6,7 +6,7 @@ use std::borrow::Cow;
 use ic_stable_structures::{BoundedStorable, Storable};
 const MAX_VALUE_SIZE: u32 = 1024 * 1024;
 
-pub type Embeddings = Vec<f32>;
+pub type Embeddings = Vec<f64>;
 
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
 pub struct VecDoc {
@@ -31,7 +31,7 @@ impl BoundedStorable for VecDoc {
 
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
 pub enum VecQuery {
-    Embeddings(Vec<f32>),
+    Embeddings(Vec<f64>),
 }
 
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
