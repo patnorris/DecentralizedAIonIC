@@ -40,6 +40,7 @@
     </button>
   </h2>
   <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
+    <hr class="w-full h-0.5 mx-auto my-4 bg-gray-200 border-0 rounded md:my-4 dark:bg-gray-700">
     <ol class="relative text-gray-500 border-s border-gray-200 dark:border-gray-700 dark:text-gray-400 ml-4">
       <li class="mb-10 ms-6 mt-8">
         <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
