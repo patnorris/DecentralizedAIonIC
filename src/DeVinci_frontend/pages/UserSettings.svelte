@@ -7,12 +7,13 @@
     userSettings
   } from "../store";
 
-  import Sidebar        from "../components/Sidebar.svelte";
-  import Navigation     from "../components/Navigation.svelte";
-  import SelectModel    from "../components/SelectModel.svelte";
-  import InOutSaveChats from "../components/InOutSaveChats.svelte";
-  import OwnCanister    from "../components/OwnCanister.svelte";
-  import Footer         from "../components/Footer.svelte";
+  import Sidebar          from "../components/Sidebar.svelte";
+  import Navigation       from "../components/Navigation.svelte";
+  import SelectModel      from "../components/SelectModel.svelte";
+  import InOutSaveChats   from "../components/InOutSaveChats.svelte";
+  import OwnCanister      from "../components/OwnCanister.svelte";
+  import GeneralSettings  from "../components/GeneralSettings.svelte";
+  import Footer           from "../components/Footer.svelte";
 
   import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
   import {
@@ -138,6 +139,7 @@
             Please connect to view and edit your settings.
           </div>
           <InOutSaveChats />
+          <GeneralSettings />
           <OwnCanister />
         {:else}
           {#if !hasLoadedSettings}
@@ -147,6 +149,7 @@
             <p hidden>{loadUserSettings()}</p>
           {:else}
             <InOutSaveChats />
+            <GeneralSettings />
             <OwnCanister />
           {/if}
         {/if}
