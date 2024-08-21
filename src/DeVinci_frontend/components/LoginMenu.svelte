@@ -35,7 +35,7 @@
     <Login />
   {:else}
     <Hamburger
-      bind:open />  
+      bind:open />
   {/if}
 </div>
 
@@ -63,7 +63,7 @@
         Logout
       </p>
     </div>
-  
+
     <hr transition:scale={{ duration: 650, easing: quadOut, opacity: 1 }} />
   </Modal>
 {/if}
@@ -78,7 +78,7 @@
   div.mainMenu {
     z-index: 10;
     position: relative;
-    height: 60%; 
+    height: 60%;
     width: 50%;
     margin: auto;
     text-align: center;

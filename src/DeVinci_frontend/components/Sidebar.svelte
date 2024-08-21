@@ -12,7 +12,7 @@
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
     <SidebarHeader />
-  <SidebarFooter />
+    <SidebarFooter />
     <SidebarBottomNav />
     {#if !userHasDownloadedAtLeastOneModel}
       <SidebarFooter />
