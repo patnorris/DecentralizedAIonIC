@@ -1,6 +1,6 @@
 <script lang="ts">
   import SidebarHeader    from "./SidebarHeader.svelte";
-  import SidebarFooter    from "./SidebarFooter.svelte";
+  import SidebarInfo        from "./SidebarFooter.svelte";
   import SidebarBottomNav from "./SidebarBottomNav.svelte";
   //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
@@ -12,10 +12,9 @@
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
     <SidebarHeader />
-    <SidebarFooter />
     <SidebarBottomNav />
     {#if !userHasDownloadedAtLeastOneModel}
-      <SidebarFooter />
+        <SidebarInfo />
     {/if}
     {#if userHasDownloadedAtLeastOneModel}
       <SidebarBottomNav />
