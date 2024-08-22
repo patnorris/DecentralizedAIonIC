@@ -12,10 +12,9 @@
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
     <SidebarHeader />
-    {#if !userHasDownloadedAtLeastOneModel}
-        <SidebarInfo />
-    {/if}
     {#if userHasDownloadedAtLeastOneModel}
-      <SidebarBottomNav />
+        <SidebarBottomNav />
+    {:else}
+        <SidebarInfo />
     {/if}
 </div>
