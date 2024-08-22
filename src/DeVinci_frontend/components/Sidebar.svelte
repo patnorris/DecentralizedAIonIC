@@ -12,7 +12,6 @@
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
     <SidebarHeader />
-    <SidebarBottomNav />
     {#if !userHasDownloadedAtLeastOneModel}
         <SidebarInfo />
     {/if}
