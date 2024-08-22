@@ -14,6 +14,7 @@
   } from "../helpers/vector_database";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
+  import Footer from "./Footer.svelte"
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
 
@@ -206,6 +207,10 @@
     {/key}
   {/if}
 </div>
+
+{#if !$chatModelIdInitiatedGlobal}
+  <Footer />
+{/if}
 
 {#if showToast}
   <InstallToastNotification />
