@@ -12,7 +12,6 @@
   import SelectModel from "../components/SelectModel.svelte";
   import Footer from "../components/Footer.svelte";
 
-  import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
   import {
     syncLocalChanges,
     setLocalFlag,
@@ -45,8 +44,6 @@
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-      } else {
-        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
       };
     };
     hasLoadedSettings = true;

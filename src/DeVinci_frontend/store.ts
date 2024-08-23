@@ -10,7 +10,6 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
-import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
 //__________Local vs Mainnet Development____________
 /* export const HOST =
@@ -125,8 +124,6 @@ export const createStore = ({
         };
         if (localStorage.getItem("selectedAiModelId")) {
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-        } else {
-          selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
         };     
       };
     } else {
@@ -135,8 +132,6 @@ export const createStore = ({
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-      } else {
-        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
       };
     };
   };
@@ -545,8 +540,6 @@ export const createStore = ({
           stoicConnect();
         };
       };
-    } else {
-      selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
     };
   };
 
