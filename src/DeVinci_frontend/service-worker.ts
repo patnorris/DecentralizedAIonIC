@@ -68,7 +68,7 @@ self.addEventListener('activate', (event) => {
   console.log('Service Worker activated.');
 });
 
-// Use a CacheFirst strategy for all requests (i.e. all requests are cached)
+// Use a NetworkFirst strategy for all requests (i.e. all requests are cached)
 registerRoute(
   ({ request }) => true,
   new NetworkFirst({

@@ -8,6 +8,38 @@ const availableAiModels = [
     default: true
   },
   { //requires shader-f16
+    id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',
+    name: 'Llama3.1 8B',
+    size: 'Large',
+    parameters: '8 billion',
+    performance: 'Super Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'SmolLM-1.7B-Instruct-q0f16-MLC',
+    name: 'SmolLM 1.7B',
+    size: 'Small',
+    parameters: '1.7 billion',
+    performance: 'Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'SmolLM-360M-Instruct-q0f16-MLC',
+    name: 'SmolLM 360M',
+    size: 'Very Small',
+    parameters: '360 million',
+    performance: 'Quite Good',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'SmolLM-135M-Instruct-q0f16-MLC',
+    name: 'SmolLM 135M',
+    size: 'Super Small',
+    parameters: '135 million',
+    performance: 'Alright',
+    default: false
+  },
+  { //requires shader-f16
     model: "https://huggingface.co/mlc-ai/Qwen2-7B-Instruct-q4f16_1-MLC",
     id: "Qwen2-7B-Instruct-q4f16_1-MLC",
     name: 'Qwen2',
@@ -108,7 +140,7 @@ const availableAiModels = [
   {
     model: "https://huggingface.co/mlc-ai/Qwen2-1.5B-Instruct-q4f32_1-MLC",
     id: "Qwen2-1.5B-Instruct-q4f32_1-MLC",
-    name: 'Qwen2 q4f32_1',
+    name: 'Qwen2 1.5B',
     size: 'Tiny',
     parameters: '1.5 billion',
     performance: 'Good',
@@ -143,6 +175,15 @@ const availableAiModels = [
     android: true
   },
   {
+    id: 'Llama-3.1-8B-Instruct-q4f32_1-MLC-1k',
+    name: 'Llama3.1 8B',
+    size: 'Large',
+    parameters: '8 billion',
+    performance: 'Super Good',
+    default: false,
+    android: true
+  },
+  {
     id: 'Llama-3-8B-Instruct-q4f32_1-MLC-1k',
     name: 'Llama3 8B',
     size: 'Large',
@@ -151,7 +192,35 @@ const availableAiModels = [
     default: false,
     android: true
   },
-  /* {
+  { //requires shader-f16
+    id: 'SmolLM-1.7B-Instruct-q4f32_1-MLC',
+    name: 'SmolLM 1.7B',
+    size: 'Small',
+    parameters: '1.7 billion',
+    performance: 'Good',
+    default: false,
+    android: true
+  },
+  /*
+  { //requires shader-f16
+    id: 'SmolLM-360M-Instruct-q4f32_1-MLC',
+    name: 'SmolLM 360M',
+    size: 'Very Small',
+    parameters: '360 million',
+    performance: 'Quite Good',
+    default: false,
+    android: true
+  },
+  { //requires shader-f16
+    id: 'SmolLM-135M-Instruct-q4f32_1-MLC',
+    name: 'SmolLM 135M',
+    size: 'Super Small',
+    parameters: '135 million',
+    performance: 'Alright',
+    default: false,
+    android: true
+  },
+  {
     model: "https://huggingface.co/mlc-ai/Qwen2-0.5B-Instruct-q4f16_1-MLC",
     id: "Qwen2-0.5B-Instruct-q4f16_1-MLC",
     name: 'Qwen2 q4f16_1',
