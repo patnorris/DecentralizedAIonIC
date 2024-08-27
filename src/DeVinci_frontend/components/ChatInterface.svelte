@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import {
     chatModelGlobal,
     activeChatGlobal,
@@ -28,6 +28,8 @@
     return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
   };
 
+  let isChatBoxReady = false;
+
   onMount(() => {
     if (!userHasDownloadedAtLeastOneModel && !isPWAInstalled()) {
       // Check if the toast has already been shown in this session
@@ -45,6 +47,12 @@
         }, 8000);
       };
     };
+  });
+
+  afterUpdate(() => {
+    if ($chatModelIdInitiatedGlobal && !isChatBoxReady) {
+      isChatBoxReady = true;
+    }
   });
 
   let vectorDbSearchTool;
@@ -199,11 +207,12 @@
 <div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
-  {/if}
-  {#if userHasDownloadedAtLeastOneModel}
-    {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+  {:else if isChatBoxReady}
+    {#key $activeChatGlobal}
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
     {/key}
+  {:else}
+    <p>Loading chat interface...</p>
   {/if}
 </div>
 
