@@ -179,6 +179,9 @@
           if (report.progress !== 0) {
             downloadProgress = toPercentage(report.progress);
             setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: toPercentage(report.progress)});
+            if (report.progress === 1) {
+              isDownloaded = true;
+            };
           } else {
             downloadText = report.text;
           };
