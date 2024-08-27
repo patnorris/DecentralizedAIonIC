@@ -10,7 +10,6 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
-import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
 //__________Local vs Mainnet Development____________
 /* export const HOST =
@@ -125,9 +124,7 @@ export const createStore = ({
         };
         if (localStorage.getItem("selectedAiModelId")) {
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-        } else {
-          selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
-        };     
+        };
       };
     } else {
       if (localStorage.getItem("userSettings")) {
@@ -135,8 +132,6 @@ export const createStore = ({
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-      } else {
-        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
       };
     };
   };
@@ -158,7 +153,7 @@ export const createStore = ({
             : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
         // Maximum authorization expiration is 30 days
         maxTimeToLive: days * hours * nanosecondsPerHour,
-        windowOpenerFeatures: 
+        windowOpenerFeatures:
           `left=${window.screen.width / 2 - 525 / 2}, `+
           `top=${window.screen.height / 2 - 705 / 2},` +
           `toolbar=0,location=0,menubar=0,width=525,height=705`,
@@ -478,27 +473,27 @@ export const createStore = ({
         if (plugConnected) {
           console.log("plug disconnect failed, trying once more");
           await window.ic?.plug?.disconnect();
-        };      
+        };
       } catch (error) {
-        console.error("Plug disconnect error: ", error);      
+        console.error("Plug disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "stoic") {
       try {
         StoicIdentity.disconnect();
       } catch (error) {
-        console.error("StoicIdentity disconnect error: ", error);      
+        console.error("StoicIdentity disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "nfid") {
       try {
-        await authClient.logout();      
+        await authClient.logout();
       } catch (error) {
-        console.error("NFid disconnect error: ", error);       
+        console.error("NFid disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "internetidentity") {
       try {
-        await authClient.logout();      
+        await authClient.logout();
       } catch (error) {
-        console.error("Internet Identity disconnect error: ", error);       
+        console.error("Internet Identity disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "bitfinity") {
       /* try {
@@ -509,9 +504,9 @@ export const createStore = ({
         if (bitfinityConnected) {
           console.log("Bitfinity disconnect failed, trying once more");
           await window.ic?.infinityWallet?.disconnect();
-        };      
+        };
       } catch (error) {
-        console.error("Bitfinity disconnect error: ", error);      
+        console.error("Bitfinity disconnect error: ", error);
       }; */
     };
 
@@ -545,8 +540,6 @@ export const createStore = ({
           stoicConnect();
         };
       };
-    } else {
-      selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
     };
   };
 

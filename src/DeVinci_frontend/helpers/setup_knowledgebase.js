@@ -6,7 +6,10 @@ export const getResourceAsArray = async (pathToUploadedPdf) => {
 // Loaded via <script> tag, create shortcut to access PDF.js exports.
 let { pdfjsLib } = globalThis;
 // The workerSrc property shall be specified.
-pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+// Check if the current environment is not localhost
+if (window.location.hostname !== 'localhost') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+}
 
 const getDocumentContent = async (documentUrl) => {
   let documentContent = [];
