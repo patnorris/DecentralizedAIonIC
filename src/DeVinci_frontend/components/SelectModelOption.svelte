@@ -98,6 +98,9 @@
   });
 
   const updateUserSettings = async (modelId) => {
+    if (!$store.isAuthed) {
+      return;
+    };
     // Persist to backend
     const updatedSettingsObject = {
       selectedAiModelId: modelId,
@@ -256,9 +259,9 @@
         {/if}
       {:else}
         {#if downloadProgress}
-        <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
-          <!-- Background animation + progress bar -->
-          <div class="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove"></div>
+          <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
+            <!-- Background animation + progress bar -->
+            <div class="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove"></div>
             <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: {downloadProgress}%;">
               {downloadProgress}%
             </div>
