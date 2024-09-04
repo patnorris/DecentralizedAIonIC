@@ -10,7 +10,9 @@
   let showToast = true; // Notify the user they can install the PWA
 
   onMount(() => {
+    console.log("in onMount");
     window.addEventListener('beforeinstallprompt', (e) => {
+      console.log("in beforeinstallprompt");
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
@@ -25,6 +27,8 @@
   });
 
   async function installPWA() {
+    console.log("in installPWA");
+    console.log(deferredPrompt);
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
