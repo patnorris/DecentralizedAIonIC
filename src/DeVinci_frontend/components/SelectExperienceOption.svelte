@@ -1,0 +1,208 @@
+<script>
+  import * as webllm from "@mlc-ai/web-llm";
+  import { onMount } from "svelte";
+  import { location, push } from 'svelte-spa-router';
+
+  import {
+    store,
+    chatModelGlobal,
+    selectedAiModelId,
+    chatModelIdInitiatedGlobal
+  } from "../store";
+  import {
+    setLocalFlag,
+    syncLocalChanges,
+    setUserSettingsSyncFlag,
+    getLocalFlag
+  } from "../helpers/localStorage";
+
+  export let id;
+  export let title;
+  export let creator;
+  export let shortDescription;
+  export let longDescription;
+  export let note;
+  export let isStandaloneApp;
+  export let standaloneAppUrl;
+  export let experienceType;
+  export let aiModelIdentifier;
+  export let databaseToInclude;
+  export let databaseIdentifier;
+  export let selectedExperienceId;
+
+  let initiateText;
+  let downloadText;
+
+  function toPercentage(floatValue, decimals = 2) {
+    return (floatValue * 100).toFixed(decimals);
+  };
+
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+      const spans = document.querySelectorAll(".performance-span");
+
+      // Define a mapping of performance to background colors
+      const backgroundColors = {
+        "Good": "#f9c490",
+        "Super Good": "#a1c490",
+        "Alright": "#f0e68c",
+        "Good for Chinese": "#76c7be",
+        "Great for Math": "rgb(237, 98, 98)",
+        "Insane": "rgb(203, 139, 208)",
+      };
+
+      // Function to set background color and save to localStorage
+      function setBackgroundColor(span) {
+        const performance = span.textContent.trim(); // Get the text content of the span and trim any whitespace
+        if (backgroundColors[performance]) {
+          const color = backgroundColors[performance];
+          span.style.backgroundColor = color;
+          // Save the color to localStorage
+          localStorage.setItem(`span-${performance}`, color);
+        };
+      };
+
+      // Function to load background color from localStorage
+      function loadBackgroundColor(span) {
+        const performance = span.textContent.trim();
+        const savedColor = localStorage.getItem(`span-${performance}`);
+        if (savedColor) {
+          span.style.backgroundColor = savedColor;
+        } else {
+          // If no saved color, set it
+          setBackgroundColor(span);
+        };
+      };
+
+      // Apply background color change to each span element
+      spans.forEach(span => loadBackgroundColor(span));
+
+      // Observer to apply background colors on subsequent navigations
+      const observer = new MutationObserver(function(mutationsList, observer) {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList' && mutation.addedNodes.length) {
+            mutation.addedNodes.forEach(node => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const newSpans = node.querySelectorAll(".performance-span");
+                newSpans.forEach(span => loadBackgroundColor(span));
+              };
+            });
+          };
+        };
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+    }, 100); // 100ms delay
+  });
+
+  const updateUserSettings = async (modelId) => {
+    if (!$store.isAuthed) {
+      return;
+    };
+    // Persist to backend
+    const updatedSettingsObject = {
+      selectedAiModelId: modelId,
+    };
+    try {
+      const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);
+      // @ts-ignore
+      if (settingsUpdatedResponse.Ok) {
+        syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+      } else {
+        // @ts-ignore
+        console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
+        // @ts-ignore
+        throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
+      };
+      syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+    } catch (error) {
+      // @ts-ignore
+      console.error("Error updating settings: ", error);
+      // Likely offline, so set flag to sync change later
+      setUserSettingsSyncFlag("selectedAiModelId");
+    };
+  };
+
+  const changeModel = (id) => {
+    if ($selectedAiModelId === id) {
+      return;
+    };
+    // Change the model in the store
+    selectedAiModelId.set(id); // this also updates the locally stored model id
+    chatModelIdInitiatedGlobal.set(null);
+    updateUserSettings(id);
+  };
+
+  let visibleExperienceInfo = false;
+
+  async function showExperienceInfo() {
+    selectedExperienceId = id;
+    visibleExperienceInfo = true;
+  };
+
+  async function loadExperienceInPlace() {
+    
+  };
+
+  onMount(async () => {
+  });
+
+</script>
+
+<li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
+  <div>
+    <input type="radio" id={id} name="selectExperience" class="hidden peer" checked={selectedExperienceId === id} on:click={() => showExperienceInfo()} />
+    <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
+      <div class="block">
+        <div class="w-full text-[#151b1e] text-md font-semibold">{title}</div>
+        <div class="w-full text-sm font-normal">{creator}</div>
+        <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{shortDescription}</span>
+      </div>
+      <svg class="w-5 h-5 ms-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      </svg>
+    </label>
+  </div>
+  <div class="p-3 pt-1 pb-2">
+    {#if visibleExperienceInfo}
+      <div class="block">
+        <div class="w-full text-[#151b1e] text-md font-semibold">{title}</div>
+        <div class="w-full text-sm font-normal">{creator}</div>
+        <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{longDescription}</span>
+        <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{note}</span>
+      </div>
+      {#if isStandaloneApp}
+        <div class="w-full text-[#151b1e] text-md font-semibold">This experience will open in a new browser tab and run there as a standalone application.</div>
+        <button on:click={()=>{window.open(standaloneAppUrl, "_blank");}} type="button" class="bg-blue-50 rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white ml-2 border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+          Open
+        </button>
+      {:else}
+        <div class="w-full text-[#151b1e] text-md font-semibold">This experience will load directly in this app.</div>
+        <button on:click={loadExperienceInPlace} type="button" class="bg-blue-50 rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white ml-2 border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+          Load
+        </button>        
+      {/if}
+    {/if}
+  </div>
+</li>
+
+<style>
+	.peer:checked + label svg {
+		color: rgb(176 196 222);
+	}
+
+  .performance-span {
+	  transition: background-color 3.3s ease-in-out; /* Adjust the duration and easing as needed */
+  }
+
+  @keyframes bgMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Applying the animation */
+  .animate-bgMove {
+    background-size: 200% 100%;
+    animation: bgMove 2s linear infinite;
+  }
+</style>
