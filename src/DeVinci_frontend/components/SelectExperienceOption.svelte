@@ -7,7 +7,8 @@
     store,
     chatModelGlobal,
     selectedAiModelId,
-    chatModelIdInitiatedGlobal
+    chatModelIdInitiatedGlobal,
+    deviceType
   } from "../store";
   import {
     setLocalFlag,
@@ -15,6 +16,8 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/localStorage";
+
+  import { getAvailableAiModels } from "../helpers/ai_model_helpers";
 
   export let id;
   export let title;
@@ -29,6 +32,11 @@
   export let databaseToInclude;
   export let databaseIdentifier;
   export let selectedExperienceId;
+
+  // Reactive statement to check if the ID is included in the already downloaded model IDs
+  $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
+
+  $: downloadProgress = getLocalFlag("aiModelDownloadingProgress", {modelId: id});
 
   let initiateText;
   let downloadText;
@@ -140,12 +148,111 @@
     visibleExperienceInfo = true;
   };
 
-  async function loadExperienceInPlace() {
+  async function loadOnDeviceExperience() {
+    console.log("in loadOnDeviceExperience");
+    console.log("Loading chat model...");
+    //chatModelDownloadInProgress = true;
+    downloadText = "Downloading... please wait.";
+    initiateText = "Initiating... please wait.";
+
+    if (process.env.NODE_ENV !== "development") {
+      console.log("Using web worker");
+      try {
+        /* TODO: fix
+        chatModel = new webllm.ChatWorkerClient(new Worker(
+          new URL(workerPath, import.meta.url),
+          {type: 'module'}
+        )); */
+        //console.log("Using webllm");
+        $chatModelGlobal = new webllm.MLCEngine();
+      } catch (error) {
+        console.error("Error loading web worker: ", error);
+        $chatModelGlobal = new webllm.MLCEngine();
+      };
+    } else {
+      console.log("Using webllm");
+      $chatModelGlobal = new webllm.MLCEngine();
+    };
+
+    const initProgressCallback = (report) => {
+      if (isDownloaded) {
+        // Avoid setting the download progress for already downloaded models (which have progress as 0)
+        initiateText = "Initiating... please wait.";
+      } else {
+        if (report.progress) {
+          if (report.progress !== 0) {
+            downloadProgress = toPercentage(report.progress);
+            setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: toPercentage(report.progress)});
+            if (report.progress === 1) {
+              isDownloaded = true;
+            };
+          } else {
+            downloadText = report.text;
+          };
+        } else {
+          downloadText = "Downloading... please wait.";
+        };
+      };
+    };
+    try {
+      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      await $chatModelGlobal.reload(aiModelIdentifier);
+      // Set flag that this model has been downloaded
+      const flagObject = {
+        modelId: aiModelIdentifier,
+      };
+      setLocalFlag("downloadedAiModels", flagObject);
+    } catch (error) {
+      console.error("Error loading model: ", error);
+      throw error;
+    };
+    $chatModelIdInitiatedGlobal = aiModelIdentifier;
+    //chatModelDownloadInProgress = false;
+    if ($location !== "/") {
+      push('/');
+    };
+  };
+
+  async function loadOnChainExperience() {
+    console.log("in loadOnChainExperience");
+
+  };
+
+  async function loadOffChainExperience() {
+    console.log("in loadOffChainExperience");
     
   };
 
-  onMount(async () => {
-  });
+  async function loadExperienceInPlace() {
+    console.log("in loadExperienceInPlace");
+    switch (experienceType) {
+      case 'ondevice':
+        // Check if the aiModelIdentifier is included in availableAiModels
+        let availableAiModels = getAvailableAiModels(deviceType === 'Android');
+        const modelExists = availableAiModels.some(model => model.id === aiModelIdentifier);
+        if (modelExists) {
+          loadOnDeviceExperience();
+        } else {
+          console.log("Model identifier not found in available models.");
+        };
+        break;
+
+      case 'onchain':
+        console.log("Handling on-chain experience.");
+        // Additional logic for on-chain experience
+        loadOnChainExperience();
+        break;
+
+      case 'offchain':
+        console.log("Handling off-chain experience.");
+        // Additional logic for off-chain experience
+        loadOffChainExperience();
+        break;
+
+      default:
+        console.log("Experience type not recognized.");
+    };    
+  };
 
 </script>
 
@@ -180,7 +287,7 @@
         <div class="w-full text-[#151b1e] text-md font-semibold">This experience will load directly in this app.</div>
         <button on:click={loadExperienceInPlace} type="button" class="bg-blue-50 rounded-lg focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white ml-2 border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
           Load
-        </button>        
+        </button>
       {/if}
     {/if}
   </div>
