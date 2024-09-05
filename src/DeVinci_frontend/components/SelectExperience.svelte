@@ -49,6 +49,20 @@
       databaseToInclude: "none", // (Vector) database to include in model's responses, possible values: none, external, local
       databaseIdentifier: null, // Identifies and locates the (vector) database or its data to use, value depends on databaseToInclude (none: null, external: URL to call database, local: URL to data which will be loaded into a local vector database running in-browser)
     },
+    {
+      id: "1", // Internal id assigned to experience
+      title: "Premier UN education", // Title of experience to be shown on overview
+      creator: "Team AI Edu", // Name of the team who created this experience
+      shortDescription: "This is your starting point for learning about UN's anti-corruption programs", // max 2 sentences (200 characters)
+      longDescription: "This experience includes a lot of fun interactive info. It's AI-powered.", // max 100 words
+      note: "Addition info: this is great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
+      isStandaloneApp: true, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
+      standaloneAppUrl: "https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/", // Only for isStandaloneApp=true, URL to open in new tab
+      experienceType: "ondevice", // For experiences loaded in this app, possible values: ondevice, onchain, offchain
+      aiModelIdentifier: "SmolLM-135M-Instruct-q0f16-MLC", // Identifies and locates the AI model, value depends on experienceType (ondevice: WebLLM model id, onchain: IC canister id, offchain: URL where model is hosted and can be called)
+      databaseToInclude: "none", // (Vector) database to include in model's responses, possible values: none, external, local
+      databaseIdentifier: null, // Identifies and locates the (vector) database or its data to use, value depends on databaseToInclude (none: null, external: URL to call database, local: URL to data which will be loaded into a local vector database running in-browser)
+    },
   ];
 
 </script>
@@ -57,7 +71,7 @@
     <div class="m-4 mt-2 px-4 py-3 text-gray-500 inline-block border border-[#b0c4de] rounded-lg sm:px-5 bg-gray-50">
       <b>Please select an experience</b>. More information on the experience will show up when you select it.
     </div>
-    <ul class="grid w-full gap-2 md:grid-cols-2 px-4 mt-4">
+    <ul class="grid w-full gap-2 md:grid-cols-1 px-4 mt-4">
       {#each availableExperiences as option}
         <SelectExperienceOption
           id={option.id}

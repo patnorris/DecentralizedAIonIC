@@ -16,6 +16,7 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/localStorage";
+  import { currentExperienceId } from "../store";
 
   import { getAvailableAiModels } from "../helpers/ai_model_helpers";
 
@@ -31,7 +32,6 @@
   export let aiModelIdentifier;
   export let databaseToInclude;
   export let databaseIdentifier;
-  export let selectedExperienceId;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
@@ -143,9 +143,11 @@
 
   let visibleExperienceInfo = false;
 
+  // Subscribe to changes in currentExperienceId
+  $: visibleExperienceInfo = $currentExperienceId === id;
+
   async function showExperienceInfo() {
-    selectedExperienceId = id;
-    visibleExperienceInfo = true;
+    currentExperienceId.set(id);
   };
 
   async function loadOnDeviceExperience() {
@@ -258,8 +260,15 @@
 
 <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
   <div>
-    <input type="radio" id={id} name="selectExperience" class="hidden peer" checked={selectedExperienceId === id} on:click={() => showExperienceInfo()} />
-    <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
+    <input 
+      type="radio" 
+      id={id} 
+      name="selectExperience" 
+      class="hidden peer" 
+      checked={$currentExperienceId === id} 
+      on:click={showExperienceInfo} 
+    />
+    <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600">
       <div class="block">
         <div class="w-full text-[#151b1e] text-md font-semibold">{title}</div>
         <div class="w-full text-sm font-normal">{creator}</div>
@@ -294,10 +303,6 @@
 </li>
 
 <style>
-	.peer:checked + label svg {
-		color: rgb(176 196 222);
-	}
-
   .performance-span {
 	  transition: background-color 3.3s ease-in-out; /* Adjust the duration and easing as needed */
   }
