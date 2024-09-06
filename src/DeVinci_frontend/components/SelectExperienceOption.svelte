@@ -270,13 +270,14 @@
     checked={isChecked} 
     on:click={showExperienceInfo} 
   />
-  <li class="text-[#151b1e] bg-[#f1f5f9] border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-white peer-checked:bg-white peer-checked:hover:bg-white">
+  <li class="text-[#151b1e] bg-[#f1f5f9] p-3 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-white peer-checked:bg-white peer-checked:hover:bg-white">
     <div>
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 peer-checked:hover:text-[#151b1e]">
-        <div class="block">
-          <div class="w-full text-[#151b1e] text-md font-semibold">{title}</div>
-          <div class="w-full text-sm font-normal">{creator}</div>
-          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-white rounded border-2 border-[#151b1e]">{shortDescription}</span>
+        <div class="flex flex-col">
+          <h1 class="flex items-center mb-3 text-3xl text-gray-800 font-extrabold">{title}
+            <span class="bg-blue-100 text-blue-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded ms-2">{creator}</span>
+          </h1>
+          <span class="performance-span text-[#151b1e] text-sm font-medium me-1.5 px-2.5 py-1 bg-white rounded border border-dashed border-gray-400">{shortDescription}</span>
         </div>
         {#if !isChecked}
           <svg class="w-5 h-5 ms-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -290,35 +291,35 @@
         <div class="block mb-2">
           <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100" role="alert">
             <span class="font-medium block mb-4">{longDescription}</span>
-          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 mb-4 bg-white rounded border-2 border-[#151b1e]">{note}</span>
+            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border-2 border-yellow-400">{note}</span>
           </div>
         </div>
         {#if isStandaloneApp}
-          <button on:click={()=>{window.open(standaloneAppUrl, "_blank");}} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
-            Open
-          </button>
-          <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">
-            <svg class="flex-shrink-0 inline w-3.5 h-3.5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-              <span>This experience will open in a new browser tab and run there as a standalone application.</span>
+            <button on:click={()=>{window.open(standaloneAppUrl, "_blank");}} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+              Open
+            </button>
+            <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">
+              <svg class="flex-shrink-0 inline w-3.5 h-3.5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span>This experience will open in a new browser tab and run there as a standalone application.</span>
+              </div>
             </div>
-          </div>
           {:else}
-          <button on:click={loadExperienceInPlace} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
-            Load
-          </button>
-          <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">
-            <svg class="flex-shrink-0 inline w-3.5 h-3.5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-              <span>This experience will load directly in this app.</span>
+            <button on:click={loadExperienceInPlace} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+              Load
+            </button>
+            <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">
+              <svg class="flex-shrink-0 inline w-3.5 h-3.5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span>This experience will load directly in this app.</span>
+              </div>
             </div>
-          </div>
         {/if}
       {/if}
     </div>
