@@ -158,7 +158,7 @@
         <!-- On-device Experienc -->
           <div class="border-b ">
             <input type="radio" name="accordion" id="accordion1" class="hidden">
-            <label for="accordion1" class="block rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
                 Create On-device Experience
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
@@ -170,7 +170,7 @@
         <!-- ICP experience -->
         <div class="border-b">
             <input type="radio" name="accordion" id="accordion2" class="hidden">
-            <label for="accordion2" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+            <label for="accordion2" class="block text-lg p-6 bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
                 Create Experience on ICP
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
@@ -182,7 +182,7 @@
         <!-- Off-chain experience -->
         <div class="border-b rounded-b-lg">
             <input type="radio" name="accordion" id="accordion3" class="hidden">
-            <label for="accordion3" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+            <label for="accordion3" class="block text-lg p-6 bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
                 Create off-chain Experience
             </label>
             <div class="accordion-content rounded-b-lg overflow-hidden max-h-0 transition-all duration-500 ease">
