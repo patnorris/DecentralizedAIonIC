@@ -19,6 +19,36 @@
   let selectedExperienceId;
 
   let availableExperiences = [
+    // Oxford entry
+    {
+      id: "oxford", // Internal id assigned to experience
+      title: "Oxford Hackathon Entry", // Title of experience to be shown on overview
+      creator: "Arjaan & Patrick", // Name of the team who created this experience
+      shortDescription: "This was the entry we put in at the Oxford hackathon", // max 2 sentences (200 characters)
+      longDescription: "It was the first AI for education experience we created and it's the inspiration for more solutions to come (including this hackathon). It's based on the same approach DeVinci is taking: run the AI model on the user's device.", // max 100 words
+      note: "Give it a try and think about how to improve it :)", // space for additional info team wants to provide to user on overview (max 50 words)
+      isStandaloneApp: true, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
+      standaloneAppUrl: "https://6tht4-syaaa-aaaai-acriq-cai.icp0.io/#/learn", // Only for isStandaloneApp=true, URL to open in new tab
+      experienceType: null, // For experiences loaded in this app, possible values: ondevice, onchain, offchain
+      aiModelIdentifier: null, // Identifies and locates the AI model, value depends on experienceType (ondevice: WebLLM model id, onchain: IC canister id, offchain: URL where model is hosted and can be called)
+      databaseToInclude: "none", // (Vector) database to include in model's responses, possible values: none, external, local
+      databaseIdentifier: null, // Identifies and locates the (vector) database or its data to use, value depends on databaseToInclude (none: null, external: URL to call database, local: URL to data which will be loaded into a local vector database running in-browser)
+    },
+    // DeVinci
+    {
+      id: "devinci", // Internal id assigned to experience
+      title: "DeVinci AI Chat App", // Title of experience to be shown on overview
+      creator: "Nuno & Patrick", // Name of the team who created this experience
+      shortDescription: "This is the first end-to-end-decentralized AI chat app and the codebase for this hackathon", // max 2 sentences (200 characters)
+      longDescription: "DeVinci is the fully private, end-to-end-decentralized AI chat app served from the Internet Computer. AI models run directly on the user's device so no data needs to leave the device and you can even use it offline.", // max 100 words
+      note: "Choose your favorite open-source Large Language Model and chat with it.", // space for additional info team wants to provide to user on overview (max 50 words)
+      isStandaloneApp: true, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
+      standaloneAppUrl: "https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/", // Only for isStandaloneApp=true, URL to open in new tab
+      experienceType: null, // For experiences loaded in this app, possible values: ondevice, onchain, offchain
+      aiModelIdentifier: null, // Identifies and locates the AI model, value depends on experienceType (ondevice: WebLLM model id, onchain: IC canister id, offchain: URL where model is hosted and can be called)
+      databaseToInclude: "none", // (Vector) database to include in model's responses, possible values: none, external, local
+      databaseIdentifier: null, // Identifies and locates the (vector) database or its data to use, value depends on databaseToInclude (none: null, external: URL to call database, local: URL to data which will be loaded into a local vector database running in-browser)
+    },
     // External
     {
       id: "randomid", // Internal id assigned to experience
