@@ -67,27 +67,26 @@
 
 </script>
 
-  <div>
-    <div class="m-4 mt-2 px-4 py-3 text-gray-500 inline-block border border-[#b0c4de] rounded-lg sm:px-5 bg-gray-50">
+  <ul class="grid w-full gap-2 md:grid-cols-1 px-4 mt-0">
+    <div class="w-full mb-4 px-4 py-3 text-gray-500 inline-block border border-[#b0c4de] rounded-lg sm:px-5 bg-gray-50">
       <b>Please select an experience</b>. More information on the experience will show up when you select it.
     </div>
-    <ul class="grid w-full gap-2 md:grid-cols-1 px-4 mt-4">
-      {#each availableExperiences as option}
-        <SelectExperienceOption
-          id={option.id}
-          title={option.title}
-          creator={option.creator}
-          shortDescription={option.shortDescription}
-          longDescription={option.longDescription}
-          note={option.note}
-          isStandaloneApp={option.isStandaloneApp}
-          standaloneAppUrl={option.standaloneAppUrl}
-          experienceType={option.experienceType}
-          aiModelIdentifier={option.aiModelIdentifier}
-          databaseToInclude={option.databaseToInclude}
-          databaseIdentifier={option.databaseIdentifier}
-          bind:selectedExperienceId
-        />
-      {/each}
-    </ul>
-  </div>
+
+    {#each availableExperiences as option}
+      <SelectExperienceOption
+        id={option.id}
+        title={option.title}
+        creator={option.creator}
+        shortDescription={option.shortDescription}
+        longDescription={option.longDescription}
+        note={option.note}
+        isStandaloneApp={option.isStandaloneApp}
+        standaloneAppUrl={option.standaloneAppUrl}
+        experienceType={option.experienceType}
+        aiModelIdentifier={option.aiModelIdentifier}
+        databaseToInclude={option.databaseToInclude}
+        databaseIdentifier={option.databaseIdentifier}
+        bind:selectedExperienceId
+      />
+    {/each}
+  </ul>

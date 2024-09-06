@@ -274,8 +274,8 @@
     <div>
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 peer-checked:hover:text-[#151b1e]">
         <div class="flex flex-col">
-          <h1 class="flex items-center mb-3 text-3xl text-gray-800 font-extrabold">{title}
-            <span class="bg-blue-100 text-blue-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded ms-2">{creator}</span>
+          <h1 class="flex items-center mb-3 text-3xl text-gray-600 font-extrabold">{title}
+            <span class="bg-blue-100 text-blue-800 text-lg font-semibold me-2 px-2.5 py-0.5 rounded ms-2">{creator}</span>
           </h1>
           <span class="performance-span text-[#151b1e] text-sm font-medium me-1.5 px-2.5 py-1 bg-white rounded border border-dashed border-gray-400">{shortDescription}</span>
         </div>
@@ -289,7 +289,7 @@
     <div class="p-3 pt-1 pb-2">
       {#if visibleExperienceInfo}
         <div class="block mb-2">
-          <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100" role="alert">
+          <div class="p-4 text-md text-gray-600 rounded-lg bg-gray-100" role="alert">
             <span class="font-medium block mb-4">{longDescription}</span>
             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border-2 border-yellow-400">{note}</span>
           </div>
