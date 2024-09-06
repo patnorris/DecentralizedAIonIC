@@ -270,7 +270,7 @@
     checked={isChecked} 
     on:click={showExperienceInfo} 
   />
-  <li class="text-[#151b1e] bg-[#f1f5f9] p-3 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-white peer-checked:bg-white peer-checked:hover:bg-white">
+  <li class="text-[#151b1e] bg-[#f1f5f9] p-3 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue] peer-checked:bg-white peer-checked:hover:bg-white">
     <div>
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 peer-checked:hover:text-[#151b1e]">
         <div class="flex flex-col">
@@ -295,7 +295,7 @@
           </div>
         </div>
         {#if isStandaloneApp}
-            <button on:click={()=>{window.open(standaloneAppUrl, "_blank");}} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+            <button on:click={()=>{window.open(standaloneAppUrl, "_blank");}} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[lightsteelblue] hover:text-gray-900 border-2 border-solid border-[#151b1e] text-sm font-bold text-[#151b1e] inline-flex items-center justify-center">
               Open
             </button>
             <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">
@@ -308,7 +308,7 @@
               </div>
             </div>
           {:else}
-            <button on:click={loadExperienceInPlace} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[#151b1e] hover:text-white border-2 border-solid border-[#151b1e] text-sm font-medium text-[#151b1e] inline-flex items-center justify-center">
+            <button on:click={loadExperienceInPlace} type="button" class="mt-2 bg-blue-50 w-full rounded-full focus:ring-2 focus:ring-blue-400 py-1.5 px-4 hover:bg-[lightsteelblue] hover:text-gray-900 border-2 border-solid border-[#151b1e] text-sm font-bold text-[#151b1e] inline-flex items-center justify-center">
               Load
             </button>
             <div class="w-full flex items-center justify-center p-2 text-sm text-gray-600" role="alert">

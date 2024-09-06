@@ -22,8 +22,8 @@
 
   const onDeviceExperienceSteps = [
     { title: "Step 1", description: "Create On-device Experience" },
-    { title: "Step 2", description: "Create On-device Experience" },
-    { title: "Step 3", description: "Create On-device Experience" },
+    { title: "Step 2", description: "Describe content" },
+    { title: "Step 3", description: "submit a PR" },
   ];
 
   const icpExperienceSteps = [
@@ -156,9 +156,9 @@
         </nav> 
         <accordion class="px-4">
         <!-- On-device Experienc -->
-          <div class="border-b rounded-t-lg">
+          <div class="border-b ">
             <input type="radio" name="accordion" id="accordion1" class="hidden">
-            <label for="accordion1" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+            <label for="accordion1" class="block rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
                 Create On-device Experience
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
