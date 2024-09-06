@@ -51,8 +51,8 @@
     },
     {
       id: "1", // Internal id assigned to experience
-      title: "Premier UN education", // Title of experience to be shown on overview
-      creator: "Team AI Edu", // Name of the team who created this experience
+      title: "No-corruption", // Title of experience to be shown on overview
+      creator: "Team Kong", // Name of the team who created this experience
       shortDescription: "This is your starting point for learning about UN's anti-corruption programs", // max 2 sentences (200 characters)
       longDescription: "This experience includes a lot of fun interactive info. It's AI-powered.", // max 100 words
       note: "Great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
