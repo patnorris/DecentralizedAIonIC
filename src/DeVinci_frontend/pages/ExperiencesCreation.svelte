@@ -9,7 +9,7 @@
 
   import Sidebar from "../components/Sidebar.svelte";
   import Navigation from "../components/Navigation.svelte";
-  import SelectExperience from "../components/SelectExperience.svelte";
+  import Stepper from "../components/molecules/Stepper.svelte";
   import Footer from "../components/Footer.svelte";
 
   import {
@@ -19,6 +19,22 @@
   } from "../helpers/localStorage";
 
   let hasLoadedSettings = false;
+
+  const onDeviceExperienceSteps = [
+    { title: "Step 1", description: "Create On-device Experience" },
+    { title: "Step 2", description: "Create On-device Experience" },
+    { title: "Step 3", description: "Create On-device Experience" },
+  ];
+
+  const icpExperienceSteps = [
+    { title: "Step 1", description: "Create ICP Experience" },
+    { title: "Step 2", description: "Deploy to ICP" },
+  ];
+
+  const offChainExperienceSteps = [
+    { title: "Step 1", description: "Create Off-chain Experience" },
+    { title: "Step 2", description: "Host Experience" },
+  ];
 
   const loadUserSettings = async () => {
     try {
@@ -118,14 +134,14 @@
       </div>
     </header>
 
-    <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
+    <main class="pt-12 pb-16 lg:pt-12 lg:pb-24 bg-slate-100 antialiased">
       <div class="flex flex-col justify-between px-4 mx-auto max-w-screen-xl ">
         <!-- Breadcrumb -->
         <nav class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
           <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
             <li>
               <div class="flex items-center">
-                <a href="/experiences" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Experiences</a>
+                <a href="#/experiences" class="ms-1 text-sm font-medium text-gray-700 hover:text-gray-400 md:ms-2">Experiences</a>
               </div>
             </li>
             <li aria-current="page">
@@ -133,47 +149,49 @@
                 <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                 </svg>
-                <a href="/experiences/create" class="cursor-not-allowed text-gray-400 ms-1 text-sm font-medium">Creation</a>
+                <a href="#/experiences/create" class="cursor-not-allowed text-gray-400 ms-1 text-sm font-medium">Creation</a>
               </div>
             </li>
           </ol>
         </nav> 
-        <!-- Accordion 1 -->
+        <accordion class="px-4">
+        <!-- On-device Experienc -->
+          <div class="border-b rounded-t-lg">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+                Create On-device Experience
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+                <div class="p-4 bg-white relative">
+                  <Stepper steps={onDeviceExperienceSteps} />
+                </div>
+            </div>
+        </div>
+        <!-- ICP experience -->
         <div class="border-b">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block bg-blue-500 text-white p-4 cursor-pointer">
-              Accordion Title 1
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500">
-              <div class="p-4 bg-white">
-                  <p>Accordion Content 1 goes here. You can place any text or content you want.</p>
-              </div>
-          </div>
-      </div>
-      <!-- Accordion 2 -->
-      <div class="border-b">
-          <input type="radio" name="accordion" id="accordion2" class="hidden">
-          <label for="accordion2" class="block bg-blue-500 text-white p-4 cursor-pointer">
-              Accordion Title 2
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500">
-              <div class="p-4 bg-white">
-                  <p>Accordion Content 2 goes here. This can be replaced with other components or information.</p>
-              </div>
-          </div>
-      </div>
-      <!-- Accordion 3 -->
-      <div class="border-b">
-          <input type="radio" name="accordion" id="accordion3" class="hidden">
-          <label for="accordion3" class="block bg-blue-500 text-white p-4 cursor-pointer">
-              Accordion Title 3
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500">
-              <div class="p-4 bg-white">
-                  <p>Accordion Content 3 goes here. This works similarly to other accordion items.</p>
-              </div>
-          </div>
-      </div>
+            <input type="radio" name="accordion" id="accordion2" class="hidden">
+            <label for="accordion2" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+                Create Experience on ICP
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+                <div class="p-4 bg-white">
+                  <Stepper steps={icpExperienceSteps} />
+                </div>
+            </div>
+        </div>
+        <!-- Off-chain experience -->
+        <div class="border-b rounded-b-lg">
+            <input type="radio" name="accordion" id="accordion3" class="hidden">
+            <label for="accordion3" class="block bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
+                Create off-chain Experience
+            </label>
+            <div class="accordion-content rounded-b-lg overflow-hidden max-h-0 transition-all duration-500 ease">
+                <div class="p-4 bg-white">
+                  <Stepper steps={offChainExperienceSteps} />
+                </div>
+            </div>
+        </div>
+      </accordion>
       </div>
     </main>
     <Footer />
@@ -184,6 +202,9 @@
   /* Open accordion if input is checked */
   input:checked + label + .accordion-content {
       max-height: 1300px;
+  }
+  ol.experience-stepper {
+    margin-left: 1rem !important;
   }
 </style>
 
