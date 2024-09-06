@@ -25,8 +25,8 @@
       title: "Premier UN education", // Title of experience to be shown on overview
       creator: "Team AI Edu", // Name of the team who created this experience
       shortDescription: "This is your starting point for learning about UN's anti-corruption programs", // max 2 sentences (200 characters)
-      longDescription: "This experience includes a lot of fun interactive info. It's AI-powered.", // max 100 words
-      note: "Addition info: this is great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
+      longDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec arcu a quam fringilla aliquet ut at erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;", // max 100 words
+      note: "Great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
       isStandaloneApp: true, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
       standaloneAppUrl: "https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/", // Only for isStandaloneApp=true, URL to open in new tab
       experienceType: null, // For experiences loaded in this app, possible values: ondevice, onchain, offchain
@@ -40,8 +40,8 @@
       title: "The in-place on-device", // Title of experience to be shown on overview
       creator: "DeVinci", // Name of the team who created this experience
       shortDescription: "This is your starting point for learning about UN's anti-corruption programs", // max 2 sentences (200 characters)
-      longDescription: "This experience includes a lot of fun interactive info. It's AI-powered.", // max 100 words
-      note: "Addition info: this is great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
+      longDescription: "Sed scelerisque, nisl at fermentum eleifend, nisl ipsum congue erat, nec dignissim elit libero sed est. Morbi non libero malesuada, interdum metus id, dapibus nisi. Ut sit amet velit nec purus fermentum placerat vel a lacus. Vivamus faucibus felis ac risus elementum, nec elementum erat tempus.", // max 100 words
+      note: "Great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
       isStandaloneApp: false, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
       standaloneAppUrl: null, // Only for isStandaloneApp=true, URL to open in new tab
       experienceType: "ondevice", // For experiences loaded in this app, possible values: ondevice, onchain, offchain
@@ -55,7 +55,7 @@
       creator: "Team AI Edu", // Name of the team who created this experience
       shortDescription: "This is your starting point for learning about UN's anti-corruption programs", // max 2 sentences (200 characters)
       longDescription: "This experience includes a lot of fun interactive info. It's AI-powered.", // max 100 words
-      note: "Addition info: this is great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
+      note: "Great for learners aged 8-12", // space for additional info team wants to provide to user on overview (max 50 words)
       isStandaloneApp: true, // Whether this experience loads in its own new tab (true) or can be loaded directly in this app (false)
       standaloneAppUrl: "https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/", // Only for isStandaloneApp=true, URL to open in new tab
       experienceType: "ondevice", // For experiences loaded in this app, possible values: ondevice, onchain, offchain
