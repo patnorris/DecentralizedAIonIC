@@ -180,4 +180,31 @@ module {
     pageSubmittedFrom: Text;
     subscribedAt: Nat64;
   };
+
+  public type EducationExperience = {
+    id: Text; // Internal id assigned to experience
+    title: Text; // Title of experience to be shown on overview
+    creator: Text; // Name of the team who created this experience
+    shortDescription: Text; // max 2 sentences (200 characters)
+    longDescription: Text; // max 100 words
+    note: Text; // space for additional info team wants to provide to user on overview (max 50 words)
+    isStandaloneApp: Bool; // Whether this experience loads in its own new tab or can be loaded directly in this app
+    standaloneAppUrl: ?Text; // Only for isStandaloneApp=true, URL to open in new tab
+    experienceType: ?ExperienceType; // For experiences loaded in this app, possible values: ondevice, onchain, offchain
+    aiModelIdentifier: ?Text; // Identifies and locates the AI model, value depends on experienceType
+    databaseToInclude: DatabaseToInclude; // Database to include in model's responses, possible values: none, external, local
+    databaseIdentifier: ?Text; // Identifies and locates the (vector) database or its data to use
+  };
+
+  public type ExperienceType = {
+    #Ondevice;
+    #Onchain;
+    #Offchain;
+  };
+
+  public type DatabaseToInclude = {
+    #None;
+    #External;
+    #Local;
+  };
 };

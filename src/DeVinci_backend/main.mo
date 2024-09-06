@@ -468,6 +468,44 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     return false;
   };
 
+// AI-for-education experiences
+  stable var aiForEducationExperiencesStable : [Types.EducationExperience] = [
+    // Oxford entry
+    {
+      id = "oxford";
+      title = "Oxford Hackathon Entry";
+      creator = "Arjaan & Patrick";
+      shortDescription = "This was the entry we put in at the Oxford hackathon";
+      longDescription = "It was the first AI for education experience we created and it's the inspiration for more solutions to come (including this hackathon). It's based on the same approach DeVinci is taking: run the AI model on the user's device.";
+      note = "Give it a try and think about how to improve it :)";
+      isStandaloneApp = true;
+      standaloneAppUrl = ?"https://6tht4-syaaa-aaaai-acriq-cai.icp0.io/#/learn";
+      experienceType = null;
+      aiModelIdentifier = null;
+      databaseToInclude = #None;
+      databaseIdentifier = null;
+    },
+    // DeVinci
+    {
+      id = "devinci";
+      title = "DeVinci AI Chat App";
+      creator = "Nuno & Patrick";
+      shortDescription = "This is the first end-to-end-decentralized AI chat app and the codebase for this hackathon";
+      longDescription = "DeVinci is the fully private, end-to-end-decentralized AI chat app served from the Internet Computer. AI models run directly on the user's device so no data needs to leave the device and you can even use it offline.";
+      note = "Choose your favorite open-source Large Language Model and chat with it.";
+      isStandaloneApp = true;
+      standaloneAppUrl = ?"https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/";
+      experienceType = null;
+      aiModelIdentifier = null;
+      databaseToInclude = #None;
+      databaseIdentifier = null;
+    }
+  ];
+
+  public shared query func get_education_experiences() : async [Types.EducationExperience] {
+    return aiForEducationExperiencesStable;
+  };
+
 // HTTP interface
   /* public query func http_request(request : HTTP.Request) : async HTTP.Response {
     //Debug.print(debug_show("http_request test"));

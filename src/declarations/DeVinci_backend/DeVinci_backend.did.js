@@ -46,6 +46,30 @@ export const idlFactory = ({ IDL }) => {
     'Ok' : UserSettings,
     'Err' : ApiError,
   });
+  const DatabaseToInclude = IDL.Variant({
+    'Local' : IDL.Null,
+    'None' : IDL.Null,
+    'External' : IDL.Null,
+  });
+  const ExperienceType = IDL.Variant({
+    'Onchain' : IDL.Null,
+    'Offchain' : IDL.Null,
+    'Ondevice' : IDL.Null,
+  });
+  const EducationExperience = IDL.Record({
+    'id' : IDL.Text,
+    'isStandaloneApp' : IDL.Bool,
+    'title' : IDL.Text,
+    'creator' : IDL.Text,
+    'note' : IDL.Text,
+    'databaseToInclude' : DatabaseToInclude,
+    'shortDescription' : IDL.Text,
+    'standaloneAppUrl' : IDL.Opt(IDL.Text),
+    'databaseIdentifier' : IDL.Opt(IDL.Text),
+    'experienceType' : IDL.Opt(ExperienceType),
+    'aiModelIdentifier' : IDL.Opt(IDL.Text),
+    'longDescription' : IDL.Text,
+  });
   const EmailSubscriber = IDL.Record({
     'subscribedAt' : IDL.Nat64,
     'emailAddress' : IDL.Text,
@@ -86,6 +110,11 @@ export const idlFactory = ({ IDL }) => {
       ),
     'get_caller_settings' : IDL.Func([], [UserSettingsResult], ['query']),
     'get_chat' : IDL.Func([IDL.Text], [ChatResult], ['query']),
+    'get_education_experiences' : IDL.Func(
+        [],
+        [IDL.Vec(EducationExperience)],
+        ['query'],
+      ),
     'get_email_subscribers' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Text, EmailSubscriber))],

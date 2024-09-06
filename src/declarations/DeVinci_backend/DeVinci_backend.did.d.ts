@@ -30,6 +30,9 @@ export type ChatsPreviewResult = { 'Ok' : Array<ChatPreview> } |
   { 'Err' : ApiError };
 export type ChatsResult = { 'Ok' : Array<Chat> } |
   { 'Err' : ApiError };
+export type DatabaseToInclude = { 'Local' : null } |
+  { 'None' : null } |
+  { 'External' : null };
 export interface DeVinciBackend {
   'check_caller_has_memory_vectors_entry' : ActorMethod<
     [],
@@ -43,6 +46,7 @@ export interface DeVinciBackend {
   'get_caller_memory_vectors' : ActorMethod<[], MemoryVectorsResult>,
   'get_caller_settings' : ActorMethod<[], UserSettingsResult>,
   'get_chat' : ActorMethod<[string], ChatResult>,
+  'get_education_experiences' : ActorMethod<[], Array<EducationExperience>>,
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
   'store_user_chats_memory_vectors' : ActorMethod<
@@ -57,11 +61,28 @@ export interface DeVinciBackend {
   'update_chat_messages' : ActorMethod<[string, Array<Message>], ChatIdResult>,
   'update_chat_metadata' : ActorMethod<[UpdateChatObject], ChatIdResult>,
 }
+export interface EducationExperience {
+  'id' : string,
+  'isStandaloneApp' : boolean,
+  'title' : string,
+  'creator' : string,
+  'note' : string,
+  'databaseToInclude' : DatabaseToInclude,
+  'shortDescription' : string,
+  'standaloneAppUrl' : [] | [string],
+  'databaseIdentifier' : [] | [string],
+  'experienceType' : [] | [ExperienceType],
+  'aiModelIdentifier' : [] | [string],
+  'longDescription' : string,
+}
 export interface EmailSubscriber {
   'subscribedAt' : bigint,
   'emailAddress' : string,
   'pageSubmittedFrom' : string,
 }
+export type ExperienceType = { 'Onchain' : null } |
+  { 'Offchain' : null } |
+  { 'Ondevice' : null };
 export interface MemoryVector {
   'content' : string,
   'metadata' : MemoryVectorMetadata,

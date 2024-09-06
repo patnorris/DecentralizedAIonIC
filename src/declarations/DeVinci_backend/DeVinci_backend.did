@@ -46,11 +46,32 @@ type MemoryVector =
    embedding: vec float64;
    metadata: MemoryVectorMetadata;
  };
+type ExperienceType = 
+ variant {
+   Offchain;
+   Onchain;
+   Ondevice;
+ };
 type EmailSubscriber = 
  record {
    emailAddress: text;
    pageSubmittedFrom: text;
    subscribedAt: nat64;
+ };
+type EducationExperience = 
+ record {
+   aiModelIdentifier: opt text;
+   creator: text;
+   databaseIdentifier: opt text;
+   databaseToInclude: DatabaseToInclude;
+   experienceType: opt ExperienceType;
+   id: text;
+   isStandaloneApp: bool;
+   longDescription: text;
+   note: text;
+   shortDescription: text;
+   standaloneAppUrl: opt text;
+   title: text;
  };
 type DeVinciBackend = 
  service {
@@ -64,6 +85,7 @@ type DeVinciBackend =
    get_caller_memory_vectors: () -> (MemoryVectorsResult) query;
    get_caller_settings: () -> (UserSettingsResult) query;
    get_chat: (text) -> (ChatResult) query;
+   get_education_experiences: () -> (vec EducationExperience) query;
    get_email_subscribers: () -> (vec record {
                                        text;
                                        EmailSubscriber;
@@ -75,6 +97,12 @@ type DeVinciBackend =
    update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
    update_chat_messages: (text, vec Message) -> (ChatIdResult);
    update_chat_metadata: (UpdateChatObject) -> (ChatIdResult);
+ };
+type DatabaseToInclude = 
+ variant {
+   External;
+   Local;
+   None;
  };
 type ChatsResult = 
  variant {

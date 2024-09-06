@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import {
+    store,
     deviceType
   } from "../store";
 
@@ -94,6 +96,13 @@
       databaseIdentifier: null, // Identifies and locates the (vector) database or its data to use, value depends on databaseToInclude (none: null, external: URL to call database, local: URL to data which will be loaded into a local vector database running in-browser)
     },
   ];
+
+  onMount(async () => {
+    console.log("in onMount");
+    availableExperiences = await $store.backendActor.get_education_experiences(); //TODO: transform retrieved experiences to UI format  
+    console.log("availableExperiences"); 
+    console.log(availableExperiences);
+  });
 
 </script>
 
