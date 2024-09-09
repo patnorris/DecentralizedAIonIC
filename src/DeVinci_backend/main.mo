@@ -468,15 +468,15 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     return false;
   };
 
-// AI-for-education experiences
-  stable var aiForEducationExperiencesStable : [Types.EducationExperience] = [
+// AI-for-education experiences (Knowledge Foundation hackathon)
+  var aiForEducationExperiencesStable : [Types.EducationExperience] = [
     // Oxford entry
     {
       id = "oxford";
       title = "Oxford Hackathon Entry";
       creator = "Arjaan & Patrick";
       shortDescription = "This was the entry we put in at the Oxford hackathon";
-      longDescription = "It was the first AI for education experience we created and it's the inspiration for more solutions to come (including this hackathon). It's based on the same approach DeVinci is taking: run the AI model on the user's device.";
+      longDescription = "It was the first AI for education experience we created and it's the inspiration for more solutions to come (including this hackathon). It's based on the same approach DeVinci is taking: run the AI model on the user's device. It includes the UN anti-corruption resources as in-browser vector databases. As an extra, we built a first pipeline to easily create an on-chain LLM (on the Internet Computer).";
       note = "Give it a try and think about how to improve it :)";
       isStandaloneApp = true;
       standaloneAppUrl = ?"https://6tht4-syaaa-aaaai-acriq-cai.icp0.io/#/learn";
@@ -490,7 +490,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
       id = "devinci";
       title = "DeVinci AI Chat App";
       creator = "Nuno & Patrick";
-      shortDescription = "This is the first end-to-end-decentralized AI chat app and the codebase for this hackathon";
+      shortDescription = "This is the first end-to-end-decentralized AI chat app and the core of the codebase for this hackathon";
       longDescription = "DeVinci is the fully private, end-to-end-decentralized AI chat app served from the Internet Computer. AI models run directly on the user's device so no data needs to leave the device and you can even use it offline.";
       note = "Choose your favorite open-source Large Language Model and chat with it.";
       isStandaloneApp = true;
@@ -502,7 +502,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     }
   ];
 
-  public shared query func get_education_experiences() : async [Types.EducationExperience] {
+  public shared query ({caller}) func get_education_experiences() : async [Types.EducationExperience] {
     return aiForEducationExperiencesStable;
   };
 
