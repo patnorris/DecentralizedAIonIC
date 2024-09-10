@@ -17,6 +17,7 @@
     setLocalFlag,
     getLocalFlag
   } from "../helpers/localStorage";
+    import About from './About.svelte';
 
   let hasLoadedSettings = false;
 
@@ -154,112 +155,182 @@
             </li>
           </ol>
         </nav> 
-        <accordion class="px-4">
+        <div class="px-4">
           <!-- Intro -->
           <div class="border-b ">
             <input type="radio" name="accordion" id="accordion1" class="hidden">
             <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-                Create On-device Experience
+                Let's build decentralized AI for education
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-              <div class="p-4 bg-white relative">
-                <Stepper steps={onDeviceExperienceSteps} />
-              </div>
-            </div>
-            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
               <p>
-
+                We're excited that you joined the hackathon and can't wait to see what you'll build!
+              </p>
+              <p>
+                This page provides a few pointers and ideas what you could implement during the hackathon (and beyond if you like). It's meant to help you get started and doesn't constitute instructions you have to follow. Please make sure you read the official hackathon guide provided by the Knowledge Foundation for these.
+              </p>
+              <p>
+                Below, you'll see potential paths to consider on your coding adventure over the weekend. These include examples that could inspire your implementation and get you going more quickly.
               </p>
             </div>
-        </div>
-        <!-- Integrate UN materials -->
-        <div class="border-b ">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-            Integrate UN materials
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-            <p>
-              1) as local vector database/s (see Oxford entry, find other in-browser database options)
-            </p>
-            <p>
-              2) as on-chain vector database/s (see branch https://github.com/patnorris/DecentralizedAIonIC/tree/firstUserKnowledgeBase, additional IC vector database projects as options)
-            </p>
-            <p>
-              3) as off-chain vector database/s (point to codebase reference where to integrate)
-            </p>
-            <p>
-              4) another approach
-            </p>
+          </div>
+          <!-- Integrate UN materials -->
+          <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+              Integrate UN materials
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+                These are some ideas which tech you could use to integrate the documents on anti-corruption such that the AI model can include them in its responses.
+              </p>
+              <p>
+                1) As a local on-device vector database (or several vector databases). 
+
+                Please see our original Oxford hackathon entry as an example for this: https://github.com/onicai/onicaiGoes2024OxfordBH/blob/main/frontend/src/deaissemblyline_frontend/helpers/vector_database.ts
+                
+                The codebase also includes code for this (where the user selects a PDF from their device that's then turned into a vector database for the AI to use): https://github.com/patnorris/DecentralizedAIonIC/blob/3d6b8547dcd0d562203d62c1d1d5a260cce65316/src/DeVinci_frontend/components/ChatBox.svelte#L162
+
+                You could also see if you find other on-device/in-browser database options or completely other approaches to accomplish this.
+              </p>
+              <p>
+                2) As an on-chain vector database (or several vector databases).
+
+                For an example, see this branch in the codebase: https://github.com/patnorris/DecentralizedAIonIC/blob/firstUserKnowledgeBase/src/DeVinci_frontend/pages/Knowledgebase.svelte
+                
+                This examples uses the Arcmind vector database the team implemented for the Internet Computer (https://github.com/arcmindai/arcmindvector). 
+                There are other vector database projects on the Internet Computer as well though that you could consider as options:
+                From Kinic DAO: https://github.com/ClankPan/ic-vectune/tree/develop/kinic_db_instance
+                From ELNA DAO: https://github.com/elna-ai/elna-vector-db
+              </p>
+              <p>
+                3) As an off-chain vector database (or several vector databases). 
+                
+                You could integrate these into the codebase here: https://github.com/patnorris/DecentralizedAIonIC/blob/3d6b8547dcd0d562203d62c1d1d5a260cce65316/src/DeVinci_frontend/components/ChatInterface.svelte#L86
+              </p>
+              <p>
+                4) Or find a completely different approach than using a vector database :)
+              </p>
+            </div>
+          </div>
+          <!-- On-device model selection -->
+          <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+              On-device model selection
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+                These are some ideas to consider for the default large language model selection that's shown to users.
+              </p>
+              <p>
+                1) Just show one LLM option to the user or several models to select from?
+              </p>
+              <p>
+                2) Should there maybe be more background info provided to the user? Which info and how?
+              </p>
+              <p>
+                3) You could create your own on-device LLM and integrate it (e.g. finetune an LLM specifically for this task).
+
+                This is how you could go about integrating it into the app (which uses WebLLM as the framework for on-device AI models): https://github.com/mlc-ai/web-llm?tab=readme-ov-file#custom-models
+              </p>
+            </div>
+          </div>
+          <!-- Replace the on-device model -->
+          <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+              Replace the on-device model
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+                The provided codebase uses the on-device AI model approach to deliver the experience. You might want to consider another approach and these are some ideas on options besides on-device.
+              </p>
+              <p>
+                1) Replace with an on-chain model: take a look at the following LLMs that run on the Internet Computer.
+                llama.cpp
+                
+                Other IC examples
+                
+                You could also consider hosting the AI model on other decentralized infrastructure and integrating that into the app.
+              </p>
+              <p>
+                2) Replace with an off-chain model: there are some examples on the Internet Computer that integrate AI services APIs.
+                
+                Juno: https://github.com/peterpeterparker/juno-openai
+                
+                Arcmind: https://github.com/arcmindai/arcmindai/tree/main/src/arcmindai_brain
+                
+                Elna: https://github.com/elna-ai/ELNA-DApp/blob/main/elnaAi/ChatAi.mo 
+              </p>
+            </div>
+          </div>
+          <!-- Improve the UX -->
+          <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+              Improve the UX
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+                These are some general ideas what you could do to give users and learners a better experience with the app.
+              </p>
+              <p>
+                You could e.g. redesign the chat flow, change the User Interface or parts of it, or update the info displayed to the user.
+              </p>
+              <p>
+                There might also be completely new features you want to implement to enhance the experience.
+              </p>
+            </div>
+          </div>
+          <!-- Issue a PR -->
+          <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+              Issue a PR
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+                As part of the hackathon, we'd like to have your entry included on an overview page (along your peers' entries). This will be a fun outcome!
+              </p>
+              <p>
+                This describes the simple process to show your hackathon entry on the overview page:
+              </p>
+              <p>
+                Issue a PR to the repo such that your experience shows on the overview page
+                [repo]
+              </p>
+              <p>
+                [overview page]
+              </p>
+              <p>
+                Your PR should only include a new entry in the array for the experiences here: [link]
+                
+                Please take a look at the existing entries in the array to get an idea of your entry's format and at the type definition for explanations on each of the field.
+
+                Each entry should look like this example:
+                
+                  id = "oxford";
+                  title = "Oxford Hackathon Entry";
+                  creator = "Arjaan & Patrick";
+                  shortDescription = "This was the entry we put in at the Oxford hackathon";
+                  longDescription = "It was the first AI for education experience we created and it's the inspiration for more solutions to come (including this hackathon). It's based on the same approach DeVinci is taking: run the AI model on the user's device. It includes the UN anti-corruption resources as in-browser vector databases. As an extra, we built a first pipeline to easily create an on-chain LLM (on the Internet Computer).";
+                  note = "Give it a try and think about how to improve it :)";
+                  isStandaloneApp = true;
+                  standaloneAppUrl = ?"https://6tht4-syaaa-aaaai-acriq-cai.icp0.io/#/learn";
+                  experienceType = null;
+                  aiModelIdentifier = null;
+                  databaseToInclude = #None;
+                  databaseIdentifier = null;
+
+                isStandaloneApp should be true and standaloneAppUrl should point to your deployed app.
+
+                The fields experienceType, aiModelIdentifier, databaseToInclude, and databaseIdentifier can be ignored (just use the same values as in the examples).
+              </p>
+            </div>
           </div>
         </div>
-        <!-- On-device model selection -->
-        <div class="border-b ">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-            On-device model selection
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-            <p>
-              1) Just one option or several models to select from?
-            </p>
-            <p>
-              2) More background info provided to the learner/user?
-            </p>
-            <p>
-              3) Create your own on-device LLM and integrate it (e.g. finetune the model, integrate into app: https://github.com/mlc-ai/web-llm?tab=readme-ov-file#custom-models)
-            </p>
-          </div>
-        </div>
-        <!-- Replace the on-device model -->
-        <div class="border-b ">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-            Replace the on-device model
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-            <p>
-              1) with an on-chain model: llama.cpp, other IC examples, other decentralized backend
-            </p>
-            <p>
-              2) with an off-chain model: examples like Juno, Arcmind, Elna
-            </p>
-          </div>
-        </div>
-        <!-- Improve the UX -->
-        <div class="border-b ">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-            Improve the UX
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-            <p>
-              ideas: redesign the flow, the UI, the info displayed to the learner/user
-            </p>
-            <p>
-              implement new features
-            </p>
-          </div>
-        </div>
-        <!-- Issue a PR -->
-        <div class="border-b ">
-          <input type="radio" name="accordion" id="accordion1" class="hidden">
-          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
-            Issue a PR
-          </label>
-          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-            <p>
-              Issue a PR to the repo such that your experience shows on the overview page
-              [repo]
-            </p>
-            <p>
-              [overview page]
-            </p>
-            <p>
-              instructions for the PR and metadata format
-            </p>
-          </div>
-        </div>
+        <accordion class="px-4">
         <!-- On-device Experience -->
           <!-- <div class="border-b ">
             <input type="radio" name="accordion" id="accordion1" class="hidden">
