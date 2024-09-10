@@ -155,43 +155,148 @@
           </ol>
         </nav> 
         <accordion class="px-4">
-        <!-- On-device Experienc -->
+          <!-- Intro -->
           <div class="border-b ">
             <input type="radio" name="accordion" id="accordion1" class="hidden">
             <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
                 Create On-device Experience
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-                <div class="p-4 bg-white relative">
-                  <Stepper steps={onDeviceExperienceSteps} />
-                </div>
+              <div class="p-4 bg-white relative">
+                <Stepper steps={onDeviceExperienceSteps} />
+              </div>
+            </div>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <p>
+
+              </p>
             </div>
         </div>
+        <!-- Integrate UN materials -->
+        <div class="border-b ">
+          <input type="radio" name="accordion" id="accordion1" class="hidden">
+          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+            Integrate UN materials
+          </label>
+          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+            <p>
+              1) as local vector database/s (see Oxford entry, find other in-browser database options)
+            </p>
+            <p>
+              2) as on-chain vector database/s (see branch https://github.com/patnorris/DecentralizedAIonIC/tree/firstUserKnowledgeBase, additional IC vector database projects as options)
+            </p>
+            <p>
+              3) as off-chain vector database/s (point to codebase reference where to integrate)
+            </p>
+            <p>
+              4) another approach
+            </p>
+          </div>
+        </div>
+        <!-- On-device model selection -->
+        <div class="border-b ">
+          <input type="radio" name="accordion" id="accordion1" class="hidden">
+          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+            On-device model selection
+          </label>
+          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+            <p>
+              1) Just one option or several models to select from?
+            </p>
+            <p>
+              2) More background info provided to the learner/user?
+            </p>
+            <p>
+              3) Create your own on-device LLM and integrate it (e.g. finetune the model, integrate into app: https://github.com/mlc-ai/web-llm?tab=readme-ov-file#custom-models)
+            </p>
+          </div>
+        </div>
+        <!-- Replace the on-device model -->
+        <div class="border-b ">
+          <input type="radio" name="accordion" id="accordion1" class="hidden">
+          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+            Replace the on-device model
+          </label>
+          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+            <p>
+              1) with an on-chain model: llama.cpp, other IC examples, other decentralized backend
+            </p>
+            <p>
+              2) with an off-chain model: examples like Juno, Arcmind, Elna
+            </p>
+          </div>
+        </div>
+        <!-- Improve the UX -->
+        <div class="border-b ">
+          <input type="radio" name="accordion" id="accordion1" class="hidden">
+          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+            Improve the UX
+          </label>
+          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+            <p>
+              ideas: redesign the flow, the UI, the info displayed to the learner/user
+            </p>
+            <p>
+              implement new features
+            </p>
+          </div>
+        </div>
+        <!-- Issue a PR -->
+        <div class="border-b ">
+          <input type="radio" name="accordion" id="accordion1" class="hidden">
+          <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+            Issue a PR
+          </label>
+          <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+            <p>
+              Issue a PR to the repo such that your experience shows on the overview page
+              [repo]
+            </p>
+            <p>
+              [overview page]
+            </p>
+            <p>
+              instructions for the PR and metadata format
+            </p>
+          </div>
+        </div>
+        <!-- On-device Experience -->
+          <!-- <div class="border-b ">
+            <input type="radio" name="accordion" id="accordion1" class="hidden">
+            <label for="accordion1" class="block text-lg p-6 rounded-t-lg bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
+                Create On-device Experience
+            </label>
+            <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
+              <div class="p-4 bg-white relative">
+                <Stepper steps={onDeviceExperienceSteps} />
+              </div>
+            </div>
+          </div> -->
         <!-- ICP experience -->
-        <div class="border-b">
+          <!-- <div class="border-b">
             <input type="radio" name="accordion" id="accordion2" class="hidden">
             <label for="accordion2" class="block text-lg p-6 bg-[lightsteelblue] text-[#151b1e] font-medium cursor-pointer">
                 Create Experience on ICP
             </label>
             <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease">
-                <div class="p-4 bg-white">
-                  <Stepper steps={icpExperienceSteps} />
-                </div>
+              <div class="p-4 bg-white">
+                <Stepper steps={icpExperienceSteps} />
+              </div>
             </div>
-        </div>
+          </div> -->
         <!-- Off-chain experience -->
-        <div class="border-b rounded-b-lg">
+          <!-- <div class="border-b rounded-b-lg">
             <input type="radio" name="accordion" id="accordion3" class="hidden">
             <label for="accordion3" class="block text-lg p-6 bg-[lightsteelblue] text-[#151b1e] font-medium p-4 cursor-pointer">
                 Create off-chain Experience
             </label>
             <div class="accordion-content rounded-b-lg overflow-hidden max-h-0 transition-all duration-500 ease">
-                <div class="p-4 bg-white">
-                  <Stepper steps={offChainExperienceSteps} />
-                </div>
+              <div class="p-4 bg-white">
+                <Stepper steps={offChainExperienceSteps} />
+              </div>
             </div>
-        </div>
-      </accordion>
+          </div> -->
+        </accordion>
       </div>
     </main>
     <Footer />
