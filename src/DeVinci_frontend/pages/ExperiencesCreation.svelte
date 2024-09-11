@@ -87,7 +87,7 @@
             <h5 class="mb-2 text-4xl font-bold tracking-tight text-gray-600 dark:text-white">Let's build decentralized AI for education</h5>
             <p class="font-semibold text-lg text-gray-700">We're excited that you joined the hackathon and can't wait to see what you'll build!</p>
             <p class="font-normal text-md my-4 text-gray-700"><span class="font-semibold">This page</span> provides a few pointers and ideas what you could implement during the hackathon (and beyond if you like). It's meant to help you get started and doesn't constitute instructions you have to follow. Please make sure you read the official hackathon guide provided by the Knowledge Foundation for these.</p>
-            <p class="font-normal text-md text-gray-700"><span class="font-semibold">Below</span>, you'll see potential paths to consider on your coding adventure over the weekend. These include examples that could inspire your implementation and get you going more quickly.</p>
+            <p class="font-normal text-md text-gray-700"><span class="font-semibold">Below</span>, you'll see a few potential paths to consider on your coding adventure over the weekend. These include examples that could inspire your implementation and get you going more quickly.</p>
           </div>
 
           <!-- Integrate UN materials -->
@@ -175,7 +175,7 @@
                   </span>
                   <h3 class="font-medium text-xl leading-tight">Idea #3</h3>
                   <p class="text-md my-2">
-                    As an off-chain vector database (or several vector databases). You could integrate these into the codebase:
+                    As an off-chain vector database (or several vector databases). You could integrate these into the codebase at this line:
                     <a href="https://github.com/patnorris/DecentralizedAIonIC/blob/3d6b8547dcd0d562203d62c1d1d5a260cce65316/src/DeVinci_frontend/components/ChatInterface.svelte#L86" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
                       Check it here
                       <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -228,6 +228,13 @@
                   </span>
                   <h3 class="font-medium text-xl leading-tight">Idea #3</h3>
                   <p class="text-md mt-2">You could create your own on-device LLM and integrate it (e.g. finetune an LLM specifically for this task).</p>
+                  <p class="text-md mt-2">This is how you could go about integrating it into the app (which uses WebLLM as the framework for on-device AI models):</p>
+                  <a href="https://github.com/mlc-ai/web-llm?tab=readme-ov-file#custom-models" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
+                    Check it here
+                    <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                  </a>
                 </li>
               </ol>
             </div>
@@ -251,10 +258,31 @@
                   1
                   </span>
                   <h3 class="font-medium text-xl leading-tight">Idea #1</h3>
-                  <p class="text-md mt-2">Replace with an on-chain model: take a look at the following LLMs that run on the Internet Computer. Other IC examples:
-                    You could also consider hosting the AI model on other decentralized infrastructure and integrating that into the app.
+                  <p class="text-md mt-2">Replace with an on-chain model: take a look at the following LLMs that run on the Internet Computer.
+                    <br />
                     <a href="https://github.com/onicai/llama_cpp_canister" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
                       llama.cpp
+                      <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                      </svg>
+                    </a>
+                    <br />
+                    <a href="https://github.com/gip/yllama.oc" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
+                      Llama 3
+                      <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                      </svg>
+                    </a>
+                    <br />
+                    <a href="https://github.com/modclub-app/tract-ic-ai" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
+                      Tract toolkit
+                      <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                      </svg>
+                    </a>
+                    <br />
+                    <a href="https://github.com/modclub-app/rust-connect-py-ai-to-ic" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
+                      Rust framework for Python models
                       <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                       </svg>
