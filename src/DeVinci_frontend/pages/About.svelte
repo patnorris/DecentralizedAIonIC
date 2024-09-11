@@ -87,6 +87,16 @@
               </ol>
             </nav>
 
+            <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow mb-12">
+              <h5 class="mb-2 text-4xl font-bold tracking-tight text-gray-500 dark:text-white">Specifically tailored for the 2024 South Africa Knowledge Foundation Hackathon. </h5>
+              <p class="font-semibold text-lg text-gray-700">We're excited that you joined the hackathon and can't wait to see what you'll build!</p>
+              <p class="font-normal text-md my-4 text-gray-700">
+              This event is part of a new 3-year series of United Nations Office on Drugs and Crime (UNODC) Coding4Integrity hackathons made possible through the partnership of UNODC, the United Nations Global Resource for Anti-Corruption Education and Youth Empowerment (GRACE) Initiative, Knowledge Foundation and DFINITY Foundation.
+              </p>
+              <img src="https://knowledgefound.org/images/2024/2024-South-Africa-hackathon-539-Participants-and-39-Countries-poster.jpg" alt="hack image" class="w-full">
+
+            </div>
+
             <address class="flex items-center mb-6 not-italic">
               <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                 <img class="mr-4 w-16 h-16 rounded-full" src={devincilogo} alt="deVinci logo">
