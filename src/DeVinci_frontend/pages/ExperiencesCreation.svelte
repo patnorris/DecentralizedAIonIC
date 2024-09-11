@@ -34,11 +34,34 @@
     };
   });
 
+  onMount(() => {
+    const accordionInputs = document.querySelectorAll<HTMLInputElement>('input[name="accordion"]');
+    const labels = document.querySelectorAll<HTMLLabelElement>('label[for^="accordion"]');
+
+    const transitionDuration = 500; // Match your CSS transition duration
+
+    accordionInputs.forEach((input, index) => {
+      input.addEventListener('change', () => {
+        if (input.checked) {
+          // Delay the scroll to allow other accordions to close
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              labels[index].scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            });
+          }, transitionDuration); // Adjust to match your CSS duration
+        }
+      });
+    });
+  });
+
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
     const accordionInputs = document.querySelectorAll<HTMLInputElement>('input[name="accordion"]');
     const labels = document.querySelectorAll<HTMLLabelElement>('label[for^="accordion"]');
-    
+
     const transitionDuration = 800; // Duration of the CSS transition in milliseconds
 
     accordionInputs.forEach((input, index) => {
