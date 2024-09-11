@@ -311,8 +311,15 @@ document.addEventListener('DOMContentLoaded', () => {
                   <h3 class="font-medium text-xl leading-tight">Idea #1</h3>
                   <p class="text-md mt-2">Replace with an on-chain model: take a look at the following LLMs that run on the Internet Computer.
                     <br />
+                    <a href="https://github.com/icppWorld/icpp_llm/tree/main/llama2_c" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
+                      Llama2
+                      <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                      </svg>
+                    </a>
+                    <br />
                     <a href="https://github.com/onicai/llama_cpp_canister" target="_blank" class="inline-flex items-center font-medium text-blue-600 hover:underline">
-                      llama.cpp
+                      llama.cpp (bleeding edge & ongoing development)
                       <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                       </svg>
