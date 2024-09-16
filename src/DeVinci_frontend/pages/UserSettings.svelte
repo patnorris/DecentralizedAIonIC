@@ -138,9 +138,6 @@
           <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
             Please connect to view and edit your settings.
           </div>
-          <InOutSaveChats />
-          <GeneralSettings />
-          <OwnCanister />
         {:else}
           {#if !hasLoadedSettings}
             <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
