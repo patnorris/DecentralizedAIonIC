@@ -36,6 +36,7 @@
             title={option.title}
             parameters={option.parameters}
             performance={option.performance}
+            goodFor={option.goodFor}
             size={option.size}
             bind:chatModelDownloadInProgress
             onlyShowIfDownloaded={onlyShowDownloadedModels}
@@ -49,6 +50,7 @@
             title={option.title}
             parameters={option.parameters}
             performance={option.performance}
+            goodFor={option.goodFor}
             size={option.size}
             bind:chatModelDownloadInProgress
           />

@@ -23,6 +23,7 @@
   export let parameters;
   export let performance;
   export let size;
+  export let goodFor;
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
   export let autoInitiateIfModelSelected = false;
@@ -221,7 +222,8 @@
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
           <div class="w-full text-sm font-normal">{parameters}</div>
           <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
-          <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{goodFor}</span>
         </div>
         <svg class="w-5 h-5 ms-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>

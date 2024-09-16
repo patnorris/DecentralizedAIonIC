@@ -5,6 +5,7 @@ const availableAiModels = [
     size: 'Small',
     parameters: '2 billion',
     performance: 'Good',
+    goodFor: 'English',
     default: true
   },
   { //requires shader-f16
@@ -14,6 +15,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '7 billion',
     performance: 'Very Good',
+    goodFor: 'English',
     default: false
   },
   {
@@ -22,6 +24,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '8B billion',
     performance: 'Super Good',
+    goodFor: 'English',
     default: false
   },
   { //requires shader-f16
@@ -30,6 +33,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '7B billion',
     performance: 'Super Good',
+    goodFor: 'English',
     default: false
   },
   {
@@ -38,6 +42,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '8 billion',
     performance: 'Super Good',
+    goodFor: 'English',
     default: false
   },
   {
@@ -46,6 +51,7 @@ const availableAiModels = [
     size: 'Medium',
     parameters: '3.8 billion',
     performance: 'Very Good',
+    goodFor: 'English',
     default: false
   },
   { //requires shader-f16
@@ -54,6 +60,7 @@ const availableAiModels = [
     size: 'Very Small',
     parameters: '1.1 billion',
     performance: 'Alright',
+    goodFor: 'English',
     default: false
   },
   {
@@ -61,7 +68,8 @@ const availableAiModels = [
     name: 'Qwen 1.5',
     size: 'Small',
     parameters: '1.8 billion',
-    performance: 'Good for Chinese',
+    performance: 'Good',
+    goodFor: 'Chinese',
     default: false
   },
   {
@@ -70,6 +78,7 @@ const availableAiModels = [
     size: 'Small',
     parameters: '1.6 billion',
     performance: 'Good',
+    goodFor: 'English',
     default: false
   },
   { //requires shader-f16
@@ -77,6 +86,7 @@ const availableAiModels = [
     name: 'Red Pajama',
     size: 'Medium',
     parameters: '3 billion',
+    goodFor: 'English',
     performance: 'Alright',
     default: false
   },
@@ -86,6 +96,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '7 billion',
     performance: 'Very Good',
+    goodFor: 'English',
     default: false
   },
   { //requires shader-f16
@@ -94,6 +105,7 @@ const availableAiModels = [
     size: 'Gigantic',
     parameters: '70 billion',
     performance: 'Insane',
+    goodFor: 'English',
     default: false
   },
   { //requires shader-f16
@@ -101,7 +113,8 @@ const availableAiModels = [
     name: 'WizardMath',
     size: 'Large',
     parameters: '7 billion',
-    performance: 'Great for Math',
+    performance: 'Great',
+    goodFor: 'Math',
     default: false
   },
 // Android WebGPU models
@@ -112,6 +125,7 @@ const availableAiModels = [
     size: 'Tiny',
     parameters: '1.5 billion',
     performance: 'Good',
+    goodFor: 'English',
     default: true,
     android: true
   },
@@ -121,6 +135,7 @@ const availableAiModels = [
     size: 'Smaller',
     parameters: '2 billion',
     performance: 'Good',
+    goodFor: 'English',
     default: false,
     android: true
   },
@@ -130,6 +145,7 @@ const availableAiModels = [
     size: 'Medium',
     parameters: '3 billion',
     performance: 'Alright',
+    goodFor: 'English',
     default: false,
     android: true
   },
@@ -139,6 +155,7 @@ const availableAiModels = [
     size: 'Medium',
     parameters: '3.8 billion',
     performance: 'Very Good',
+    goodFor: 'English',
     default: false,
     android: true
   },
@@ -148,6 +165,7 @@ const availableAiModels = [
     size: 'Large',
     parameters: '8 billion',
     performance: 'Super Good',
+    goodFor: 'English',
     default: false,
     android: true
   },
