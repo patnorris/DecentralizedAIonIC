@@ -51,7 +51,7 @@
         <!--
         -- triggers sidebar on small devices
         -->
-        <button id="sidebarToggle" data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <button id="sidebarToggle" data-drawer-target="chat" data-drawer-toggle="chat" aria-controls="chat" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
           <span class="sr-only">Open sidebar</span>
           <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
@@ -64,12 +64,12 @@
       </div>
     </header>
 
-    <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-slate-100 dark:bg-gray-900 antialiased">
+    <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-slate-100 antialiased">
       <div class="flex justify-between px-4 mx-auto max-w-screen-xl ">
-        <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+        <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
           <header class="mb-4 lg:mb-6 not-format">
             <!-- Breadcrumb -->
-            <nav class="justify-between mb-8 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+            <nav class="justify-between mb-8 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50" aria-label="Breadcrumb">
               <ol class="inline-flex items-center mb-3 space-x-1 md:space-x-2 rtl:space-x-reverse sm:mb-0">
                 <li>
                   <div class="flex items-center">
@@ -88,19 +88,19 @@
             </nav>
 
             <address class="flex items-center mb-6 not-italic">
-              <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+              <div class="inline-flex items-center mr-3 text-sm text-gray-900">
                 <img class="mr-4 w-16 h-16 rounded-full" src={devincilogo} alt="deVinci logo">
                 <div>
-                  <a href="#" rel="author" class="text-xl font-bold text-gray-900 dark:text-white">deVinci</a>
-                  <p class="text-base text-gray-500 dark:text-gray-400"> Powered by <a href='https://www.onicai.com/' target='_blank' rel="noreferrer" class='underline'>onicai</a> and hosted on <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a>
+                  <a href="#" rel="author" class="text-xl font-bold text-gray-900">deVinci</a>
+                  <p class="text-base text-gray-500"> Powered by <a href='https://www.onicai.com/' target='_blank' rel="noreferrer" class='underline'>onicai</a> and hosted on <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a>
                   </p>
                 </div>
               </div>
             </address>
-            <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Howdy from deVinci</h1>
+            <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">Howdy from deVinci</h1>
           </header>
           <p class="lead">Hi there! I'm deVinci, your truly personal AI assistant. I can help you with whatever you need, and I'm always here to answer your questions. Whether you're looking for advice, support, or just a friendly chat, I'm here to help.</p>
-          <h3 class="my-4 text-2xl font-bold dark:text-white">About deVinci<br /> Decentralized, Trusted, Open-source, Truly Yours</h3>
+          <h3 class="my-4 text-2xl font-bold">About deVinci<br /> Decentralized, Trusted, Open-source, Truly Yours</h3>
           <p>DeVinci is your personalized AI assistant that redefines the paradigm of digital privacy and trust. It's not just an assistant; it's a mission to revolutionize how AI and data privacy intersect.</p>
           <p class="my-4">DeVinci is powered by an open-source AI model that operates directly within your browser. When you engage with DeVinci, the AI model is loaded and processed on your device. This means your interactions stay completely within the confines of your device. Your data never leaves your hands, ensuring unprecedented control over your data and a level of privacy that is a rarity in today's world of AI assistants.</p>
           <p class="my-4">Unlike traditional AI assistants backed by corporations, DeVinci is fully independent. There is no big company behind it, influencing or manipulating the responses to favor their interests. DeVinci's sole purpose is to serve you and provide you with the most honest, unbiased assistance.</p>
