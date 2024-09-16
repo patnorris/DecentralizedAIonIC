@@ -193,9 +193,9 @@
   const loadChat = async () => {
     if($chatModelGlobal) {
       try {
-        await $chatModelGlobal.interruptGenerate(); // stop any previously triggered answer generations to not interfere in this chat        
+        await $chatModelGlobal.interruptGenerate(); // stop any previously triggered answer generations to not interfere in this chat
       } catch (error) {
-        console.error("Error stopping the answer generation on loading chat ", error);        
+        console.error("Error stopping the answer generation on loading chat ", error);
       };
     };
     chatRetrievalInProgress = true;
@@ -216,7 +216,7 @@
           console.error("Error loading chat: ", chatHistoryResponse.Err);
           // @ts-ignore
           throw new Error("Error loading chat: ", chatHistoryResponse.Err);
-        };        
+        };
       } catch (error) {
         // Likely in offline usage
         const storedMessages = getLocallyStoredChat(chatDisplayed.id);
@@ -232,18 +232,6 @@
 
   onMount(loadChat);
 </script>
-
-<!-- TODO: {#if !$store.isAuthed}
-  <div>
-    <p>Please note that you may only store chats (and access additional features) if you log in.</p>
-  </div>
-{:else}
-  <div>
-    <p>Should your chat messages be stored?</p>
-    <input type="checkbox" bind:checked={storeChatToggle} on:click={handleStoreChatToggle} />
-    <span>{storeChatToggle ? 'YES' : 'NO'}</span>
-  </div>
-{/if} -->
 
 <div class="messages h-[calc(100vh-164px)]" style="overflow:auto;" use:scrollToBottom={messages}>
   {#if $chatModelIdInitiatedGlobal && messages.length === 0}
@@ -268,7 +256,7 @@
         <p class="font-semibold text-gray-900 dark:text-gray-600">Loading your content into the local Knowledge Base for you...</p>
         <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
       {/if}
-      {#if !$chatModelIdInitiatedGlobal || messageGenerationInProgress}
+      {#if !$chatModelIdInitiatedGlobal}
         <input disabled type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " />
         <button disabled type="submit" class="opacity-55 cursor-not-allowed inline-flex justify-center p-2 text-gray-600 rounded-full">
           <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
@@ -276,9 +264,17 @@
           </svg>
           <span class="sr-only">Send message</span>
         </button>
+      {:else if messageGenerationInProgress}
+        <input disabled type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " />
+        <button type="submit" class="opacity-55 cursor-not-allowed inline-flex justify-center p-2 text-gray-600 rounded-full bg-gray-100 hover:bg-gray-300">
+          <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z"/>
+          </svg>
+          <span class="sr-only">Stop chat</span>
+        </button>
       {:else}
         <input bind:value={newMessageText} on:keydown={handleInputKeyDown} type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message deVinci..." />
-        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={() => {sendMessage()}} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-100">
+        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={() => {sendMessage()}} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer bg-gray-100 hover:bg-gray-300">
           <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
           </svg>

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import SidebarHeader from "./SidebarHeader.svelte";
-  import SidebarFooter from "./SidebarFooter.svelte";
-  //import Knowledgebase from "./Knowledgebase.svelte"; TODO
+  import SidebarHeader    from "./SidebarHeader.svelte";
+  import SidebarInfo        from "./SidebarFooter.svelte";
+  import SidebarBottomNav from "./SidebarBottomNav.svelte";
+  //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
 
@@ -11,7 +12,9 @@
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">
     <SidebarHeader />
-    {#if !userHasDownloadedAtLeastOneModel}
-      <SidebarFooter />
+    {#if userHasDownloadedAtLeastOneModel}
+        <SidebarBottomNav />
+    {:else}
+        <SidebarInfo />
     {/if}
 </div>

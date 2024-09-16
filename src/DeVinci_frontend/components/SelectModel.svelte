@@ -21,7 +21,7 @@
 
   <div>
     <div class="m-4 mt-2 px-4 py-3 text-gray-500 inline-block border border-[#b0c4de] rounded-lg sm:px-5 bg-gray-50">
-      <b>Please select a model</b>. When selecting an AI model to interact with, consider the balance between performance and hardware requirements. Larger models generally offer enhanced accuracy and advanced features, making them ideal for complex tasks. However, they demand more powerful hardware and may operate slower.
+      <b>Please select a model</b>. When choosing an AI model, balance performance with hardware needs. Larger models offer better accuracy and features but require more powerful hardware and may run slower.
     </div>
     <ul class="grid w-full gap-2 md:grid-cols-2 px-4 mt-4">
       {#each availableAiModels as option}

@@ -1,5 +1,5 @@
 <footer class="bg-gray-300 dark:bg-gray-900">
-  <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+  <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-5 border-gray-200 border-2">
     <div class="sm:flex sm:items-center sm:justify-between">
           <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">deVinci 2024</span>
       <div class="flex mt-4 sm:justify-center sm:mt-0">
