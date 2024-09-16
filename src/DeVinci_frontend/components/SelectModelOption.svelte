@@ -236,22 +236,34 @@
       {#if isDownloaded}
       <div class="p-3 pt-1 pb-2">
         {#if initiateText}
-          <div class="w-full bg-gray-200 my-1 rounded-full">
-            <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{initiateText}</div>
-          </div>
+            <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
+              <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-[#151b1e]  text-center p-0.5 leading-none rounded-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove" style="width: 100%;">
+                {initiateText}
+              </div>
+            </div>
+          {/if}
+          <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
+            Downloaded
+            <svg class="ml-0.5 w-3 h-3 text-[#151b1e]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
+            </svg>
+          </span>
+          {#if $selectedAiModelId === id}
+          <span class="inline-flex items-center bg-green-800 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
+            In Use
+            <svg class="ml-0.5 w-3 h-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 0 0-2 2v4m5-6h8M8 7V5c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2m0 0h3a2 2 0 0 1 2 2v4m0 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6m18 0h-3m-3 0h-4m-3 0H5"/>
+            </svg>
+          </span>
         {/if}
-        <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
-          Downloaded
-          <svg class="ml-0.5 w-3 h-3 text-[#151b1e]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
-          </svg>
-        </span>
       </div>
       {:else if downloadProgress}
       <div class="p-3 pt-1 pb-2">
         {#if downloadProgress !== 0}
-          <div class="w-full bg-gray-200 my-1 rounded-full">
-            <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: {downloadProgress}%;">
+        <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
+          <!-- Background animation + progress bar -->
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove"></div>
+            <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: {downloadProgress}%;">
               {downloadProgress}%
             </div>
           </div>
@@ -272,5 +284,16 @@
 
   .performance-span {
 	  transition: background-color 3.3s ease-in-out; /* Adjust the duration and easing as needed */
+  }
+
+  @keyframes bgMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Applying the animation */
+  .animate-bgMove {
+    background-size: 200% 100%;
+    animation: bgMove 2s linear infinite;
   }
 </style>
