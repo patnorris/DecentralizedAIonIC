@@ -250,7 +250,7 @@
         </span>
         {#if $selectedAiModelId === id}
           <span class="inline-flex items-center bg-green-800 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
-            In Use
+            In use
             <svg class="ml-0.5 w-3 h-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 0 0-2 2v4m5-6h8M8 7V5c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2m0 0h3a2 2 0 0 1 2 2v4m0 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6m18 0h-3m-3 0h-4m-3 0H5"/>
             </svg>
