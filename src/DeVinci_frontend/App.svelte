@@ -4,6 +4,9 @@
   import { store } from "./store";
 
   // import UserChatsOverview from "./pages/UserChatsOverview.svelte";
+
+  import Breadcrumbs from "./components/Breadcrumbs.svelte";
+  
   import UserSettings from "./pages/UserSettings.svelte";
   import About from "./pages/About.svelte";
   import Brand from "./pages/Brand.svelte";
@@ -33,5 +36,6 @@
 </script>
 
 <div class="App">
+  <Breadcrumbs />
   <Router {routes} />
 </div>
