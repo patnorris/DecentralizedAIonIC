@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { store } from "./store";
 
-  import { deviceType, supportsWebGpu, chatModelIdInitiatedGlobal } from "./store";
+  import { deviceType, supportsWebGpu } from "./store";
 
   import UnsupportedBrowserBanner from "./components/UnsupportedBrowserBanner.svelte";
   import UnsupportedDeviceBanner from "./components/UnsupportedDeviceBanner.svelte";
@@ -71,9 +71,7 @@
         </header>
         <Breadcrumbs />
         <Router {routes} />
-        {#if !$chatModelIdInitiatedGlobal}
-          <Footer />
-        {/if}
+        <Footer />
       </main>
     </div>
     {/if}

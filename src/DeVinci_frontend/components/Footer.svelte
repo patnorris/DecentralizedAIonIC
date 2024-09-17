@@ -1,3 +1,18 @@
+<script lang="ts">
+  import { location } from 'svelte-spa-router';
+  import { derived } from 'svelte/store';
+
+  const currentPage = derived(location, $location => {
+    if ($location === '/') return 'Home';
+    const path = $location.split('/')[1];
+    return path.charAt(0).toUpperCase() + path.slice(1);
+  });
+
+  const showFooter= derived(location, $location => $location !== '/');
+</script>
+
+{#if $showFooter}
+
 <footer class="bg-gray-300">
   <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-5 border-gray-200 border-2">
     <div class="flex items-center justify-between">
@@ -13,3 +28,5 @@
     </div>
   </div>
 </footer>
+
+{/if}

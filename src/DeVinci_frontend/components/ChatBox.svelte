@@ -242,7 +242,7 @@
   {/each}
 </div>
 
-<footer class="footer fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
+<footer class="footer fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full md:ml-36 md:w-[calc(100%-18rem)]">
   <form class="w-full max-w-2xl mx-auto px-1 sm:px-0">
     <label for="chat" class="sr-only">Message DeVinci</label>
     <div class="flex items-center px-3 p-2 rounded-full bg-gray-200">
