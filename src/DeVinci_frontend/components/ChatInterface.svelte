@@ -14,7 +14,6 @@
   } from "../helpers/vector_database";
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
-  import Footer from "./Footer.svelte"
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
 
@@ -197,7 +196,7 @@
   };
 </script>
 
-<div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
+<div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-4xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
   {/if}
@@ -207,10 +206,6 @@
     {/key}
   {/if}
 </div>
-
-{#if !$chatModelIdInitiatedGlobal}
-  <Footer />
-{/if}
 
 {#if showToast}
   <InstallToastNotification />
