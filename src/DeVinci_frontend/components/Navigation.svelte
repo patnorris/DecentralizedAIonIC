@@ -80,7 +80,11 @@
         <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
       </svg>
     {:else}
-      <div class="w-10 h-10 -m-2.5 rounded-lg bg-violet-500 text-gray-100 flex justify-center items-center content-center">0X</div>
+      <div class="w-10 h-10 -m-2.5 rounded-lg bg-violet-500 text-gray-100 flex justify-center items-center content-center">
+        <svg class="w-6 h-6 text-text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+        </svg>
+      </div>
     {/if}
   </button>
 
