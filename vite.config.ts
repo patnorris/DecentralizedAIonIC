@@ -88,10 +88,10 @@ const pwaManifest = {
       src: './devinci512.png',
       sizes: '512x512',
       type: 'image/png',
-      purpose: 'any maskable' // Combined purpose
+      purpose: 'any maskable'
     },
     {
-      src: "./devinci1024.png", // Replace 721x721 with 1024x1024
+      src: "./devinci1024.png", 
       type: "image/png",
       sizes: "1024x1024"
     },
@@ -102,7 +102,6 @@ const pwaManifest = {
       type: "image/jpg",
       sizes: "1600x840"
     },
-    // Add more screenshots as needed
   ],
   shortcuts: [
     {
@@ -112,7 +111,6 @@ const pwaManifest = {
       url: "/",
       icons: [{ src: "./devinci192.png", sizes: "192x192" }]
     }
-    // Add more shortcuts as needed
   ]
 };
 
