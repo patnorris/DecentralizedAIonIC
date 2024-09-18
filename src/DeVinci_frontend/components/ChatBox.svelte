@@ -5,6 +5,7 @@
 
   import Message from './Message.svelte';
   import StartUpChatPanel from "./StartUpChatPanel.svelte";
+  import ToastNotification from "./ToastNotification.svelte";
 
   import spinner from "../assets/loading.gif";
 
@@ -27,6 +28,8 @@
   let replyText = 'Thinking...';
 
   let messageGenerationInProgress = false;
+  let showToast = false;
+  let toastMessage = '';
 
   const scrollToBottom = node => {
 		const scroll = () => node.scroll({
@@ -181,11 +184,17 @@
       initiatedKnowledgeDatabase = true;
       loadingKnowledgeDatabase = false;
       useKnowledgeBase = true;
-      alert("PDF processed and ready to use!");
+      showToast = true;
+      toastMessage = "PDF processed and ready to use!";
     } else {
-      alert("Please select a PDF file.");
-    };
-  };
+      showToast = true;
+      toastMessage = "Please select a PDF file.";
+    }
+  }
+
+  function closeToast() {
+    showToast = false;
+  }
 
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
@@ -284,6 +293,10 @@
     </div>
   </form>
 </footer>
+
+{#if showToast}
+  <ToastNotification message={toastMessage} onClose={closeToast} />
+{/if}
 
 <style>
 	.has-text {
