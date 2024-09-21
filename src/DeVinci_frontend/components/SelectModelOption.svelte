@@ -23,6 +23,7 @@
   export let parameters;
   export let performance;
   export let size;
+  export let goodFor;
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
   export let autoInitiateIfModelSelected = false;
@@ -219,18 +220,22 @@
     };
   });
 
+  // Add this reactive statement
+  $: isChecked = $selectedAiModelId !== null && $selectedAiModelId === id;
+
 </script>
 
 {#if !onlyShowIfDownloaded || isDownloaded}
   <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
     <div>
-      <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" checked={$selectedAiModelId === id} on:click={() => loadChatModel(id)} />
+      <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" checked={isChecked} on:click={() => loadChatModel(id)} />
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
         <div class="block">
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
           <div class="w-full text-sm font-normal">{parameters}</div>
           <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
-          <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{goodFor}</span>
         </div>
         <svg class="w-5 h-5 ms-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -241,7 +246,7 @@
       {#if isDownloaded}
         {#if initiateText}
           <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
-            <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-[#151b1e]  text-center p-0.5 leading-none rounded-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove" style="width: 100%;">
+            <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-[#151b1e] text-center p-0.5 leading-none rounded-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove" style="width: 100%;">
               {initiateText}
             </div>
           </div>
@@ -254,7 +259,7 @@
         </span>
         {#if $selectedAiModelId === id}
           <span class="inline-flex items-center bg-green-800 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
-            In Use
+            In use
             <svg class="ml-0.5 w-3 h-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 0 0-2 2v4m5-6h8M8 7V5c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2m0 0h3a2 2 0 0 1 2 2v4m0 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6m18 0h-3m-3 0h-4m-3 0H5"/>
             </svg>

@@ -59,6 +59,8 @@ selectedAiModelId.subscribe((value) => {
     localStorage.setItem("selectedAiModelId", value);
   }
 });
+
+export const currentExperienceId = writable(null);
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
 saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
