@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from "svelte";
   import { location, push } from 'svelte-spa-router';
@@ -7,7 +7,8 @@
     store,
     chatModelGlobal,
     selectedAiModelId,
-    chatModelIdInitiatedGlobal
+    chatModelIdInitiatedGlobal,
+    currentModelName
   } from "../store";
   import {
     setLocalFlag,
@@ -86,7 +87,7 @@
           if (mutation.type === 'childList' && mutation.addedNodes.length) {
             mutation.addedNodes.forEach(node => {
               if (node.nodeType === Node.ELEMENT_NODE) {
-                const newSpans = node.querySelectorAll(".performance-span");
+                const newSpans = (node as Element).querySelectorAll(".performance-span");
                 newSpans.forEach(span => loadBackgroundColor(span));
               };
             });
@@ -126,14 +127,24 @@
     };
   };
 
-  const changeModel = (id) => {
-    if ($selectedAiModelId === id) {
-      return;
-    };
-    // Change the model in the store
-    selectedAiModelId.set(id); // this also updates the locally stored model id
+  const changeModel = async (modelOptionId: string) => {
+    console.log('changeModel called with:', modelOptionId);
+    console.log('Current name:', name);
+
+    // Update the selected model ID and name in the store
+    selectedAiModelId.set(modelOptionId);
+    currentModelName.set(name);
+    console.log('Updated currentModelName to:', name);
     chatModelIdInitiatedGlobal.set(null);
-    updateUserSettings(id);
+
+    try {
+      console.log('Loading chat model...');
+      await loadChatModel(modelOptionId);
+      await updateUserSettings();
+      push('/'); // Navigate to home after successful update
+    } catch (error) {
+      console.error('Error changing model:', error);
+    }
   };
 
   async function loadChatModel(modelOptionId) {

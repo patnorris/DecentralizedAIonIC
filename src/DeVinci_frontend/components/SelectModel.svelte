@@ -31,7 +31,7 @@
         {#if userHasDownloadedAtLeastOneModel}
           <SelectModelOption
             id={option.id}
-            name="{option.name}"
+            name={option.name}
             value={option.value}
             title={option.title}
             parameters={option.parameters}

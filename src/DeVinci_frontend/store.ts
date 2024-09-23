@@ -30,6 +30,8 @@ export const device = result.device.model || 'Unknown Device';
 export let deviceType = result.device.type; // Will return 'mobile' for mobile devices, 'tablet' for tablets, and undefined for desktops
 let osName = result.os.name; // Get the operating system name
 
+export const currentModelName = writable<string>("No model selected");
+
 if (!deviceType) {
   deviceType = 'desktop';
 } else if (deviceType === 'mobile' || deviceType === 'tablet') {
