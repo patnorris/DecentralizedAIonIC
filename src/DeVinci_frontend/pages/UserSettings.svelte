@@ -11,7 +11,6 @@
   import OwnCanister      from "../components/OwnCanister.svelte";
   import GeneralSettings  from "../components/GeneralSettings.svelte";
 
-  import { getDefaultAiModelId } from "../helpers/ai_model_helpers";
   import {
     syncLocalChanges
   } from "../helpers/localStorage";
@@ -42,8 +41,6 @@
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-      } else {
-        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
       };
     };
     hasLoadedSettings = true;

@@ -32,7 +32,7 @@
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
 
   $: downloadProgress = getLocalFlag("aiModelDownloadingProgress", {modelId: id});
-  
+
   let initiateText;
   let downloadText;
 
@@ -99,6 +99,9 @@
   });
 
   const updateUserSettings = async (modelId) => {
+    if (!$store.isAuthed) {
+      return;
+    };
     // Persist to backend
     const updatedSettingsObject = {
       selectedAiModelId: modelId,
@@ -143,6 +146,9 @@
     };
     console.log("Loading chat model...");
     chatModelDownloadInProgress = true;
+    downloadText = "Downloading... please wait.";
+    initiateText = "Initiating... please wait.";
+
     if (!modelOptionId) {
       modelOptionId = $selectedAiModelId;
     };
@@ -174,6 +180,9 @@
           if (report.progress !== 0) {
             downloadProgress = toPercentage(report.progress);
             setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: toPercentage(report.progress)});
+            if (report.progress === 1) {
+              isDownloaded = true;
+            };
           } else {
             downloadText = report.text;
           };
@@ -233,8 +242,8 @@
         </svg>
       </label>
     </div>
-    {#if isDownloaded}
-      <div class="p-3 pt-1 pb-2">
+    <div class="p-3 pt-1 pb-2">
+      {#if isDownloaded}
         {#if initiateText}
           <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
             <div class="relative z-10 bg-[dimgrey] text-xs font-medium text-[#151b1e] text-center p-0.5 leading-none rounded-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove" style="width: 100%;">
@@ -256,10 +265,8 @@
             </svg>
           </span>
         {/if}
-      </div>
-    {:else if downloadProgress}
-      <div class="p-3 pt-1 pb-2">
-        {#if downloadProgress !== 0}
+      {:else}
+        {#if downloadProgress}
           <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
             <!-- Background animation + progress bar -->
             <div class="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 animate-bgMove"></div>
@@ -272,8 +279,8 @@
             <div class="bg-[dimgrey] text-xs font-medium text-orange-50 text-center p-0.5 leading-none rounded-full" style="width: 100%">{downloadText}</div>
           </div>
         {/if}
-      </div>
-    {/if}
+      {/if}
+    </div>
   </li>
 {/if}
 
