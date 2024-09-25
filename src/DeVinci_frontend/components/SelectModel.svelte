@@ -4,6 +4,7 @@
   } from "../store";
 
   import SelectModelOption from './SelectModelOption.svelte';
+  import Entertainment from "./Entertainment.svelte";
 
   import { getAvailableAiModels } from "../helpers/ai_model_helpers";
   import { userHasDownloadedModel } from "../helpers/localStorage";
@@ -54,6 +55,7 @@
             size={option.size}
             bind:chatModelDownloadInProgress
           />
+          <Entertainment />
         {/if}
       {/each}
     </ul>
