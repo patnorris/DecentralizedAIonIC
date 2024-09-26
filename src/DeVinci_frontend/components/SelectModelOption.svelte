@@ -128,23 +128,15 @@
   };
 
   const changeModel = async (modelOptionId: string) => {
-    console.log('changeModel called with:', modelOptionId);
-    console.log('Current name:', name);
-
-    // Update the selected model ID and name in the store
-    selectedAiModelId.set(modelOptionId);
-    currentModelName.set(name);
-    console.log('Updated currentModelName to:', name);
-    chatModelIdInitiatedGlobal.set(null);
-
     try {
-      console.log('Loading chat model...');
-      await loadChatModel(modelOptionId);
-      await updateUserSettings();
-      push('/'); // Navigate to home after successful update
+      // Update the selected model ID and name in the store
+      selectedAiModelId.set(modelOptionId);
+      currentModelName.set(name);
+      chatModelIdInitiatedGlobal.set(null);
+      await updateUserSettings(modelOptionId);
     } catch (error) {
       console.error('Error changing model:', error);
-    }
+    };
   };
 
   async function loadChatModel(modelOptionId) {
