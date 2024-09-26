@@ -65,6 +65,16 @@
       </div>
     </div>
 
+    <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl">Letterform</h1>
+    <h1 class="my-14 text-4xl font-normal leading-tight text-[#151b1e] lg:mb-6 lg:text-5xl w-full mx-auto text-center"><b>D</b>e<b>V</b>inci</h1>
+    <p class="text-gray-500 text-left text-lg">
+      The DeVinci brand must consistently be written with a capital "D" and a capital "V" across all branding materials and communications to maintain its visual identity and brand consistency.
+    </p>
+    <p class="text-gray-500 text-left text-lg mt-6">
+      This specific stylization—DeVinci—is a key element of the brand's recognition, serving to distinguish it from other names and enhance its memorability. Whether in marketing, digital platforms, packaging, or internal documents, this capitalization structure should always be adhered to in order to preserve the integrity and uniqueness of the brand.
+    </p>
+    
+    
     <h1 class="my-14 text-xl font-extrabold leading-tight text-gray-700 lg:mb-6 lg:text-3xl">Typography</h1>
 
     <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-500">Sans-serif </h5>
