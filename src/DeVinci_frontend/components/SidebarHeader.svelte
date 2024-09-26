@@ -8,11 +8,10 @@
   import ChatHistory from "./ChatHistory.svelte";
 
   import devincilogo from "/devinci-logo.svg";
-
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { downloadedModels } from '../helpers/modelStore';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+  $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;
 
   // User can select between chats (global variable is kept)
   async function showNewChat() {
