@@ -10,6 +10,7 @@
   import InOutSaveChats   from "../components/InOutSaveChats.svelte";
   import OwnCanister      from "../components/OwnCanister.svelte";
   import GeneralSettings  from "../components/GeneralSettings.svelte";
+  import AdvancedSettings from "../components/AdvancedSettings.svelte";
 
   import {
     syncLocalChanges
@@ -64,6 +65,7 @@
         <InOutSaveChats />
         <GeneralSettings />
         <OwnCanister />
+        <AdvancedSettings />
       {/if}
     {/if}
     <SelectModel />
