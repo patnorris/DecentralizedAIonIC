@@ -15,7 +15,7 @@
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
 
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/local_storage";
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();

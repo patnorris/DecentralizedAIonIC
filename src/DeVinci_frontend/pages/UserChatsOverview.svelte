@@ -9,7 +9,7 @@
         getLocallyStoredChatHistory,
         storeChatHistoryLocally,
         syncLocalChanges
-    } from "../helpers/localStorage";
+    } from "../helpers/local_storage";
 
     let chats = [];
     let hasLoadedChats = false;

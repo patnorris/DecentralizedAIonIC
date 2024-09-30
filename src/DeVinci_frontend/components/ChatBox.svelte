@@ -16,7 +16,7 @@
     storeChatLocally,
     storeLocalChangeToBeSynced,
     syncLocalChanges,
-  } from "../helpers/localStorage";
+  } from "../helpers/local_storage";
 
   export let modelCallbackFunction;
   export let chatDisplayed;

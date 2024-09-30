@@ -15,7 +15,7 @@
     syncLocalChanges,
     setUserSettingsSyncFlag,
     getLocalFlag
-  } from "../helpers/localStorage";
+  } from "../helpers/local_storage";
 
   export let id;
   export let name;

@@ -21,7 +21,7 @@
   import NotFound from "./pages/NotFound.svelte";
   import deVinci from "./pages/deVinci.svelte";
 
-  import { syncLocalChanges } from "./helpers/localStorage";
+  import { syncLocalChanges } from "./helpers/local_storage";
 
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)

@@ -1,5 +1,9 @@
 <script>
-  let temperature = 0.6;
+  import {
+    userSettings
+  } from "../store";
+
+  let temperature = $userSettings.temperature | 0.6;
 
   // Function to handle changes in the slider
   function handleTemperatureChange(event) {

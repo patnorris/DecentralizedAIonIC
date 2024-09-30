@@ -5,7 +5,7 @@ import { onMount } from 'svelte';
   import SidebarBottomNav from "./SidebarBottomNav.svelte";
   //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/local_storage";
 
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');

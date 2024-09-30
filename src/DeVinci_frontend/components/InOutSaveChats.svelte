@@ -2,7 +2,7 @@
     import {
       setLocalFlag,
       getLocalFlag
-    } from "../helpers/localStorage";
+    } from "../helpers/local_storage";
 
     // Holds the value of the selected option whether to store chats or not
     let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
