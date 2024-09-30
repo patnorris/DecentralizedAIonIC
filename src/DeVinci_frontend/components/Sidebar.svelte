@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
   import SidebarHeader    from "./SidebarHeader.svelte";
   import SidebarInfo        from "./SidebarFooter.svelte";
   import SidebarBottomNav from "./SidebarBottomNav.svelte";
-  import { downloadedModels } from "../helpers/modelStore";
+  import { downloadedModels } from "../store";
   //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
