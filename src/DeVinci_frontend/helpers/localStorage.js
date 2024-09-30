@@ -1,6 +1,7 @@
 import {
   store,
-  saveChatsUserSelection
+  saveChatsUserSelection,
+  downloadedModels 
 } from "../store";
 
 let storeState;
@@ -21,9 +22,13 @@ export function setLocalFlag(flagType, flagObject) {
         arrayOfModels.push(flagObject.modelId);
       };
       localStorage.setItem(flagType, JSON.stringify(arrayOfModels));
+      // Update the downloadedModels store
+      downloadedModels.set(arrayOfModels);
     } else {
       let newArrayForModel = [flagObject.modelId];
       localStorage.setItem(flagType, JSON.stringify(newArrayForModel));
+      // Update the downloadedModels store
+      downloadedModels.set(newArrayForModel);
     };
   } else if (flagType === "aiModelDownloadingProgress") {
     const modelDownloadProgressStored = localStorage.getItem(flagType);
@@ -50,6 +55,11 @@ export function setLocalFlag(flagType, flagObject) {
   };
   return true;
 };
+
+// Export addDownloadedModel as part of setLocalFlag
+export function addDownloadedModel(modelId) {
+  return setLocalFlag("downloadedAiModels", { modelId });
+}
 
 export function getLocalFlag(flagType, flagObject=null) {
   if (flagType === "downloadedAiModels") {
@@ -337,4 +347,3 @@ export async function syncLocalChanges() {
   console.log("Sync process completed, with retries scheduled for failed items.");
   return true;
 };
-

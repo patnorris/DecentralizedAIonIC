@@ -2,7 +2,7 @@
   import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from "svelte";
   import { location, push } from 'svelte-spa-router';
-  import { addDownloadedModel } from '../helpers/modelStore';
+  import { addDownloadedModel } from '../helpers/localStorage';
   import {
     store,
     chatModelGlobal,
