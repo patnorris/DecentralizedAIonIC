@@ -8,7 +8,7 @@
   import ChatHistory from "./ChatHistory.svelte";
 
   import devincilogo from "/devinci-logo.svg";
-  import { downloadedModels } from "../store";
+  import { downloadedModels } from '../helpers/modelStore';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;

@@ -2,7 +2,6 @@
   import Router from "svelte-spa-router";
   import { onMount } from "svelte";
   import { store } from "./store";
-  import { initializeStores } from './store';
 
   import { deviceType, supportsWebGpu } from "./store";
 
@@ -41,7 +40,6 @@
     if ($store.isAuthed) {
       syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
     };
-    initializeStores();
   });
 </script>
 

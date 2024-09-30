@@ -2,8 +2,7 @@
   import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from "svelte";
   import { location, push } from 'svelte-spa-router';
-  import { setLocalFlag, updateDownloadedModels } from '../helpers/localStorage';
-  import { downloadedModels } from '../store';
+  import { addDownloadedModel } from '../helpers/modelStore';
   import {
     store,
     chatModelGlobal,
@@ -12,6 +11,8 @@
     currentModelName
   } from "../store";
   import {
+    setLocalFlag,
+    syncLocalChanges,
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/localStorage";
@@ -184,7 +185,6 @@
             setLocalFlag("aiModelDownloadingProgress", {modelId: id, downloadProgress: toPercentage(report.progress)});
             if (report.progress === 1) {
               isDownloaded = true;
-              updateDownloadedModels(modelOptionId);
             };
           } else {
             downloadText = report.text;
@@ -202,6 +202,7 @@
         modelId: modelOptionId,
       };
       setLocalFlag("downloadedAiModels", flagObject);
+      addDownloadedModel(modelOptionId);
     } catch (error) {
       console.error("Error loading model: ", error);
       throw error;

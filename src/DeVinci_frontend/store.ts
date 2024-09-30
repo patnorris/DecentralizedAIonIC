@@ -17,11 +17,6 @@ import {
     ? "https://ic0.app" // Use in Production (on Mainnet)
     : "http://localhost:4943"; // to be used with http://localhost:4943/?canisterId=ryjl3-tyaaa-aaaaa-aaaba-cai#/testroom */
 
-
-import { getLocalFlag, setLocalFlag } from "./helpers/localStorage";
-// Create the downloadedModels store without initializing it yet
-export const downloadedModels = writable([]);
-
 export const HOST =
   process.env.NODE_ENV !== "development"
     ? "https://ic0.app"
@@ -672,13 +667,5 @@ declare global {
         batchTransactions: () => Promise<any>;
       };
     };
-  }
-}
-
-// Add this function at the end of the file
-export function initializeStores() {
-  const storedModels = localStorage.getItem("downloadedAiModels");
-  if (storedModels) {
-    downloadedModels.set(JSON.parse(storedModels));
   }
 }

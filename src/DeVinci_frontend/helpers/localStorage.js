@@ -3,7 +3,8 @@ import {
   saveChatsUserSelection
 } from "../store";
 
-import { downloadedModels } from '../store';
+let storeState;
+store.subscribe((value) => storeState = value);
 
 export function setLocalFlag(flagType, flagObject) {
   if (flagType === "downloadedAiModels") {
@@ -53,10 +54,17 @@ export function setLocalFlag(flagType, flagObject) {
 export function getLocalFlag(flagType, flagObject=null) {
   if (flagType === "downloadedAiModels") {
     const modelFlagsStored = localStorage.getItem(flagType);
+    // modelFlagsStored is a stringified array where each entry is a model id (of a model that has been downloaded)
     if (modelFlagsStored) {
-      return JSON.parse(modelFlagsStored);
-    }
-    return [];
+      let arrayOfModels = JSON.parse(modelFlagsStored);
+      if (arrayOfModels) {
+        return arrayOfModels;
+      } else {
+        return [];
+      };
+    } else {
+      return [];
+    };
   } else if (flagType === "aiModelDownloadingProgress") {
     const modelDownloadProgressStored = localStorage.getItem(flagType);
     // modelDownloadProgressStored is a stringified object where each key is a model id and the value the download progress
@@ -254,7 +262,7 @@ export async function syncLocalChanges() {
   for (const chatId in chatsToUpdate) {
     const messagesFormattedForBackend = chatsToUpdate[chatId];  // Assuming these are already formatted properly
     try {
-      const chatUpdatedResponse = await store.backendActor.update_chat_messages(chatId, messagesFormattedForBackend);
+      const chatUpdatedResponse = await storeState.backendActor.update_chat_messages(chatId, messagesFormattedForBackend);
       if (chatUpdatedResponse.Err) {
         console.error("Error message syncing chat messages: ", chatUpdatedResponse.Err);
         // Store failed updates to retry later
@@ -270,7 +278,7 @@ export async function syncLocalChanges() {
   // Sync new chats
   for (const chatMessages of chatsToCreate) {
     try {
-      const chatCreatedResponse = await store.backendActor.create_chat(chatMessages);
+      const chatCreatedResponse = await storeState.backendActor.create_chat(chatMessages);
       if (chatCreatedResponse.Err) {
         console.error("Error message syncing new chat: ", chatCreatedResponse.Err);
         // Store failed creations to retry later
@@ -304,7 +312,7 @@ export async function syncLocalChanges() {
         selectedAiModelId: selectedAiModelIdToSync,
       };
       try {
-        const settingsUpdatedResponse = await store.backendActor.update_caller_settings(updatedSettingsObject);            
+        const settingsUpdatedResponse = await storeState.backendActor.update_caller_settings(updatedSettingsObject);            
         // @ts-ignore
         if (settingsUpdatedResponse.Err) {
           // @ts-ignore
@@ -330,13 +338,3 @@ export async function syncLocalChanges() {
   return true;
 };
 
-export function updateDownloadedModels(modelId) {
-  const modelFlagsStored = localStorage.getItem("downloadedAiModels");
-  let arrayOfModels = JSON.parse(modelFlagsStored) || [];
-
-  if (!arrayOfModels.includes(modelId)) {
-    arrayOfModels.push(modelId);
-    localStorage.setItem("downloadedAiModels", JSON.stringify(arrayOfModels));
-    downloadedModels.set(arrayOfModels);
-  }
-}
