@@ -53,6 +53,7 @@ export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
 export let userSettings = writable(localStorage.getItem("userSettings"));
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
+
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
 selectedAiModelId.subscribe((value) => {
   if (value === null) {
@@ -60,6 +61,11 @@ selectedAiModelId.subscribe((value) => {
   } else {
     localStorage.setItem("selectedAiModelId", value);
   }
+});
+
+export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
+downloadedModels.subscribe((value) => {
+  localStorage.setItem("downloadedAiModels", JSON.stringify(value));
 });
 
 export const currentExperienceId = writable(null);

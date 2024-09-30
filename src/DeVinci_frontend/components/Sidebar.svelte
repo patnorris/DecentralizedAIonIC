@@ -3,6 +3,7 @@ import { onMount } from 'svelte';
   import SidebarHeader    from "./SidebarHeader.svelte";
   import SidebarInfo        from "./SidebarFooter.svelte";
   import SidebarBottomNav from "./SidebarBottomNav.svelte";
+  import { downloadedModels } from "../store";
   //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
   import { userHasDownloadedModel } from "../helpers/localStorage";
@@ -38,7 +39,7 @@ import { onMount } from 'svelte';
   });
 
   // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+  $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;
 </script>
 
 <div class="sidebar-header flex flex-col items-center justify-between py-4 h-lvh">

@@ -2,7 +2,7 @@
   import * as webllm from "@mlc-ai/web-llm";
   import { onMount } from "svelte";
   import { location, push } from 'svelte-spa-router';
-
+  import { addDownloadedModel } from '../helpers/localStorage';
   import {
     store,
     chatModelGlobal,
@@ -202,6 +202,7 @@
         modelId: modelOptionId,
       };
       setLocalFlag("downloadedAiModels", flagObject);
+      addDownloadedModel(modelOptionId);
     } catch (error) {
       console.error("Error loading model: ", error);
       throw error;
@@ -229,7 +230,7 @@
 </script>
 
 {#if !onlyShowIfDownloaded || isDownloaded}
-  <li class="text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
+  <li class="text-[#151b1e] bg-gray-200 border-2 border-dotted border-[#151b1e] rounded-lg hover:bg-[lightsteelblue]">
     <div>
       <input type="radio" id={id} name="selectModel" value={value} class="hidden peer" checked={isChecked} on:click={() => loadChatModel(id)} />
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
@@ -249,7 +250,7 @@
         </svg>
       </label>
     </div>
-    <div class="p-3 pt-1 pb-2">
+    <div class="p-3 pt-1 pb-2 bg-[ghostwhite] empty:p-0 rounded-b-lg">
       {#if isDownloaded}
         {#if initiateText}
           <div class="w-full bg-gray-200 my-1 rounded-full relative overflow-hidden">
@@ -258,14 +259,14 @@
             </div>
           </div>
         {/if}
-        <span class="inline-flex items-center bg-[lightsteelblue] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
+        <span class="inline-flex items-center bg-[#cb8bd0] text-[#151b1e] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
           Downloaded
           <svg class="ml-0.5 w-3 h-3 text-[#151b1e]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
           </svg>
         </span>
         {#if $selectedAiModelId === id}
-          <span class="inline-flex items-center bg-green-800 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
+          <span class="inline-flex items-center bg-green-700 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
             In use
             <svg class="ml-0.5 w-3 h-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 0 0-2 2v4m5-6h8M8 7V5c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2m0 0h3a2 2 0 0 1 2 2v4m0 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6m18 0h-3m-3 0h-4m-3 0H5"/>
