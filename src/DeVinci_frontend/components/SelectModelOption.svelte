@@ -16,6 +16,9 @@
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/local_storage";
+  import {
+    updateUserSettingsProperty
+  } from "../helpers/user_settings";
 
   export let id;
   export let name;
@@ -99,41 +102,13 @@
     }, 100); // 100ms delay
   });
 
-  const updateUserSettings = async (modelId) => {
-    if (!$store.isAuthed) {
-      return;
-    };
-    // Persist to backend
-    const updatedSettingsObject = {
-      selectedAiModelId: modelId,
-    };
-    try {
-      const settingsUpdatedResponse = await $store.backendActor.update_caller_settings(updatedSettingsObject);
-      // @ts-ignore
-      if (settingsUpdatedResponse.Ok) {
-        syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
-      } else {
-        // @ts-ignore
-        console.error("Error updating user settings: ", settingsUpdatedResponse.Err);
-        // @ts-ignore
-        throw new Error("Error updating user settings: ", settingsUpdatedResponse.Err);
-      };
-      syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
-    } catch (error) {
-      // @ts-ignore
-      console.error("Error updating settings: ", error);
-      // Likely offline, so set flag to sync change later
-      setUserSettingsSyncFlag("selectedAiModelId");
-    };
-  };
-
   const changeModel = async (modelOptionId: string) => {
     try {
       // Update the selected model ID and name in the store
       selectedAiModelId.set(modelOptionId);
       currentModelName.set(name);
       chatModelIdInitiatedGlobal.set(null);
-      await updateUserSettings(modelOptionId);
+      await updateUserSettingsProperty("selectedAiModelId", modelOptionId);
     } catch (error) {
       console.error('Error changing model:', error);
     };
