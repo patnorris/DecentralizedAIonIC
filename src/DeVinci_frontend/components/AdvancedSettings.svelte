@@ -2,13 +2,14 @@
   import { userSettings } from "../store";
   import { updateUserSettingsProperty } from "../helpers/user_settings";
 
-  let temperature = $userSettings.temperature || 0.6; // Use the existing temperature setting or default to 0.6
-  let responseLength = $userSettings.responseLength || "Medium"; // Medium as default response length
+  $: temperature = $userSettings.temperature || 0.6; // Use the existing temperature setting or default to 0.6
+  $: responseLength = $userSettings.responseLength || "Medium"; // Medium as default response length
 
   // Function to handle changes in the temperature slider
   async function handleTemperatureChange(event) {
     temperature = parseFloat(event.target.value);
     $userSettings.temperature = temperature;
+    userSettings.set($userSettings);
     await updateUserSettingsProperty("temperature", temperature);
   };
 
@@ -16,6 +17,7 @@
   async function handleResponseLengthChange(event) {
     responseLength = event.target.value;
     $userSettings.responseLength = responseLength;
+    userSettings.set($userSettings);
     await updateUserSettingsProperty("responseLength", responseLength);
   };
 </script>

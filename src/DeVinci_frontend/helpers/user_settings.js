@@ -1,13 +1,18 @@
 import {
-  store
+  store,
+  userSettings
 } from "../store";
 import { syncLocalChanges, setUserSettingsSyncFlag } from "./local_storage";
 
 let storeState;
 store.subscribe((value) => storeState = value);
 
+let userSettingsState;
+userSettings.subscribe((value) => userSettingsState = value);
+
 const updateUserSettings = async (updatedSettingsObject) => {
-  if (storeState.isAuthed) {
+  console.log("updateUserSettingsProperty updatedSettingsObject ", updatedSettingsObject);
+  if (!storeState.isAuthed) {
     return;
   };
   try {
@@ -32,7 +37,9 @@ const updateUserSettings = async (updatedSettingsObject) => {
 };
 
 export const updateUserSettingsProperty = async (propertyKey, propertyValue) => {
-  if (storeState.isAuthed) {
+  console.log("updateUserSettingsProperty propertyKey ", propertyKey);
+  console.log("updateUserSettingsProperty propertyValue ", propertyValue);
+  if (!storeState.isAuthed) {
     return;
   };
 
@@ -40,13 +47,17 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
     return;
   };
 
-  let updatedSettingsObject = storeState.userSettings; // initiate with current settings
+  let updatedSettingsObject = userSettingsState; // initiate with current settings
 
   // Update property
   if (propertyKey === "selectedAiModelId") {
     updatedSettingsObject.selectedAiModelId = propertyValue;
   } else if (propertyKey === "temperature") {
     updatedSettingsObject.temperature = propertyValue;
+  } else if (propertyKey === "responseLength") {
+    updatedSettingsObject.responseLength = propertyValue;
+  } else if (propertyKey === "saveChats") {
+    updatedSettingsObject.saveChats = propertyValue;
   };
 
   await updateUserSettings(updatedSettingsObject);

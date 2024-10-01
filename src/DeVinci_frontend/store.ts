@@ -69,6 +69,7 @@ export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUser
 let saveChatsUserSelectionValue = true;
 saveChatsUserSelection.subscribe((value) => {
   saveChatsUserSelectionValue = value;
+  // @ts-ignore
   localStorage.setItem("saveChatsUserSelection", value)
 });
 
