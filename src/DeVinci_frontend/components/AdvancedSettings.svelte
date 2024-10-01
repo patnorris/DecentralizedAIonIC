@@ -3,11 +3,15 @@
     userSettings
   } from "../store";
 
+  import { updateUserSettingsProperty } from "../helpers/user_settings";
+
   let temperature = $userSettings.temperature | 0.6;
 
   // Function to handle changes in the slider
-  function handleTemperatureChange(event) {
+  async function handleTemperatureChange(event) {
     temperature = parseFloat(event.target.value);
+    $userSettings.temperature = temperature;
+    await updateUserSettingsProperty("temperature", temperature);
   }
 </script>
 

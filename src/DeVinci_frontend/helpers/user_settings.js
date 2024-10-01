@@ -45,6 +45,8 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
   // Update property
   if (propertyKey === "selectedAiModelId") {
     updatedSettingsObject.selectedAiModelId = propertyValue;
+  } else if (propertyKey === "temperature") {
+    updatedSettingsObject.temperature = propertyValue;
   };
 
   await updateUserSettings(updatedSettingsObject);
