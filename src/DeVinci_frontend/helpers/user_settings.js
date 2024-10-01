@@ -11,7 +11,6 @@ let userSettingsState;
 userSettings.subscribe((value) => userSettingsState = value);
 
 const updateUserSettings = async (updatedSettingsObject) => {
-  console.log("updateUserSettingsProperty updatedSettingsObject ", updatedSettingsObject);
   if (!storeState.isAuthed) {
     return;
   };
@@ -37,8 +36,6 @@ const updateUserSettings = async (updatedSettingsObject) => {
 };
 
 export const updateUserSettingsProperty = async (propertyKey, propertyValue) => {
-  console.log("updateUserSettingsProperty propertyKey ", propertyKey);
-  console.log("updateUserSettingsProperty propertyValue ", propertyValue);
   if (!storeState.isAuthed) {
     return;
   };
