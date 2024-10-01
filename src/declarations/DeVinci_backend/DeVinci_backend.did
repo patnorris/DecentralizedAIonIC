@@ -3,7 +3,13 @@ type UserSettingsResult =
    Err: ApiError;
    Ok: UserSettings;
  };
-type UserSettings = record {selectedAiModelId: text;};
+type UserSettings = 
+ record {
+   responseLength: text;
+   saveChats: bool;
+   selectedAiModelId: text;
+   temperature: float64;
+ };
 type UpdateUserSettingsResult = 
  variant {
    Err: ApiError;
