@@ -10,8 +10,8 @@
     function handleSelectionChange() {
       let saveChatsValue = true;
       if (saveChats === "doNotSave") {
-      saveChatsValue = false;
-    };
+        saveChatsValue = false;
+      };
       setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
     };
 </script>
