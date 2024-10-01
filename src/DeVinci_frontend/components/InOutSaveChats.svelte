@@ -1,19 +1,27 @@
 <script lang="ts">
-    import {
-      setLocalFlag,
-      getLocalFlag
-    } from "../helpers/local_storage";
+  import { userSettings } from "../store";
 
-    // Holds the value of the selected option whether to store chats or not
-    let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
-    // Function to be called whenever the chat storage selection changes
-    function handleSelectionChange() {
-      let saveChatsValue = true;
-      if (saveChats === "doNotSave") {
-        saveChatsValue = false;
-      };
-      setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
+  import {
+    setLocalFlag,
+    getLocalFlag
+  } from "../helpers/local_storage";
+
+  import { updateUserSettingsProperty } from "../helpers/user_settings";
+
+  // Holds the value of the selected option whether to store chats or not
+  let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
+  // Function to be called whenever the chat storage selection changes
+  async function handleSelectionChange() {
+    let saveChatsValue = true;
+    if (saveChats === "doNotSave") {
+      saveChatsValue = false;
     };
+    setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
+    
+    $userSettings.saveChats = saveChatsValue;
+    userSettings.set($userSettings);
+    await updateUserSettingsProperty("saveChats", saveChatsValue);
+  };
 </script>
 
 <div id="alert-additional-content-4" class="p-4 m-4 text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg" role="alert">
