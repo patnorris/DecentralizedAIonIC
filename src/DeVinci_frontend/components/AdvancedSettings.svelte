@@ -22,35 +22,44 @@
   };
 </script>
 
-<div class="settings-container">
-  <div class="temperature-slider">
-    <label for="temperature">Set LLM Temperature:</label>
-    <input
-      type="range"
-      id="temperature"
-      min="0"
-      max="1"
-      step="0.01"
-      value={temperature}
-      on:input={handleTemperatureChange}
-    />
-    <span>{temperature.toFixed(2)}</span>
+<div id="alert-additional-content-4" class="p-4 m-4 text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg" role="alert">
+  <div class="flex items-center">
+    <span class="sr-only">Info</span>
+    <h3 class="text-lg font-medium"> Advanced Settings</h3>
   </div>
-
-  <div class="response-length">
-    <label>Choose Response Length:</label>
-    <div>
-      <input type="radio" id="short" value="Short" checked={responseLength === 'Short'} on:change={handleResponseLengthChange} />
-      <label for="short">Short</label>
+  <div class="mt-2 mb-4 text-sm">
+    These settings determine how the AI model responds to your messages.
+  </div>
+  <div>
+    <div class="temperature-slider">
+      <label for="temperature">Set AI's Allowed Creativity:</label>
+      <input
+        type="range"
+        id="temperature"
+        min="0"
+        max="1"
+        step="0.01"
+        value={temperature}
+        on:input={handleTemperatureChange}
+      />
+      <span>{temperature.toFixed(2)}</span>
     </div>
-    <div>
-      <input type="radio" id="medium" value="Medium" checked={responseLength === 'Medium'} on:change={handleResponseLengthChange} />
-      <label for="medium">Medium</label>
-    </div>
-    <div>
-      <input type="radio" id="long" value="Long" checked={responseLength === 'Long'} on:change={handleResponseLengthChange} />
-      <label for="long">Long</label>
-    </div>
+  
+    <div class="response-length">
+      <label>Choose Response Length:</label>
+      <div>
+        <input type="radio" id="short" value="Short" checked={responseLength === 'Short'} on:change={handleResponseLengthChange} />
+        <label for="short">Short</label>
+      </div>
+      <div>
+        <input type="radio" id="medium" value="Medium" checked={responseLength === 'Medium'} on:change={handleResponseLengthChange} />
+        <label for="medium">Medium</label>
+      </div>
+      <div>
+        <input type="radio" id="long" value="Long" checked={responseLength === 'Long'} on:change={handleResponseLengthChange} />
+        <label for="long">Long</label>
+      </div>
+    </div>    
   </div>
 </div>
 
@@ -64,6 +73,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 5px;
   }
   input[type="range"] {
     flex-grow: 1;
