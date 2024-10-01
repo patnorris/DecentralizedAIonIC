@@ -220,17 +220,6 @@
     showToast = false;
   }
 
-
-  function interruptMessageGeneration(): void {
-    // Call to interrupt the chat model generation
-    $chatModelGlobal.interruptGenerate().then(() => {
-      console.log('Message generation has been interrupted.');
-    }).catch((error: any) => {
-      console.error('Failed to interrupt message generation:', error);
-    });
-  }
-
-
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
 
