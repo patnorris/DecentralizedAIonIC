@@ -1,6 +1,6 @@
-<footer class="footer fixed bottom-0 py-4 bg-gray-900 border-t-4 border-gray-600 left-0 md:left-36 w-full md:ml-36 md:w-[calc(100%-18rem)] overflow-hidden">
+<footer class="footer fixed bottom-0 py-4 bg-gray-700 border-t-4 border-gray-600 left-0 md:left-36 w-full md:ml-36 md:w-[calc(100%-18rem)] overflow-hidden">
   <div class="scrolling-text-container w-full mx-auto">
-    <p class="scrolling-text text-lg bold text-gray-50">
+    <p class="scrolling-text text-lg bold text-white">
       The LLM model is currently being downloaded to your browser cache. We appreciate your patience, as this may take a little time depending on your connection. Once the download is complete, the model will initialize, allowing you to enjoy a fully private chat. This brief wait ensures the highest level of privacy for your experience. 
     </p>
   </div>
