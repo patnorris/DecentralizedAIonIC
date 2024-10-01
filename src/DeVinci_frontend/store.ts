@@ -51,20 +51,26 @@ export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
-export let userSettings = writable(JSON.parse(localStorage.getItem("userSettings")));
+export let userSettings = writable(null);
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
+let selectedAiModelIdValue = null;
 selectedAiModelId.subscribe((value) => {
+  selectedAiModelIdValue = value;
   if (value === null) {
     localStorage.removeItem("selectedAiModelId");
   } else {
     localStorage.setItem("selectedAiModelId", value);
-  }
+  };
 });
 
 export const currentExperienceId = writable(null);
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
-saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
+let saveChatsUserSelectionValue = true;
+saveChatsUserSelection.subscribe((value) => {
+  saveChatsUserSelectionValue = value;
+  localStorage.setItem("saveChatsUserSelection", value)
+});
 
 export let vectorStore = writable(null);
 
@@ -130,7 +136,23 @@ export const createStore = ({
       } catch (error) {
         console.error("Error in get_caller_settings: ", error);
         if (localStorage.getItem("userSettings")) {
-          userSettings.set(localStorage.getItem("userSettings"));
+          try {
+            userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+          } catch (error) {
+            userSettings.set({ // default settings
+              temperature: 0.6,
+              responseLength: "Medium",
+              saveChats: saveChatsUserSelectionValue,
+              selectedAiModelId: selectedAiModelIdValue,
+            });        
+          };
+        } else {
+          userSettings.set({ // default settings
+            temperature: 0.6,
+            responseLength: "Medium",
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+          });
         };
         if (localStorage.getItem("selectedAiModelId")) {
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
@@ -138,7 +160,23 @@ export const createStore = ({
       };
     } else {
       if (localStorage.getItem("userSettings")) {
-        userSettings.set(localStorage.getItem("userSettings"));
+        try {
+          userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+        } catch (error) {
+          userSettings.set({ // default settings
+            temperature: 0.6,
+            responseLength: "Medium",
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+          });          
+        };
+      } else {
+        userSettings.set({ // default settings
+          temperature: 0.6,
+          responseLength: "Medium",
+          saveChats: saveChatsUserSelectionValue,
+          selectedAiModelId: selectedAiModelIdValue,
+        });
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
