@@ -8,6 +8,7 @@ import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
 import List "mo:base/List";
 import AssocList "mo:base/AssocList";
+import Float "mo:base/Float";
 
 module {
   public type Chat = {
@@ -48,6 +49,7 @@ module {
 
   public type UserSettings = {
     selectedAiModelId : Text;
+    temperature : Float;
   };
 
   public type UserSettingsResult = Result<UserSettings, ApiError>;
