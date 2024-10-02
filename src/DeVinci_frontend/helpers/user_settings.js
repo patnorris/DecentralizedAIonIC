@@ -60,3 +60,44 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
   await updateUserSettings(updatedSettingsObject);
   return true;
 };
+
+export function responseLengthToTokenNumber(responseLength) {
+  switch (responseLength) {
+    case 'Long':
+      return 512;
+    case 'Medium':
+      return 128;
+    case 'Short':
+      return 32;
+    default:
+      throw new Error('Invalid response length');
+  };
+};
+
+// Function to determine inference parameters based on user settings
+export async function determineInferenceParameters() {
+  const settings = userSettingsState;
+  let temperature = settings.temperature;
+  let max_tokens;
+
+  // Ensure that the temperature is within valid range
+  if (!temperature || temperature < 0 || temperature > 1) {
+    console.warn("Temperature setting is out of bounds. Resetting to default (0.6).");
+    temperature = 0.6;
+  };
+
+  // Determine the max tokens from response length
+  try {
+    max_tokens = responseLengthToTokenNumber(settings.responseLength);
+  } catch (error) {
+    console.error("Error determining max tokens:", error.message);
+    // Set a default value if there's an error
+    max_tokens = 128;  // Default to 'Medium' if there is a problem
+  };
+
+  return {
+    temperature,
+    max_tokens
+  };
+};
+

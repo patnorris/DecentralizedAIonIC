@@ -92,7 +92,7 @@
       } catch (error) {
         console.error("Error getting response from model: ", error);
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
-      }
+      };
       replyText = 'Thinking...';
     };
     messageGenerationInProgress = false;

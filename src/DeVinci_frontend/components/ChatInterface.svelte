@@ -16,6 +16,7 @@
   import ChatBox from "./ChatBox.svelte";
 
   import { userHasDownloadedModel } from "../helpers/local_storage";
+  import { determineInferenceParameters } from '../helpers/user_settings';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
@@ -128,7 +129,14 @@
         setLabel("debug-label", debugOutput); */
         let curMessage = "";
         let stepCount = 0;
-        const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
+        // determine inference parameters to use
+        const inferenceParameters = await determineInferenceParameters();
+        const completion = await $chatModelGlobal.chat.completions.create({
+          stream: true,
+          messages: prompt,
+          temperature: inferenceParameters.temperature,
+          max_tokens: inferenceParameters.max_tokens,
+        });
         /* debugOutput += " completion ";
         debugOutput += JSON.stringify(completion);
         setLabel("debug-label", debugOutput); */
