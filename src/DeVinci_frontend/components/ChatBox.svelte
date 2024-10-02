@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store, chatModelIdInitiatedGlobal, chatModelGlobal } from "../store";
+  import { store, chatModelIdInitiatedGlobal, chatModelGlobal, activeChatGlobal } from "../store";
+  import { push } from 'svelte-spa-router';
+
   import { now } from "svelte/internal";
 
   import Message from './Message.svelte';
@@ -40,6 +42,18 @@
 
 		return { update: scroll }
 	};
+
+  async function interruptMessageGeneration() {
+  if ($chatModelGlobal) {
+    try {
+      await $chatModelGlobal.interruptGenerate();
+      console.log("Message generation interrupted successfully");
+    } catch (error) {
+      console.error("Error stopping the answer generation:", error);
+    }
+  }
+  messageGenerationInProgress = false;
+}
 
 // Whether user wants their messages to be stored
   let saveChats = getLocalFlag("saveChatsUserSelection"); // default is save
@@ -197,17 +211,6 @@
     showToast = false;
   }
 
-
-  function interruptMessageGeneration(): void {
-    // Call to interrupt the chat model generation
-    $chatModelGlobal.interruptGenerate().then(() => {
-      console.log('Message generation has been interrupted.');
-    }).catch((error: any) => {
-      console.error('Failed to interrupt message generation:', error);
-    });
-  }
-
-
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
 
@@ -287,7 +290,7 @@
         </button>
       {:else if messageGenerationInProgress}
         <input bind:value={newMessageText} type="text" id="chat" class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " />
-        <button on:click={() => {interruptMessageGeneration()}} type="submit" class="inline-flex justify-center p-2 text-gray-600 rounded-full bg-gray-100 hover:bg-gray-300">
+        <button on:click={interruptMessageGeneration} type="submit" class="inline-flex justify-center p-2 text-gray-600 rounded-full bg-gray-100 hover:bg-gray-300">
           <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
             <path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z"/>
           </svg>
