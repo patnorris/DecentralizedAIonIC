@@ -10,6 +10,14 @@ store.subscribe((value) => storeState = value);
 let userSettingsState;
 userSettings.subscribe((value) => userSettingsState = value);
 
+export const temperatureDefaultSetting = 0.6;
+
+const maxTokenLongResponseLength = 512;
+const maxTokenMediumResponseLength = 256;
+const maxTokenShortResponseLength = 64;
+export const responseLengthDefaultSetting = 'Medium'; 
+export const maxTokenDefault = responseLengthToTokenNumber(responseLengthDefaultSetting);
+
 const updateUserSettings = async (updatedSettingsObject) => {
   if (!storeState.isAuthed) {
     return;
@@ -64,11 +72,11 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
 export function responseLengthToTokenNumber(responseLength) {
   switch (responseLength) {
     case 'Long':
-      return 512;
+      return maxTokenLongResponseLength;
     case 'Medium':
-      return 128;
+      return maxTokenMediumResponseLength;
     case 'Short':
-      return 32;
+      return maxTokenShortResponseLength;
     default:
       throw new Error('Invalid response length');
   };
@@ -82,8 +90,8 @@ export async function determineInferenceParameters() {
 
   // Ensure that the temperature is within valid range
   if (!temperature || temperature < 0 || temperature > 1) {
-    console.warn("Temperature setting is out of bounds. Resetting to default (0.6).");
-    temperature = 0.6;
+    console.warn("Temperature setting is out of bounds. Resetting to default.");
+    temperature = temperatureDefaultSetting;
   };
 
   // Determine the max tokens from response length
@@ -92,7 +100,7 @@ export async function determineInferenceParameters() {
   } catch (error) {
     console.error("Error determining max tokens:", error.message);
     // Set a default value if there's an error
-    max_tokens = 128;  // Default to 'Medium' if there is a problem
+    max_tokens = maxTokenDefault;  // Default if there is a problem
   };
 
   return {

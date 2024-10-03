@@ -11,6 +11,8 @@ import {
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
 
+import { temperatureDefaultSetting, responseLengthDefaultSetting } from "./helpers/user_settings";
+
 //__________Local vs Mainnet Development____________
 /* export const HOST =
   backendCanisterId === "vee64-zyaaa-aaaai-acpta-cai"
@@ -141,16 +143,16 @@ export const createStore = ({
             userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
           } catch (error) {
             userSettings.set({ // default settings
-              temperature: 0.6,
-              responseLength: "Medium",
+              temperature: temperatureDefaultSetting,
+              responseLength: responseLengthDefaultSetting,
               saveChats: saveChatsUserSelectionValue,
               selectedAiModelId: selectedAiModelIdValue,
             });        
           };
         } else {
           userSettings.set({ // default settings
-            temperature: 0.6,
-            responseLength: "Medium",
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
             saveChats: saveChatsUserSelectionValue,
             selectedAiModelId: selectedAiModelIdValue,
           });
@@ -165,16 +167,16 @@ export const createStore = ({
           userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
         } catch (error) {
           userSettings.set({ // default settings
-            temperature: 0.6,
-            responseLength: "Medium",
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
             saveChats: saveChatsUserSelectionValue,
             selectedAiModelId: selectedAiModelIdValue,
           });          
         };
       } else {
         userSettings.set({ // default settings
-          temperature: 0.6,
-          responseLength: "Medium",
+          temperature: temperatureDefaultSetting,
+          responseLength: responseLengthDefaultSetting,
           saveChats: saveChatsUserSelectionValue,
           selectedAiModelId: selectedAiModelIdValue,
         });
