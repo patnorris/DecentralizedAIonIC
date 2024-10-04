@@ -1,6 +1,8 @@
 import {
   store,
-  userSettings
+  userSettings,
+  temperatureDefaultSetting,
+  responseLengthDefaultSetting
 } from "../store";
 import { syncLocalChanges, setUserSettingsSyncFlag } from "./local_storage";
 
@@ -10,12 +12,9 @@ store.subscribe((value) => storeState = value);
 let userSettingsState;
 userSettings.subscribe((value) => userSettingsState = value);
 
-export const temperatureDefaultSetting = 0.6;
-
-const maxTokenLongResponseLength = 512;
+const maxTokenLongResponseLength = 1024;
 const maxTokenMediumResponseLength = 256;
-const maxTokenShortResponseLength = 64;
-export const responseLengthDefaultSetting = 'Medium'; 
+const maxTokenShortResponseLength = 64; 
 export const maxTokenDefault = responseLengthToTokenNumber(responseLengthDefaultSetting);
 
 const updateUserSettings = async (updatedSettingsObject) => {
