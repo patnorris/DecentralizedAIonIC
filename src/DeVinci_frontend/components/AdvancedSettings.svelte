@@ -1,6 +1,6 @@
 <script>
-  import { userSettings } from "../store";
-  import { updateUserSettingsProperty, temperatureDefaultSetting, responseLengthDefaultSetting } from "../helpers/user_settings";
+  import { userSettings, temperatureDefaultSetting, responseLengthDefaultSetting } from "../store";
+  import { updateUserSettingsProperty } from "../helpers/user_settings";
 
   $: temperature = $userSettings.temperature || temperatureDefaultSetting; // Use the existing temperature setting or default
   $: responseLength = $userSettings.responseLength || responseLengthDefaultSetting; // Medium as default response length

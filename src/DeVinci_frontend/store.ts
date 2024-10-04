@@ -11,8 +11,6 @@ import {
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
 
-import { temperatureDefaultSetting, responseLengthDefaultSetting } from "./helpers/user_settings";
-
 //__________Local vs Mainnet Development____________
 /* export const HOST =
   backendCanisterId === "vee64-zyaaa-aaaai-acpta-cai"
@@ -74,6 +72,8 @@ saveChatsUserSelection.subscribe((value) => {
   // @ts-ignore
   localStorage.setItem("saveChatsUserSelection", value)
 });
+export const temperatureDefaultSetting = 0.6;
+export const responseLengthDefaultSetting = 'Medium';
 
 export let vectorStore = writable(null);
 
