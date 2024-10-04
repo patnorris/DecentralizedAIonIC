@@ -53,6 +53,7 @@ module {
     temperature : Float;
     responseLength : Text;
     saveChats : Bool;    
+    systemPrompt : Text;
   };
 
   public type UserSettingsResult = Result<UserSettings, ApiError>;

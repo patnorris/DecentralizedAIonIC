@@ -346,6 +346,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
           responseLength = "Medium";
           saveChats = true;
           selectedAiModelId = "";
+          systemPrompt = "You are a helpful, respectful and honest assistant.";
         };
         return #Ok(userSettings);
       };

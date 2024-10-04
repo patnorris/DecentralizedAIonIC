@@ -51,6 +51,11 @@ export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
+
+export const temperatureDefaultSetting = 0.6;
+export const responseLengthDefaultSetting = 'Medium';
+export const systemPromptDefaultSetting = "You are a helpful, respectful and honest assistant.";
+export const saveChatsDefaultSetting = true;
 export let userSettings = writable(null);
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
@@ -64,16 +69,17 @@ selectedAiModelId.subscribe((value) => {
   };
 });
 
-export const currentExperienceId = writable(null);
+
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
-let saveChatsUserSelectionValue = true;
+let saveChatsUserSelectionValue = saveChatsDefaultSetting;
 saveChatsUserSelection.subscribe((value) => {
   saveChatsUserSelectionValue = value;
   // @ts-ignore
   localStorage.setItem("saveChatsUserSelection", value)
 });
-export const temperatureDefaultSetting = 0.6;
-export const responseLengthDefaultSetting = 'Medium';
+
+
+export const currentExperienceId = writable(null);
 
 export let vectorStore = writable(null);
 
@@ -147,6 +153,7 @@ export const createStore = ({
               responseLength: responseLengthDefaultSetting,
               saveChats: saveChatsUserSelectionValue,
               selectedAiModelId: selectedAiModelIdValue,
+              systemPrompt: systemPromptDefaultSetting,
             });        
           };
         } else {
@@ -155,6 +162,7 @@ export const createStore = ({
             responseLength: responseLengthDefaultSetting,
             saveChats: saveChatsUserSelectionValue,
             selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
           });
         };
         if (localStorage.getItem("selectedAiModelId")) {
@@ -171,6 +179,7 @@ export const createStore = ({
             responseLength: responseLengthDefaultSetting,
             saveChats: saveChatsUserSelectionValue,
             selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
           });          
         };
       } else {
@@ -179,6 +188,7 @@ export const createStore = ({
           responseLength: responseLengthDefaultSetting,
           saveChats: saveChatsUserSelectionValue,
           selectedAiModelId: selectedAiModelIdValue,
+          systemPrompt: systemPromptDefaultSetting,
         });
       };
       if (localStorage.getItem("selectedAiModelId")) {

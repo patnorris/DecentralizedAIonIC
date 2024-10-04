@@ -2,7 +2,9 @@ import {
   store,
   userSettings,
   temperatureDefaultSetting,
-  responseLengthDefaultSetting
+  responseLengthDefaultSetting,
+  systemPromptDefaultSetting,
+  saveChatsDefaultSetting
 } from "../store";
 import { syncLocalChanges, setUserSettingsSyncFlag } from "./local_storage";
 
@@ -62,6 +64,34 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
     updatedSettingsObject.responseLength = propertyValue;
   } else if (propertyKey === "saveChats") {
     updatedSettingsObject.saveChats = propertyValue;
+  } else if (propertyKey === "systemPrompt") {
+    updatedSettingsObject.systemPrompt = propertyValue;
+  };
+
+  await updateUserSettings(updatedSettingsObject);
+  return true;
+};
+
+export const resetUserSettingsPropertyToDefault = async (propertyKey) => {
+  if (!storeState.isAuthed) {
+    return;
+  };
+
+  if (!propertyKey) {
+    return;
+  };
+
+  let updatedSettingsObject = userSettingsState; // initiate with current settings
+
+  // Update property
+  if (propertyKey === "temperature") {
+    updatedSettingsObject.temperature = temperatureDefaultSetting;
+  } else if (propertyKey === "responseLength") {
+    updatedSettingsObject.responseLength = responseLengthDefaultSetting;
+  } else if (propertyKey === "saveChats") {
+    updatedSettingsObject.saveChats = saveChatsDefaultSetting;
+  } else if (propertyKey === "systemPrompt") {
+    updatedSettingsObject.systemPrompt = systemPromptDefaultSetting;
   };
 
   await updateUserSettings(updatedSettingsObject);
@@ -86,6 +116,7 @@ export async function determineInferenceParameters() {
   const settings = userSettingsState;
   let temperature = settings.temperature;
   let max_tokens;
+  let system_prompt = settings.systemPrompt;
 
   // Ensure that the temperature is within valid range
   if (!temperature || temperature < 0 || temperature > 1) {
@@ -102,9 +133,14 @@ export async function determineInferenceParameters() {
     max_tokens = maxTokenDefault;  // Default if there is a problem
   };
 
+  if (system_prompt === "") {
+    system_prompt = systemPromptDefaultSetting;
+  };
+
   return {
     temperature,
-    max_tokens
+    max_tokens,
+    system_prompt
   };
 };
 

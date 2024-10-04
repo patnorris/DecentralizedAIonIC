@@ -131,6 +131,11 @@
         let stepCount = 0;
         // determine inference parameters to use
         const inferenceParameters = await determineInferenceParameters();
+        prompt.unshift({
+          role: "system",
+          content: inferenceParameters.system_prompt,
+        });
+        console.log("final prompt ", prompt);
         const completion = await $chatModelGlobal.chat.completions.create({
           stream: true,
           messages: prompt,
