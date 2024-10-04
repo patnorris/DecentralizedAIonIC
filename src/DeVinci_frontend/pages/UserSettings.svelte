@@ -62,8 +62,8 @@
         <p hidden>{loadUserSettings()}</p>
       {:else}
         <InOutSaveChats />
-        <GeneralSettings />
-        <OwnCanister />
+        <!-- <GeneralSettings />
+        <OwnCanister /> -->
       {/if}
     {/if}
     <SelectModel />
