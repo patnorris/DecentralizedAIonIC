@@ -14,7 +14,7 @@
 <section class="bg-white">
   <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
     <div class="mx-auto max-w-screen-md sm:text-center">
-      <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Subscribe for deVinci newsletter</h2>
+      <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Subscribe for DeVinci newsletter</h2>
       <p class="mx-auto mb-8 max-w-2xl  text-gray-500 md:mb-12 sm:text-xl">Sign up with your email to stay up to date with the roadmap progress and announcements.</p>
       <form on:submit={submitForm} >
         <div class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0">

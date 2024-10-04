@@ -11,16 +11,16 @@
         <div class="inline-flex items-center mr-3 text-sm text-gray-900">
           <img class="mr-4 w-16 h-16 rounded-full" src={devincilogo} alt="deVinci logo">
           <div>
-            <a href="#" rel="author" class="text-xl font-bold text-gray-900">deVinci</a>
+            <a href="#" rel="author" class="text-xl font-bold text-gray-900">DeVinci</a>
             <p class="text-base text-gray-500"> Powered by <a href='https://www.onicai.com/' target='_blank' rel="noreferrer" class='underline'>onicai</a> and hosted on <a href='https://internetcomputer.org/' target='_blank' rel="noreferrer" class='underline'>Internet Computer</a>
             </p>
           </div>
         </div>
       </address>
-      <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">Howdy from deVinci</h1>
+      <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">Howdy from DeVinci</h1>
     </header>
-    <p class="lead">Hi there! I'm deVinci, your truly personal AI assistant. I can help you with whatever you need, and I'm always here to answer your questions. Whether you're looking for advice, support, or just a friendly chat, I'm here to help.</p>
-    <h3 class="my-4 text-2xl font-bold">About deVinci<br /> Decentralized, Trusted, Open-source, Truly Yours</h3>
+    <p class="lead">Hi there! I'm DeVinci, your truly personal AI assistant. I can help you with whatever you need, and I'm always here to answer your questions. Whether you're looking for advice, support, or just a friendly chat, I'm here to help.</p>
+    <h3 class="my-4 text-2xl font-bold">About DeVinci<br /> Decentralized, Trusted, Open-source, Truly Yours</h3>
     <p>DeVinci is your personalized AI assistant that redefines the paradigm of digital privacy and trust. It's not just an assistant; it's a mission to revolutionize how AI and data privacy intersect.</p>
     <p class="my-4">DeVinci is powered by an open-source AI model that operates directly within your browser. When you engage with DeVinci, the AI model is loaded and processed on your device. This means your interactions stay completely within the confines of your device. Your data never leaves your hands, ensuring unprecedented control over your data and a level of privacy that is a rarity in today's world of AI assistants.</p>
     <p class="my-4">Unlike traditional AI assistants backed by corporations, DeVinci is fully independent. There is no big company behind it, influencing or manipulating the responses to favor their interests. DeVinci's sole purpose is to serve you and provide you with the most honest, unbiased assistance.</p>
