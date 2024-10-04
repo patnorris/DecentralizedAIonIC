@@ -30,6 +30,8 @@ export const device = result.device.model || 'Unknown Device';
 export let deviceType = result.device.type; // Will return 'mobile' for mobile devices, 'tablet' for tablets, and undefined for desktops
 let osName = result.os.name; // Get the operating system name
 
+export const currentModelName = writable<string>("No model selected");
+
 if (!deviceType) {
   deviceType = 'desktop';
 } else if (deviceType === 'mobile' || deviceType === 'tablet') {
@@ -51,6 +53,7 @@ export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
 export let userSettings = writable(localStorage.getItem("userSettings"));
 userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
+
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
 selectedAiModelId.subscribe((value) => {
   if (value === null) {
@@ -59,6 +62,13 @@ selectedAiModelId.subscribe((value) => {
     localStorage.setItem("selectedAiModelId", value);
   }
 });
+
+export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
+downloadedModels.subscribe((value) => {
+  localStorage.setItem("downloadedAiModels", JSON.stringify(value));
+});
+
+export const currentExperienceId = writable(null);
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
 saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
