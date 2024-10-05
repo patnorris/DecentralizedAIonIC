@@ -8,6 +8,7 @@ type UserSettings =
    responseLength: text;
    saveChats: bool;
    selectedAiModelId: text;
+   systemPrompt: text;
    temperature: float64;
  };
 type UpdateUserSettingsResult = 

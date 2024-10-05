@@ -86,6 +86,7 @@ export interface UserSettings {
   'responseLength' : string,
   'temperature' : number,
   'selectedAiModelId' : string,
+  'systemPrompt' : string,
   'saveChats' : boolean,
 }
 export type UserSettingsResult = { 'Ok' : UserSettings } |

@@ -128,11 +128,13 @@ export const createStore = ({
   subscribe((value) => globalState = value);
 
   const initUserSettings = async (backendActor) => {
+    console.log("initUserSettings localStorage ", localStorage.getItem("userSettings"));
     // Load the user's settings
       // Especially selected AI model to be used for chat
     if (navigator.onLine) {
       try {
         const retrievedSettingsResponse = await backendActor.get_caller_settings();
+        console.log("initUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
         // @ts-ignore
         if (retrievedSettingsResponse.Ok) {
           userSettings.set(retrievedSettingsResponse.Ok);

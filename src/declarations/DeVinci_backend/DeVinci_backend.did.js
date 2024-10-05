@@ -45,6 +45,7 @@ export const idlFactory = ({ IDL }) => {
     'responseLength' : IDL.Text,
     'temperature' : IDL.Float64,
     'selectedAiModelId' : IDL.Text,
+    'systemPrompt' : IDL.Text,
     'saveChats' : IDL.Bool,
   });
   const UserSettingsResult = IDL.Variant({

@@ -25,19 +25,22 @@
     await updateUserSettingsProperty("responseLength", responseLength);
   };
 
-  // Function to handle changes in the system prompt
-  async function handleSystemPromptChange(event) {
-    systemPrompt = event.target.value;
-    console.log("handleSystemPromptChange systemPrompt ", systemPrompt);
-    $userSettings.systemPrompt = systemPrompt;
-    await updateUserSettingsProperty("systemPrompt", systemPrompt);
+  // Function to update the system prompt
+  async function updateSystemPrompt() {
+    const inputElement = document.getElementById('systemPromptInput');
+    if (inputElement) {
+      console.log('Input value:', inputElement.value);
+      systemPrompt = inputElement.value;
+      console.log("updateSystemPrompt systemPrompt ", systemPrompt);
+      $userSettings.systemPrompt = systemPrompt;
+      await updateUserSettingsProperty("systemPrompt", systemPrompt);
+    };
   };
 
   // Function to reset system prompt to default
   async function resetSystemPrompt() {
     systemPrompt = systemPromptDefaultSetting;
-    $userSettings.systemPrompt = systemPrompt;
-    await updateUserSettingsProperty("systemPrompt", systemPrompt);
+    await updateSystemPrompt();
   };
 </script>
 
@@ -60,7 +63,7 @@
         max="1"
         step="0.01"
         value={temperature}
-        on:input={handleTemperatureChange}
+        on:change={handleTemperatureChange}
       />
       <span>{temperature.toFixed(2)}</span>
     </div>
@@ -84,16 +87,22 @@
 
     <!-- System Prompt Text Input -->
     <div class="system-prompt">
-      <label for="systemPrompt">Set System Prompt:</label>
-      <input
-        type="text"
-        id="systemPrompt"
-        maxlength="50"
-        value={systemPrompt}
-        on:input={handleSystemPromptChange}
-      />
-      <button on:click={resetSystemPrompt}>Reset to Default</button>
-      <p>This setting allows you to customize the AI's response style. The AI is instructed to reply accordingly, so please ensure that your system prompt is clear as otherwise the response quality will suffer. Note that you can also use a different language than English here (make sure though that the AI speaks it).</p>
+      <div class="prompt-control">
+        <label for="systemPromptInput">Set System Prompt:</label>
+        <input
+          type="text"
+          id="systemPromptInput"
+          maxlength="50"
+          value={systemPrompt}
+        />
+      </div>
+      <div class="prompt-buttons">
+        <button on:click={updateSystemPrompt}>Update Prompt</button>
+        <button on:click={resetSystemPrompt}>Reset to Default</button>
+      </div>
+      <div class="prompt-info">
+        <p>This setting allows you to customize the AI's response style. The AI is instructed to reply accordingly, so please ensure that your system prompt is clear as otherwise the response quality will suffer. Note that you can also use a different language than English here (make sure though that the AI speaks it).</p>
+      </div>
     </div>
   </div>
 </div>
@@ -104,7 +113,7 @@
     flex-direction: column;
     gap: 20px;
   }
-  .temperature-slider, .response-length, .system-prompt {
+  .temperature-slider, .response-length {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -113,7 +122,24 @@
   input[type="range"], input[type="text"] {
     flex-grow: 1;
   }
-  .response-length div, .system-prompt {
+  .response-length div {
     margin-left: 20px;
+  }
+  .system-prompt {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+  }
+  .prompt-control, .prompt-buttons, .prompt-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 3px;
+  }
+  .prompt-control {
+    justify-content: start;
+  }
+  .prompt-info {
+    flex-direction: column;
   }
 </style>
