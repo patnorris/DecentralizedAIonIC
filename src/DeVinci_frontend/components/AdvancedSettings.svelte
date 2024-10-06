@@ -29,9 +29,8 @@
   async function updateSystemPrompt() {
     const inputElement = document.getElementById('systemPromptInput');
     if (inputElement) {
-      console.log('Input value:', inputElement.value);
+      // @ts-ignore
       systemPrompt = inputElement.value;
-      console.log("updateSystemPrompt systemPrompt ", systemPrompt);
       $userSettings.systemPrompt = systemPrompt;
       await updateUserSettingsProperty("systemPrompt", systemPrompt);
     };

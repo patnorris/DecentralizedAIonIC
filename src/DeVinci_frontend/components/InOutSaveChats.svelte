@@ -9,7 +9,10 @@
   import { updateUserSettingsProperty } from "../helpers/user_settings";
 
   // Holds the value of the selected option whether to store chats or not
-  let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
+  let saveChats = $userSettings?.saveChats !== null 
+    ? $userSettings?.saveChats === false ? "doNotSave" : "save"
+    : getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
+  
   // Function to be called whenever the chat storage selection changes
   async function handleSelectionChange() {
     let saveChatsValue = true;

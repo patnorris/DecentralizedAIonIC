@@ -26,6 +26,7 @@
   let showToast = false;
 
   function isPWAInstalled() {
+    // @ts-ignore
     return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
   };
 
@@ -135,7 +136,6 @@
           role: "system",
           content: inferenceParameters.system_prompt,
         });
-        console.log("final prompt ", prompt);
         const completion = await $chatModelGlobal.chat.completions.create({
           stream: true,
           messages: prompt,

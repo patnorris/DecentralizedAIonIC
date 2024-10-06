@@ -20,14 +20,12 @@ const maxTokenShortResponseLength = 64;
 export const maxTokenDefault = responseLengthToTokenNumber(responseLengthDefaultSetting);
 
 const updateUserSettings = async (updatedSettingsObject) => {
-  console.log("updateUserSettings updatedSettingsObject ", updatedSettingsObject);
   if (!storeState.isAuthed) {
     return;
   };
   try {
     // Persist to backend
     const settingsUpdatedResponse = await storeState.backendActor.update_caller_settings(updatedSettingsObject);
-    console.log("updateUserSettings settingsUpdatedResponse ", settingsUpdatedResponse);
     // @ts-ignore
     if (settingsUpdatedResponse.Ok) {
       syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
@@ -47,13 +45,11 @@ const updateUserSettings = async (updatedSettingsObject) => {
 };
 
 export const updateUserSettingsProperty = async (propertyKey, propertyValue) => {
-  console.log("updateUserSettingsProperty propertyKey ", propertyKey);
-  console.log("updateUserSettingsProperty propertyValue ", propertyValue);
   if (!storeState.isAuthed) {
     return;
   };
 
-  if (!propertyKey || !propertyValue) {
+  if (!propertyKey || propertyValue === null) {
     return;
   };
 

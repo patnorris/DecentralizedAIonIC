@@ -57,7 +57,7 @@ export const responseLengthDefaultSetting = 'Medium';
 export const systemPromptDefaultSetting = "You are a helpful, respectful and honest assistant.";
 export const saveChatsDefaultSetting = true;
 export let userSettings = writable(null);
-userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
+userSettings.subscribe((value) => localStorage.setItem("userSettings", JSON.stringify(value)));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
 let selectedAiModelIdValue = null;
 selectedAiModelId.subscribe((value) => {
@@ -69,7 +69,6 @@ selectedAiModelId.subscribe((value) => {
   };
 });
 
-
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
 let saveChatsUserSelectionValue = saveChatsDefaultSetting;
 saveChatsUserSelection.subscribe((value) => {
@@ -77,7 +76,6 @@ saveChatsUserSelection.subscribe((value) => {
   // @ts-ignore
   localStorage.setItem("saveChatsUserSelection", value)
 });
-
 
 export const currentExperienceId = writable(null);
 
@@ -128,13 +126,11 @@ export const createStore = ({
   subscribe((value) => globalState = value);
 
   const initUserSettings = async (backendActor) => {
-    console.log("initUserSettings localStorage ", localStorage.getItem("userSettings"));
     // Load the user's settings
       // Especially selected AI model to be used for chat
     if (navigator.onLine) {
       try {
         const retrievedSettingsResponse = await backendActor.get_caller_settings();
-        console.log("initUserSettings retrievedSettingsResponse ", retrievedSettingsResponse);
         // @ts-ignore
         if (retrievedSettingsResponse.Ok) {
           userSettings.set(retrievedSettingsResponse.Ok);
