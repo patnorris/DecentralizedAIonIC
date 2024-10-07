@@ -147,7 +147,7 @@
     if ($chatModelIdInitiatedGlobal && $chatModelGlobal) {
       return;
     };
-    console.log("Loading chat model...");
+    console.info("Loading chat model...");
     chatModelDownloadInProgress = true;
     downloadText = "Downloading... please wait.";
     initiateText = "Initiating... please wait.";
@@ -156,21 +156,21 @@
       modelOptionId = $selectedAiModelId;
     };
     if (process.env.NODE_ENV !== "development") {
-      console.log("Using web worker");
+      console.info("Using web worker");
       try {
         /* TODO: fix
         chatModel = new webllm.ChatWorkerClient(new Worker(
           new URL(workerPath, import.meta.url),
           {type: 'module'}
         )); */
-        //console.log("Using webllm");
+        //console.info("Using webllm");
         $chatModelGlobal = new webllm.MLCEngine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
       };
     } else {
-      console.log("Using webllm");
+      console.info("Using webllm");
       $chatModelGlobal = new webllm.MLCEngine();
     };
 

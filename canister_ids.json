@@ -1,11 +1,13 @@
 {
   "DeVinci_backend": {
+    "backup": "cs45n-5iaaa-aaaaj-aztsq-cai",
     "development": "sbflw-gyaaa-aaaal-qcbeq-cai",
     "ic": "xzpew-mqaaa-aaaai-acqza-cai",
     "test": "x56rt-nqaaa-aaaal-qcb3a-cai",
     "testing": "xmiv3-nyaaa-aaaai-acq2q-cai"
   },
   "DeVinci_frontend": {
+    "backup": "c37wr-laaaa-aaaaj-aztta-cai",
     "development": "yi77p-fyaaa-aaaap-qblxa-cai",
     "ic": "x6occ-biaaa-aaaai-acqzq-cai",
     "test": "4clue-eaaaa-aaaao-a2gwq-cai",

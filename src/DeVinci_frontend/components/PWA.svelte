@@ -3,10 +3,10 @@
   
     const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
       onRegistered(swr) {
-        console.log(`SW registered: `, swr);
+        console.info(`SW registered: `, swr);
       },
       onRegisterError(error) {
-        console.log('SW registration error', error);
+        console.warn('SW registration error', error);
       }
     });
   
