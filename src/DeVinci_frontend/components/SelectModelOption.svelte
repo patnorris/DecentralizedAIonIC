@@ -240,7 +240,7 @@
           <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
           <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
           <div class="inline-flex  bg-gray-100 mt-2 text-gray-800 text-xs font-medium mx-0 px-2 py-1 rounded border border-gray-500">
-            <div class="w-72">
+            <div class="w-64">
               {goodFor}
             </div>
           </div>
