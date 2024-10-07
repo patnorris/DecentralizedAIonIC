@@ -48,10 +48,11 @@
     <span class="sr-only">Info</span>
     <h3 class="text-lg font-medium">Advanced Settings</h3>
   </div>
-  <div class="mt-2 mb-4 text-sm">
+  <div class="mt-2 mb-2 text-sm text-gray-600">
     These settings determine how the AI model responds to your messages.
   </div>
   <div>
+    <hr class="w-full h-0.5 mx-auto my-4 bg-gray-200 border-0 rounded md:my-4">
     <!-- Temperature Slider -->
     <div class="temperature-slider">
       <label for="temperature">Set AI's Allowed Creativity:</label>
@@ -66,6 +67,7 @@
       />
       <span>{temperature.toFixed(2)}</span>
     </div>
+    <hr class="w-full h-0.5 mx-auto my-4 bg-gray-200 border-0 rounded md:my-4">
   
     <!-- Response Length Radio Buttons -->
     <div class="response-length">
@@ -83,25 +85,28 @@
         <label for="long">Long</label>
       </div>
     </div>
+    <hr class="w-full h-0.5 mx-auto my-4 bg-gray-200 border-0 rounded md:my-4">
+    <div class="mt-2 mb-4 text-sm text-gray-600">
+      <p>This setting allows you to customize the AI's response style. The AI is instructed to reply accordingly, so please ensure that your system prompt is clear as otherwise the response quality will suffer. Note that you can also use a different language than English here (make sure though that the AI speaks it).</p>
+    </div>
 
     <!-- System Prompt Text Input -->
     <div class="system-prompt">
-      <div class="prompt-control">
-        <label for="systemPromptInput">Set System Prompt:</label>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900" for="systemPromptInput">Set System Prompt:</label>
         <input
           type="text"
           id="systemPromptInput"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           maxlength="50"
           value={systemPrompt}
         />
       </div>
-      <div class="prompt-buttons">
-        <button on:click={updateSystemPrompt}>Update Prompt</button>
-        <button on:click={resetSystemPrompt}>Reset to Default</button>
+      <div class="prompt-buttons ml-auto mt-2">
+        <button class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-900 hover:text-gray-50 focus:z-10 focus:ring-4 focus:ring-gray-100" on:click={updateSystemPrompt}>Update Prompt</button>
+        <button class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-900 hover:text-gray-50 focus:z-10 focus:ring-4 focus:ring-gray-100" on:click={resetSystemPrompt}>Reset to Default</button>
       </div>
-      <div class="prompt-info">
-        <p>This setting allows you to customize the AI's response style. The AI is instructed to reply accordingly, so please ensure that your system prompt is clear as otherwise the response quality will suffer. Note that you can also use a different language than English here (make sure though that the AI speaks it).</p>
-      </div>
+      
     </div>
   </div>
 </div>
@@ -134,9 +139,6 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 3px;
-  }
-  .prompt-control {
-    justify-content: start;
   }
   .prompt-info {
     flex-direction: column;
