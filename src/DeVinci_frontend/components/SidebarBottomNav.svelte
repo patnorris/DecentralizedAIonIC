@@ -9,6 +9,7 @@ import { currentModelName } from "../store";
         CURRENT MODEL<br/>{$currentModelName}
       </span>
     </a>
+    <!--
     <button type="button" class="border inline-flex flex-col items-center justify-center px-1 hover:bg-gray-50 group">
       <label class="inline-flex items-center cursor-pointer">
         <span class=" text-[10px] font-medium text-gray-500 text-left mr-2 uppercase tracking-tight">Knowledge<br /> Base</span>
@@ -16,5 +17,6 @@ import { currentModelName } from "../store";
         <div class="relative w-9 h-5 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
       </label>
     </button>
+    -->
   </div>
 </div>
