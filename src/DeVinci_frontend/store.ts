@@ -70,11 +70,12 @@ downloadedModels.subscribe((value) => {
 
 export const currentExperienceId = writable(null);
 export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
+// @ts-ignore
 saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
 export let vectorStore = writable(null);
 
-export let installAppDeferredPrompt = writable(null);
+export let installAppDeferredPrompt = writable(null); // the installAppDeferredPrompt event cannot be stored across sessions
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";

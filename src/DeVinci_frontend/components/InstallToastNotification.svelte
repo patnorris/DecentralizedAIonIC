@@ -4,23 +4,28 @@
     installAppDeferredPrompt
   } from "../store";
 
-  let deferredPrompt;
+  let deferredPrompt = $installAppDeferredPrompt;
   installAppDeferredPrompt.subscribe((value) => deferredPrompt = value); // needed to persist the prompt across reloads of this component
 
-  let showToast = true; // Notify the user they can install the PWA
+  export let showToast = true; // Notify the user they can install the PWA
 
-  onMount(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
+  onMount(() => {    
+    function handleBeforeInstallPrompt(e) {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
-      $installAppDeferredPrompt = e;
-    });
+      installAppDeferredPrompt.set(e);
+    };
+
+    window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt); // ensure no previous event handler is registered
+
+    // Add event listener for beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     window.addEventListener('appinstalled', () => {
       // Hide the app-provided install promotion
       showToast = false;
-      console.log('PWA was installed');
+      console.info('PWA was installed');
     });
   });
 
@@ -29,9 +34,9 @@
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
+        console.info('User accepted the A2HS prompt');
       } else {
-        console.log('User dismissed the A2HS prompt');
+        console.info('User dismissed the A2HS prompt');
       };
       deferredPrompt = null;
     };

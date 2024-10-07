@@ -118,6 +118,6 @@
   <LoginModal {toggleModal} />
 </div>
 
-{#if visibleInstallAppToast}
-  <InstallToastNotification />
-{/if}
+{#key visibleInstallAppToast}
+  <InstallToastNotification showToast={visibleInstallAppToast} />
+{/key}
