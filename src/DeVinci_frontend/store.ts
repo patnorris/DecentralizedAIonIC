@@ -209,7 +209,7 @@ export const createStore = ({
       isAuthed: "nfid",
     }));
 
-    console.log("nfid is authed");
+    console.info("nfid is authed");
   };
 
   const internetIdentityConnect = async () => {
@@ -265,7 +265,7 @@ export const createStore = ({
       isAuthed: "internetidentity",
     }));
 
-    console.log("internetidentity is authed");
+    console.info("internetidentity is authed");
   };
 
   const stoicConnect = () => {
@@ -308,7 +308,7 @@ export const createStore = ({
       isAuthed: "stoic",
     }));
 
-    console.log("stoic is authed");
+    console.info("stoic is authed");
   };
 
   const plugConnect = async () => {
@@ -322,7 +322,7 @@ export const createStore = ({
     const plugConnected = await window.ic?.plug?.isConnected();
     if (!plugConnected) {
       try {
-        console.log({
+        console.info({
           whitelist,
           host,
         });
@@ -330,7 +330,7 @@ export const createStore = ({
           whitelist,
           host,
         });
-        console.log("plug connected");
+        console.info("plug connected");
       } catch (e) {
         console.warn(e);
         return;
@@ -350,7 +350,7 @@ export const createStore = ({
         host,
       });
       result
-        ? console.log("agent created")
+        ? console.info("agent created")
         : console.warn("agent creation failed");
     };
     // check if createActor method is available
@@ -393,7 +393,7 @@ export const createStore = ({
       isAuthed: "plug",
     }));
 
-    console.log("plug is authed");
+    console.info("plug is authed");
   };
 
   const bitfinityConnect = async () => {
@@ -407,7 +407,7 @@ export const createStore = ({
     const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
     if (!bitfinityConnected) {
       try {
-        console.log({
+        console.info({
           whitelist,
           host,
         });
@@ -434,7 +434,7 @@ export const createStore = ({
         host,
       });
       result
-        ? console.log("agent created")
+        ? console.info("agent created")
         : console.warn("agent creation failed");
     }; */
     // check if createActor method is available
@@ -476,7 +476,7 @@ export const createStore = ({
       isAuthed: "bitfinity",
     }));
 
-    console.log("bitfinity is authed");
+    console.info("bitfinity is authed");
   };
 
   const disconnect = async () => {
@@ -488,7 +488,7 @@ export const createStore = ({
         await new Promise((resolve) => setTimeout(resolve, 500));
         const plugConnected = await window.ic?.plug?.isConnected();
         if (plugConnected) {
-          console.log("plug disconnect failed, trying once more");
+          console.info("plug disconnect failed, trying once more");
           await window.ic?.plug?.disconnect();
         };
       } catch (error) {
@@ -519,7 +519,7 @@ export const createStore = ({
         await new Promise((resolve) => setTimeout(resolve, 500));
         const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
         if (bitfinityConnected) {
-          console.log("Bitfinity disconnect failed, trying once more");
+          console.info("Bitfinity disconnect failed, trying once more");
           await window.ic?.infinityWallet?.disconnect();
         };
       } catch (error) {
@@ -541,19 +541,19 @@ export const createStore = ({
       const authClient = await AuthClient.create();
       if (await authClient.isAuthenticated()) {
         if (isAuthed === "nfid") {
-          console.log("NFID connection detected");
+          console.info("NFID connection detected");
           nfidConnect();
         } else if (isAuthed === "internetidentity") {
-          console.log("Internet Identity connection detected");
+          console.info("Internet Identity connection detected");
           internetIdentityConnect();
         } else if (isAuthed === "plug") {
-          console.log("Plug connection detected");
+          console.info("Plug connection detected");
           plugConnect();
         } else if (isAuthed === "bitfinity") {
-          console.log("Bitfinity connection detected");
+          console.info("Bitfinity connection detected");
           bitfinityConnect();
         } else if (isAuthed === "stoic") {
-          console.log("Stoic connection detected");
+          console.info("Stoic connection detected");
           stoicConnect();
         };
       };

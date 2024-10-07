@@ -47,7 +47,7 @@
   if ($chatModelGlobal) {
     try {
       await $chatModelGlobal.interruptGenerate();
-      console.log("Message generation interrupted successfully");
+      console.info("Message generation interrupted successfully");
     } catch (error) {
       console.error("Error stopping the answer generation:", error);
     }

@@ -267,7 +267,7 @@ export async function syncLocalChanges() {
   let failedUpdates = {};
   let failedCreations = [];
 
-  console.log("syncing local changes to the backend");
+  console.info("syncing local changes to the backend");
   // Sync existing chats
   for (const chatId in chatsToUpdate) {
     const messagesFormattedForBackend = chatsToUpdate[chatId];  // Assuming these are already formatted properly
@@ -344,6 +344,6 @@ export async function syncLocalChanges() {
     };    
   };
 
-  console.log("Sync process completed, with retries scheduled for failed items.");
+  console.info("Sync process completed, with retries scheduled for failed items.");
   return true;
 };
