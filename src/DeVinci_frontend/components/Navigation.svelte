@@ -95,7 +95,7 @@
         <a use:link href="/" class="block px-4 py-2 hover:bg-white">New Chat</a>
       </li>
       <li>
-        <a use:link href="/models" class="block px-4 py-2 hover:bg-white">LLM Models</a>
+        <a use:link href="/models" class="block px-4 py-2 hover:bg-white">✨ Ai Models </a>
       </li>
       <li>
         <a use:link href="/settings" class="block px-4 py-2 hover:bg-white">Settings</a>
