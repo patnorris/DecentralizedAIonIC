@@ -195,8 +195,12 @@
       };
     };
     try {
-      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
-      await $chatModelGlobal.reload(modelOptionId);
+      //$chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      //await $chatModelGlobal.reload(modelOptionId);
+      $chatModelGlobal = await webllm.CreateServiceWorkerMLCEngine(
+        modelOptionId,
+        { initProgressCallback }, // engineConfig
+      );
       // Set flag that this model has been downloaded
       const flagObject = {
         modelId: modelOptionId,
