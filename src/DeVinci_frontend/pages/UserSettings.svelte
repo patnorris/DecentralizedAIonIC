@@ -9,10 +9,11 @@
   import InOutSaveChats   from "../components/InOutSaveChats.svelte";
   import OwnCanister      from "../components/OwnCanister.svelte";
   import GeneralSettings  from "../components/GeneralSettings.svelte";
+  import AdvancedSettings from "../components/AdvancedSettings.svelte";
 
   import {
     syncLocalChanges
-  } from "../helpers/localStorage";
+  } from "../helpers/local_storage";
 
   let hasLoadedSettings = false;
 
@@ -63,6 +64,7 @@
         <InOutSaveChats />
         <GeneralSettings />
         <OwnCanister />
+        <AdvancedSettings />
       {/if}
     {/if}
 </div>

@@ -51,16 +51,30 @@ export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
-export let userSettings = writable(localStorage.getItem("userSettings"));
-userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
 
+export const temperatureDefaultSetting = 0.6;
+export const responseLengthDefaultSetting = 'Medium';
+export const systemPromptDefaultSetting = "You are a helpful, respectful and honest assistant.";
+export const saveChatsDefaultSetting = true;
+export let userSettings = writable(null);
+userSettings.subscribe((value) => localStorage.setItem("userSettings", JSON.stringify(value)));
 export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
+let selectedAiModelIdValue = null;
 selectedAiModelId.subscribe((value) => {
+  selectedAiModelIdValue = value;
   if (value === null) {
     localStorage.removeItem("selectedAiModelId");
   } else {
     localStorage.setItem("selectedAiModelId", value);
-  }
+  };
+});
+
+export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
+let saveChatsUserSelectionValue = saveChatsDefaultSetting;
+saveChatsUserSelection.subscribe((value) => {
+  saveChatsUserSelectionValue = value;
+  // @ts-ignore
+  localStorage.setItem("saveChatsUserSelection", value)
 });
 
 export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
@@ -69,10 +83,6 @@ downloadedModels.subscribe((value) => {
 });
 
 export const currentExperienceId = writable(null);
-export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
-// @ts-ignore
-saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
-
 export let vectorStore = writable(null);
 
 export let installAppDeferredPrompt = writable(null); // the installAppDeferredPrompt event cannot be stored across sessions
@@ -136,7 +146,25 @@ export const createStore = ({
       } catch (error) {
         console.error("Error in get_caller_settings: ", error);
         if (localStorage.getItem("userSettings")) {
-          userSettings.set(localStorage.getItem("userSettings"));
+          try {
+            userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+          } catch (error) {
+            userSettings.set({ // default settings
+              temperature: temperatureDefaultSetting,
+              responseLength: responseLengthDefaultSetting,
+              saveChats: saveChatsUserSelectionValue,
+              selectedAiModelId: selectedAiModelIdValue,
+              systemPrompt: systemPromptDefaultSetting,
+            });        
+          };
+        } else {
+          userSettings.set({ // default settings
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
+          });
         };
         if (localStorage.getItem("selectedAiModelId")) {
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
@@ -144,7 +172,25 @@ export const createStore = ({
       };
     } else {
       if (localStorage.getItem("userSettings")) {
-        userSettings.set(localStorage.getItem("userSettings"));
+        try {
+          userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+        } catch (error) {
+          userSettings.set({ // default settings
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
+          });          
+        };
+      } else {
+        userSettings.set({ // default settings
+          temperature: temperatureDefaultSetting,
+          responseLength: responseLengthDefaultSetting,
+          saveChats: saveChatsUserSelectionValue,
+          selectedAiModelId: selectedAiModelIdValue,
+          systemPrompt: systemPromptDefaultSetting,
+        });
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));

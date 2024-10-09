@@ -7,7 +7,7 @@
   import Entertainment from "./Entertainment.svelte";
 
   import { getAvailableAiModels } from "../helpers/ai_model_helpers";
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/local_storage";
 
   export let onlyShowDownloadedModels = false;
   export let autoInitiateSelectedModel = false;

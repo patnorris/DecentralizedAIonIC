@@ -1,19 +1,30 @@
 <script lang="ts">
-    import {
-      setLocalFlag,
-      getLocalFlag
-    } from "../helpers/localStorage";
+  import { userSettings } from "../store";
 
-    // Holds the value of the selected option whether to store chats or not
-    let saveChats = getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
-    // Function to be called whenever the chat storage selection changes
-    function handleSelectionChange() {
-      let saveChatsValue = true;
-      if (saveChats === "doNotSave") {
+  import {
+    setLocalFlag,
+    getLocalFlag
+  } from "../helpers/local_storage";
+
+  import { updateUserSettingsProperty } from "../helpers/user_settings";
+
+  // Holds the value of the selected option whether to store chats or not
+  let saveChats = $userSettings?.saveChats !== null 
+    ? $userSettings?.saveChats === false ? "doNotSave" : "save"
+    : getLocalFlag("saveChatsUserSelection") === false ? "doNotSave" : "save"; // default is save
+  
+  // Function to be called whenever the chat storage selection changes
+  async function handleSelectionChange() {
+    let saveChatsValue = true;
+    if (saveChats === "doNotSave") {
       saveChatsValue = false;
     };
-      setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
-    };
+    setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
+    
+    $userSettings.saveChats = saveChatsValue;
+    userSettings.set($userSettings);
+    await updateUserSettingsProperty("saveChats", saveChatsValue);
+  };
 </script>
 
 <div id="alert-additional-content-4" class="p-4 m-4 text-[#151b1e] bg-gray-100 border-2 border-dotted border-[#151b1e] rounded-lg" role="alert">
@@ -33,10 +44,10 @@
             type="radio"
             value="save"
             name="list-radio"
-            class="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+            class="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 ml-2"
             bind:group={saveChats}
             on:change={handleSelectionChange}>
-          <label for="horizontal-list-radio-license" class="cursor-pointer w-full py-3 ms-2 text-sm font-medium text-gray-900">
+          <label for="horizontal-list-radio-license" class="cursor-pointer w-full py-3 ms-2 ml-1 text-sm font-medium text-gray-900">
             Save my chats
           </label>
         </div>
@@ -48,10 +59,10 @@
             type="radio"
             value="doNotSave"
             name="list-radio"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 cursor-pointer ml-2"
             bind:group={saveChats}
             on:change={handleSelectionChange}>
-          <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer">
+          <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 ml-1 text-sm font-medium text-gray-900 cursor-pointer">
             Do not save my chats
           </label>
         </div>

@@ -22,7 +22,7 @@
   import deVinci from "./pages/deVinci.svelte";
   import Models from "./pages/Models.svelte";
 
-  import { syncLocalChanges } from "./helpers/localStorage";
+  import { syncLocalChanges } from "./helpers/local_storage";
 
   const routes = {
     // Exact path (with /# in front of route, e.g. .../#/about)

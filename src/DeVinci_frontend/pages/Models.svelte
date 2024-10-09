@@ -10,7 +10,7 @@
 
   import {
     syncLocalChanges
-  } from "../helpers/localStorage";
+  } from "../helpers/local_storage";
 
   let hasLoadedSettings = false;
 

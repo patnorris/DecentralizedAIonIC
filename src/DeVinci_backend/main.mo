@@ -339,7 +339,17 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
       return #Err(#Unauthorized);
 		};
     switch (getUserSettings(caller)) {
-      case (null) { return #Err(#Unauthorized); };
+      case (null) {
+        // No settings stored yet, return default
+        let userSettings : Types.UserSettings = {
+          temperature = 0.6;
+          responseLength = "Medium";
+          saveChats = true;
+          selectedAiModelId = "";
+          systemPrompt = "You are a helpful, respectful and honest assistant.";
+        };
+        return #Ok(userSettings);
+      };
       case (?userSettings) { return #Ok(userSettings); };
     };   
   };

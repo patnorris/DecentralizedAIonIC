@@ -15,7 +15,8 @@
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
 
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { userHasDownloadedModel } from "../helpers/local_storage";
+  import { determineInferenceParameters } from '../helpers/user_settings';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
   $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
@@ -25,6 +26,7 @@
   let showToast = false;
 
   function isPWAInstalled() {
+    // @ts-ignore
     return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
   };
 
@@ -128,7 +130,18 @@
         setLabel("debug-label", debugOutput); */
         let curMessage = "";
         let stepCount = 0;
-        const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
+        // determine inference parameters to use
+        const inferenceParameters = await determineInferenceParameters();
+        prompt.unshift({
+          role: "system",
+          content: inferenceParameters.system_prompt,
+        });
+        const completion = await $chatModelGlobal.chat.completions.create({
+          stream: true,
+          messages: prompt,
+          temperature: inferenceParameters.temperature,
+          max_tokens: inferenceParameters.max_tokens,
+        });
         /* debugOutput += " completion ";
         debugOutput += JSON.stringify(completion);
         setLabel("debug-label", debugOutput); */
