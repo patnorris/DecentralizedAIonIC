@@ -55,8 +55,10 @@
             size={option.size}
             bind:chatModelDownloadInProgress
           />
-          <Entertainment />
         {/if}
       {/each}
+      {#if chatModelDownloadInProgress}
+        <Entertainment />
+      {/if}
     </ul>
   </div>

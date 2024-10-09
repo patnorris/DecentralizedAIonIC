@@ -48,7 +48,7 @@
     const loadUserChats = async () => {
         chatsRetrievalInProgress = true;
         try {
-            const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history(); 
+            const retrievedChatsResponse = await $store.backendActor.get_caller_chat_history();   
             // @ts-ignore
             if (retrievedChatsResponse.Ok) {
                 // @ts-ignore

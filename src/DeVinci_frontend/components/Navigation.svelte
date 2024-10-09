@@ -92,16 +92,19 @@
   <div id="dropdownDots" class="absolute right-0 top-14 z-10 hidden bg-gray-100 divide-y divide-gray-200 rounded-lg shadow-2xl w-52 border-gray-200 border-4">
     <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconButton">
       <li>
-        <a use:link href="/" class="block px-4 py-2 hover:bg-white">Chat</a>
+        <a use:link href="/" class="block px-4 py-2 hover:bg-white">New Chat</a>
       </li>
       <li>
-        <a use:link href="/about" class="block px-4 py-2 hover:bg-white">About</a>
+        <a use:link href="/models" class="block px-4 py-2 hover:bg-white">✨ Ai Models </a>
       </li>
       <li>
         <a use:link href="/settings" class="block px-4 py-2 hover:bg-white">Settings</a>
       </li>
       <li>
-        <a use:link href="/brand" class="block px-4 py-2 hover:bg-white">Brand Guide</a>
+        <a use:link href="/about" class="block px-4 py-2 hover:bg-white">About</a>
+      </li>
+      <li>
+        <a use:link href="/brand" class="block px-4 py-2 hover:bg-white">Brand guide</a>
       </li>
     </ul>
     <div>
@@ -118,6 +121,6 @@
   <LoginModal {toggleModal} />
 </div>
 
-{#if visibleInstallAppToast}
-  <InstallToastNotification />
-{/if}
+{#key visibleInstallAppToast}
+  <InstallToastNotification showToast={visibleInstallAppToast} />
+{/key}

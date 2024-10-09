@@ -20,6 +20,7 @@
   import Brand from "./pages/Brand.svelte";
   import NotFound from "./pages/NotFound.svelte";
   import deVinci from "./pages/deVinci.svelte";
+  import Models from "./pages/Models.svelte";
 
   import { syncLocalChanges } from "./helpers/local_storage";
 
@@ -30,6 +31,7 @@
     "/settings": UserSettings,
     "/about": About,
     "/brand": Brand,
+    "/models": Models,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };

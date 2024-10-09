@@ -10,7 +10,7 @@
 
 <div class="mt-auto w-full">
   <div id="dropdown-cta" class="p-4 mb-16 text-[#151b1e] border-2 border-dotted border-[#151b1e] rounded-2xl bg-[lightsteelblue]" role="alert">
-    <div class="flex items-center mb-3">
+    <div class="flex items-center justify-between mb-3">
       <span class="text-lg font-medium">Which model?</span>
 
       <button id="close-button" type="button" on:click={closeAlert} class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200" data-dismiss-target="#dropdown-cta" aria-label="Close">

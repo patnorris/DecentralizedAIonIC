@@ -229,6 +229,6 @@
   {/if}
 </div>
 
-{#if showToast}
-  <InstallToastNotification />
-{/if}
+{#key showToast}
+  <InstallToastNotification showToast={showToast} />
+{/key}

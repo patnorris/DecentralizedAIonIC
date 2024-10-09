@@ -16,7 +16,7 @@
 <footer class="bg-gray-300">
   <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-5 border-gray-200 border-2">
     <div class="flex items-center justify-between">
-      <span class="text-sm text-gray-500 sm:text-center">deVinci 2024</span>
+      <span class="text-sm text-gray-500 sm:text-center">DeVinci 2024</span>
       <div class="flex mt-0">
         <a href="https://github.com/patnorris/DecentralizedAIonIC" class="text-gray-500 hover:text-gray-900 ms-5">
           <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">

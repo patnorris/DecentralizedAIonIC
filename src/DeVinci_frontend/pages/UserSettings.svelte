@@ -6,7 +6,6 @@
     userSettings
   } from "../store";
 
-  import SelectModel      from "../components/SelectModel.svelte";
   import InOutSaveChats   from "../components/InOutSaveChats.svelte";
   import OwnCanister      from "../components/OwnCanister.svelte";
   import GeneralSettings  from "../components/GeneralSettings.svelte";
@@ -68,5 +67,4 @@
         <AdvancedSettings />
       {/if}
     {/if}
-    <SelectModel />
 </div>
