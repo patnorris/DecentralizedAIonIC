@@ -164,7 +164,8 @@
           {type: 'module'}
         )); */
         //console.info("Using webllm");
-        $chatModelGlobal = new webllm.MLCEngine();
+        //$chatModelGlobal = new webllm.MLCEngine();
+        $chatModelGlobal = new webllm.ServiceWorkerMLCEngine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
@@ -195,12 +196,8 @@
       };
     };
     try {
-      //$chatModelGlobal.setInitProgressCallback(initProgressCallback);
-      //await $chatModelGlobal.reload(modelOptionId);
-      $chatModelGlobal = await webllm.CreateServiceWorkerMLCEngine(
-        modelOptionId,
-        { initProgressCallback }, // engineConfig
-      );
+      $chatModelGlobal.setInitProgressCallback(initProgressCallback);
+      await $chatModelGlobal.reload(modelOptionId);
       // Set flag that this model has been downloaded
       const flagObject = {
         modelId: modelOptionId,

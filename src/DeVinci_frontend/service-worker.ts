@@ -57,6 +57,8 @@ clientsClaim();
 
 // Install event
 self.addEventListener('install', event => {
+  // Always update right away
+  self.skipWaiting();
   console.info('Service Worker installing.');
   /* event.waitUntil(
     caches.open(CACHE_NAME)
@@ -70,13 +72,25 @@ let handler: ServiceWorkerMLCEngineHandler;
 
 self.addEventListener("activate", function (event) {
   console.info('Service Worker activated.');
-  handler = new ServiceWorkerMLCEngineHandler();
+  if (!handler) {
+    handler = new ServiceWorkerMLCEngineHandler();
+  };
   console.log("Service Worker is ready");
 });
 
 /* self.addEventListener('activate', (event) => {
   console.info('Service Worker activated.');
 }); */
+
+self.addEventListener("message", (event) => {
+  // event is a MessageEvent object
+  console.log(`service worker message: ${event.data}`);
+  if (!handler) {
+    handler = new ServiceWorkerMLCEngineHandler();
+    console.log("Service Worker: Web-LLM Engine Activated");
+  };
+  handler.onmessage(event);
+});
 
 // Use a NetworkFirst strategy for all requests (i.e. all requests are cached)
 registerRoute(
