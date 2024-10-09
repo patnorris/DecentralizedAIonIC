@@ -3,8 +3,6 @@ import { clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { registerRoute } from 'workbox-routing';
 import { NetworkFirst } from 'workbox-strategies';
 
-import { ServiceWorkerMLCEngineHandler } from "@mlc-ai/web-llm";
-
 declare let self: ServiceWorkerGlobalScope;
 
 cleanupOutdatedCaches();
@@ -68,28 +66,8 @@ self.addEventListener('install', event => {
   ); */
 });
 
-let handler: ServiceWorkerMLCEngineHandler;
-
-self.addEventListener("activate", function (event) {
+self.addEventListener('activate', (event) => {
   console.info('Service Worker activated.');
-  if (!handler) {
-    handler = new ServiceWorkerMLCEngineHandler();
-  };
-  console.log("Service Worker is ready");
-});
-
-/* self.addEventListener('activate', (event) => {
-  console.info('Service Worker activated.');
-}); */
-
-self.addEventListener("message", (event) => {
-  // event is a MessageEvent object
-  console.log(`service worker message: ${event.data}`);
-  if (!handler) {
-    handler = new ServiceWorkerMLCEngineHandler();
-    console.log("Service Worker: Web-LLM Engine Activated");
-  };
-  handler.onmessage(event);
 });
 
 // Use a NetworkFirst strategy for all requests (i.e. all requests are cached)

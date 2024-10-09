@@ -164,8 +164,7 @@
           {type: 'module'}
         )); */
         //console.info("Using webllm");
-        //$chatModelGlobal = new webllm.MLCEngine();
-        $chatModelGlobal = new webllm.ServiceWorkerMLCEngine();
+        $chatModelGlobal = new webllm.MLCEngine();
       } catch (error) {
         console.error("Error loading web worker: ", error);
         $chatModelGlobal = new webllm.MLCEngine();
