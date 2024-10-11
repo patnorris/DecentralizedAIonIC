@@ -37,7 +37,7 @@
     } catch (error) {
       console.error("Error in get_caller_settings: ", error);
       if (localStorage.getItem("userSettings")) {
-        userSettings.set(localStorage.getItem("userSettings"));
+        userSettings.set(JSON.parse(localStorage.getItem("userSettings"))); 
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));

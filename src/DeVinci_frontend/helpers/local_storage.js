@@ -208,7 +208,10 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
 };
 
 export function setUserSettingsSyncFlag(flagType) {
-  if (flagType === "selectedAiModelId") {
+  if (flagType === "userSettings") {
+    localStorage.setItem("userSettingsNeedsSync", "true");
+    return true;
+  } else if (flagType === "selectedAiModelId") {
     localStorage.setItem("selectedAiModelIdNeedsSync", "true");
     return true;
   } else {
@@ -314,14 +317,12 @@ export async function syncLocalChanges() {
   };
 
   // Sync user settings changes
-  const aiModelFlagToSyncStored = localStorage.getItem("selectedAiModelIdNeedsSync");
-  if (aiModelFlagToSyncStored === "true") {
-    const selectedAiModelIdToSync = localStorage.getItem("selectedAiModelId");
-    if (selectedAiModelIdToSync) {
-      const updatedSettingsObject = {
-        selectedAiModelId: selectedAiModelIdToSync,
-      };
+  const userSettingsFlagToSyncStored = localStorage.getItem("userSettingsNeedsSync");
+  if (userSettingsFlagToSyncStored === "true") {
+    const userSettingsToSync = localStorage.getItem("userSettings");
+    if (userSettingsToSync) {
       try {
+        const updatedSettingsObject = JSON.parse(userSettingsToSync);
         const settingsUpdatedResponse = await storeState.backendActor.update_caller_settings(updatedSettingsObject);            
         // @ts-ignore
         if (settingsUpdatedResponse.Err) {
@@ -330,17 +331,17 @@ export async function syncLocalChanges() {
           // @ts-ignore
           throw new Error("Error syncing user settings: ", settingsUpdatedResponse.Err);
         } else {
-          localStorage.setItem("selectedAiModelIdNeedsSync", "false"); // sync successful
+          localStorage.setItem("userSettingsNeedsSync", "false"); // sync successful
         };
       } catch (error) {
         // @ts-ignore
         console.error("Error syncing settings: ", error);
         // Set flag to sync change later
-        setUserSettingsSyncFlag("selectedAiModelId");
+        setUserSettingsSyncFlag("userSettings");
       };
     } else {
-      // no AI model id to sync, so no sync necessary
-      localStorage.setItem("selectedAiModelIdNeedsSync", "false");
+      // no user settings to sync, so no sync necessary
+      localStorage.setItem("userSettingsNeedsSync", "false");
     };    
   };
 

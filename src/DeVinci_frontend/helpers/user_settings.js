@@ -40,7 +40,7 @@ const updateUserSettings = async (updatedSettingsObject) => {
     // @ts-ignore
     console.error("Error updating settings: ", error);
     // Likely offline, so set flag to sync change later
-    setUserSettingsSyncFlag("selectedAiModelId");
+    setUserSettingsSyncFlag("userSettings");
   };
 };
 
