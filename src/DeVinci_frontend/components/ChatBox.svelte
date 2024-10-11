@@ -33,6 +33,8 @@
   let showToast = false;
   let toastMessage = '';
 
+  let newLocalChatId;
+
   const scrollToBottom = node => {
 		const scroll = () => node.scroll({
 			top: node.scrollHeight,
@@ -159,8 +161,9 @@
               chatTitle: "",
             };
             chatDisplayed = newChatPreview;
-            // Remove the just created chat by its first message from new chats to sync to avoid duplicates
+            // Remove the just created chat from new chats to sync to avoid duplicates
             const syncObject = {
+              newLocalChatId,
               chatMessages: messagesFormattedForBackend,
             };
             removeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
@@ -169,6 +172,7 @@
         } catch (error) {
           console.error("Error creating new chat: ", error);
           const syncObject = {
+            newLocalChatId,
             chatMessages: messagesFormattedForBackend,
           };
           storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
@@ -249,9 +253,11 @@
           messages = formattedMessages;
         };
       };
+    } else {
+      // Fresh chat
+      newLocalChatId = Date.now();
     };
     chatRetrievalInProgress = false;
-    // Fresh chat
   };
 
   onMount(loadChat);
