@@ -12,7 +12,6 @@
   } from "../store";
   import {
     setLocalFlag,
-    setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/local_storage";
   import {
