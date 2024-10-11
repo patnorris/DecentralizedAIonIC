@@ -68,6 +68,8 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
     updatedSettingsObject.systemPrompt = propertyValue;
   };
 
+  userSettings.set(updatedSettingsObject);
+
   await updateUserSettings(updatedSettingsObject);
   return true;
 };

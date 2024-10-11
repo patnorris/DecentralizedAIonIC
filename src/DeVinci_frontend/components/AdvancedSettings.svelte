@@ -13,16 +13,16 @@
 
   // Function to handle changes in the temperature slider
   async function handleTemperatureChange(event) {
-    temperature = parseFloat(event.target.value);
-    $userSettings.temperature = temperature;
-    await updateUserSettingsProperty("temperature", temperature);
+    const temperatureValue = parseFloat(event.target.value);
+    $userSettings.temperature = temperatureValue; // reactive statements updates local variable as well
+    await updateUserSettingsProperty("temperature", temperatureValue);
   };
 
   // Function to handle changes in response length
   async function handleResponseLengthChange(event) {
-    responseLength = event.target.value;
-    $userSettings.responseLength = responseLength;
-    await updateUserSettingsProperty("responseLength", responseLength);
+    const responseLengthValue = event.target.value;
+    $userSettings.responseLength = responseLengthValue; // reactive statements updates local variable as well
+    await updateUserSettingsProperty("responseLength", responseLengthValue);
   };
 
   // Function to update the system prompt
@@ -30,15 +30,15 @@
     const inputElement = document.getElementById('systemPromptInput');
     if (inputElement) {
       // @ts-ignore
-      systemPrompt = inputElement.value;
-      $userSettings.systemPrompt = systemPrompt;
-      await updateUserSettingsProperty("systemPrompt", systemPrompt);
+      const systemPromptValue = inputElement.value;
+      $userSettings.systemPrompt = systemPromptValue; // reactive statements updates local variable as well
+      await updateUserSettingsProperty("systemPrompt", systemPromptValue);
     };
   };
 
   // Function to reset system prompt to default
   async function resetSystemPrompt() {
-    systemPrompt = systemPromptDefaultSetting;
+    $userSettings.systemPrompt = systemPromptDefaultSetting; // reactive statements updates local variable as well
     await updateSystemPrompt();
   };
 </script>

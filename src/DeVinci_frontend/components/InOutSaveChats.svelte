@@ -22,7 +22,6 @@
     setLocalFlag("saveChatsUserSelection", {saveChats: saveChatsValue});
     
     $userSettings.saveChats = saveChatsValue;
-    userSettings.set($userSettings);
     await updateUserSettingsProperty("saveChats", saveChatsValue);
   };
 </script>
