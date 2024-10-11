@@ -59,7 +59,7 @@ export function setLocalFlag(flagType, flagObject) {
 // Export addDownloadedModel as part of setLocalFlag
 export function addDownloadedModel(modelId) {
   return setLocalFlag("downloadedAiModels", { modelId });
-}
+};
 
 export function getLocalFlag(flagType, flagObject=null) {
   if (flagType === "downloadedAiModels") {

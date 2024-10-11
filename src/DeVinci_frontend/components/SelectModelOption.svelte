@@ -12,7 +12,6 @@
   } from "../store";
   import {
     setLocalFlag,
-    syncLocalChanges,
     setUserSettingsSyncFlag,
     getLocalFlag
   } from "../helpers/local_storage";
@@ -173,10 +172,6 @@
       $chatModelGlobal.setInitProgressCallback(initProgressCallback);
       await $chatModelGlobal.reload(modelOptionId);
       // Set flag that this model has been downloaded
-      const flagObject = {
-        modelId: modelOptionId,
-      };
-      setLocalFlag("downloadedAiModels", flagObject);
       addDownloadedModel(modelOptionId);
     } catch (error) {
       console.error("Error loading model: ", error);

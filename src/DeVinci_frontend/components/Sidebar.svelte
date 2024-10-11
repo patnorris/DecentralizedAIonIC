@@ -6,8 +6,6 @@ import { onMount } from 'svelte';
   import { downloadedModels } from "../store";
   //import Knowledgebase  from "./Knowledgebase.svelte"; TODO
 
-  import { userHasDownloadedModel } from "../helpers/local_storage";
-
   onMount(() => {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const chat = document.getElementById('chat');
