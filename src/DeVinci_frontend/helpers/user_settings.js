@@ -40,7 +40,7 @@ const updateUserSettings = async (updatedSettingsObject) => {
     // @ts-ignore
     console.error("Error updating settings: ", error);
     // Likely offline, so set flag to sync change later
-    setUserSettingsSyncFlag("selectedAiModelId");
+    setUserSettingsSyncFlag("userSettings");
   };
 };
 
@@ -67,6 +67,8 @@ export const updateUserSettingsProperty = async (propertyKey, propertyValue) => 
   } else if (propertyKey === "systemPrompt") {
     updatedSettingsObject.systemPrompt = propertyValue;
   };
+
+  userSettings.set(updatedSettingsObject);
 
   await updateUserSettings(updatedSettingsObject);
   return true;
@@ -114,9 +116,13 @@ export function responseLengthToTokenNumber(responseLength) {
 // Function to determine inference parameters based on user settings
 export async function determineInferenceParameters() {
   const settings = userSettingsState;
-  let temperature = settings.temperature;
+  let temperature;
   let max_tokens;
-  let system_prompt = settings.systemPrompt;
+  let system_prompt;
+  if (settings) {
+    temperature = settings.temperature;
+    system_prompt = settings.systemPrompt;
+  };
 
   // Ensure that the temperature is within valid range
   if (!temperature || temperature < 0 || temperature > 1) {
@@ -133,7 +139,7 @@ export async function determineInferenceParameters() {
     max_tokens = maxTokenDefault;  // Default if there is a problem
   };
 
-  if (system_prompt === "") {
+  if (!system_prompt || system_prompt === "") {
     system_prompt = systemPromptDefaultSetting;
   };
 

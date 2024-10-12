@@ -4,8 +4,9 @@
     chatModelGlobal,
     activeChatGlobal,
     chatModelIdInitiatedGlobal,
+    downloadedModels
   } from "../store";
-  import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
+  import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
@@ -15,11 +16,10 @@
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
 
-  import { userHasDownloadedModel } from "../helpers/local_storage";
   import { determineInferenceParameters } from '../helpers/user_settings';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+  $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;
 
   const workerPath = './worker.ts';
 

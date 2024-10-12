@@ -1,19 +1,19 @@
 <script lang="ts">
   import {
-    deviceType
+    deviceType,
+    downloadedModels
   } from "../store";
 
   import SelectModelOption from './SelectModelOption.svelte';
   import Entertainment from "./Entertainment.svelte";
 
   import { getAvailableAiModels } from "../helpers/ai_model_helpers";
-  import { userHasDownloadedModel } from "../helpers/local_storage";
 
   export let onlyShowDownloadedModels = false;
   export let autoInitiateSelectedModel = false;
 
   // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+  $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;
 
   let availableAiModels = getAvailableAiModels(deviceType === 'Android');
   let chatModelDownloadInProgress = false;

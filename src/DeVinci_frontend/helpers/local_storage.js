@@ -59,7 +59,7 @@ export function setLocalFlag(flagType, flagObject) {
 // Export addDownloadedModel as part of setLocalFlag
 export function addDownloadedModel(modelId) {
   return setLocalFlag("downloadedAiModels", { modelId });
-}
+};
 
 export function getLocalFlag(flagType, flagObject=null) {
   if (flagType === "downloadedAiModels") {
@@ -177,26 +177,15 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
       };
       return true;
     } else if (storeType === "newLocalChatToSync") {
-      let newChatsToSync = localStorage.getItem(storeType);
-      // newChatsToSync is a stringified array where each entry is a new chat to sync (as array of messages)
+      let newChatsToSync = localStorage.getItem(storeType); // newChatsToSync is a stringified object where each entry is a new chat to sync (key: local id, value: messages)
       if (newChatsToSync) {
-        let arrayOfChats = JSON.parse(newChatsToSync);
-        // We need to check whether this chat is already included in the ones to sync (to avoid duplicates)
-        // Check if the current storeObject's first message content already exists in any stored chats
-        const existingChatIndex = arrayOfChats.findIndex(chat => 
-          chat.length > 0 && chat[0].content === storeObject.chatMessages[0].content
-        );
-        if (existingChatIndex !== -1) {
-          // If the chat exists, replace it with the new chatMessages
-          arrayOfChats[existingChatIndex] = storeObject.chatMessages;
-        } else {
-          // If the chat does not exist, add the new chatMessages to the array
-          arrayOfChats.push(storeObject.chatMessages);
-        };
-        localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
+        let chatsDictionary = JSON.parse(newChatsToSync);
+        chatsDictionary[storeObject.newLocalChatId] = storeObject.chatMessages; // upserts chat
+        localStorage.setItem(storeType, JSON.stringify(chatsDictionary));
       } else {
-        let newArrayForChats = [storeObject.chatMessages];
-        localStorage.setItem(storeType, JSON.stringify(newArrayForChats));
+        let newchatsDictionary = {};
+        newchatsDictionary[storeObject.newLocalChatId] = storeObject.chatMessages;
+        localStorage.setItem(storeType, JSON.stringify(newchatsDictionary));
       };
       return true;
     } else {
@@ -208,7 +197,10 @@ export function storeLocalChangeToBeSynced(storeType, storeObject) {
 };
 
 export function setUserSettingsSyncFlag(flagType) {
-  if (flagType === "selectedAiModelId") {
+  if (flagType === "userSettings") {
+    localStorage.setItem("userSettingsNeedsSync", "true");
+    return true;
+  } else if (flagType === "selectedAiModelId") {
     localStorage.setItem("selectedAiModelIdNeedsSync", "true");
     return true;
   } else {
@@ -228,20 +220,11 @@ export function removeLocalChangeToBeSynced(storeType, storeObject) {
       };
       return true;
     } else if (storeType === "newLocalChatToSync") {
-      let newChatsToSync = localStorage.getItem(storeType);
-      // newChatsToSync is a stringified array where each entry is a new chat to sync (as array of messages)
+      let newChatsToSync = localStorage.getItem(storeType); // newChatsToSync is a stringified object where each entry is a new chat to sync (key: local id, value: messages)
       if (newChatsToSync) {
-        let arrayOfChats = JSON.parse(newChatsToSync);
-        // We need to check whether this chat is already included in the ones to sync (to avoid duplicates)
-        // Remove if the current storeObject's first message content already exists in any stored chats
-        const existingChatIndex = arrayOfChats.findIndex(chat => 
-          chat.length > 0 && chat[0].content === storeObject.chatMessages[0].content
-        );
-        if (existingChatIndex !== -1) {
-          // If the chat exists, remove it
-          arrayOfChats.splice(existingChatIndex, 1);
-        };
-        localStorage.setItem(storeType, JSON.stringify(arrayOfChats));
+        let chatsDictionary = JSON.parse(newChatsToSync);
+        delete chatsDictionary[storeObject.newLocalChatId];
+        localStorage.setItem(storeType, JSON.stringify(chatsDictionary));
       };
       return true;
     } else {
@@ -261,11 +244,11 @@ export async function syncLocalChanges() {
   let chatsToUpdate = chatsToSyncStored ? JSON.parse(chatsToSyncStored) : {};
 
   const newChatsToSync = localStorage.getItem('newLocalChatToSync');
-  let chatsToCreate = newChatsToSync ? JSON.parse(newChatsToSync) : [];
+  let chatsToCreate = newChatsToSync ? JSON.parse(newChatsToSync) : {};
 
   // Temporary storage to handle failures
   let failedUpdates = {};
-  let failedCreations = [];
+  let failedCreations = {};
 
   console.info("syncing local changes to the backend");
   // Sync existing chats
@@ -286,18 +269,19 @@ export async function syncLocalChanges() {
   };
 
   // Sync new chats
-  for (const chatMessages of chatsToCreate) {
+  for (const newLocalChatId in chatsToCreate) {
+    const messagesFormattedForBackend = chatsToCreate[newLocalChatId];
     try {
-      const chatCreatedResponse = await storeState.backendActor.create_chat(chatMessages);
+      const chatCreatedResponse = await storeState.backendActor.create_chat(messagesFormattedForBackend);
       if (chatCreatedResponse.Err) {
         console.error("Error message syncing new chat: ", chatCreatedResponse.Err);
         // Store failed creations to retry later
-        failedCreations.push(chatMessages);
+        failedCreations[newLocalChatId] = messagesFormattedForBackend;
       };
     } catch (error) {
       console.error("Failed to create new chat due to an error: ", error);
       // Store failed creations to retry later
-      failedCreations.push(chatMessages);
+      failedCreations[newLocalChatId] = messagesFormattedForBackend;
     };
   };
 
@@ -307,21 +291,19 @@ export async function syncLocalChanges() {
   } else {
     localStorage.removeItem('localChatMessagesToSync');
   };
-  if (failedCreations.length > 0) {
+  if (Object.keys(failedCreations).length > 0) {
     localStorage.setItem('newLocalChatToSync', JSON.stringify(failedCreations));
   } else {
     localStorage.removeItem('newLocalChatToSync');
   };
 
   // Sync user settings changes
-  const aiModelFlagToSyncStored = localStorage.getItem("selectedAiModelIdNeedsSync");
-  if (aiModelFlagToSyncStored === "true") {
-    const selectedAiModelIdToSync = localStorage.getItem("selectedAiModelId");
-    if (selectedAiModelIdToSync) {
-      const updatedSettingsObject = {
-        selectedAiModelId: selectedAiModelIdToSync,
-      };
+  const userSettingsFlagToSyncStored = localStorage.getItem("userSettingsNeedsSync");
+  if (userSettingsFlagToSyncStored === "true") {
+    const userSettingsToSync = localStorage.getItem("userSettings");
+    if (userSettingsToSync) {
       try {
+        const updatedSettingsObject = JSON.parse(userSettingsToSync);
         const settingsUpdatedResponse = await storeState.backendActor.update_caller_settings(updatedSettingsObject);            
         // @ts-ignore
         if (settingsUpdatedResponse.Err) {
@@ -330,17 +312,17 @@ export async function syncLocalChanges() {
           // @ts-ignore
           throw new Error("Error syncing user settings: ", settingsUpdatedResponse.Err);
         } else {
-          localStorage.setItem("selectedAiModelIdNeedsSync", "false"); // sync successful
+          localStorage.setItem("userSettingsNeedsSync", "false"); // sync successful
         };
       } catch (error) {
         // @ts-ignore
         console.error("Error syncing settings: ", error);
         // Set flag to sync change later
-        setUserSettingsSyncFlag("selectedAiModelId");
+        setUserSettingsSyncFlag("userSettings");
       };
     } else {
-      // no AI model id to sync, so no sync necessary
-      localStorage.setItem("selectedAiModelIdNeedsSync", "false");
+      // no user settings to sync, so no sync necessary
+      localStorage.setItem("userSettingsNeedsSync", "false");
     };    
   };
 
