@@ -90,12 +90,12 @@
   };
 
   async function sendMessage(messageTextInput=null) {
-    messageGenerationInProgress = true;
     if(messageTextInput){
-      newMessageText = messageTextInput;
+      newMessageText = messageTextInput;    
     };
     const newMessage = newMessageText;
-    if(newMessage.trim() !== '') {
+    if(newMessage && newMessage.trim() !== '') {
+      messageGenerationInProgress = true;
       const newPrompt = newMessage.trim();
       const newMessageEntry = { role: 'user', content: newPrompt, name: 'You' };
       const messageHistoryWithPrompt = [...messages, newMessageEntry];
@@ -110,72 +110,72 @@
         messages = [...messages, { role: 'system', content: "There was an error unfortunately. Please try again.", name: 'DeVinci' }];
       };
       replyText = 'Thinking...';
-    };
-    messageGenerationInProgress = false;
-    // Store chat
-    if (saveChats && $store.isAuthed) {
-      // Get messages into format for backend
-      const messagesFormattedForBackend = formatMessagesForBackend(messages);
-      if(chatDisplayed) {
-        // Update chat
-        try {
-          const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend);
-          // @ts-ignore
-          if (chatUpdatedResponse.Err) {
+      messageGenerationInProgress = false;
+      // Store chat
+      if (saveChats && $store.isAuthed) {
+        // Get messages into format for backend
+        const messagesFormattedForBackend = formatMessagesForBackend(messages);
+        if(chatDisplayed) {
+          // Update chat
+          try {
+            const chatUpdatedResponse = await $store.backendActor.update_chat_messages(chatDisplayed.id, messagesFormattedForBackend);
             // @ts-ignore
-            console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
-            throw new Error("Err updating chat messages");
-          } else {
-            // Remove this chat from chats to sync to avoid duplicates
+            if (chatUpdatedResponse.Err) {
+              // @ts-ignore
+              console.error("Error message updating chat messages: ", chatUpdatedResponse.Err);
+              throw new Error("Err updating chat messages");
+            } else {
+              // Remove this chat from chats to sync to avoid duplicates
+              const syncObject = {
+                chatId: chatDisplayed.id,
+              };
+              removeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
+              syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            };
+          } catch (error) {
+            console.error("Error storing chat: ", error);
+            // Store locally and sync when back online
             const syncObject = {
               chatId: chatDisplayed.id,
+              chatMessages: messagesFormattedForBackend,
             };
-            removeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
-            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            storeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
           };
-        } catch (error) {
-          console.error("Error storing chat: ", error);
-          // Store locally and sync when back online
-          const syncObject = {
-            chatId: chatDisplayed.id,
-            chatMessages: messagesFormattedForBackend,
-          };
-          storeLocalChangeToBeSynced("localChatMessagesToSync", syncObject);
-        };
-      } else {
-        // New chat
-        try {
-          const chatCreatedResponse = await $store.backendActor.create_chat(messagesFormattedForBackend);
-          // @ts-ignore
-          if (chatCreatedResponse.Err) {
+        } else {
+          // New chat
+          try {
+            const chatCreatedResponse = await $store.backendActor.create_chat(messagesFormattedForBackend);
             // @ts-ignore
-            console.error("Error message creating new chat: ", chatCreatedResponse.Err);
-            throw new Error("Err creating new chat");
-          } else {
-            // @ts-ignore
-            let newChatId = chatCreatedResponse.Ok;
-            let newChatPreview = {
-              id: newChatId,
-              creationTime: now(),
-              firstMessagePreview: messages[0].content,
-              chatTitle: "",
+            if (chatCreatedResponse.Err) {
+              // @ts-ignore
+              console.error("Error message creating new chat: ", chatCreatedResponse.Err);
+              throw new Error("Err creating new chat");
+            } else {
+              // @ts-ignore
+              let newChatId = chatCreatedResponse.Ok;
+              let newChatPreview = {
+                id: newChatId,
+                creationTime: now(),
+                firstMessagePreview: messages[0].content,
+                chatTitle: "",
+              };
+              chatDisplayed = newChatPreview;
+              // Remove the just created chat from new chats to sync to avoid duplicates
+              const syncObject = {
+                newLocalChatId,
+                chatMessages: messagesFormattedForBackend,
+              };
+              removeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
+              syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
             };
-            chatDisplayed = newChatPreview;
-            // Remove the just created chat from new chats to sync to avoid duplicates
+          } catch (error) {
+            console.error("Error creating new chat: ", error);
             const syncObject = {
               newLocalChatId,
               chatMessages: messagesFormattedForBackend,
             };
-            removeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
-            syncLocalChanges(); // Sync any local changes (from offline usage), only works if back online
+            storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
           };
-        } catch (error) {
-          console.error("Error creating new chat: ", error);
-          const syncObject = {
-            newLocalChatId,
-            chatMessages: messagesFormattedForBackend,
-          };
-          storeLocalChangeToBeSynced("newLocalChatToSync", syncObject);
         };
       };
     };
@@ -304,7 +304,7 @@
         </button>
       {:else}
         <input bind:value={newMessageText} on:keydown={handleInputKeyDown} type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Message DeVinci..." />
-        <button class:has-text={newMessageText.length > 1}  type="submit" on:click={() => {sendMessage()}} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer bg-gray-100 hover:bg-gray-300">
+        <button class:has-text={newMessageText.length > 0}  type="submit" on:click={() => {sendMessage()}} class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer bg-gray-100 hover:bg-gray-300">
           <svg class="w-5 h-5 rotate-0 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
           </svg>
