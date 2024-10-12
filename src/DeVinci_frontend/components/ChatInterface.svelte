@@ -6,7 +6,7 @@
     chatModelIdInitiatedGlobal,
     downloadedModels
   } from "../store";
-  import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
+  import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
