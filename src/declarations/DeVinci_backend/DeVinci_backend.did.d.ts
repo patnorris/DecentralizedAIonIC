@@ -31,6 +31,10 @@ export type ChatsPreviewResult = { 'Ok' : Array<ChatPreview> } |
 export type ChatsResult = { 'Ok' : Array<Chat> } |
   { 'Err' : ApiError };
 export interface DeVinciBackend {
+  'add_to_user_knowledgebase' : ActorMethod<
+    [string, Embeddings],
+    MemoryVectorsStoredResult
+  >,
   'check_caller_has_memory_vectors_entry' : ActorMethod<
     [],
     MemoryVectorsCheckResult
@@ -45,6 +49,10 @@ export interface DeVinciBackend {
   'get_chat' : ActorMethod<[string], ChatResult>,
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
+  'search_user_knowledgebase' : ActorMethod<
+    [Embeddings],
+    SearchKnowledgeBaseResult
+  >,
   'store_user_chats_memory_vectors' : ActorMethod<
     [Array<MemoryVector>],
     MemoryVectorsStoredResult
@@ -62,10 +70,11 @@ export interface EmailSubscriber {
   'emailAddress' : string,
   'pageSubmittedFrom' : string,
 }
+export type Embeddings = Array<number>;
 export interface MemoryVector {
   'content' : string,
   'metadata' : MemoryVectorMetadata,
-  'embedding' : Array<number>,
+  'embedding' : Embeddings,
 }
 export interface MemoryVectorMetadata { 'id' : bigint }
 export type MemoryVectorsCheckResult = { 'Ok' : boolean } |
@@ -75,6 +84,8 @@ export type MemoryVectorsResult = { 'Ok' : Array<MemoryVector> } |
 export type MemoryVectorsStoredResult = { 'Ok' : boolean } |
   { 'Err' : ApiError };
 export interface Message { 'content' : string, 'sender' : string }
+export type SearchKnowledgeBaseResult = { 'Ok' : string } |
+  { 'Err' : ApiError };
 export interface SignUpFormInput {
   'emailAddress' : string,
   'pageSubmittedFrom' : string,

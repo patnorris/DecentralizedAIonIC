@@ -414,6 +414,42 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };   
   };
 
+  let knowledgebaseCanisterId : Text = "44ti7-fiaaa-aaaak-qitia-cai";
+  type VecDoc = { content : Text; embeddings : Types.Embeddings };
+  type VecQuery = { #Embeddings : Types.Embeddings };
+  type PlainDoc = { content : Text };
+
+  public shared({ caller }) func add_to_user_knowledgebase(content: Text, embeddings: Types.Embeddings) : async Types.MemoryVectorsStoredResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    
+    let knowledgebaseCanister = actor(knowledgebaseCanisterId): actor { add: (VecDoc) -> async Text };
+    let result = await knowledgebaseCanister.add({content=content ; embeddings=embeddings});
+
+    return #Ok(true);
+  };
+
+  public shared ({caller}) func search_user_knowledgebase(embeddings: Types.Embeddings) : async Types.SearchKnowledgeBaseResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    //search(vec_query: VecQuery, k: usize) -> Option<Vec<PlainDoc>>
+    let knowledgebaseCanister = actor(knowledgebaseCanisterId): actor { search: (VecQuery, Nat64) -> async ?[PlainDoc] };
+    let result = await knowledgebaseCanister.search(#Embeddings(embeddings), 1);
+    switch (result) {
+      case (null) { return #Err(#Other("none found")); };
+      case (?resultDocs) {
+        if (resultDocs.size() > 0) {
+          return #Ok(resultDocs[0].content);
+        };
+        return #Err(#Other("none found"));
+      };
+    };   
+  };
+
 // Email Signups from Website
   stable var emailSubscribersStorageStable : [(Text, Types.EmailSubscriber)] = [];
   var emailSubscribersStorage : HashMap.HashMap<Text, Types.EmailSubscriber> = HashMap.HashMap(0, Text.equal, Text.hash);

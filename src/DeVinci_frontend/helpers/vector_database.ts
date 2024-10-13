@@ -211,3 +211,47 @@ export const checkUserHasKnowledgeBase = async () => {
     console.error("Error in checkUserHasKnowledgeBase: ", error)
   };
 };
+
+export const addToUserKnowledgebase = async (newKnowledge) => {
+  const embeddingsModel = new TensorFlowEmbeddings();
+  const embeddingResult = await embeddingsModel.embedQuery(newKnowledge);
+  try {
+    /* const addInput = {
+      content: newKnowledge,
+      embedding: embeddingResult,
+    }; */
+    console.log("in addToUserKnowledgebase content ", newKnowledge);
+    console.log("in addToUserKnowledgebase embeddingResult ", embeddingResult);
+    const addResponse = await storeState.backendActor.add_to_user_knowledgebase(newKnowledge, embeddingResult);
+    console.log("in addToUserKnowledgebase addResponse ", addResponse);
+    if (addResponse.Ok) {
+      return addResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in addToUserKnowledgebase: ", error)
+  };
+};
+
+export const searchUserKnowledgebase = async (searchText) => {
+  const embeddingsModel = new TensorFlowEmbeddings();
+  const embeddingResult = await embeddingsModel.embedQuery(searchText);
+  try {
+    /* const searchInput = {
+      content: searchText,
+      embedding: embeddingResult,
+    }; */
+    console.log("in searchUserKnowledgebase searchText ", searchText);
+    console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
+    const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
+    console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
+    if (searchResponse.Ok) {
+      return searchResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in searchUserKnowledgebase: ", error)
+  };
+};

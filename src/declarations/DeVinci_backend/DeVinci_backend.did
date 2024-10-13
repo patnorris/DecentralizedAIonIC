@@ -26,6 +26,11 @@ type SignUpFormInput =
    emailAddress: text;
    pageSubmittedFrom: text;
  };
+type SearchKnowledgeBaseResult = 
+ variant {
+   Err: ApiError;
+   Ok: text;
+ };
 type Message = 
  record {
    content: text;
@@ -50,9 +55,10 @@ type MemoryVectorMetadata = record {id: int;};
 type MemoryVector = 
  record {
    content: text;
-   embedding: vec float64;
+   embedding: Embeddings;
    metadata: MemoryVectorMetadata;
  };
+type Embeddings = vec float64;
 type EmailSubscriber = 
  record {
    emailAddress: text;
@@ -61,6 +67,8 @@ type EmailSubscriber =
  };
 type DeVinciBackend = 
  service {
+   add_to_user_knowledgebase: (text, Embeddings) ->
+    (MemoryVectorsStoredResult);
    check_caller_has_memory_vectors_entry: () ->
     (MemoryVectorsCheckResult) query;
    create_chat: (vec Message) -> (ChatCreationResult);
@@ -76,6 +84,7 @@ type DeVinciBackend =
                                        EmailSubscriber;
                                      }) query;
    greet: (text) -> (text);
+   search_user_knowledgebase: (Embeddings) -> (SearchKnowledgeBaseResult);
    store_user_chats_memory_vectors: (vec MemoryVector) ->
     (MemoryVectorsStoredResult);
    submit_signup_form: (SignUpFormInput) -> (text);

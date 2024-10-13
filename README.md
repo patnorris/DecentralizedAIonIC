@@ -85,6 +85,7 @@ Deploy the code as canisters to the live IC where it's accessible via regular We
 ```bash
 dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
 dfx deploy --network development DeVinci_frontend
+dfx deploy --network development arcmindvectordb
 ```
 
 ### Testing Stage
