@@ -120,4 +120,4 @@ dist-ssr
 *checkpoint
 *-ubyte
 
-src/arcmindvectordb/target/**
+src/arcmindvectordb/**

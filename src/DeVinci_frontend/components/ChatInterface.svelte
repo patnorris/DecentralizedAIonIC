@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import {
     chatModelGlobal,
     activeChatGlobal,
     chatModelIdInitiatedGlobal,
+    downloadedModels
   } from "../store";
-  import InstallToastNotification from './InstallToastNotification.svelte'; //TODO: move
+  import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
     //storeEmbeddings,
@@ -15,18 +16,21 @@
   import SelectModel from "./SelectModel.svelte";
   import ChatBox from "./ChatBox.svelte";
 
-  import { userHasDownloadedModel } from "../helpers/localStorage";
+  import { determineInferenceParameters } from '../helpers/user_settings';
 
   // Reactive statement to check if the user has already downloaded at least one AI model
-  $: userHasDownloadedAtLeastOneModel = userHasDownloadedModel();
+  $: userHasDownloadedAtLeastOneModel = $downloadedModels.length > 0;
 
   const workerPath = './worker.ts';
 
   let showToast = false;
 
   function isPWAInstalled() {
+    // @ts-ignore
     return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
   };
+
+  let isChatBoxReady = false;
 
   onMount(() => {
     if (!userHasDownloadedAtLeastOneModel && !isPWAInstalled()) {
@@ -45,6 +49,12 @@
         }, 8000);
       };
     };
+  });
+
+  afterUpdate(() => {
+    if ($chatModelIdInitiatedGlobal && !isChatBoxReady) {
+      isChatBoxReady = true;
+    }
   });
 
   let vectorDbSearchTool;
@@ -120,7 +130,18 @@
         setLabel("debug-label", debugOutput); */
         let curMessage = "";
         let stepCount = 0;
-        const completion = await $chatModelGlobal.chat.completions.create({ stream: true, messages: prompt });
+        // determine inference parameters to use
+        const inferenceParameters = await determineInferenceParameters();
+        prompt.unshift({
+          role: "system",
+          content: inferenceParameters.system_prompt,
+        });
+        const completion = await $chatModelGlobal.chat.completions.create({
+          stream: true,
+          messages: prompt,
+          temperature: inferenceParameters.temperature,
+          max_tokens: inferenceParameters.max_tokens,
+        });
         /* debugOutput += " completion ";
         debugOutput += JSON.stringify(completion);
         setLabel("debug-label", debugOutput); */
@@ -196,17 +217,18 @@
   };
 </script>
 
-<div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-3xl mx-auto w-full">
+<div id="chatinterface" class="flex flex-col p-4 pb-24 max-w-4xl mx-auto w-full">
   {#if !$chatModelIdInitiatedGlobal}
     <SelectModel onlyShowDownloadedModels={true} autoInitiateSelectedModel={true}/>
-  {/if}
-  {#if userHasDownloadedAtLeastOneModel}
-    {#key $activeChatGlobal}  <!-- Element to rerender everything inside when activeChat changes (https://www.webtips.dev/force-rerender-components-in-svelte) -->
+  {:else if isChatBoxReady}
+    {#key $activeChatGlobal}
       <ChatBox modelCallbackFunction={getChatModelResponse} chatDisplayed={$activeChatGlobal} callbackSearchVectorDbTool={setVectorDbSearchTool}/>
     {/key}
+  {:else}
+    <p>Loading chat interface...</p>
   {/if}
 </div>
 
-{#if showToast}
-  <InstallToastNotification />
-{/if}
+{#key showToast}
+  <InstallToastNotification showToast={showToast} />
+{/key}

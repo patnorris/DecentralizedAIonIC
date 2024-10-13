@@ -55,7 +55,7 @@ clientsClaim();
 
 // Install event
 self.addEventListener('install', event => {
-  console.log('Service Worker installing.');
+  console.info('Service Worker installing.');
   /* event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -65,10 +65,10 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activated.');
+  console.info('Service Worker activated.');
 });
 
-// Use a CacheFirst strategy for all requests (i.e. all requests are cached)
+// Use a NetworkFirst strategy for all requests (i.e. all requests are cached)
 registerRoute(
   ({ request }) => true,
   new NetworkFirst({

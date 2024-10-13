@@ -5,7 +5,7 @@
     getLocallyStoredChatHistory,
     storeChatHistoryLocally,
     syncLocalChanges
-  } from "../helpers/localStorage";
+  } from "../helpers/local_storage";
 
   export let selectedChat;
 

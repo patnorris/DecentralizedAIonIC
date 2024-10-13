@@ -46,7 +46,13 @@ export const idlFactory = ({ IDL }) => {
     'Ok' : IDL.Vec(MemoryVector),
     'Err' : ApiError,
   });
-  const UserSettings = IDL.Record({ 'selectedAiModelId' : IDL.Text });
+  const UserSettings = IDL.Record({
+    'responseLength' : IDL.Text,
+    'temperature' : IDL.Float64,
+    'selectedAiModelId' : IDL.Text,
+    'systemPrompt' : IDL.Text,
+    'saveChats' : IDL.Bool,
+  });
   const UserSettingsResult = IDL.Variant({
     'Ok' : UserSettings,
     'Err' : ApiError,

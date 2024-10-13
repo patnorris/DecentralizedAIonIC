@@ -113,6 +113,15 @@ In case there are authentication issues, you could try this command
 dfx deploy --network ic --wallet "$(dfx identity --network ic get-wallet)"
 ```
 
+### Backup stage
+created due to high demand on subnets and failing deployments
+```bash
+dfx identity get-wallet --ic
+dfx identity --network backup set-wallet 3v5vy-2aaaa-aaaai-aapla-cai
+dfx deploy --network backup --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend --subnet qdvhd-os4o2-zzrdw-xrcv4-gljou-eztdp-bj326-e6jgr-tkhuc-ql6v2-yqe --with-cycles 1000000000000
+dfx deploy --network backup DeVinci_frontend --subnet qdvhd-os4o2-zzrdw-xrcv4-gljou-eztdp-bj326-e6jgr-tkhuc-ql6v2-yqe --with-cycles 1000000000000
+```
+
 # Credits
 Running DeVinci in your browser is enabled by the great open-source project [Web LLM](https://webllm.mlc.ai/)
 

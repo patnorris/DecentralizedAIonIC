@@ -10,7 +10,6 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
-import { getDefaultAiModelId } from "./helpers/ai_model_helpers";
 
 //__________Local vs Mainnet Development____________
 /* export const HOST =
@@ -31,6 +30,8 @@ export const device = result.device.model || 'Unknown Device';
 export let deviceType = result.device.type; // Will return 'mobile' for mobile devices, 'tablet' for tablets, and undefined for desktops
 let osName = result.os.name; // Get the operating system name
 
+export const currentModelName = writable<string>("No model selected");
+
 if (!deviceType) {
   deviceType = 'desktop';
 } else if (deviceType === 'mobile' || deviceType === 'tablet') {
@@ -50,22 +51,46 @@ export let chatModelGlobal = writable(null);
 export let chatModelDownloadedGlobal = writable(false);
 export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
-export let userSettings = writable(localStorage.getItem("userSettings"));
-userSettings.subscribe((value) => localStorage.setItem("userSettings", value));
-export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId"));
-selectedAiModelId.subscribe((value) => localStorage.setItem("selectedAiModelId", value));
-export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
-saveChatsUserSelection.subscribe((value) => localStorage.setItem("saveChatsUserSelection", value));
 
+export const temperatureDefaultSetting = 0.6;
+export const responseLengthDefaultSetting = 'Medium';
+export const systemPromptDefaultSetting = "You are a helpful, respectful and honest assistant.";
+export const saveChatsDefaultSetting = true;
+export let userSettings = writable(null);
+userSettings.subscribe((value) => localStorage.setItem("userSettings", JSON.stringify(value)));
+export let selectedAiModelId = writable(localStorage.getItem("selectedAiModelId") || null);
+let selectedAiModelIdValue = null;
+selectedAiModelId.subscribe((value) => {
+  selectedAiModelIdValue = value;
+  if (value === null) {
+    localStorage.removeItem("selectedAiModelId");
+  } else {
+    localStorage.setItem("selectedAiModelId", value);
+  };
+});
+
+export let saveChatsUserSelection = writable(localStorage.getItem("saveChatsUserSelection") === "false" ? false : true); // values: true for "save" or false for "doNotSave" with true as default
+let saveChatsUserSelectionValue = saveChatsDefaultSetting;
+saveChatsUserSelection.subscribe((value) => {
+  saveChatsUserSelectionValue = value;
+  // @ts-ignore
+  localStorage.setItem("saveChatsUserSelection", value)
+});
+
+export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
+downloadedModels.subscribe((value) => {
+  localStorage.setItem("downloadedAiModels", JSON.stringify(value));
+});
+
+export const currentExperienceId = writable(null);
 export let vectorStore = writable(null);
 
-export let installAppDeferredPrompt = writable(null);
+export let installAppDeferredPrompt = writable(null); // the installAppDeferredPrompt event cannot be stored across sessions
 
 let authClient : AuthClient;
 const APPLICATION_NAME = "DeVinci";
-const APPLICATION_LOGO_URL = "https://vdfyi-uaaaa-aaaai-acptq-cai.ic0.app/favicon.ico"; //TODO: change
-//"https%3A%2F%2Fx6occ%2Dbiaaa%2Daaaai%2Dacqzq%2Dcai.icp0.io%2Ffavicon.ico"
-//"https%3A%2F%2Fx6occ-biaaa-aaaai-acqzq-cai.icp0.io%2FFutureWebInitiative%5Fimg.png";
+const APPLICATION_LOGO_URL = "https://x6occ-biaaa-aaaai-acqzq-cai.icp0.io/devinci512.png";
+
 const AUTH_PATH = "/authenticate/?applicationName="+APPLICATION_NAME+"&applicationLogo="+APPLICATION_LOGO_URL+"#authorize";
 
 const days = BigInt(30);
@@ -121,22 +146,54 @@ export const createStore = ({
       } catch (error) {
         console.error("Error in get_caller_settings: ", error);
         if (localStorage.getItem("userSettings")) {
-          userSettings.set(localStorage.getItem("userSettings"));
+          try {
+            userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+          } catch (error) {
+            userSettings.set({ // default settings
+              temperature: temperatureDefaultSetting,
+              responseLength: responseLengthDefaultSetting,
+              saveChats: saveChatsUserSelectionValue,
+              selectedAiModelId: selectedAiModelIdValue,
+              systemPrompt: systemPromptDefaultSetting,
+            });        
+          };
+        } else {
+          userSettings.set({ // default settings
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
+          });
         };
         if (localStorage.getItem("selectedAiModelId")) {
           selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-        } else {
-          selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
-        };     
+        };
       };
     } else {
       if (localStorage.getItem("userSettings")) {
-        userSettings.set(localStorage.getItem("userSettings"));
+        try {
+          userSettings.set(JSON.parse(localStorage.getItem("userSettings")));            
+        } catch (error) {
+          userSettings.set({ // default settings
+            temperature: temperatureDefaultSetting,
+            responseLength: responseLengthDefaultSetting,
+            saveChats: saveChatsUserSelectionValue,
+            selectedAiModelId: selectedAiModelIdValue,
+            systemPrompt: systemPromptDefaultSetting,
+          });          
+        };
+      } else {
+        userSettings.set({ // default settings
+          temperature: temperatureDefaultSetting,
+          responseLength: responseLengthDefaultSetting,
+          saveChats: saveChatsUserSelectionValue,
+          selectedAiModelId: selectedAiModelIdValue,
+          systemPrompt: systemPromptDefaultSetting,
+        });
       };
       if (localStorage.getItem("selectedAiModelId")) {
         selectedAiModelId.set(localStorage.getItem("selectedAiModelId"));
-      } else {
-        selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
       };
     };
   };
@@ -158,7 +215,7 @@ export const createStore = ({
             : process.env.LOCAL_NFID_CANISTER + AUTH_PATH, */
         // Maximum authorization expiration is 30 days
         maxTimeToLive: days * hours * nanosecondsPerHour,
-        windowOpenerFeatures: 
+        windowOpenerFeatures:
           `left=${window.screen.width / 2 - 525 / 2}, `+
           `top=${window.screen.height / 2 - 705 / 2},` +
           `toolbar=0,location=0,menubar=0,width=525,height=705`,
@@ -197,7 +254,7 @@ export const createStore = ({
       isAuthed: "nfid",
     }));
 
-    console.log("nfid is authed");
+    console.info("nfid is authed");
   };
 
   const internetIdentityConnect = async () => {
@@ -253,7 +310,7 @@ export const createStore = ({
       isAuthed: "internetidentity",
     }));
 
-    console.log("internetidentity is authed");
+    console.info("internetidentity is authed");
   };
 
   const stoicConnect = () => {
@@ -296,7 +353,7 @@ export const createStore = ({
       isAuthed: "stoic",
     }));
 
-    console.log("stoic is authed");
+    console.info("stoic is authed");
   };
 
   const plugConnect = async () => {
@@ -310,7 +367,7 @@ export const createStore = ({
     const plugConnected = await window.ic?.plug?.isConnected();
     if (!plugConnected) {
       try {
-        console.log({
+        console.info({
           whitelist,
           host,
         });
@@ -318,7 +375,7 @@ export const createStore = ({
           whitelist,
           host,
         });
-        console.log("plug connected");
+        console.info("plug connected");
       } catch (e) {
         console.warn(e);
         return;
@@ -338,7 +395,7 @@ export const createStore = ({
         host,
       });
       result
-        ? console.log("agent created")
+        ? console.info("agent created")
         : console.warn("agent creation failed");
     };
     // check if createActor method is available
@@ -381,7 +438,7 @@ export const createStore = ({
       isAuthed: "plug",
     }));
 
-    console.log("plug is authed");
+    console.info("plug is authed");
   };
 
   const bitfinityConnect = async () => {
@@ -395,7 +452,7 @@ export const createStore = ({
     const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
     if (!bitfinityConnected) {
       try {
-        console.log({
+        console.info({
           whitelist,
           host,
         });
@@ -422,7 +479,7 @@ export const createStore = ({
         host,
       });
       result
-        ? console.log("agent created")
+        ? console.info("agent created")
         : console.warn("agent creation failed");
     }; */
     // check if createActor method is available
@@ -464,7 +521,7 @@ export const createStore = ({
       isAuthed: "bitfinity",
     }));
 
-    console.log("bitfinity is authed");
+    console.info("bitfinity is authed");
   };
 
   const disconnect = async () => {
@@ -476,29 +533,29 @@ export const createStore = ({
         await new Promise((resolve) => setTimeout(resolve, 500));
         const plugConnected = await window.ic?.plug?.isConnected();
         if (plugConnected) {
-          console.log("plug disconnect failed, trying once more");
+          console.info("plug disconnect failed, trying once more");
           await window.ic?.plug?.disconnect();
-        };      
+        };
       } catch (error) {
-        console.error("Plug disconnect error: ", error);      
+        console.error("Plug disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "stoic") {
       try {
         StoicIdentity.disconnect();
       } catch (error) {
-        console.error("StoicIdentity disconnect error: ", error);      
+        console.error("StoicIdentity disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "nfid") {
       try {
-        await authClient.logout();      
+        await authClient.logout();
       } catch (error) {
-        console.error("NFid disconnect error: ", error);       
+        console.error("NFid disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "internetidentity") {
       try {
-        await authClient.logout();      
+        await authClient.logout();
       } catch (error) {
-        console.error("Internet Identity disconnect error: ", error);       
+        console.error("Internet Identity disconnect error: ", error);
       };
     } else if (globalState.isAuthed === "bitfinity") {
       /* try {
@@ -507,11 +564,11 @@ export const createStore = ({
         await new Promise((resolve) => setTimeout(resolve, 500));
         const bitfinityConnected = await window.ic?.infinityWallet?.isConnected();
         if (bitfinityConnected) {
-          console.log("Bitfinity disconnect failed, trying once more");
+          console.info("Bitfinity disconnect failed, trying once more");
           await window.ic?.infinityWallet?.disconnect();
-        };      
+        };
       } catch (error) {
-        console.error("Bitfinity disconnect error: ", error);      
+        console.error("Bitfinity disconnect error: ", error);
       }; */
     };
 
@@ -529,24 +586,22 @@ export const createStore = ({
       const authClient = await AuthClient.create();
       if (await authClient.isAuthenticated()) {
         if (isAuthed === "nfid") {
-          console.log("NFID connection detected");
+          console.info("NFID connection detected");
           nfidConnect();
         } else if (isAuthed === "internetidentity") {
-          console.log("Internet Identity connection detected");
+          console.info("Internet Identity connection detected");
           internetIdentityConnect();
         } else if (isAuthed === "plug") {
-          console.log("Plug connection detected");
+          console.info("Plug connection detected");
           plugConnect();
         } else if (isAuthed === "bitfinity") {
-          console.log("Bitfinity connection detected");
+          console.info("Bitfinity connection detected");
           bitfinityConnect();
         } else if (isAuthed === "stoic") {
-          console.log("Stoic connection detected");
+          console.info("Stoic connection detected");
           stoicConnect();
         };
       };
-    } else {
-      selectedAiModelId.set(getDefaultAiModelId(deviceType === 'Android'));
     };
   };
 
