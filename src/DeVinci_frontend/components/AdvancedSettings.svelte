@@ -18,7 +18,9 @@
     if ($userSettings) {
       $userSettings.temperature = temperatureValue;
       await updateUserSettingsProperty("temperature", temperatureValue);
-    }
+    } else {
+      temperature = temperatureValue;
+    };
   };
 
   // Function to handle changes in response length
@@ -27,17 +29,23 @@
     if ($userSettings) {
       $userSettings.responseLength = responseLengthValue;
       await updateUserSettingsProperty("responseLength", responseLengthValue);
+    } else {
+      responseLength = responseLengthValue;
     }
   };
 
   // Function to update the system prompt
   async function updateSystemPrompt() {
     const inputElement = document.getElementById('systemPromptInput');
-    if (inputElement && $userSettings) {
+    if (inputElement) {
       const systemPromptValue = inputElement.value;
-      $userSettings.systemPrompt = systemPromptValue;
-      await updateUserSettingsProperty("systemPrompt", systemPromptValue);
-    }
+      if ($userSettings) {
+        $userSettings.systemPrompt = systemPromptValue;
+        await updateUserSettingsProperty("systemPrompt", systemPromptValue); 
+      } else {
+        systemPrompt = systemPromptValue;
+      };
+    };
   };
 
   // Function to reset system prompt to default
@@ -45,7 +53,9 @@
     if ($userSettings) {
       $userSettings.systemPrompt = systemPromptDefaultSetting;
       await updateSystemPrompt();
-    }
+    } else {
+      systemPrompt = systemPromptDefaultSetting;
+    };
   };
 </script>
 
