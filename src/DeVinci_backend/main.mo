@@ -343,7 +343,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
         // No settings stored yet, return default
         let userSettings : Types.UserSettings = {
           temperature = 0.6;
-          responseLength = "Medium";
+          responseLength = "Long";
           saveChats = true;
           selectedAiModelId = "";
           systemPrompt = "You are a helpful, respectful and honest assistant.";

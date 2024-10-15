@@ -53,7 +53,7 @@ export let chatModelIdInitiatedGlobal = writable(null);
 export let activeChatGlobal = writable(null);
 
 export const temperatureDefaultSetting = 0.6;
-export const responseLengthDefaultSetting = 'Medium';
+export const responseLengthDefaultSetting = 'Long';
 export const systemPromptDefaultSetting = "You are a helpful, respectful and honest assistant.";
 export const saveChatsDefaultSetting = true;
 export let userSettings = writable(null);
