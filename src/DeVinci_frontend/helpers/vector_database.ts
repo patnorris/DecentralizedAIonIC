@@ -212,8 +212,13 @@ export const checkUserHasKnowledgeBase = async () => {
   };
 };
 
+let embeddingsModel = new TensorFlowEmbeddings();
+
 export const addToUserKnowledgebase = async (newKnowledge) => {
-  const embeddingsModel = new TensorFlowEmbeddings();
+  if (!embeddingsModel) {
+    embeddingsModel = new TensorFlowEmbeddings();
+  };
+
   const embeddingResult = await embeddingsModel.embedQuery(newKnowledge);
   try {
     /* const addInput = {
@@ -235,7 +240,10 @@ export const addToUserKnowledgebase = async (newKnowledge) => {
 };
 
 export const searchUserKnowledgebase = async (searchText) => {
-  const embeddingsModel = new TensorFlowEmbeddings();
+  if (!embeddingsModel) {
+    embeddingsModel = new TensorFlowEmbeddings();
+  };
+  
   const embeddingResult = await embeddingsModel.embedQuery(searchText);
   try {
     /* const searchInput = {
