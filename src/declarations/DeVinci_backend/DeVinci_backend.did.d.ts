@@ -82,7 +82,13 @@ export interface SignUpFormInput {
 export interface UpdateChatObject { 'id' : string, 'chatTitle' : string }
 export type UpdateUserSettingsResult = { 'Ok' : boolean } |
   { 'Err' : ApiError };
-export interface UserSettings { 'selectedAiModelId' : string }
+export interface UserSettings {
+  'responseLength' : string,
+  'temperature' : number,
+  'selectedAiModelId' : string,
+  'systemPrompt' : string,
+  'saveChats' : boolean,
+}
 export type UserSettingsResult = { 'Ok' : UserSettings } |
   { 'Err' : ApiError };
 export interface _SERVICE extends DeVinciBackend {}

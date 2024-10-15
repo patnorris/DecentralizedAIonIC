@@ -72,37 +72,46 @@ const pwaManifest = {
   display: "standalone",
   scope: "/",
   start_url: "/",
-  background_color: "#3367D6",
-  theme_color: "#3367D6",
+  background_color: "#b0c4de",
+  theme_color: "#b0c4de",
+  lang: "en",
+  dir: "ltr",
+  orientation: "any",
+  categories: ["productivity", "ai", "chatbot"], 
   icons: [
     {
-      src: './FutureWebInitiative_img192.png',
+      src: './devinci192.png',
       sizes: '192x192',
       type: 'image/png',
     },
     {
-      src: './FutureWebInitiative_img512.png',
+      src: './devinci512.png',
       sizes: '512x512',
       type: 'image/png',
+      purpose: 'any maskable'
     },
     {
-      src: './FutureWebInitiative_img512.png',
-      sizes: '512x512',
-      type: 'image/png',
-      purpose: 'any'
-    },
-    {
-      src: './FutureWebInitiative_img512.png',
-      sizes: '512x512',
-      type: 'image/png',
-      purpose: 'maskable'
-    },
-    {
-      src: "./FutureWebInitiative_img.png",
+      src: "./devinci1024.png", 
       type: "image/png",
-      sizes: "721x721"
+      sizes: "1024x1024"
     },
   ],
+  screenshots: [
+    {
+      src: "./meta.jpg",
+      type: "image/jpg",
+      sizes: "1600x840"
+    },
+  ],
+  shortcuts: [
+    {
+      name: "Start New Chat",
+      short_name: "New Chat",
+      description: "Start a new AI chat session",
+      url: "/",
+      icons: [{ src: "./devinci192.png", sizes: "192x192" }]
+    }
+  ]
 };
 
 const pwaOptions = {
