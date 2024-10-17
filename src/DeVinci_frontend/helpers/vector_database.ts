@@ -214,6 +214,31 @@ export const checkUserHasKnowledgeBase = async () => {
 
 let embeddingsModel = new TensorFlowEmbeddings();
 
+export const searchUserKnowledgebase = async (searchText) => {
+  if (!embeddingsModel) {
+    embeddingsModel = new TensorFlowEmbeddings();
+  };
+  
+  const embeddingResult = await embeddingsModel.embedQuery(searchText);
+  try {
+    /* const searchInput = {
+      content: searchText,
+      embedding: embeddingResult,
+    }; */
+    console.log("in searchUserKnowledgebase searchText ", searchText);
+    console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
+    const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
+    console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
+    if (searchResponse.Ok) {
+      return searchResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in searchUserKnowledgebase: ", error)
+  };
+};
+
 export const addToUserKnowledgebase = async (newKnowledge) => {
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
@@ -239,27 +264,54 @@ export const addToUserKnowledgebase = async (newKnowledge) => {
   };
 };
 
-export const searchUserKnowledgebase = async (searchText) => {
+export const addPdfToUserKnowledgebase = async (pathToPdf) => {
+  if (!pathToPdf) {
+    return;
+  };
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
   };
-  
-  const embeddingResult = await embeddingsModel.embedQuery(searchText);
+
+  const start = performance.now() / 1000;
+
   try {
-    /* const searchInput = {
-      content: searchText,
-      embedding: embeddingResult,
-    }; */
-    console.log("in searchUserKnowledgebase searchText ", searchText);
-    console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
-    const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
-    console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
-    if (searchResponse.Ok) {
-      return searchResponse.Ok;
-    } else {
-      return false;
+    const existingDataEntries = await getDataEntries(pathToPdf);
+    console.log("in addPdfToUserKnowledgebase existingDataEntries ", existingDataEntries);
+
+    const textsToEmbed = existingDataEntries.map(
+      (dataEntry) => JSON.stringify(dataEntry)
+    );
+    console.log("in addPdfToUserKnowledgebase textsToEmbed ", textsToEmbed);
+    let promises = [];
+    for (const text of textsToEmbed) {
+      console.log("in addPdfToUserKnowledgebase content ", text);
+      // Generate embeddings and then push each backend actor call to the promises array
+      const promise = embeddingsModel.embedQuery(text).then(embeddingResult => {
+        console.log("in addPdfToUserKnowledgebase embeddingResult ", embeddingResult);
+        return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
+      }).catch(error => {
+        console.error("Error processing text: ", text, error);
+        //return { error, text }; // Return an object indicating an error occurred along with the text
+      });
+      promises.push(promise);
     };
+
+    const results = await Promise.allSettled(promises);
+    results.forEach(result => {
+      if (result.status === 'fulfilled') {
+        console.log("in addPdfToUserKnowledgebase result ", result.value);
+      } else {
+        console.error("Failed to process: ", result.reason);
+      }
+    });
   } catch (error) {
-    console.error("Error in searchUserKnowledgebase: ", error)
+    console.error("Error in addPdfToUserKnowledgebase: ", error);
+    return false;
   };
+
+  const end = performance.now() / 1000;
+  console.log(`Debug: generateEmbeddings took ${(end - start).toFixed(2)}s`);
+  return true;
 };
+
+

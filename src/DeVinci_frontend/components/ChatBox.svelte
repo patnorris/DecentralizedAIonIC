@@ -209,11 +209,11 @@
       showToast = true;
       toastMessage = "Please select a PDF file.";
     }
-  }
+  };
 
   function closeToast() {
     showToast = false;
-  }
+  };
 
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
