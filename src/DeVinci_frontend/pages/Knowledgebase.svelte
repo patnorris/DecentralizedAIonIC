@@ -98,7 +98,7 @@
   </label>
   <input id="pdf_chat" type="file" accept=".pdf" on:change={uploadPdfToKnowledgeBase} class="hidden text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 ml-2">
   {#if loadingKnowledgeDatabase}
-    <p class="font-semibold text-gray-900">Loading your content into the local Knowledge Base for you...</p>
+    <p class="font-semibold text-gray-900">Loading the content into your Knowledge Base for you...</p>
     <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
   {/if}
 </div>
