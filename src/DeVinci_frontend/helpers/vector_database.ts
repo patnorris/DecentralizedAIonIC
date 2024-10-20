@@ -286,23 +286,16 @@ export const addPdfToUserKnowledgebase = async (pathToPdf) => {
     for (const text of textsToEmbed) {
       console.log("in addPdfToUserKnowledgebase content ", text);
       // Generate embeddings and then push each backend actor call to the promises array
-      const promise = embeddingsModel.embedQuery(text).then(embeddingResult => {
-        console.log("in addPdfToUserKnowledgebase embeddingResult ", embeddingResult);
-        return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
-      }).catch(error => {
-        console.error("Error processing text: ", text, error);
-        //return { error, text }; // Return an object indicating an error occurred along with the text
-      });
-      promises.push(promise);
+      promises.push(embedAndAddChunk(text, embeddingsModel));
     };
 
     const results = await Promise.allSettled(promises);
     results.forEach(result => {
       if (result.status === 'fulfilled') {
-        console.log("in addPdfToUserKnowledgebase result ", result.value);
+        console.info("in addPdfToUserKnowledgebase result ", result.value);
       } else {
         console.error("Failed to process: ", result.reason);
-      }
+      };
     });
   } catch (error) {
     console.error("Error in addPdfToUserKnowledgebase: ", error);
@@ -313,5 +306,57 @@ export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   console.log(`Debug: generateEmbeddings took ${(end - start).toFixed(2)}s`);
   return true;
 };
+
+export const addTextToUserKnowledgebase = async (pathToTextFile) => {
+  if (!pathToTextFile) {
+    return;
+  };
+  if (!embeddingsModel) {
+    embeddingsModel = new TensorFlowEmbeddings();
+  };
+
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    try {
+      const text = e.target.result;
+      const chunkSize = 1000; // Define chunk size as per your requirement
+      const regex = new RegExp(`.{1,${chunkSize}}`, 'g'); // Regex to split the text into chunks
+      const chunks = text.match(regex) || [];
+      
+      let promises = [];
+      for (let chunk of chunks) {
+        promises.push(embedAndAddChunk(chunk, embeddingsModel));
+      };
+
+      const results = await Promise.allSettled(promises);
+      results.forEach(result => {
+        if (result.status === 'fulfilled') {
+          console.info('Embedding success:', result.value);
+        } else {
+          console.error('Failed to process chunk:', result.reason);
+        };
+      });
+    } catch (error) {
+      console.error('Error processing chunks:', error);
+    };
+  };
+
+  reader.onerror = (error) => {
+    console.error('Error reading file:', error);
+  };
+
+  reader.readAsText(pathToTextFile); // Initiates reading the text file
+};
+
+const embedAndAddChunk = async (text, embeddingsModel) => {
+  // Generate embeddings for a chunk of text
+  return embeddingsModel.embedQuery(text).then(embeddingResult => {
+    console.log("in embedAndAddChunk embeddingResult ", embeddingResult);
+    // and add the chunk to the vector database
+    return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
+  });
+};
+
 
 
