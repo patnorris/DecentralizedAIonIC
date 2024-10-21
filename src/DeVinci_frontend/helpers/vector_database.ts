@@ -307,52 +307,39 @@ export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   return true;
 };
 
-export const addTextToUserKnowledgebase = async (pathToTextFile) => {
-  if (!pathToTextFile) {
+export const addTextFileToUserKnowledgebase = async (textFile) => {
+  if (!textFile) {
     return;
   };
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
   };
 
-  const reader = new FileReader();
-
-  reader.onload = async (e) => {
-    try {
-      const text = e.target.result;
-      const chunkSize = 1000; // Define chunk size as per your requirement
-      const regex = new RegExp(`.{1,${chunkSize}}`, 'g'); // Regex to split the text into chunks
-      const chunks = text.match(regex) || [];
-      
-      let promises = [];
-      for (let chunk of chunks) {
-        promises.push(embedAndAddChunk(chunk, embeddingsModel));
+  try {
+    const blob = textFile;
+    const chunkSize = 1000;
+    let promises = [];
+    for (let start = 0; start < blob.size; start += chunkSize) {
+      const chunk = blob.slice(start, start + chunkSize);
+      const chunkText = await chunk.text();
+      promises.push(embedAndAddChunk(chunkText, embeddingsModel));
+    };  
+    const results = await Promise.allSettled(promises);
+    results.forEach(result => {
+      if (result.status === 'fulfilled') {
+        console.info('Embedding success:', result.value);
+      } else {
+        console.error('Failed to process chunk:', result.reason);
       };
-
-      const results = await Promise.allSettled(promises);
-      results.forEach(result => {
-        if (result.status === 'fulfilled') {
-          console.info('Embedding success:', result.value);
-        } else {
-          console.error('Failed to process chunk:', result.reason);
-        };
-      });
-    } catch (error) {
-      console.error('Error processing chunks:', error);
-    };
+    });
+  } catch (error) {
+    console.error('Error processing chunks:', error);
   };
-
-  reader.onerror = (error) => {
-    console.error('Error reading file:', error);
-  };
-
-  reader.readAsText(pathToTextFile); // Initiates reading the text file
 };
 
 const embedAndAddChunk = async (text, embeddingsModel) => {
   // Generate embeddings for a chunk of text
   return embeddingsModel.embedQuery(text).then(embeddingResult => {
-    console.log("in embedAndAddChunk embeddingResult ", embeddingResult);
     // and add the chunk to the vector database
     return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
   });

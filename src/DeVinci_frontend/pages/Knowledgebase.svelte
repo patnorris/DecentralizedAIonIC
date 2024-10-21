@@ -3,7 +3,7 @@
 
   import {
     addPdfToUserKnowledgebase,
-    addTextToUserKnowledgebase,
+    addTextFileToUserKnowledgebase,
     addToUserKnowledgebase,
     searchUserKnowledgebase
   } from "../helpers/vector_database";
@@ -72,7 +72,7 @@
       if (fileContentType === 'application/pdf') {
         await addPdfToUserKnowledgebase(pathToUserFile);
       } else if (fileContentType === 'text/plain') {
-        await addTextToUserKnowledgebase(pathToUserFile);
+        await addTextFileToUserKnowledgebase(file);
       };
 
       loadingKnowledgeDatabase = false;
