@@ -77,6 +77,12 @@ saveChatsUserSelection.subscribe((value) => {
   localStorage.setItem("saveChatsUserSelection", value)
 });
 
+export let useKnowledgeBase = writable(localStorage.getItem("useKnowledgeBase") === "true" ? true : false);
+useKnowledgeBase.subscribe((value) => {
+  // @ts-ignore
+  localStorage.setItem("useKnowledgeBase", value)
+});
+
 export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
 downloadedModels.subscribe((value) => {
   localStorage.setItem("downloadedAiModels", JSON.stringify(value));

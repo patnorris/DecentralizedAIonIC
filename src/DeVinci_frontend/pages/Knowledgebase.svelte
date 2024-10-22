@@ -102,6 +102,9 @@
   <div class="justify-between m-4 mt-0 px-4 py-3 text-gray-700 border border-gray-200 rounded-lg sm:flex sm:px-5 bg-gray-50">
     {searchResult}
   </div>
+{:else if searchingKnowledgeInProgress}
+  <p class="font-semibold text-gray-900">Searching in your Knowledge Base for you...</p>
+  <img class="h-12 mx-auto p-1 block" src={spinner} alt="loading animation" />
 {/if}
 <div class="flex items-center px-3 p-2 rounded-full bg-gray-200">
   <input bind:value={newKnowledgeText} type="text" id="chat" autofocus class="block mx-4 p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:outline-none focus:ring-[#24292F]/50 " placeholder="Add to your knowledgebase..." />
