@@ -414,8 +414,8 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };   
   };
 
-  let knowledgebaseCanisterId : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
-  // let knowledgebaseCanisterId : Text = "44ti7-fiaaa-aaaak-qitia-cai"; // for development, TODO: dynamically chose correct address for stage/local dev 
+  //let knowledgebaseCanisterId : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // for local dev
+  let knowledgebaseCanisterId : Text = "44ti7-fiaaa-aaaak-qitia-cai"; // for development, TODO: dynamically chose correct address for stage/local dev 
   type VecDoc = { content : Text; embeddings : Types.Embeddings };
   type VecQuery = { #Embeddings : Types.Embeddings };
   type PlainDoc = { content : Text };
