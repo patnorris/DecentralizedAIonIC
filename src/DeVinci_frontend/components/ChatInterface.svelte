@@ -87,7 +87,10 @@
       /* debugOutput = "###in getChatModelResponse###";
       debugOutput += JSON.stringify(prompt);
       setLabel("debug-label", debugOutput); */
-      if ((vectorDbSearchTool && useSessionVectorDb) || useKnowledgeBase) {
+      console.log("getChatModelResponse vectorDbSearchTool ", vectorDbSearchTool);
+      console.log("getChatModelResponse useSessionVectorDb ", useSessionVectorDb);
+      console.log("getChatModelResponse $useKnowledgeBase ", $useKnowledgeBase);
+      if ((vectorDbSearchTool && useSessionVectorDb) || $useKnowledgeBase) {
         /* debugOutput += " useSessionVectorDb ";
         setLabel("debug-label", debugOutput); */
         // Add content from local knowledge base if activated
@@ -114,7 +117,7 @@
               setLabel("debug-label", debugOutput);  */
             };
           };
-          if (useKnowledgeBase) {
+          if ($useKnowledgeBase) {
             try {
               let userKnowledgeBaseResponse = await searchUserKnowledgebase(promptContent);
               console.log("userKnowledgeBaseResponse ", userKnowledgeBaseResponse);
@@ -144,7 +147,7 @@
           setLabel("debug-label", debugOutput);   */
         };
       };
-
+      console.log("final prompt ", prompt);
       try {
         /* debugOutput += " final prompt ";
         debugOutput += JSON.stringify(prompt);
