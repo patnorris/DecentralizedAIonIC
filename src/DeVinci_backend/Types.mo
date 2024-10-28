@@ -180,6 +180,49 @@ module {
 
   public type SearchKnowledgeBaseResult = Result<Text, ApiError>;
 
+  public type AuthRecord = {
+    auth : Text;
+  };
+
+  public type AuthRecordResult = Result<AuthRecord, ApiError>;
+  
+  public type CanisterCreationConfigurationInput = {
+    canisterType : CanisterType;
+  };
+
+  public type CanisterCreationConfiguration = {
+    canisterType : CanisterType;
+    owner: Principal;
+  };
+
+  public type CanisterCreationRecord = {
+    creationResult : Text;
+    newCanisterId : Text;
+  };
+
+  public type CanisterCreationResult = Result<CanisterCreationRecord, ApiError>;
+
+  // Info stored about canisters per user
+  public type UserCanisterEntry = {
+    userCanister : CanisterInfo;
+  };
+
+  public type CanisterType = {
+    #Knowledgebase;
+  };
+
+  public type CanisterInfo = {
+    canisterType : CanisterType;
+    creationTimestamp : Nat64;
+    canisterAddress : Text;
+  };
+
+  public type AvailableCanistersRecord = {
+    canisterType: CanisterType;
+  };
+
+  public type UserCanistersEntryResult = Result<UserCanisterEntry, ApiError>;
+
   public type SignUpFormInput = {
     emailAddress: Text; // provided by user on signup
     pageSubmittedFrom: Text; // capture for analytics

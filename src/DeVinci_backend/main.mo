@@ -30,7 +30,7 @@ import Blob "mo:base/Blob";
 
 
 
-shared actor class DeVinciBackend(custodian: Principal) = Self {
+shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_canister_id : Text) = Self {
   stable var custodians = List.make<Principal>(custodian);
 
 // TODO: instead add functions to manage cycles balance and gather stats
@@ -451,6 +451,195 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };   
   };
 
+// User created canisters
+  let KNOWLEDGEBASE_CREATION_CANISTER_ID : Text = _knowledgebase_creation_canister_id;
+
+  let knowledgebaseCreationCanister = actor (KNOWLEDGEBASE_CREATION_CANISTER_ID) : actor {
+      amiController() : async Types.AuthRecordResult;
+      createCanister : (configurationInput : Types.CanisterCreationConfiguration) -> async Types.CanisterCreationResult;
+  };
+
+  // Map each user Principal to a record with the info about the created canisters
+  private var createdCanistersByUser = HashMap.HashMap<Principal, [Types.UserCanisterEntry]>(0, Principal.equal, Principal.hash);
+  stable var createdCanistersByUserStable : [(Principal, [Types.UserCanisterEntry])] = [];
+
+  public shared (msg) func whoami() : async Principal {
+    return msg.caller;
+  };
+
+  public shared ({caller}) func amiController() : async Types.AuthRecordResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    /* if (not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    }; */ //TODO
+    let authRecord = { auth = "You are a controller of this canister." };
+    return #Ok(authRecord);
+  };
+
+  // Admin function to verify that this canister is a controller of model_creation_canister and frontend_creation_canister
+  public shared ({caller}) func isControllerLogicOk() : async Types.AuthRecordResult {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+		};
+    /* if (not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    }; */ //TODO
+    try {
+      let authRecordResultKnowledgebaseCanister : Types.AuthRecordResult = await knowledgebaseCreationCanister.amiController();
+      switch (authRecordResultKnowledgebaseCanister) {
+          case (#Err(authErrorKnowledgebaseCanister)) { return authRecordResultKnowledgebaseCanister; };
+          case (#Ok(authSuccessKnowledgebaseCanister)) {
+            return authRecordResultKnowledgebaseCanister;
+          };
+      };
+    } catch (error : Error) {
+      // Handle any other errors
+      return #Err(#Other("Failed to retrieve controller info"));
+    };
+  };
+
+  private func verifyUserRequest(user : Principal, canisterType : Types.CanisterType) : Bool {
+    switch(canisterType) {
+      case (#Knowledgebase) {
+        // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
+        switch(createdCanistersByUser.get(user)) {
+          case (?existingUserEntries) {
+            return false; // only one entry per user
+          };
+          case _ { return true; }; // no entry yet
+        };
+      };
+      case _ { return false; }; // Invalid request
+    };
+  };
+
+  private func getCanisterInfo(user : Principal, canisterType : Types.CanisterType) : ?Types.CanisterInfo {
+    switch(canisterType) {
+      case (#Knowledgebase) {
+        switch(createdCanistersByUser.get(user)) {
+          case (?existingUserEntries) {
+            for (userEntry in existingUserEntries.vals()) {
+              if (userEntry.userCanister.canisterType == canisterType) {
+                return ?userEntry.userCanister;
+              };
+            };
+            return null;
+          };
+          case _ { return null; }; // no entries yet
+        };
+      };
+      case _ { return null; }; // Invalid request
+    };
+  };
+
+  private func addUserEntry(user : Principal, newUserEntry : Types.UserCanisterEntry) : Bool {
+    switch(createdCanistersByUser.get(user)) {
+      case (?existingUserEntries) {
+        createdCanistersByUser.put(user, Array.append<Types.UserCanisterEntry>(existingUserEntries, [newUserEntry]));
+        return true;
+      };
+      case _ {
+        // no entries yet
+        createdCanistersByUser.put(user, [newUserEntry]);
+        return true;
+      };
+    };
+  };
+
+  public shared (msg) func createNewCanister(configurationInput : Types.CanisterCreationConfigurationInput) : async Types.CanisterCreationResult {
+    if (Principal.isAnonymous(msg.caller)) {
+        return #Err(#Unauthorized);
+    };
+
+    switch(configurationInput.canisterType) {
+      case (#Knowledgebase) {
+        // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
+        let verifyUserRequestResult = verifyUserRequest(msg.caller, #Knowledgebase);
+        if (not verifyUserRequestResult) {
+          return #Err(#Other("Your request could not be verified. Please note that only one canister pair per user may be created."));
+        };
+        let canisterConfiguration : Types.CanisterCreationConfiguration = {
+          canisterType : Types.CanisterType = configurationInput.canisterType;
+          owner: Principal = msg.caller;
+        };
+        let createCanisterResult : Types.CanisterCreationResult = await knowledgebaseCreationCanister.createCanister(canisterConfiguration);
+        
+        switch (createCanisterResult) {
+          case (#Err(createCanisterError)) {
+            return createCanisterResult;
+          };
+          case (#Ok(createCanisterSuccess)) {
+            // Create new entry for user
+            let newCanisterInfo : Types.CanisterInfo = {
+              canisterType : Types.CanisterType = #Knowledgebase;
+              creationTimestamp : Nat64 = Nat64.fromNat(Int.abs(Time.now()));
+              canisterAddress : Text = createCanisterSuccess.newCanisterId;
+            };
+            let userEntry : Types.UserCanisterEntry = {
+              userCanister = newCanisterInfo;
+            };
+            let addEntryResult = addUserEntry(msg.caller, userEntry);
+            if (addEntryResult) {
+              return createCanisterResult;
+            } else {
+              return #Err(#Other("There was an error adding the canister entry for the user"));
+            };                        
+          };
+        };
+      };
+      case _ { 
+        return #Err(#Other("canisterType must be #Knowledgebase"));
+      };
+    };       
+  };
+
+  public query (msg) func getUserCanistersEntry(lookupInput : Types.AvailableCanistersRecord) : async Types.UserCanistersEntryResult {
+    if (Principal.isAnonymous(msg.caller)) {
+        return #Err(#Unauthorized);
+    };
+
+    switch(createdCanistersByUser.get(msg.caller)) {
+      case (?existingUserEntries) {
+        for (userEntry in existingUserEntries.vals()) {
+          if (userEntry.userCanister.canisterType == lookupInput.canisterType) {
+            return #Ok(userEntry);
+          };
+        };
+        return #Err(#Other("No canister of this type for the user yet."));
+      };
+      case _ { return #Err(#Other("No entry yet")); };
+    };
+  };
+
+  // Admin functions TODO
+// Use with caution!
+    /* public shared (msg) func deleteUserCanistersEntriesAdmin(user : Text) : async Bool {
+        if (Principal.isAnonymous(msg.caller)) {
+            return false;
+        };
+        if (not Principal.isController(msg.caller)) {
+            return false;
+        };
+
+        creationsByUser.delete(Principal.fromText(user));
+        return true;
+    };
+
+    public query (msg) func getAllUserCanistersEntriesAdmin() : async ?[(Principal, [Types.UserCreationEntry])] {
+        if (Principal.isAnonymous(msg.caller)) {
+            return null;
+        };
+        if (not Principal.isController(msg.caller)) {
+            return null;
+        };
+
+        return ?Iter.toArray(creationsByUser.entries());
+    }; */
+
 // Email Signups from Website
   stable var emailSubscribersStorageStable : [(Text, Types.EmailSubscriber)] = [];
   var emailSubscribersStorage : HashMap.HashMap<Text, Types.EmailSubscriber> = HashMap.HashMap(0, Text.equal, Text.hash);
@@ -590,6 +779,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     chatsStorageStable := Iter.toArray(chatsStorage.entries());
     emailSubscribersStorageStable := Iter.toArray(emailSubscribersStorage.entries());
     userMemoryVectorsStorageStable := Iter.toArray(userMemoryVectorsStorage.entries());
+    createdCanistersByUserStable := Iter.toArray(createdCanistersByUser.entries());
   };
 
   system func postupgrade() {
@@ -603,5 +793,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     emailSubscribersStorageStable := [];
     userMemoryVectorsStorage := HashMap.fromIter(Iter.fromArray(userMemoryVectorsStorageStable), userMemoryVectorsStorageStable.size(), Principal.equal, Principal.hash);
     userMemoryVectorsStorageStable := [];
+    createdCanistersByUser := HashMap.fromIter(Iter.fromArray(createdCanistersByUserStable), createdCanistersByUserStable.size(), Principal.equal, Principal.hash);
+    createdCanistersByUserStable := [];
   };
 };
