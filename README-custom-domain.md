@@ -6,6 +6,21 @@ One time steps to use the custom domain `devinci.onicai.com` :
 
 1. Define the DNS records as described in step 1 of [IC Custom Domain Docs](https://internetcomputer.org/docs/current/developer-docs/production/custom-domain/#custom-domains-on-the-boundary-nodes)
 
+   You can verify everything is propagating with "dig":
+   ```
+   % dig CNAME devinci.onicai.com
+   ;; ANSWER SECTION:
+   devinci.onicai.com.     3600    IN      CNAME   icp1.io.
+
+   % dig CNAME _acme-challenge.devinci.onicai.com
+   ;; ANSWER SECTION:
+   _acme-challenge.devinci.onicai.com. 3600 IN CNAME _acme-challenge.devinci.onicai.com.icp2.io.
+
+   % dig TXT _canister-id.devinci.onicai.com
+   ;; ANSWER SECTION:
+   _canister-id.devinci.onicai.com. 3600 IN TXT    "x6occ-biaaa-aaaai-acqzq-cai"
+   ```
+
 2. Created this file: `src/DeVinci_frontend/assets/.well-known/ic-domains`:
 
   ```
