@@ -4,19 +4,19 @@
 
 One time steps to use the custom domain `devinci.onicai.com` :
 
-- Define the DNS records as described in step 1 of [IC Custom Domain Docs](https://internetcomputer.org/docs/current/developer-docs/production/custom-domain/#custom-domains-on-the-boundary-nodes)
+1. Define the DNS records as described in step 1 of [IC Custom Domain Docs](https://internetcomputer.org/docs/current/developer-docs/production/custom-domain/#custom-domains-on-the-boundary-nodes)
 
-- Created this file: `src/DeVinci_frontend/assets/.well-known/ic-domains`:
+2. Created this file: `src/DeVinci_frontend/assets/.well-known/ic-domains`:
 
   ```
   devinci.onicai.com
   ```
 
-- After build, verify that files are included in `dist/.well-known`
+3. After build, verify that files are included in `dist/.well-known`
 
-- Deploy the canister
+4. Deploy the canister
 
-- Initiate the registration of domain with IC this command & check that the output looks similar as:
+5. Initiate the registration of domain with IC this command & check that the output looks similar as:
 
   ```bash
   $ curl -sLv -X POST \
@@ -33,7 +33,7 @@ One time steps to use the custom domain `devinci.onicai.com` :
   {"id":"xxx..."}
   ```
 
-- Query the status, using the REQUEST_ID:
+6. Query the status, using the REQUEST_ID:
   (You might need to repeat this several times before everything is 'approved')
 
   ```bash
