@@ -46,6 +46,7 @@ EOF
 ...
 * Connection #0 to host ic0.app left intact
 {"id":"xxx..."}
+e.g. {"id":"50c9888f77c132534498d0f6ffd19b4269a2373eb55a90c705e2b2c3471bada9"}
 ```
 
 6. Query the status, using the REQUEST_ID:
@@ -55,6 +56,7 @@ EOF
 $ curl -sLv -X GET \
     https://ic0.app/registrations/xxx
 ...
+e.g. curl -sLv -X GET https://ic0.app/registrations/50c9888f77c132534498d0f6ffd19b4269a2373eb55a90c705e2b2c3471bada9
 # once approved
 * Connection #0 to host ic0.app left intact
 {"name":"devinci.onicai.com","canister":"x6occ-biaaa-aaaai-acqzq-cai","state":"Available"}
