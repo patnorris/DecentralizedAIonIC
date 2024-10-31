@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "canisters": {
+    "knowledgebase_creation_canister": {
+      "main": "src/Main.mo"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "mops sources"
+    }
+  }
+}

@@ -66,7 +66,7 @@ npm run erase-replica
 ### 4. Deploy your canisters to the replica
 Local:
 ```bash
-dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend --network local
+dfx deploy --argument "( principal\"$(dfx identity get-principal)\", \"bkyz2-fmaaa-aaaaa-qaaaq-cai\" )" DeVinci_backend --network local
 dfx deploy internet_identity --network local
 dfx deploy DeVinci_frontend --network local
 ```

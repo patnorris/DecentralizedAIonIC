@@ -1,0 +1,4 @@
+-r scripts/requirements.txt
+icpp-pro==3.13.0
+ic-py==1.0.1
+requests
