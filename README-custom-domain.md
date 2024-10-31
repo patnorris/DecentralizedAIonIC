@@ -33,29 +33,29 @@ One time steps to use the custom domain `devinci.onicai.com` :
 
 5. Initiate the registration of domain with IC this command & check that the output looks similar as:
 
-  ```bash
-  $ curl -sLv -X POST \
-      -H 'Content-Type: application/json' \
-      https://ic0.app/registrations \
-      --data @- <<EOF
-  {
-      "name": "devinci.onicai.com"
-  }
-  EOF
-  
-  ...
-  * Connection #0 to host ic0.app left intact
-  {"id":"xxx..."}
-  ```
+```bash
+$ curl -sLv -X POST \
+    -H 'Content-Type: application/json' \
+    https://ic0.app/registrations \
+    --data @- <<EOF
+{
+    "name": "devinci.onicai.com"
+}
+EOF
+
+...
+* Connection #0 to host ic0.app left intact
+{"id":"xxx..."}
+```
 
 6. Query the status, using the REQUEST_ID:
   (You might need to repeat this several times before everything is 'approved')
 
-  ```bash
-  $ curl -sLv -X GET \
-      https://ic0.app/registrations/xxx
-  ...
-  # once approved
-  * Connection #0 to host ic0.app left intact
-  {"name":"devinci.onicai.com","canister":"x6occ-biaaa-aaaai-acqzq-cai","state":"Available"}
-  ```
+```bash
+$ curl -sLv -X GET \
+    https://ic0.app/registrations/xxx
+...
+# once approved
+* Connection #0 to host ic0.app left intact
+{"name":"devinci.onicai.com","canister":"x6occ-biaaa-aaaai-acqzq-cai","state":"Available"}
+```
