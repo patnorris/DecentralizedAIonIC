@@ -28,8 +28,6 @@ import Protocol "./Protocol";
 import Testable "mo:matchers/Testable";
 import Blob "mo:base/Blob";
 
-
-
 shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_canister_id : Text) = Self {
   stable var custodians = List.make<Principal>(custodian);
 
@@ -463,11 +461,11 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
   private var createdCanistersByUser = HashMap.HashMap<Principal, [Types.UserCanisterEntry]>(0, Principal.equal, Principal.hash);
   stable var createdCanistersByUserStable : [(Principal, [Types.UserCanisterEntry])] = [];
 
-  public shared (msg) func whoami() : async Principal {
+  public query (msg) func whoami() : async Principal {
     return msg.caller;
   };
 
-  public shared ({caller}) func amiController() : async Types.AuthRecordResult {
+  public query ({caller}) func amiController() : async Types.AuthRecordResult {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
