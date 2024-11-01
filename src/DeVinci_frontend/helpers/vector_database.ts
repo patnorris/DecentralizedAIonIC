@@ -10,6 +10,7 @@ import { TensorFlowEmbeddings } from "langchain/embeddings/tensorflow";
 import {
   store,
   vectorStore,
+  userKnowledgebaseBackendCanisterAddress,
 } from "../store";
 
 import { getResourceAsArray } from "./setup_knowledgebase";
@@ -212,6 +213,25 @@ export const checkUserHasKnowledgeBase = async () => {
   };
 };
 
+export const createUserKnowledgebaseCanister = async () => {
+  try {
+    let createCanisterResponse = await storeState.backendActor.createNewCanister({ 'canisterType' : { 'Knowledgebase' : null } });
+    if (createCanisterResponse.Ok) {
+      /* CanisterCreationRecord = {
+        creationResult : Text;
+        newCanisterId : Text;
+      }; */
+      userKnowledgebaseBackendCanisterAddress.set(createCanisterResponse.Ok?.newCanisterId);
+      return createCanisterResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in createUserKnowledgebaseCanister: ", error);
+    return false;    
+  };
+};
+
 let embeddingsModel = new TensorFlowEmbeddings();
 
 export const searchUserKnowledgebase = async (searchText) => {
@@ -231,7 +251,7 @@ export const searchUserKnowledgebase = async (searchText) => {
     let searchResponse = await userKnowledgebaseCanister.search([{ 'Embeddings': embeddings }, 1]);
     // 'search' : ActorMethod<[VecQuery, bigint], [] | [Array<PlainDoc>]>,
     // VecQuery = { 'Embeddings' : Array<number> };
-    
+
     //const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
     console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
     if (searchResponse.Ok) {
@@ -240,10 +260,11 @@ export const searchUserKnowledgebase = async (searchText) => {
       return false;
     };
   } catch (error) {
-    console.error("Error in searchUserKnowledgebase: ", error)
+    console.error("Error in searchUserKnowledgebase: ", error);
   };
 };
 
+// TODO
 export const addToUserKnowledgebase = async (newKnowledge) => {
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
@@ -269,6 +290,7 @@ export const addToUserKnowledgebase = async (newKnowledge) => {
   };
 };
 
+// TODO
 export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   if (!pathToPdf) {
     return;
@@ -312,6 +334,7 @@ export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   return true;
 };
 
+// TODO
 export const addTextFileToUserKnowledgebase = async (textFile) => {
   if (!textFile) {
     return;
