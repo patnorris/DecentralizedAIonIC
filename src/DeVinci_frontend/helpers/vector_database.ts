@@ -214,13 +214,17 @@ export const checkUserHasKnowledgeBase = async () => {
 };
 
 export const createUserKnowledgebaseCanister = async () => {
+  console.log("in createUserKnowledgebaseCanister");
   try {
     let createCanisterResponse = await storeState.backendActor.createNewCanister({ 'canisterType' : { 'Knowledgebase' : null } });
+    console.log("in createUserKnowledgebaseCanister createCanisterResponse ", createCanisterResponse);
     if (createCanisterResponse.Ok) {
+      console.log("in createUserKnowledgebaseCanister createCanisterResponse.Ok ", createCanisterResponse.Ok);
       /* CanisterCreationRecord = {
         creationResult : Text;
         newCanisterId : Text;
       }; */
+      console.log("in createUserKnowledgebaseCanister createCanisterResponse.Ok?.newCanisterId ", createCanisterResponse.Ok?.newCanisterId);
       userKnowledgebaseBackendCanisterAddress.set(createCanisterResponse.Ok?.newCanisterId);
       return createCanisterResponse.Ok;
     } else {
@@ -247,8 +251,9 @@ export const searchUserKnowledgebase = async (searchText) => {
     }; */
     console.log("in searchUserKnowledgebase searchText ", searchText);
     console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
-    let userKnowledgebaseCanister = await storeState.getActorForUserKnowledgebaseCanister();
-    let searchResponse = await userKnowledgebaseCanister.search([{ 'Embeddings': embeddings }, 1]);
+    let userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
+    console.log("in searchUserKnowledgebase userKnowledgebaseCanister ", userKnowledgebaseCanister);
+    let searchResponse = await userKnowledgebaseCanister.search({ 'Embeddings': embeddingResult }, 1);
     // 'search' : ActorMethod<[VecQuery, bigint], [] | [Array<PlainDoc>]>,
     // VecQuery = { 'Embeddings' : Array<number> };
 
