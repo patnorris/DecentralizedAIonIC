@@ -227,7 +227,12 @@ export const searchUserKnowledgebase = async (searchText) => {
     }; */
     console.log("in searchUserKnowledgebase searchText ", searchText);
     console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
-    const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
+    let userKnowledgebaseCanister = await storeState.getActorForUserKnowledgebaseCanister();
+    let searchResponse = await userKnowledgebaseCanister.search([{ 'Embeddings': embeddings }, 1]);
+    // 'search' : ActorMethod<[VecQuery, bigint], [] | [Array<PlainDoc>]>,
+    // VecQuery = { 'Embeddings' : Array<number> };
+    
+    //const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
     console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
     if (searchResponse.Ok) {
       return searchResponse.Ok;

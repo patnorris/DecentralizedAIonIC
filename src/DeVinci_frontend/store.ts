@@ -10,6 +10,10 @@ import {
   canisterId as backendCanisterId,
   idlFactory as backendIdlFactory,
 } from "../declarations/DeVinci_backend";
+import {
+  arcmindvectordb,
+  createActor as createUserKnowledgebaseBackendCanisterActor,
+} from "../declarations/arcmindvectordb";
 
 //__________Local vs Mainnet Development____________
 /* export const HOST =
@@ -83,6 +87,13 @@ useKnowledgeBase.subscribe((value) => {
   localStorage.setItem("useKnowledgeBase", value)
 });
 
+export let userKnowledgebaseBackendCanisterAddress = writable(localStorage.getItem("userKnowledgebaseBackendCanisterAddress") || null);
+let userKnowledgebaseBackendCanisterAddressValue = localStorage.getItem("userKnowledgebaseBackendCanisterAddress");
+userKnowledgebaseBackendCanisterAddress.subscribe((value) => {
+  userKnowledgebaseBackendCanisterAddressValue = value;
+  localStorage.setItem("userKnowledgebaseBackendCanisterAddress", value)
+});
+
 export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
 downloadedModels.subscribe((value) => {
   localStorage.setItem("downloadedAiModels", JSON.stringify(value));
@@ -110,6 +121,7 @@ type State = {
   accountId: string;
   error: string;
   isLoading: boolean;
+  userKnowledgebaseBackendActor: typeof arcmindvectordb;
 };
 
 const defaultState: State = {
@@ -121,6 +133,7 @@ const defaultState: State = {
   accountId: "",
   error: "",
   isLoading: false,
+  userKnowledgebaseBackendActor: null,
 };
 
 export const createStore = ({
@@ -611,6 +624,46 @@ export const createStore = ({
     };
   };
 
+  const getActorForUserKnowledgebaseCanister = async () => {
+    if (globalState.userKnowledgebaseBackendActor) {
+      return globalState.userKnowledgebaseBackendActor;
+    };
+    if (authClient) {
+      const identity = await authClient.getIdentity();
+
+      if (!userKnowledgebaseBackendCanisterAddressValue) {
+        try {
+          const canisterEntryResponse = await globalState.backendActor.getUserCanistersEntry({ 'canisterType' : { 'Knowledgebase' : null } });
+          // @ts-ignore
+          if (canisterEntryResponse.Ok) {
+            userKnowledgebaseBackendCanisterAddress.set(canisterEntryResponse.Ok?.userCanister?.canisterAddress);
+          } else {
+            console.error("Error retrieving user knowledgebase canister: ", canisterEntryResponse.Err);
+            throw new Error("Error retrieving user knowledgebase canister: ", canisterEntryResponse.Err);
+          };
+        } catch (error) {
+          console.error("Error in getActorForUserKnowledgebaseCanister: ", error);
+          return null;
+        };
+      };
+
+      const userKnowledgebaseBackendActor = createUserKnowledgebaseBackendCanisterActor(userKnowledgebaseBackendCanisterAddressValue, {
+        agentOptions: {
+          identity,
+          host: HOST,
+        },
+      });
+      update((state) => {
+        return {
+          ...state,
+          userKnowledgebaseBackendActor,
+        };
+      });
+      return userKnowledgebaseBackendActor;
+    };
+    return null;    
+  };
+
   return {
     subscribe,
     update,
@@ -621,6 +674,7 @@ export const createStore = ({
     internetIdentityConnect,
     disconnect,
     checkExistingLoginAndConnect,
+    getActorForUserKnowledgebaseCanister,
   };
 };
 
