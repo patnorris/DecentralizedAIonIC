@@ -426,9 +426,9 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
-    /* if (not Principal.isController(caller)) {
+    if (not Principal.isController(caller)) {
       return #Err(#Unauthorized);
-    }; */ //TODO
+    };
     let authRecord = { auth = "You are a controller of this canister." };
     return #Ok(authRecord);
   };
@@ -439,9 +439,9 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
-    /* if (not Principal.isController(caller)) {
+    if (not Principal.isController(caller)) {
       return #Err(#Unauthorized);
-    }; */ //TODO
+    };
     try {
       let authRecordResultKnowledgebaseCanister : Types.AuthRecordResult = await knowledgebaseCreationCanister.amiController();
       switch (authRecordResultKnowledgebaseCanister) {
