@@ -2,31 +2,15 @@ import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Iter "mo:base/Iter";
-import Nat "mo:base/Nat";
-import Nat16 "mo:base/Nat16";
-import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Time "mo:base/Time";
 import Int "mo:base/Int";
-import Char "mo:base/Char";
-import AssocList "mo:base/AssocList";
-import Buffer "mo:base/Buffer";
-import Random "mo:base/Random";
-import RBTree "mo:base/RBTree";
 import HashMap "mo:base/HashMap";
 import Array "mo:base/Array";
 
-import FileTypes "./types/FileStorageTypes";
 import Utils "./Utils";
 
 import Types "./Types";
-import HTTP "./Http";
-
-import Stoic "./EXT/Stoic";
-
-import Protocol "./Protocol";
-import Testable "mo:matchers/Testable";
-import Blob "mo:base/Blob";
 
 shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_canister_id : Text) = Self {
   stable var custodians = List.make<Principal>(custodian);
@@ -38,35 +22,6 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
-
-  // Helper functions
-  func textToNat(txt : Text) : Nat {
-    assert(txt.size() > 0);
-    let chars = txt.chars();
-
-    var num : Nat = 0;
-    for (v in chars){
-      let charToNum = Nat32.toNat(Char.toNat32(v)-48);
-      assert(charToNum >= 0 and charToNum <= 9);
-      num := num * 10 +  charToNum;          
-    };
-
-    num;
-  };
-
-  func textToNat64(txt : Text) : Nat64 {
-    assert(txt.size() > 0);
-    let chars = txt.chars();
-
-    var num : Nat = 0;
-    for (v in chars){
-      let charToNum = Nat32.toNat(Char.toNat32(v)-48);
-      assert(charToNum >= 0 and charToNum <= 9);
-      num := num * 10 +  charToNum;          
-    };
-
-    Nat64.fromNat(num);
-  };
 
 // Project-specific functions
   stable var userChatsStorageStable : [(Principal, List.List<Text>)] = [];
@@ -412,6 +367,7 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
     };   
   };
 
+// Knowledgebase
   //let knowledgebaseCanisterId : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // for local dev
   let knowledgebaseCanisterId : Text = "44ti7-fiaaa-aaaak-qitia-cai"; // for development, TODO: dynamically chose correct address for stage/local dev 
   type VecDoc = { content : Text; embeddings : Types.Embeddings };
@@ -701,74 +657,6 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
     };
     return false;
   };
-
-// HTTP interface
-  /* public query func http_request(request : HTTP.Request) : async HTTP.Response {
-    //Debug.print(debug_show("http_request test"));
-    //Debug.print(debug_show(request));
-    if (Text.contains(request.url, #text("tokenid"))) { // endpoint for Stoic Wallet/Entrepot
-      let tokenId = Iter.toArray(Text.tokens(request.url, #text("tokenid=")))[1];
-      let { index } = Stoic.decodeToken(tokenId);
-      let item = List.get(nfts, Nat32.toNat(index));
-      switch (item) {
-        case (null) {
-          let response = {
-            body = Text.encodeUtf8("Invalid tokenid");
-            headers = [];
-            status_code = 404 : Nat16;
-            streaming_strategy = null;
-            upgrade = false;
-          };
-          return(response);
-        };
-        case (?token) {
-          let body = token.metadata[0].data;
-          let response = {
-            body = body;
-            headers = [("Content-Type", "text/html"), ("Content-Length", Nat.toText(body.size()))];
-            status_code = 200 : Nat16;
-            streaming_strategy = null;
-            upgrade = false;
-          };
-          return(response);
-        };
-      };
-    } else if (Text.contains(request.url, #text("spaceId"))) {
-      let spaceId = Iter.toArray(Text.tokens(request.url, #text("spaceId=")))[1];
-      let item = List.get(nfts, textToNat(spaceId));
-      switch (item) {
-        case (null) {
-          let response = {
-            body = Text.encodeUtf8("Invalid spaceId");
-            headers = [];
-            status_code = 404 : Nat16;
-            streaming_strategy = null;
-            upgrade = false;
-          };
-          return(response);
-        };
-        case (?token) {
-          let body = token.metadata[0].data;
-          let response = {
-            body = body;
-            headers = [("Content-Type", "text/html"), ("Content-Length", Nat.toText(body.size()))];
-            status_code = 200 : Nat16;
-            streaming_strategy = null;
-            upgrade = false;
-          };
-          return(response);
-        };
-      };
-    } else {
-      return {
-        upgrade = false; // ← If this is set to true, the request will be sent to http_request_update()
-        status_code = 200;
-        headers = [ ("content-type", "text/plain") ];
-        body = "It does not work";
-        streaming_strategy = null;
-      };
-    };
-  }; */
 
 // Upgrade Hooks
   system func preupgrade() {

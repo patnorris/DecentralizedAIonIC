@@ -6,7 +6,6 @@ import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
-import List "mo:base/List";
 import AssocList "mo:base/AssocList";
 import Float "mo:base/Float";
 import Bool "mo:base/Bool";
