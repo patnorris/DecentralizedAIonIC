@@ -8,7 +8,7 @@ import Cycles "mo:base/ExperimentalCycles";
 
 import Types "Types";
 
-actor class KnowledgebaseCreationCanister() = this {
+actor class CanisterCreationCanister() = this {
 
     stable var MASTER_CANISTER_ID : Text = ""; // Corresponds to DeVinci Backend canister
 
@@ -38,10 +38,10 @@ actor class KnowledgebaseCreationCanister() = this {
 
     let IC0 : Types.IC_Management = actor ("aaaaa-aa");
 
-    // Admin function to upload control canister wasm
+    // Admin function to upload knowledgebase canister wasm
     private stable var knowledgebaseCanisterWasm : [Nat8] = [];
 
-    public shared (msg) func upload_canister_wasm_bytes_chunk(bytesChunk : [Nat8]) : async Types.FileUploadResult {
+    public shared (msg) func upload_knowledgebase_canister_wasm_bytes_chunk(bytesChunk : [Nat8]) : async Types.FileUploadResult {
         if (not Principal.isController(msg.caller)) {
             return #Err(#Unauthorized);
         };
@@ -51,7 +51,20 @@ actor class KnowledgebaseCreationCanister() = this {
         return #Ok({ creationResult = "Success" });
     };
 
-    // Spin up a new knowledgebase canister as specified by the input parameters
+    // Admin function to upload backend canister wasm
+    private stable var backendCanisterWasm : [Nat8] = [];
+
+    public shared (msg) func upload_backend_canister_wasm_bytes_chunk(bytesChunk : [Nat8]) : async Types.FileUploadResult {
+        if (not Principal.isController(msg.caller)) {
+            return #Err(#Unauthorized);
+        };
+
+        backendCanisterWasm := Array.append(backendCanisterWasm, bytesChunk);
+
+        return #Ok({ creationResult = "Success" });
+    };
+
+    // Spin up a new canister as specified by the input parameters
     public shared (msg) func createCanister(configurationInput : Types.CanisterCreationConfiguration) : async Types.CanisterCreationResult {
         // Only Controllers and the Master canister may call this (plus the cansiter itself for testing functionality)
         if (not (Principal.isController(msg.caller) or Principal.equal(msg.caller, Principal.fromText(MASTER_CANISTER_ID)) or Principal.equal(msg.caller, Principal.fromActor(this)))) {
@@ -94,14 +107,49 @@ actor class KnowledgebaseCreationCanister() = this {
                 };
                 return #Ok(creationRecord);
             };
+            case (#Backend) {
+                // Create canister
+                Cycles.add(300_000_000_000);
+
+                let createdCanister = await IC0.create_canister({
+                    settings = ?{
+                        freezing_threshold = null;
+                        controllers = ?[Principal.fromActor(this), configurationInput.owner, Principal.fromText(MASTER_CANISTER_ID)];
+                        memory_allocation = null;
+                        compute_allocation = null;
+                    };
+                });
+
+                let installControlWasm = await IC0.install_code({
+                    arg = "";
+                    wasm_module = Blob.fromArray(backendCanisterWasm);
+                    mode = #install;
+                    canister_id = createdCanister.canister_id;
+                });
+
+                /* let readyResult = await knowledgebaseCanister.ready();
+                switch (readyResult) {
+                    case (#Err(error)) {
+                        return #Err(error);
+                    };
+                    case _ {};
+                }; */               
+
+                // --------------------------------------------------------------------
+                let creationRecord = {
+                    creationResult = "Success";
+                    newCanisterId = Principal.toText(createdCanister.canister_id);
+                };
+                return #Ok(creationRecord);
+            };
             case _ { 
-                return #Err(#Other("canisterType must be #Knowledgebase"));
+                return #Err(#Other("canisterType not supported"));
             };
         };
     };
 
 // Admin 
-    public shared (msg) func testCreateCanister() : async Types.CanisterCreationResult {
+    public shared (msg) func testCreateKnowledgebaseCanister() : async Types.CanisterCreationResult {
         if (Principal.isAnonymous(msg.caller)) {
             return #Err(#Unauthorized);
         };
@@ -110,6 +158,21 @@ actor class KnowledgebaseCreationCanister() = this {
         };
         let config = {
             canisterType : Types.CanisterType = #Knowledgebase;
+            owner : Principal = msg.caller;
+        };
+        let result = await createCanister(config);
+        return result;
+    };
+
+    public shared (msg) func testCreateBackendCanister() : async Types.CanisterCreationResult {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #Err(#Unauthorized);
+        };
+        if (not Principal.isController(msg.caller)) {
+            return #Err(#Unauthorized);
+        };
+        let config = {
+            canisterType : Types.CanisterType = #Backend;
             owner : Principal = msg.caller;
         };
         let result = await createCanister(config);
@@ -126,6 +189,20 @@ actor class KnowledgebaseCreationCanister() = this {
         };
 
         knowledgebaseCanisterWasm := [];
+
+        return #Ok({ creationResult = "Success" });
+    };
+
+    // Use with caution: Admin function to reset the canister wasm
+    public shared (msg) func reset_backend_canister_wasm() : async Types.FileUploadResult {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #Err(#Unauthorized);
+        };
+        if (not Principal.isController(msg.caller)) {
+            return #Err(#Unauthorized);
+        };
+
+        backendCanisterWasm := [];
 
         return #Ok({ creationResult = "Success" });
     };

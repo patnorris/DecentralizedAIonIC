@@ -43,6 +43,7 @@ module Types {
 
     public type CanisterType = {
         #Knowledgebase;
+        #Backend;
     };
 
     public type FileUploadRecord = {
