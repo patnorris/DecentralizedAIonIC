@@ -1,4 +1,4 @@
-# Knowledgebase Creation Canister
+# Canister Creation Canister
 
 ### Setup
 
@@ -16,17 +16,17 @@ mops install
 dfx generate
 
 # local
-dfx deploy knowledgebase_creation_canister
+dfx deploy canister_creation_canister
 
 # IC mainnet (caution!)
-dfx deploy --ic knowledgebase_creation_canister
+dfx deploy --ic canister_creation_canister
 
 # Set DeVinci Backend as master canister (you have to deploy that canister first and then return with its id)
 # local
-dfx canister call knowledgebase_creation_canister setMasterCanisterId '("be2us-64aaa-aaaaa-qaabq-cai")'
+dfx canister call canister_creation_canister setMasterCanisterId '("be2us-64aaa-aaaaa-qaabq-cai")'
 
 # IC mainnet (caution!)
-dfx canister call --ic knowledgebase_creation_canister setMasterCanisterId '("6ugvi-7aaaa-aaaai-acria-cai")'
+dfx canister call --ic canister_creation_canister setMasterCanisterId '("6ugvi-7aaaa-aaaai-acria-cai")'
 
 ```
 
@@ -71,7 +71,7 @@ class SyncStream(NetworkStream):
 
 # ========================================================================
 # Upload the knowledgebase canister wasm
-python3 -m scripts.upload_knowledgebase_canister --network local --canister knowledgebase_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/knowledgebase_creation_canister/knowledgebase_creation_canister.did
+python3 -m scripts.upload_knowledgebase_canister --network local --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
 ```
 
 Run upload script - IC:
@@ -79,17 +79,17 @@ Run upload script - IC:
 ```bash
 ## To IC
 # Upload the knowledgebase canister wasm
-python3 -m scripts.upload_knowledgebase_canister --network ic --canister knowledgebase_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/knowledgebase_creation_canister/knowledgebase_creation_canister.did
+python3 -m scripts.upload_knowledgebase_canister --network ic --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
 ```
 
 ### Test canister creation
 
 ```bash
-dfx canister call knowledgebase_creation_canister whoami
-dfx canister call knowledgebase_creation_canister amiController
+dfx canister call canister_creation_canister whoami
+dfx canister call canister_creation_canister amiController
 
 # To test knowledgebase canister creation
-dfx canister call knowledgebase_creation_canister testCreateCanister
+dfx canister call canister_creation_canister testCreateCanister
 
 ## Call endpoints on created control canister
 ## Note: use newCanisterId printed by testCreateCanister
@@ -100,9 +100,9 @@ Also see tests in arcmindvectordb/interact/
 
 # ----be carefull with these START ---
 ## In case the knowledgebase canister wasm has to be reset (use with caution):
-dfx canister call knowledgebase_creation_canister reset_knowledgebase_canister_wasm
+dfx canister call canister_creation_canister reset_knowledgebase_canister_wasm
 
 ## Might come in handy during local testing
-dfx ledger fabricate-cycles --canister knowledgebase_creation_canister
+dfx ledger fabricate-cycles --canister canister_creation_canister
 # ----be carefull with these END ---
 ```

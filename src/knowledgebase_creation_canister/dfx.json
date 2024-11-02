@@ -1,7 +1,7 @@
 {
   "version": 1,
   "canisters": {
-    "knowledgebase_creation_canister": {
+    "canister_creation_canister": {
       "main": "src/Main.mo"
     }
   },
