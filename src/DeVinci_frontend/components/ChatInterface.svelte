@@ -87,9 +87,6 @@
       /* debugOutput = "###in getChatModelResponse###";
       debugOutput += JSON.stringify(prompt);
       setLabel("debug-label", debugOutput); */
-      console.log("getChatModelResponse vectorDbSearchTool ", vectorDbSearchTool);
-      console.log("getChatModelResponse useSessionVectorDb ", useSessionVectorDb);
-      console.log("getChatModelResponse $useKnowledgeBase ", $useKnowledgeBase);
       if ((vectorDbSearchTool && useSessionVectorDb) || $useKnowledgeBase) {
         /* debugOutput += " useSessionVectorDb ";
         setLabel("debug-label", debugOutput); */
@@ -120,7 +117,6 @@
           if ($useKnowledgeBase) {
             try {
               let userKnowledgeBaseResponse = await searchUserKnowledgebase(promptContent);
-              console.log("userKnowledgeBaseResponse ", userKnowledgeBaseResponse);
               if (userKnowledgeBaseResponse) {
                 additionalContentToProvide += "  ";
                 additionalContentToProvide += userKnowledgeBaseResponse;
@@ -136,7 +132,6 @@
             };
           };
           // Compose the final prompt
-          console.log("additionalContentToProvide ", additionalContentToProvide);
           const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
           prompt = [...prompt, additionalContentEntry];
         } catch (error) {
@@ -149,7 +144,6 @@
           setLabel("debug-label", debugOutput);   */
         };
       };
-      console.log("final prompt ", prompt);
       try {
         /* debugOutput += " final prompt ";
         debugOutput += JSON.stringify(prompt);

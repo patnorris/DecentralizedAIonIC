@@ -2,10 +2,8 @@
   import { currentModelName, useKnowledgeBase } from "../store";
   
   function handleChange(event) {
-    console.log("handleChange event ", event);
     // Toggle useKnowledgeBase based on the checkbox's checked state
     useKnowledgeBase.set(event.target.checked);
-    console.log("Knowledge Base active:", $useKnowledgeBase);
   };
   </script>
   
