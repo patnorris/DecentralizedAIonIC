@@ -12,7 +12,7 @@ import Utils "./Utils";
 
 import Types "./Types";
 
-shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_canister_id : Text) = Self {
+shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canister_id : Text) = Self {
   stable var custodians = List.make<Principal>(custodian);
 
 // TODO: instead add functions to manage cycles balance and gather stats
@@ -406,9 +406,9 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
   };
 
 // User created canisters
-  let KNOWLEDGEBASE_CREATION_CANISTER_ID : Text = _knowledgebase_creation_canister_id;
+  let CANISTER_CREATION_CANISTER_ID : Text = _canister_creation_canister_id;
 
-  let knowledgebaseCreationCanister = actor (KNOWLEDGEBASE_CREATION_CANISTER_ID) : actor {
+  let canisterCreationCanister = actor (CANISTER_CREATION_CANISTER_ID) : actor {
       amiController() : async Types.AuthRecordResult;
       createCanister : (configurationInput : Types.CanisterCreationConfiguration) -> async Types.CanisterCreationResult;
   };
@@ -433,7 +433,7 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
     return #Ok(authRecord);
   };
 
-  // Admin function to verify that this canister is a controller of model_creation_canister and frontend_creation_canister
+  // Admin function to verify that this canister is a controller of canisterCreationCanister
   public shared ({caller}) func isControllerLogicOk() : async Types.AuthRecordResult {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
@@ -443,11 +443,11 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
       return #Err(#Unauthorized);
     };
     try {
-      let authRecordResultKnowledgebaseCanister : Types.AuthRecordResult = await knowledgebaseCreationCanister.amiController();
-      switch (authRecordResultKnowledgebaseCanister) {
-          case (#Err(authErrorKnowledgebaseCanister)) { return authRecordResultKnowledgebaseCanister; };
-          case (#Ok(authSuccessKnowledgebaseCanister)) {
-            return authRecordResultKnowledgebaseCanister;
+      let authRecordResultCanister : Types.AuthRecordResult = await canisterCreationCanister.amiController();
+      switch (authRecordResultCanister) {
+          case (#Err(authErrorCanister)) { return authRecordResultCanister; };
+          case (#Ok(authSuccessCanister)) {
+            return authRecordResultCanister;
           };
       };
     } catch (error : Error) {
@@ -462,7 +462,26 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
         // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
         switch(createdCanistersByUser.get(user)) {
           case (?existingUserEntries) {
-            return false; // only one entry per user
+            for (userEntry in existingUserEntries.vals()) {
+              if (userEntry.userCanister.canisterType == canisterType) {
+                return false; // only one entry per user
+              };
+            };
+            return true;
+          };
+          case _ { return true; }; // no entry yet
+        };
+      };
+      case (#Backend) {
+        // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
+        switch(createdCanistersByUser.get(user)) {
+          case (?existingUserEntries) {
+            for (userEntry in existingUserEntries.vals()) {
+              if (userEntry.userCanister.canisterType == canisterType) {
+                return false; // only one entry per user
+              };
+            };
+            return true;
           };
           case _ { return true; }; // no entry yet
         };
@@ -474,6 +493,19 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
   private func getCanisterInfo(user : Principal, canisterType : Types.CanisterType) : ?Types.CanisterInfo {
     switch(canisterType) {
       case (#Knowledgebase) {
+        switch(createdCanistersByUser.get(user)) {
+          case (?existingUserEntries) {
+            for (userEntry in existingUserEntries.vals()) {
+              if (userEntry.userCanister.canisterType == canisterType) {
+                return ?userEntry.userCanister;
+              };
+            };
+            return null;
+          };
+          case _ { return null; }; // no entries yet
+        };
+      };
+      case (#Backend) {
         switch(createdCanistersByUser.get(user)) {
           case (?existingUserEntries) {
             for (userEntry in existingUserEntries.vals()) {
@@ -520,7 +552,7 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
           canisterType : Types.CanisterType = configurationInput.canisterType;
           owner: Principal = msg.caller;
         };
-        let createCanisterResult : Types.CanisterCreationResult = await knowledgebaseCreationCanister.createCanister(canisterConfiguration);
+        let createCanisterResult : Types.CanisterCreationResult = await canisterCreationCanister.createCanister(canisterConfiguration);
         
         switch (createCanisterResult) {
           case (#Err(createCanisterError)) {
@@ -545,8 +577,51 @@ shared actor class DeVinciBackend(custodian: Principal, _knowledgebase_creation_
           };
         };
       };
+      case (#Backend) {
+        // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
+        let verifyUserRequestResult = verifyUserRequest(msg.caller, configurationInput.canisterType);
+        if (not verifyUserRequestResult) {
+          return #Err(#Other("Your request could not be verified. Please note that only one canister pair per user may be created."));
+        };
+        let canisterConfiguration : Types.CanisterCreationConfiguration = {
+          canisterType : Types.CanisterType = configurationInput.canisterType;
+          owner: Principal = msg.caller;
+        };
+        let createCanisterResult : Types.CanisterCreationResult = await canisterCreationCanister.createCanister(canisterConfiguration);
+        
+        switch (createCanisterResult) {
+          case (#Err(createCanisterError)) {
+            return createCanisterResult;
+          };
+          case (#Ok(createCanisterSuccess)) {
+            // Create new entry for user
+            let newCanisterInfo : Types.CanisterInfo = {
+              canisterType : Types.CanisterType = configurationInput.canisterType;
+              creationTimestamp : Nat64 = Nat64.fromNat(Int.abs(Time.now()));
+              canisterAddress : Text = createCanisterSuccess.newCanisterId;
+            };
+            let userEntry : Types.UserCanisterEntry = {
+              userCanister = newCanisterInfo;
+            };
+            let addEntryResult = addUserEntry(msg.caller, userEntry);
+            if (addEntryResult) {
+              // TODO: Migrate user data to user's new backend canister
+              let userBackendCanisterCanister = actor (createCanisterSuccess.newCanisterId) : actor {
+                  migrate_user_chats
+                  migrate_user_settings
+              };
+              //getUserChats
+              //getUserSettings
+
+              return createCanisterResult;
+            } else {
+              return #Err(#Other("There was an error adding the canister entry for the user"));
+            };                        
+          };
+        };
+      };
       case _ { 
-        return #Err(#Other("canisterType must be #Knowledgebase"));
+        return #Err(#Other("canisterType not supported"));
       };
     };       
   };
