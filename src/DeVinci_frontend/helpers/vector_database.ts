@@ -237,6 +237,7 @@ export const createUserKnowledgebaseCanister = async () => {
 };
 
 let embeddingsModel = new TensorFlowEmbeddings();
+let userKnowledgebaseCanister;
 
 export const searchUserKnowledgebase = async (searchText) => {
   if (!embeddingsModel) {
@@ -251,25 +252,27 @@ export const searchUserKnowledgebase = async (searchText) => {
     }; */
     console.log("in searchUserKnowledgebase searchText ", searchText);
     console.log("in searchUserKnowledgebase embeddingResult ", embeddingResult);
-    let userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
+    if (!userKnowledgebaseCanister) {
+      userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
+    };
     console.log("in searchUserKnowledgebase userKnowledgebaseCanister ", userKnowledgebaseCanister);
     let searchResponse = await userKnowledgebaseCanister.search({ 'Embeddings': embeddingResult }, 1);
     // 'search' : ActorMethod<[VecQuery, bigint], [] | [Array<PlainDoc>]>,
-    // VecQuery = { 'Embeddings' : Array<number> };
+      // VecQuery = { 'Embeddings' : Array<number> };
 
     //const searchResponse = await storeState.backendActor.search_user_knowledgebase(embeddingResult);
     console.log("in searchUserKnowledgebase searchResponse ", searchResponse);
-    if (searchResponse.Ok) {
-      return searchResponse.Ok;
-    } else {
-      return false;
+    if (searchResponse.length > 0) {
+      if (searchResponse[0] && searchResponse[0].length > 0) {
+        return searchResponse[0][0].content; 
+      };
     };
+    return false;
   } catch (error) {
     console.error("Error in searchUserKnowledgebase: ", error);
   };
 };
 
-// TODO
 export const addToUserKnowledgebase = async (newKnowledge) => {
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
@@ -283,25 +286,35 @@ export const addToUserKnowledgebase = async (newKnowledge) => {
     }; */
     console.log("in addToUserKnowledgebase content ", newKnowledge);
     console.log("in addToUserKnowledgebase embeddingResult ", embeddingResult);
-    const addResponse = await storeState.backendActor.add_to_user_knowledgebase(newKnowledge, embeddingResult);
+    if (!userKnowledgebaseCanister) {
+      userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
+    };
+    console.log("in addToUserKnowledgebase userKnowledgebaseCanister ", userKnowledgebaseCanister);
+    let addResponse = await userKnowledgebaseCanister.add({ content: newKnowledge, embeddings: embeddingResult });
+    // add: (VecDoc) -> async Text
+      // type VecDoc = { content : Text; embeddings : Types.Embeddings };
+    //const addResponse = await storeState.backendActor.add_to_user_knowledgebase(newKnowledge, embeddingResult);
     console.log("in addToUserKnowledgebase addResponse ", addResponse);
-    if (addResponse.Ok) {
-      return addResponse.Ok;
+    if (addResponse) {
+      return addResponse;
     } else {
       return false;
     };
   } catch (error) {
-    console.error("Error in addToUserKnowledgebase: ", error)
+    console.error("Error in addToUserKnowledgebase: ", error);
+    return false;
   };
 };
 
-// TODO
 export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   if (!pathToPdf) {
     return;
   };
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
+  };
+  if (!userKnowledgebaseCanister) {
+    userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
   };
 
   const start = performance.now() / 1000;
@@ -339,13 +352,15 @@ export const addPdfToUserKnowledgebase = async (pathToPdf) => {
   return true;
 };
 
-// TODO
 export const addTextFileToUserKnowledgebase = async (textFile) => {
   if (!textFile) {
     return;
   };
   if (!embeddingsModel) {
     embeddingsModel = new TensorFlowEmbeddings();
+  };
+  if (!userKnowledgebaseCanister) {
+    userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
   };
 
   try {
@@ -371,10 +386,16 @@ export const addTextFileToUserKnowledgebase = async (textFile) => {
 };
 
 const embedAndAddChunk = async (text, embeddingsModel) => {
+  if (!userKnowledgebaseCanister) {
+    userKnowledgebaseCanister = await store.getActorForUserKnowledgebaseCanister();
+  };
   // Generate embeddings for a chunk of text
   return embeddingsModel.embedQuery(text).then(embeddingResult => {
     // and add the chunk to the vector database
-    return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
+    return userKnowledgebaseCanister.add({ content: text, embeddings: embeddingResult });
+    // add: (VecDoc) -> async Text
+      // type VecDoc = { content : Text; embeddings : Types.Embeddings };
+    //return storeState.backendActor.add_to_user_knowledgebase(text, embeddingResult);
   });
 };
 
