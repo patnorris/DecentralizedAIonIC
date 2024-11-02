@@ -1,9 +1,9 @@
 export const idlFactory = ({ IDL }) => {
   const VecDoc = IDL.Record({
     'content' : IDL.Text,
-    'embeddings' : IDL.Vec(IDL.Float32),
+    'embeddings' : IDL.Vec(IDL.Float64),
   });
-  const VecQuery = IDL.Variant({ 'Embeddings' : IDL.Vec(IDL.Float32) });
+  const VecQuery = IDL.Variant({ 'Embeddings' : IDL.Vec(IDL.Float64) });
   const PlainDoc = IDL.Record({ 'content' : IDL.Text });
   return IDL.Service({
     'add' : IDL.Func([VecDoc], [IDL.Text], []),
