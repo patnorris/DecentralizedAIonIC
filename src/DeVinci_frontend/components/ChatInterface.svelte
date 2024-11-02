@@ -121,8 +121,10 @@
             try {
               let userKnowledgeBaseResponse = await searchUserKnowledgebase(promptContent);
               console.log("userKnowledgeBaseResponse ", userKnowledgeBaseResponse);
-              additionalContentToProvide += "  ";
-              additionalContentToProvide += userKnowledgeBaseResponse;
+              if (userKnowledgeBaseResponse) {
+                additionalContentToProvide += "  ";
+                additionalContentToProvide += userKnowledgeBaseResponse;
+              };
             } catch (error) {
               console.error("Error in getChatModelResponse vectorDbSearchTool");
               console.error(error.toString());
