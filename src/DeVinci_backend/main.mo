@@ -474,6 +474,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
   private var createdCanistersByUser = HashMap.HashMap<Principal, [Types.UserCanisterEntry]>(0, Principal.equal, Principal.hash);
   stable var createdCanistersByUserStable : [(Principal, [Types.UserCanisterEntry])] = [];
 
+  private var usersWithOwnBackendCanister = HashMap.HashMap<Principal, Text>(0, Principal.equal, Principal.hash);
+  stable var usersWithOwnBackendCanisterStable : [(Principal, Text)] = [];
+
   public query (msg) func whoami() : async Principal {
     return msg.caller;
   };
@@ -663,15 +666,31 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
             let userEntry : Types.UserCanisterEntry = {
               userCanister = newCanisterInfo;
             };
+            let addOwnCanisterResult = usersWithOwnBackendCanister.put(caller, createCanisterSuccess.newCanisterId);
             let addEntryResult = addUserEntry(caller, userEntry);
             if (addEntryResult) {
-              // TODO: Migrate user data to user's new backend canister
-              /* let userBackendCanisterCanister = actor (createCanisterSuccess.newCanisterId) : actor {
-                  migrate_user_chats
-                  migrate_user_settings
-              }; */
-              //getUserChats
-              //getUserSettings
+              // Migrate user data to user's new backend canister
+              let userBackendCanister = actor (createCanisterSuccess.newCanisterId) : DeVinciBackend;
+              // Set canisterIsPrivate variable to true (to indicate it's a user's private backend canister)
+              let updateCanisterIsPrivateResponse : Bool = await userBackendCanister.updateCanisterIsPrivate(true);
+              if (not updateCanisterIsPrivateResponse) {
+                return #Err(#Other("There was an error setting the canister to private"));
+              };
+
+              // Migrate user's settings to user's canister
+              let getUserSettingsResponse : ?Types.UserSettings = getUserSettings(caller);
+              switch (getUserSettingsResponse) {
+                case (?userSettings) {
+                  //update_caller_settings
+                  let updateCallerSettingsResponse = await userBackendCanister.update_caller_settings(userSettings);
+                  // TODO: delete user's settings here in the shared backend
+                };
+                case _ {};
+              };
+              // Migrate user's chat data to user's canister
+              let userChats : List.List<Types.Chat> = getUserChats(caller);
+              let migrateUserChatsResponse : Bool = await userBackendCanister.migrate_user_chats(caller, userChats);
+              // TODO: delete user's chats here in the shared backend              
 
               return createCanisterResult;
             } else {
@@ -706,6 +725,29 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
       case _ { return #Err(#Other("No entry yet")); };
     };
   };
+
+  public shared ({caller}) func migrate_user_chats(user : Principal, chatsToMigrate : List.List<Types.Chat>) : async Bool {
+    if (Principal.isAnonymous(caller)) {
+      return false;
+    };
+    if (not Principal.isController(caller)) {
+      return false;
+    };
+    if (canisterIsPrivate and not Principal.isController(user)) {
+      return false
+    };
+
+    let migrationResult = List.map<Types.Chat, Bool>(chatsToMigrate, func (chat : Types.Chat) : Bool {
+      let chatCreated = putChat(chat);
+      let result = putUserChat(user, chat.id);
+      if (chatCreated == chat.id and result == chat.id) {
+        return true;
+      };
+      return false; // TODO: error handling      
+    });
+
+    return true;
+};
 
   // Admin functions TODO
 // Use with caution!
@@ -813,6 +855,7 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     emailSubscribersStorageStable := Iter.toArray(emailSubscribersStorage.entries());
     userMemoryVectorsStorageStable := Iter.toArray(userMemoryVectorsStorage.entries());
     createdCanistersByUserStable := Iter.toArray(createdCanistersByUser.entries());
+    usersWithOwnBackendCanisterStable := Iter.toArray(usersWithOwnBackendCanister.entries());
   };
 
   system func postupgrade() {
@@ -828,5 +871,7 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     userMemoryVectorsStorageStable := [];
     createdCanistersByUser := HashMap.fromIter(Iter.fromArray(createdCanistersByUserStable), createdCanistersByUserStable.size(), Principal.equal, Principal.hash);
     createdCanistersByUserStable := [];
+    usersWithOwnBackendCanister := HashMap.fromIter(Iter.fromArray(usersWithOwnBackendCanisterStable), usersWithOwnBackendCanisterStable.size(), Principal.equal, Principal.hash);
+    usersWithOwnBackendCanisterStable := [];
   };
 };
