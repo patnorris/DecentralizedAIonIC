@@ -15,6 +15,20 @@ import Types "./Types";
 shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canister_id : Text) = Self {
   stable var custodians = List.make<Principal>(custodian);
 
+  stable var canisterIsPrivate : Bool = false; // variable to indicate whether this is the shared DeVinci backend (false) or a user's own backend (true)
+
+  public shared({ caller }) func updateCanisterIsPrivate(newIsPrivateValue : Bool) : async Bool {
+    // don't allow anonymous Principal
+    if (Principal.isAnonymous(caller)) {
+      return false;
+		};
+    if (not Principal.isController(caller)) {
+      return false;
+    };
+    canisterIsPrivate := newIsPrivateValue;
+    return true;
+  };
+
 // TODO: instead add functions to manage cycles balance and gather stats
   public func greet(name : Text) : async Text {
     return "Hello, " # name # "!";
@@ -110,6 +124,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
 
     let newId : Text = await Utils.newRandomUniqueId();
 
@@ -138,6 +155,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     let chats = getUserChats(caller);
     return #Ok(List.toArray(chats)); 
   };
@@ -147,6 +167,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     let chats = getUserChats(caller);
     var chatsPreview : List.List<Types.ChatPreview> = List.nil<Types.ChatPreview>();
     chatsPreview := List.map<Types.Chat, Types.ChatPreview>(chats, func (chat : Types.Chat) : Types.ChatPreview {
@@ -165,6 +188,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     let chat = getChat(chatId);
     switch (chat) {
       case (null) {
@@ -184,6 +210,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     switch (getChat(updateChatObject.id)) {
       case (null) {
         return #Err(#InvalidTokenId);
@@ -214,6 +243,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     switch (getChat(chatId)) {
       case (null) {
         return #Err(#InvalidTokenId);
@@ -244,6 +276,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     let chat = getChat(chatId);
     switch (chat) {
       case (null) {
@@ -291,6 +326,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     switch (getUserSettings(caller)) {
       case (null) {
         // No settings stored yet, return default
@@ -312,6 +350,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     let settingsUpdated = putUserSettings(caller, updatedSettingsObject);
     return #Ok(settingsUpdated);
   };
@@ -337,6 +378,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
 
     let result = putUserMemoryVectors(caller, memoryVectors);
 
@@ -348,6 +392,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     
     switch (getUserMemoryVectors(caller)) {
       case (null) { return #Err(#Unauthorized); };
@@ -360,6 +407,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     
     switch (getUserMemoryVectors(caller)) {
       case (null) { return #Err(#Unauthorized); };
@@ -379,6 +429,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
     
     let knowledgebaseCanister = actor(knowledgebaseCanisterId): actor { add: (VecDoc) -> async Text };
     let result = await knowledgebaseCanister.add({content=content ; embeddings=embeddings});
@@ -391,6 +444,10 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
+    };
+
     //search(vec_query: VecQuery, k: usize) -> Option<Vec<PlainDoc>>
     let knowledgebaseCanister = actor(knowledgebaseCanisterId): actor { search: (VecQuery, Nat64) -> async ?[PlainDoc] };
     let result = await knowledgebaseCanister.search(#Embeddings(embeddings), 1);
@@ -536,21 +593,24 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     };
   };
 
-  public shared (msg) func createNewCanister(configurationInput : Types.CanisterCreationConfigurationInput) : async Types.CanisterCreationResult {
-    if (Principal.isAnonymous(msg.caller)) {
+  public shared ({caller}) func createNewCanister(configurationInput : Types.CanisterCreationConfigurationInput) : async Types.CanisterCreationResult {
+    if (Principal.isAnonymous(caller)) {
         return #Err(#Unauthorized);
+    };
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
     };
 
     switch(configurationInput.canisterType) {
       case (#Knowledgebase) {
         // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
-        let verifyUserRequestResult = verifyUserRequest(msg.caller, #Knowledgebase);
+        let verifyUserRequestResult = verifyUserRequest(caller, #Knowledgebase);
         if (not verifyUserRequestResult) {
           return #Err(#Other("Your request could not be verified. Please note that only one canister pair per user may be created."));
         };
         let canisterConfiguration : Types.CanisterCreationConfiguration = {
           canisterType : Types.CanisterType = configurationInput.canisterType;
-          owner: Principal = msg.caller;
+          owner: Principal = caller;
         };
         let createCanisterResult : Types.CanisterCreationResult = await canisterCreationCanister.createCanister(canisterConfiguration);
         
@@ -568,7 +628,7 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
             let userEntry : Types.UserCanisterEntry = {
               userCanister = newCanisterInfo;
             };
-            let addEntryResult = addUserEntry(msg.caller, userEntry);
+            let addEntryResult = addUserEntry(caller, userEntry);
             if (addEntryResult) {
               return createCanisterResult;
             } else {
@@ -579,13 +639,13 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
       };
       case (#Backend) {
         // Verify that the user hasn't created any canisters yet (only one canister pair per user is allowed)
-        let verifyUserRequestResult = verifyUserRequest(msg.caller, configurationInput.canisterType);
+        let verifyUserRequestResult = verifyUserRequest(caller, configurationInput.canisterType);
         if (not verifyUserRequestResult) {
           return #Err(#Other("Your request could not be verified. Please note that only one canister pair per user may be created."));
         };
         let canisterConfiguration : Types.CanisterCreationConfiguration = {
           canisterType : Types.CanisterType = configurationInput.canisterType;
-          owner: Principal = msg.caller;
+          owner: Principal = caller;
         };
         let createCanisterResult : Types.CanisterCreationResult = await canisterCreationCanister.createCanister(canisterConfiguration);
         
@@ -603,13 +663,13 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
             let userEntry : Types.UserCanisterEntry = {
               userCanister = newCanisterInfo;
             };
-            let addEntryResult = addUserEntry(msg.caller, userEntry);
+            let addEntryResult = addUserEntry(caller, userEntry);
             if (addEntryResult) {
               // TODO: Migrate user data to user's new backend canister
-              let userBackendCanisterCanister = actor (createCanisterSuccess.newCanisterId) : actor {
+              /* let userBackendCanisterCanister = actor (createCanisterSuccess.newCanisterId) : actor {
                   migrate_user_chats
                   migrate_user_settings
-              };
+              }; */
               //getUserChats
               //getUserSettings
 
@@ -626,12 +686,15 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     };       
   };
 
-  public query (msg) func getUserCanistersEntry(lookupInput : Types.AvailableCanistersRecord) : async Types.UserCanistersEntryResult {
-    if (Principal.isAnonymous(msg.caller)) {
-        return #Err(#Unauthorized);
+  public query ({caller}) func getUserCanistersEntry(lookupInput : Types.AvailableCanistersRecord) : async Types.UserCanistersEntryResult {
+    if (Principal.isAnonymous(caller)) {
+      return #Err(#Unauthorized);
+    };
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return #Err(#Unauthorized);
     };
 
-    switch(createdCanistersByUser.get(msg.caller)) {
+    switch(createdCanistersByUser.get(caller)) {
       case (?existingUserEntries) {
         for (userEntry in existingUserEntries.vals()) {
           if (userEntry.userCanister.canisterType == lookupInput.canisterType) {
@@ -687,7 +750,10 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
 
   // User can submit a form to sign up for email updates
     // For now, we only capture the email address provided by the user and on which page they submitted the form
-  public func submit_signup_form(submittedSignUpForm : Types.SignUpFormInput) : async Text {
+  public shared ({caller}) func submit_signup_form(submittedSignUpForm : Types.SignUpFormInput) : async Text {
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return "not supported";
+    };
     switch(getEmailSubscriber(submittedSignUpForm.emailAddress)) {
       case null {
         // New subscriber
@@ -712,6 +778,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return [];
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return [];
+    };
     // Only Principals registered as custodians can access this function
     if (List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
       return Iter.toArray(emailSubscribersStorage.entries());
@@ -725,6 +794,9 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     if (Principal.isAnonymous(caller)) {
       return false;
 		};
+    if (canisterIsPrivate and not Principal.isController(caller)) {
+      return false;
+    };
     // Only Principals registered as custodians can access this function
     if (List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
       emailSubscribersStorage.delete(emailAddress);
