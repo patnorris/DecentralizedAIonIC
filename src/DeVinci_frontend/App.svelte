@@ -22,6 +22,7 @@
   import deVinci from "./pages/deVinci.svelte";
   import Models from "./pages/Models.svelte";
   import Knowledgebase from "./pages/Knowledgebase.svelte";
+  import UserBackend from "./pages/UserBackend.svelte";
 
   import { syncLocalChanges } from "./helpers/local_storage";
 
@@ -34,6 +35,7 @@
     "/brand": Brand,
     "/models": Models,
     "/knowledgebase": Knowledgebase,
+    "/userbackend": UserBackend,
     // Catch-all (this is optional, but if present it must be the last)
     "*": NotFound,
   };
