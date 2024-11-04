@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { store } from '../store';
+  
   import ToastNotification from '../components/ToastNotification.svelte';
 
   import {
@@ -10,7 +12,6 @@
   } from "../helpers/vector_database";
 
   import spinner from "../assets/loading.gif";
-    import { store } from '../store';
 
   let newKnowledgeText = '';
   let addingKnowledgeInProgress = false;
