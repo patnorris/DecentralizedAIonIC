@@ -87,11 +87,17 @@ useKnowledgeBase.subscribe((value) => {
   localStorage.setItem("useKnowledgeBase", value)
 });
 
-export let userKnowledgebaseBackendCanisterAddress = writable(localStorage.getItem("userKnowledgebaseBackendCanisterAddress") || null);
-let userKnowledgebaseBackendCanisterAddressValue = localStorage.getItem("userKnowledgebaseBackendCanisterAddress");
-userKnowledgebaseBackendCanisterAddress.subscribe((value) => {
-  userKnowledgebaseBackendCanisterAddressValue = value;
-  localStorage.setItem("userKnowledgebaseBackendCanisterAddress", value)
+export let userKnowledgebaseCanisterAddress = writable(localStorage.getItem("userKnowledgebaseCanisterAddress") || null);
+let userKnowledgebaseCanisterAddressValue = localStorage.getItem("userKnowledgebaseCanisterAddress");
+userKnowledgebaseCanisterAddress.subscribe((value) => {
+  userKnowledgebaseCanisterAddressValue = value;
+  localStorage.setItem("userKnowledgebaseCanisterAddress", value)
+});
+export let userBackendCanisterAddress = writable(localStorage.getItem("userBackendCanisterAddress") || null);
+let userBackendCanisterAddressValue = localStorage.getItem("userBackendCanisterAddress");
+userBackendCanisterAddress.subscribe((value) => {
+  userBackendCanisterAddressValue = value;
+  localStorage.setItem("userBackendCanisterAddress", value)
 });
 
 export let downloadedModels = writable(JSON.parse(localStorage.getItem("downloadedAiModels") || "[]"));
@@ -121,19 +127,21 @@ type State = {
   accountId: string;
   error: string;
   isLoading: boolean;
-  userKnowledgebaseBackendActor: typeof arcmindvectordb;
+  userKnowledgebaseCanisterActor: typeof arcmindvectordb;
 };
+
+const defaultBackendCanisterId = userBackendCanisterAddressValue ? userBackendCanisterAddressValue : backendCanisterId;
 
 const defaultState: State = {
   isAuthed: null,
-  backendActor: createBackendCanisterActor(backendCanisterId, {
+  backendActor: createBackendCanisterActor(defaultBackendCanisterId, {
     agentOptions: { host: HOST },
   }),
   principal: null,
   accountId: "",
   error: "",
   isLoading: false,
-  userKnowledgebaseBackendActor: null,
+  userKnowledgebaseCanisterActor: null,
 };
 
 export const createStore = ({
@@ -217,6 +225,133 @@ export const createStore = ({
     };
   };
 
+  const initBackendCanisterActor = async (loginType, identity: Identity) => {
+    const getUserBackendCanisterId = async (backendActor) => {
+      try {
+        const canisterEntryResponse = await backendActor.getUserCanistersEntry({ 'canisterType' : { 'Backend' : null } });
+        // @ts-ignore
+        if (canisterEntryResponse.Ok) {
+          // Update backend canister info with user's own canister
+          // @ts-ignore
+          const userCanisterId = canisterEntryResponse.Ok?.userCanister?.canisterAddress;
+          userBackendCanisterAddress.set(userCanisterId);            
+          return userCanisterId;
+        } else {
+          // @ts-ignore
+          console.error("Error retrieving user backend canister: ", canisterEntryResponse.Err);
+          // @ts-ignore
+          throw new Error("Error retrieving user backend canister: ", canisterEntryResponse.Err);
+        };
+      } catch (error) {
+        console.error("Error in getUserBackendCanisterId: ", error);
+      };
+      return null; // no user backend canister
+    };
+
+    let canisterId = backendCanisterId;
+    if (userBackendCanisterAddressValue) {
+      canisterId = userBackendCanisterAddressValue;
+    };
+
+    if (loginType === "plug") {
+      let backendActor = (await window.ic?.plug.createActor({
+        canisterId: canisterId,
+        interfaceFactory: backendIdlFactory,
+      })) as typeof DeVinci_backend;
+      if (!userBackendCanisterAddressValue) {
+        // The user might have an own backend canister
+        const canisterIdResponse = await getUserBackendCanisterId(backendActor);
+        if (canisterIdResponse && canisterIdResponse !== canisterId) {
+          canisterId = canisterIdResponse;
+          backendActor = (await window.ic?.plug.createActor({
+            canisterId: canisterId,
+            interfaceFactory: backendIdlFactory,
+          })) as typeof DeVinci_backend;
+        };
+      };
+      return backendActor;
+    } else if (loginType === "bitfinity") {
+      let backendActor = (await window.ic?.infinityWallet.createActor({
+        canisterId: canisterId,
+        interfaceFactory: backendIdlFactory,
+        host,
+      })) as typeof DeVinci_backend;
+      if (!userBackendCanisterAddressValue) {
+        // The user might have an own backend canister
+        const canisterIdResponse = await getUserBackendCanisterId(backendActor);
+        if (canisterIdResponse && canisterIdResponse !== canisterId) {
+          canisterId = canisterIdResponse;
+          backendActor = (await window.ic?.infinityWallet.createActor({
+            canisterId: canisterId,
+            interfaceFactory: backendIdlFactory,
+            host,
+          })) as typeof DeVinci_backend;
+        };
+      };
+      return backendActor;
+    } else {
+      let backendActor = createBackendCanisterActor(canisterId, {
+        agentOptions: {
+          identity,
+          host: HOST,
+        },
+      });
+      if (!userBackendCanisterAddressValue) {
+        // The user might have an own backend canister
+        const canisterIdResponse = await getUserBackendCanisterId(backendActor);
+        if (canisterIdResponse && canisterIdResponse !== canisterId) {
+          canisterId = canisterIdResponse;
+          backendActor = createBackendCanisterActor(canisterId, {
+            agentOptions: {
+              identity,
+              host: HOST,
+            },
+          });
+        };
+      };
+      return backendActor;
+    };
+  };
+
+  const updateBackendCanisterActor = async (newBackendCanisterId) => {
+    if (!newBackendCanisterId) {
+      return;
+    }
+    if (authClient) {
+      const identity = await authClient.getIdentity();
+      let backendActor;
+      if (globalState.isAuthed === "plug") {
+        backendActor = (await window.ic?.plug.createActor({
+          canisterId: newBackendCanisterId,
+          interfaceFactory: backendIdlFactory,
+        })) as typeof DeVinci_backend;
+      } else if (globalState.isAuthed === "bitfinity") {
+        backendActor = (await window.ic?.infinityWallet.createActor({
+          canisterId: newBackendCanisterId,
+          interfaceFactory: backendIdlFactory,
+          host,
+        })) as typeof DeVinci_backend;
+      } else {
+        backendActor = createBackendCanisterActor(newBackendCanisterId, {
+          agentOptions: {
+            identity,
+            host: HOST,
+          },
+        });
+      };
+      if (backendActor) {
+        update((state) => {
+          return {
+            ...state,
+            backendActor,
+          };
+        });
+      };
+      return backendActor;
+    };
+    return null; 
+  };
+
   const nfidConnect = async () => {
     authClient = await AuthClient.create();
     if (await authClient.isAuthenticated()) {
@@ -246,12 +381,7 @@ export const createStore = ({
   };
 
   const initNfid = async (identity: Identity) => {
-    const backendActor = createBackendCanisterActor(backendCanisterId, {
-      agentOptions: {
-        identity,
-        host: HOST,
-      },
-    });
+    const backendActor = await initBackendCanisterActor("nfid", identity);
 
     if (!backendActor) {
       console.warn("couldn't create backend actor");
@@ -433,10 +563,7 @@ export const createStore = ({
       });
     };
 
-    const backendActor = (await window.ic?.plug.createActor({
-      canisterId: backendCanisterId,
-      interfaceFactory: backendIdlFactory,
-    })) as typeof DeVinci_backend;
+    const backendActor = await initBackendCanisterActor("plug", null);
 
     if (!backendActor) {
       console.warn("couldn't create backend actor");
@@ -517,11 +644,7 @@ export const createStore = ({
       }); */
     }
 
-    const backendActor = (await window.ic?.infinityWallet.createActor({
-      canisterId: backendCanisterId,
-      interfaceFactory: backendIdlFactory,
-      host,
-    })) as typeof DeVinci_backend;
+    const backendActor = await initBackendCanisterActor("bitfinity", null);
 
     if (!backendActor) {
       console.warn("couldn't create backend actor");
@@ -625,20 +748,23 @@ export const createStore = ({
   };
 
   const getActorForUserKnowledgebaseCanister = async () => {
-    if (globalState.userKnowledgebaseBackendActor) {
-      return globalState.userKnowledgebaseBackendActor;
+    if (globalState.userKnowledgebaseCanisterActor) {
+      return globalState.userKnowledgebaseCanisterActor;
     };
     if (authClient) {
       const identity = await authClient.getIdentity();
 
-      if (!userKnowledgebaseBackendCanisterAddressValue) {
+      if (!userKnowledgebaseCanisterAddressValue) {
         try {
           const canisterEntryResponse = await globalState.backendActor.getUserCanistersEntry({ 'canisterType' : { 'Knowledgebase' : null } });
           // @ts-ignore
           if (canisterEntryResponse.Ok) {
-            userKnowledgebaseBackendCanisterAddress.set(canisterEntryResponse.Ok?.userCanister?.canisterAddress);
+            // @ts-ignore
+            userKnowledgebaseCanisterAddress.set(canisterEntryResponse.Ok?.userCanister?.canisterAddress);
           } else {
+            // @ts-ignore
             console.error("Error retrieving user knowledgebase canister: ", canisterEntryResponse.Err);
+            // @ts-ignore
             throw new Error("Error retrieving user knowledgebase canister: ", canisterEntryResponse.Err);
           };
         } catch (error) {
@@ -647,7 +773,7 @@ export const createStore = ({
         };
       };
 
-      const userKnowledgebaseBackendActor = createUserKnowledgebaseBackendCanisterActor(userKnowledgebaseBackendCanisterAddressValue, {
+      const userKnowledgebaseCanisterActor = createUserKnowledgebaseBackendCanisterActor(userKnowledgebaseCanisterAddressValue, {
         agentOptions: {
           identity,
           host: HOST,
@@ -656,10 +782,10 @@ export const createStore = ({
       update((state) => {
         return {
           ...state,
-          userKnowledgebaseBackendActor,
+          userKnowledgebaseCanisterActor,
         };
       });
-      return userKnowledgebaseBackendActor;
+      return userKnowledgebaseCanisterActor;
     };
     return null;    
   };
@@ -675,6 +801,7 @@ export const createStore = ({
     disconnect,
     checkExistingLoginAndConnect,
     getActorForUserKnowledgebaseCanister,
+    updateBackendCanisterActor,
   };
 };
 
