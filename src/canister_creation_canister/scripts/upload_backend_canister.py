@@ -1,8 +1,8 @@
-"""Uploads knowledgebase canister wasm
+"""Uploads backend canister wasm
 
 Run with:
 
-    python -m scripts.upload_knowledgebase_canister.py
+    python -m scripts.upload_backend_canister.py
 """
 
 # pylint: disable=invalid-name, too-few-public-methods, no-member, too-many-statements
@@ -43,7 +43,7 @@ def generate_chunks(data: bytes, chunk_size: int) -> Generator[bytes, None, None
 
 
 def main() -> int:
-    """Uploads the knowledgebase canister wasm."""
+    """Uploads the backend canister wasm."""
 
     args = parse_args()
 
@@ -102,7 +102,7 @@ def main() -> int:
             print(f"- chunk[0]  = {chunk[0]}")
             print(f"- chunk[-1] = {chunk[-1]}")
 
-        response = canister_creator.upload_knowledgebase_canister_wasm_bytes_chunk(
+        response = canister_creator.upload_backend_canister_wasm_bytes_chunk(
             chunk
         )  # pylint: disable=no-member
         if "Ok" in response[0].keys():
