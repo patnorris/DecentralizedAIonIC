@@ -72,6 +72,8 @@ class SyncStream(NetworkStream):
 # ========================================================================
 # Upload the knowledgebase canister wasm
 python3 -m scripts.upload_knowledgebase_canister --network local --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
+# Upload the backend canister wasm
+python3 -m scripts.upload_backend_canister --network local --canister canister_creation_canister --wasm files/DeVinci_backend.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
 ```
 
 Run upload script - IC:
@@ -80,6 +82,8 @@ Run upload script - IC:
 ## To IC
 # Upload the knowledgebase canister wasm
 python3 -m scripts.upload_knowledgebase_canister --network ic --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
+# Upload the backend canister wasm
+python3 -m scripts.upload_backend_canister --network ic --canister canister_creation_canister --wasm files/backend.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
 ```
 
 ### Test canister creation
@@ -89,14 +93,20 @@ dfx canister call canister_creation_canister whoami
 dfx canister call canister_creation_canister amiController
 
 # To test knowledgebase canister creation
-dfx canister call canister_creation_canister testCreateCanister
+dfx canister call canister_creation_canister testCreateKnowledgebaseCanister
+# To test backend canister creation
+dfx canister call canister_creation_canister testCreateBackendCanister
 
-## Call endpoints on created control canister
-## Note: use newCanisterId printed by testCreateCanister
+## Call endpoints on created knowledgebase canister
+## Note: use newCanisterId printed by testCreateKnowledgebaseCanister
 dfx canister call b77ix-eeaaa-aaaaa-qaada-cai size
 dfx canister call b77ix-eeaaa-aaaaa-qaada-cai check_cycles_and_topup
 
 Also see tests in arcmindvectordb/interact/
+
+## Call endpoints on created backend canister
+## Note: use newCanisterId printed by testCreateBackendCanister
+
 
 # ----be carefull with these START ---
 ## In case the knowledgebase canister wasm has to be reset (use with caution):

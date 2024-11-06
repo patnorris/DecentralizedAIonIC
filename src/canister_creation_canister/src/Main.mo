@@ -121,10 +121,13 @@ actor class CanisterCreationCanister() = this {
                 });
 
                 // DeVinciBackend(custodian: Principal, _canister_creation_canister_id : Text)
-                let argInstall = [configurationInput.owner, Principal.toText(Principal.fromActor(this))];
+                let argInstall = {
+                    custodian : Principal = configurationInput.owner;
+                    _canister_creation_canister_id : Text = Principal.toText(Principal.fromActor(this));
+                };
 
                 let installControlWasm = await IC0.install_code({
-                    arg = to_candid(argInstall);
+                    arg = to_candid(#Init(argInstall));
                     wasm_module = Blob.fromArray(backendCanisterWasm);
                     mode = #install;
                     canister_id = createdCanister.canister_id;
