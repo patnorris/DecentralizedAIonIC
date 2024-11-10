@@ -103,6 +103,7 @@ type DeVinciBackend =
    isControllerLogicOk: () -> (AuthRecordResult);
    migrate_user_chats: (principal, List) -> (bool);
    search_user_knowledgebase: (Embeddings) -> (SearchKnowledgeBaseResult);
+   setCanisterCreationCanisterId: (text) -> (AuthRecordResult);
    store_user_chats_memory_vectors: (vec MemoryVector) ->
     (MemoryVectorsStoredResult);
    submit_signup_form: (SignUpFormInput) -> (text);
@@ -190,4 +191,4 @@ type ApiError =
    Unauthorized;
    ZeroAddress;
  };
-service : (principal, text) -> DeVinciBackend
+service : (principal) -> DeVinciBackend

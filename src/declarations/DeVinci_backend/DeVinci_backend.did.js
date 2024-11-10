@@ -158,6 +158,11 @@ export const idlFactory = ({ IDL }) => {
         [SearchKnowledgeBaseResult],
         [],
       ),
+    'setCanisterCreationCanisterId' : IDL.Func(
+        [IDL.Text],
+        [AuthRecordResult],
+        [],
+      ),
     'store_user_chats_memory_vectors' : IDL.Func(
         [IDL.Vec(MemoryVector)],
         [MemoryVectorsStoredResult],
@@ -180,4 +185,4 @@ export const idlFactory = ({ IDL }) => {
   });
   return DeVinciBackend;
 };
-export const init = ({ IDL }) => { return [IDL.Principal, IDL.Text]; };
+export const init = ({ IDL }) => { return [IDL.Principal]; };

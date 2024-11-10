@@ -12,7 +12,7 @@ import Utils "./Utils";
 
 import Types "./Types";
 
-shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canister_id : Text) = Self {
+shared actor class DeVinciBackend(custodian: Principal) = Self {
   stable var custodians = List.make<Principal>(custodian);
 
   stable var canisterIsPrivate : Bool = false; // variable to indicate whether this is the shared DeVinci backend (false) or a user's own backend (true)
@@ -27,6 +27,17 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
     };
     canisterIsPrivate := newIsPrivateValue;
     return true;
+  };
+
+  stable var CANISTER_CREATION_CANISTER_ID : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+
+  public shared (msg) func setCanisterCreationCanisterId(_canister_creation_canister_id : Text) : async Types.AuthRecordResult {
+    if (not Principal.isController(msg.caller)) {
+      return #Err(#Unauthorized);
+    };
+    CANISTER_CREATION_CANISTER_ID := _canister_creation_canister_id;
+    let authRecord = { auth = "You set the creation canister for this canister." };
+    return #Ok(authRecord);
   };
 
 // TODO: instead add functions to manage cycles balance and gather stats
@@ -463,8 +474,6 @@ shared actor class DeVinciBackend(custodian: Principal, _canister_creation_canis
   };
 
 // User created canisters
-  let CANISTER_CREATION_CANISTER_ID : Text = _canister_creation_canister_id;
-
   let canisterCreationCanister = actor (CANISTER_CREATION_CANISTER_ID) : actor {
       amiController() : async Types.AuthRecordResult;
       createCanister : (configurationInput : Types.CanisterCreationConfiguration) -> async Types.CanisterCreationResult;

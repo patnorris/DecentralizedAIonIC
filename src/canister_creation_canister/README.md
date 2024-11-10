@@ -106,7 +106,8 @@ Also see tests in arcmindvectordb/interact/
 
 ## Call endpoints on created backend canister
 ## Note: use newCanisterId printed by testCreateBackendCanister
-
+dfx canister call by6od-j4aaa-aaaaa-qaadq-cai updateCanisterIsPrivate '(true)'
+dfx canister call by6od-j4aaa-aaaaa-qaadq-cai setCanisterCreationCanisterId '("bkyz2-fmaaa-aaaaa-qaaaq-cai")'
 
 # ----be carefull with these START ---
 ## In case the knowledgebase canister wasm has to be reset (use with caution):

@@ -127,11 +127,14 @@ actor class CanisterCreationCanister() = this {
                 };
 
                 let installControlWasm = await IC0.install_code({
-                    arg = to_candid(#Init(argInstall));
+                    //arg = to_candid(#Init(argInstall));
+                    arg = to_candid(configurationInput.owner);
                     wasm_module = Blob.fromArray(backendCanisterWasm);
                     mode = #install;
                     canister_id = createdCanister.canister_id;
                 });
+
+                // TODO: setCanisterCreationCanisterId
 
                 /* let readyResult = await knowledgebaseCanister.ready();
                 switch (readyResult) {

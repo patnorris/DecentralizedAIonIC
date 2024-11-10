@@ -84,6 +84,7 @@ export interface DeVinciBackend {
     [Embeddings],
     SearchKnowledgeBaseResult
   >,
+  'setCanisterCreationCanisterId' : ActorMethod<[string], AuthRecordResult>,
   'store_user_chats_memory_vectors' : ActorMethod<
     [Array<MemoryVector>],
     MemoryVectorsStoredResult
