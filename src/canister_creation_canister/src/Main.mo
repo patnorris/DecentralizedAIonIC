@@ -74,7 +74,7 @@ actor class CanisterCreationCanister() = this {
         switch (configurationInput.canisterType) {
             case (#Knowledgebase) {
                 // Create canister
-                Cycles.add(300_000_000_000);
+                Cycles.add(700_000_000_000);
 
                 let createdCanister = await IC0.create_canister({
                     settings = ?{
@@ -109,7 +109,7 @@ actor class CanisterCreationCanister() = this {
             };
             case (#Backend) {
                 // Create canister
-                Cycles.add(300_000_000_000);
+                Cycles.add(700_000_000_000);
 
                 let createdCanister = await IC0.create_canister({
                     settings = ?{

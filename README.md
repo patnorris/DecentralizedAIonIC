@@ -68,6 +68,7 @@ Local:
 ```bash
 dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend --network local
 dfx canister call DeVinci_backend --network local setCanisterCreationCanisterId '("bkyz2-fmaaa-aaaaa-qaaaq-cai")'
+
 dfx deploy internet_identity --network local
 dfx deploy DeVinci_frontend --network local
 ```
@@ -85,6 +86,8 @@ Deploy the code as canisters to the live IC where it's accessible via regular We
 ### Development Stage
 ```bash
 dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
+dfx canister call DeVinci_backend --network development setCanisterCreationCanisterId '("wyx7t-zqaaa-aaaam-qb5ga-cai")'
+
 dfx deploy --network development DeVinci_frontend
 dfx deploy --network development arcmindvectordb
 ```

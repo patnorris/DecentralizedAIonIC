@@ -9,5 +9,13 @@
     "build": {
       "packtool": "mops sources"
     }
+  },
+  "networks": {
+    "development": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
+    }
   }
 }

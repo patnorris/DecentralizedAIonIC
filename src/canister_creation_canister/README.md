@@ -19,6 +19,10 @@ dfx generate
 dfx deploy canister_creation_canister
 
 # IC mainnet (caution!)
+## development
+dfx deploy --network development canister_creation_canister
+
+## production
 dfx deploy --ic canister_creation_canister
 
 # Set DeVinci Backend as master canister (you have to deploy that canister first and then return with its id)
@@ -26,7 +30,11 @@ dfx deploy --ic canister_creation_canister
 dfx canister call canister_creation_canister setMasterCanisterId '("be2us-64aaa-aaaaa-qaabq-cai")'
 
 # IC mainnet (caution!)
-dfx canister call --ic canister_creation_canister setMasterCanisterId '("6ugvi-7aaaa-aaaai-acria-cai")'
+## development
+dfx canister call --network development canister_creation_canister setMasterCanisterId '("sbflw-gyaaa-aaaal-qcbeq-cai")'
+
+## production
+dfx canister call --ic canister_creation_canister setMasterCanisterId '("xzpew-mqaaa-aaaai-acqza-cai")'
 
 ```
 
@@ -79,11 +87,18 @@ python3 -m scripts.upload_backend_canister --network local --canister canister_c
 Run upload script - IC:
 
 ```bash
-## To IC
-# Upload the knowledgebase canister wasm
+# To IC
+## development
+### Upload the knowledgebase canister wasm
+python3 -m scripts.upload_knowledgebase_canister --network development --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
+### Upload the backend canister wasm
+python3 -m scripts.upload_backend_canister --network development --canister canister_creation_canister --wasm files/DeVinci_backend.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
+
+## production
+### Upload the knowledgebase canister wasm
 python3 -m scripts.upload_knowledgebase_canister --network ic --canister canister_creation_canister --wasm files/arcmindvectordb.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
-# Upload the backend canister wasm
-python3 -m scripts.upload_backend_canister --network ic --canister canister_creation_canister --wasm files/backend.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
+### Upload the backend canister wasm
+python3 -m scripts.upload_backend_canister --network ic --canister canister_creation_canister --wasm files/DeVinci_backend.wasm --candid src/declarations/canister_creation_canister/canister_creation_canister.did
 ```
 
 ### Test canister creation

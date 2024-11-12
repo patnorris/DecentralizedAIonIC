@@ -11,7 +11,7 @@ Process to create another stage:
 - To add the controller via dfx: e.g. dfx canister update-settings --add-controller <principal> --network development DeVinci_frontend
 - Double-check contollers (via dfx) with e.g. dfx canister info --network development DeVinci_frontend
 - Copy the id of the new canister
-- Paste the canister's id in the file canister_ids.json (under the new entry for the stage, the entry's ket needs to match the network name given in dfx.json) 
+- Paste the canister's id in the file canister_ids.json (under the new entry for the stage, the entry's key needs to match the network name given in dfx.json) 
 - Create a new networks entry in dfx.json (with the network's name being the same key as given in canister_ids.json)
 - If there are multiple canisters for a stage, create as many canisters as needed (e.g. DeVinci_backend and DeVinci_frontend)
 - Add the CLI command/s in Readme for the new stage (with the correct network name)
