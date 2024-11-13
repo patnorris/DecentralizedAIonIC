@@ -216,10 +216,8 @@ export const checkUserHasKnowledgeBase = async () => {
 };
 
 export const createUserKnowledgebaseCanister = async () => {
-  console.log("in createUserKnowledgebaseCanister");
   try {
     let createCanisterResponse = await storeState.backendActor.createNewCanister({ 'canisterType' : { 'Knowledgebase' : null } });
-    console.log("in createUserKnowledgebaseCanister createCanisterResponse ", createCanisterResponse);
     if (createCanisterResponse.Ok) {
       /* CanisterCreationRecord = {
         creationResult : Text;
@@ -237,10 +235,8 @@ export const createUserKnowledgebaseCanister = async () => {
 };
 
 export const createUserBackendCanister = async () => {
-  console.log("in createUserBackendCanister");
   try {
     let createCanisterResponse = await storeState.backendActor.createNewCanister({ 'canisterType' : { 'Backend' : null } });
-    console.log("in createUserBackendCanister createCanisterResponse ", createCanisterResponse);
     if (createCanisterResponse.Ok) {
       /* CanisterCreationRecord = {
         creationResult : Text;

@@ -229,20 +229,14 @@ export const createStore = ({
   };
 
   const initBackendCanisterActor = async (loginType, identity: Identity) => {
-    console.log("initBackendCanisterActor loginType ", loginType);
-    console.log("initBackendCanisterActor identity ", identity);
-
     const getUserBackendCanisterId = async (backendActor) => {
-      console.log("initBackendCanisterActor getUserBackendCanisterId backendActor ", backendActor);
       try {
         const canisterEntryResponse = await backendActor.getUserCanistersEntry({ 'canisterType' : { 'Backend' : null } });
-        console.log("initBackendCanisterActor getUserBackendCanisterId canisterEntryResponse ", canisterEntryResponse);
         // @ts-ignore
         if (canisterEntryResponse.Ok) {
           // Update backend canister info with user's own canister
           // @ts-ignore
           const userCanisterId = canisterEntryResponse.Ok?.userCanister?.canisterAddress;
-          console.log("initBackendCanisterActor getUserBackendCanisterId userCanisterId ", userCanisterId);
           userBackendCanisterAddress.set(userCanisterId);            
           return userCanisterId;
         } else {
@@ -258,13 +252,10 @@ export const createStore = ({
     };
 
     let canisterId = backendCanisterId;
-    console.log("initBackendCanisterActor backendCanisterId ", backendCanisterId);
-    console.log("initBackendCanisterActor userBackendCanisterAddressValue ", userBackendCanisterAddressValue);
     if (userBackendCanisterAddressValue && userBackendCanisterAddressValue !== null && userBackendCanisterAddressValue.length > 5) {
       canisterId = userBackendCanisterAddressValue;
     };
-    console.log("initBackendCanisterActor canisterId ", canisterId);
-
+    
     if (loginType === "plug") {
       let backendActor = (await window.ic?.plug.createActor({
         canisterId: canisterId,
