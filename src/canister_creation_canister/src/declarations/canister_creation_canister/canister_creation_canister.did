@@ -1,0 +1,57 @@
+type StatusCode = nat16;
+type FileUploadResult = 
+ variant {
+   Err: ApiError;
+   Ok: FileUploadRecord;
+ };
+type FileUploadRecord = record {creationResult: text;};
+type CanisterType = 
+ variant {
+   Backend;
+   Knowledgebase;
+ };
+type CanisterCreationResult = 
+ variant {
+   Err: ApiError;
+   Ok: CanisterCreationRecord;
+ };
+type CanisterCreationRecord = 
+ record {
+   creationResult: text;
+   newCanisterId: text;
+ };
+type CanisterCreationConfiguration = 
+ record {
+   canisterType: CanisterType;
+   owner: principal;
+ };
+type CanisterCreationCanister = 
+ service {
+   amiController: () -> (AuthRecordResult);
+   createCanister: (CanisterCreationConfiguration) ->
+    (CanisterCreationResult);
+   reset_backend_canister_wasm: () -> (FileUploadResult);
+   reset_knowledgebase_canister_wasm: () -> (FileUploadResult);
+   setMasterCanisterId: (text) -> (AuthRecordResult);
+   testCreateBackendCanister: () -> (CanisterCreationResult);
+   testCreateKnowledgebaseCanister: () -> (CanisterCreationResult);
+   upload_backend_canister_wasm_bytes_chunk: (vec nat8) -> (FileUploadResult);
+   upload_knowledgebase_canister_wasm_bytes_chunk: (vec nat8) ->
+    (FileUploadResult);
+   whoami: () -> (principal);
+ };
+type AuthRecordResult = 
+ variant {
+   Err: ApiError;
+   Ok: AuthRecord;
+ };
+type AuthRecord = record {auth: text;};
+type ApiError = 
+ variant {
+   InvalidId;
+   Other: text;
+   StatusCode: StatusCode;
+   Unauthorized;
+   ZeroAddress;
+ };
+service : () -> CanisterCreationCanister

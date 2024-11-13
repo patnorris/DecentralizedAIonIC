@@ -24,7 +24,8 @@ export interface CanisterInfo {
   'creationTimestamp' : bigint,
   'canisterAddress' : string,
 }
-export type CanisterType = { 'Knowledgebase' : null };
+export type CanisterType = { 'Knowledgebase' : null } |
+  { 'Backend' : null };
 export interface Chat {
   'id' : string,
   'messages' : Array<Message>,
@@ -78,15 +79,18 @@ export interface DeVinciBackend {
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
   'isControllerLogicOk' : ActorMethod<[], AuthRecordResult>,
+  'migrate_user_chats' : ActorMethod<[Principal, List], boolean>,
   'search_user_knowledgebase' : ActorMethod<
     [Embeddings],
     SearchKnowledgeBaseResult
   >,
+  'setCanisterCreationCanisterId' : ActorMethod<[string], AuthRecordResult>,
   'store_user_chats_memory_vectors' : ActorMethod<
     [Array<MemoryVector>],
     MemoryVectorsStoredResult
   >,
   'submit_signup_form' : ActorMethod<[SignUpFormInput], string>,
+  'updateCanisterIsPrivate' : ActorMethod<[boolean], boolean>,
   'update_caller_settings' : ActorMethod<
     [UserSettings],
     UpdateUserSettingsResult
@@ -101,6 +105,7 @@ export interface EmailSubscriber {
   'pageSubmittedFrom' : string,
 }
 export type Embeddings = Array<number>;
+export type List = [] | [[Chat, List]];
 export interface MemoryVector {
   'content' : string,
   'metadata' : MemoryVectorMetadata,

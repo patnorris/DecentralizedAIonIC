@@ -208,6 +208,7 @@ module {
 
   public type CanisterType = {
     #Knowledgebase;
+    #Backend;
   };
 
   public type CanisterInfo = {

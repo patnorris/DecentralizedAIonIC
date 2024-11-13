@@ -1,4 +1,5 @@
 export const idlFactory = ({ IDL }) => {
+  const List = IDL.Rec();
   const Embeddings = IDL.Vec(IDL.Float64);
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
@@ -16,7 +17,10 @@ export const idlFactory = ({ IDL }) => {
     'Ok' : IDL.Bool,
     'Err' : ApiError,
   });
-  const CanisterType = IDL.Variant({ 'Knowledgebase' : IDL.Null });
+  const CanisterType = IDL.Variant({
+    'Knowledgebase' : IDL.Null,
+    'Backend' : IDL.Null,
+  });
   const CanisterCreationConfigurationInput = IDL.Record({
     'canisterType' : CanisterType,
   });
@@ -89,6 +93,7 @@ export const idlFactory = ({ IDL }) => {
     'emailAddress' : IDL.Text,
     'pageSubmittedFrom' : IDL.Text,
   });
+  List.fill(IDL.Opt(IDL.Tuple(Chat, List)));
   const SearchKnowledgeBaseResult = IDL.Variant({
     'Ok' : IDL.Text,
     'Err' : ApiError,
@@ -147,9 +152,15 @@ export const idlFactory = ({ IDL }) => {
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'isControllerLogicOk' : IDL.Func([], [AuthRecordResult], []),
+    'migrate_user_chats' : IDL.Func([IDL.Principal, List], [IDL.Bool], []),
     'search_user_knowledgebase' : IDL.Func(
         [Embeddings],
         [SearchKnowledgeBaseResult],
+        [],
+      ),
+    'setCanisterCreationCanisterId' : IDL.Func(
+        [IDL.Text],
+        [AuthRecordResult],
         [],
       ),
     'store_user_chats_memory_vectors' : IDL.Func(
@@ -158,6 +169,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'submit_signup_form' : IDL.Func([SignUpFormInput], [IDL.Text], []),
+    'updateCanisterIsPrivate' : IDL.Func([IDL.Bool], [IDL.Bool], []),
     'update_caller_settings' : IDL.Func(
         [UserSettings],
         [UpdateUserSettingsResult],
@@ -173,4 +185,4 @@ export const idlFactory = ({ IDL }) => {
   });
   return DeVinciBackend;
 };
-export const init = ({ IDL }) => { return [IDL.Principal, IDL.Text]; };
+export const init = ({ IDL }) => { return [IDL.Principal]; };

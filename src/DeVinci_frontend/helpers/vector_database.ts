@@ -10,7 +10,8 @@ import { TensorFlowEmbeddings } from "langchain/embeddings/tensorflow";
 import {
   store,
   vectorStore,
-  userKnowledgebaseBackendCanisterAddress,
+  userKnowledgebaseCanisterAddress,
+  userBackendCanisterAddress,
 } from "../store";
 
 import { getResourceAsArray } from "./setup_knowledgebase";
@@ -119,6 +120,7 @@ const searchEmbeddings = async (text: string) => {
 
 const getDataEntries = async (pathToUploadedPdf) => {
   const dataEntries = [];
+  // @ts-ignore
   const knowledgePages: [] = await getResourceAsArray(pathToUploadedPdf);
   for (let index = 0; index < knowledgePages.length; index++) {
     const dataEntry = {
@@ -221,13 +223,34 @@ export const createUserKnowledgebaseCanister = async () => {
         creationResult : Text;
         newCanisterId : Text;
       }; */
-      userKnowledgebaseBackendCanisterAddress.set(createCanisterResponse.Ok?.newCanisterId);
+      userKnowledgebaseCanisterAddress.set(createCanisterResponse.Ok?.newCanisterId);
       return createCanisterResponse.Ok;
     } else {
       return false;
     };
   } catch (error) {
     console.error("Error in createUserKnowledgebaseCanister: ", error);
+    return false;    
+  };
+};
+
+export const createUserBackendCanister = async () => {
+  try {
+    let createCanisterResponse = await storeState.backendActor.createNewCanister({ 'canisterType' : { 'Backend' : null } });
+    if (createCanisterResponse.Ok) {
+      /* CanisterCreationRecord = {
+        creationResult : Text;
+        newCanisterId : Text;
+      }; */
+      const newCanisterId = createCanisterResponse.Ok?.newCanisterId;
+      userBackendCanisterAddress.set(newCanisterId);
+      await store.updateBackendCanisterActor(newCanisterId)
+      return createCanisterResponse.Ok;
+    } else {
+      return false;
+    };
+  } catch (error) {
+    console.error("Error in createUserBackendCanister: ", error);
     return false;    
   };
 };
