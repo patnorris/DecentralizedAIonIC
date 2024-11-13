@@ -6,6 +6,25 @@ export type ApiError = { 'ZeroAddress' : null } |
   { 'InvalidTokenId' : null } |
   { 'Unauthorized' : null } |
   { 'Other' : string };
+export interface AuthRecord { 'auth' : string }
+export type AuthRecordResult = { 'Ok' : AuthRecord } |
+  { 'Err' : ApiError };
+export interface AvailableCanistersRecord { 'canisterType' : CanisterType }
+export interface CanisterCreationConfigurationInput {
+  'canisterType' : CanisterType,
+}
+export interface CanisterCreationRecord {
+  'creationResult' : string,
+  'newCanisterId' : string,
+}
+export type CanisterCreationResult = { 'Ok' : CanisterCreationRecord } |
+  { 'Err' : ApiError };
+export interface CanisterInfo {
+  'canisterType' : CanisterType,
+  'creationTimestamp' : bigint,
+  'canisterAddress' : string,
+}
+export type CanisterType = { 'Knowledgebase' : null };
 export interface Chat {
   'id' : string,
   'messages' : Array<Message>,
@@ -31,13 +50,26 @@ export type ChatsPreviewResult = { 'Ok' : Array<ChatPreview> } |
 export type ChatsResult = { 'Ok' : Array<Chat> } |
   { 'Err' : ApiError };
 export interface DeVinciBackend {
+  'add_to_user_knowledgebase' : ActorMethod<
+    [string, Embeddings],
+    MemoryVectorsStoredResult
+  >,
+  'amiController' : ActorMethod<[], AuthRecordResult>,
   'check_caller_has_memory_vectors_entry' : ActorMethod<
     [],
     MemoryVectorsCheckResult
   >,
+  'createNewCanister' : ActorMethod<
+    [CanisterCreationConfigurationInput],
+    CanisterCreationResult
+  >,
   'create_chat' : ActorMethod<[Array<Message>], ChatCreationResult>,
   'delete_chat' : ActorMethod<[string], ChatResult>,
   'delete_email_subscriber' : ActorMethod<[string], boolean>,
+  'getUserCanistersEntry' : ActorMethod<
+    [AvailableCanistersRecord],
+    UserCanistersEntryResult
+  >,
   'get_caller_chat_history' : ActorMethod<[], ChatsPreviewResult>,
   'get_caller_chats' : ActorMethod<[], ChatsResult>,
   'get_caller_memory_vectors' : ActorMethod<[], MemoryVectorsResult>,
@@ -45,6 +77,11 @@ export interface DeVinciBackend {
   'get_chat' : ActorMethod<[string], ChatResult>,
   'get_email_subscribers' : ActorMethod<[], Array<[string, EmailSubscriber]>>,
   'greet' : ActorMethod<[string], string>,
+  'isControllerLogicOk' : ActorMethod<[], AuthRecordResult>,
+  'search_user_knowledgebase' : ActorMethod<
+    [Embeddings],
+    SearchKnowledgeBaseResult
+  >,
   'store_user_chats_memory_vectors' : ActorMethod<
     [Array<MemoryVector>],
     MemoryVectorsStoredResult
@@ -56,16 +93,18 @@ export interface DeVinciBackend {
   >,
   'update_chat_messages' : ActorMethod<[string, Array<Message>], ChatIdResult>,
   'update_chat_metadata' : ActorMethod<[UpdateChatObject], ChatIdResult>,
+  'whoami' : ActorMethod<[], Principal>,
 }
 export interface EmailSubscriber {
   'subscribedAt' : bigint,
   'emailAddress' : string,
   'pageSubmittedFrom' : string,
 }
+export type Embeddings = Array<number>;
 export interface MemoryVector {
   'content' : string,
   'metadata' : MemoryVectorMetadata,
-  'embedding' : Array<number>,
+  'embedding' : Embeddings,
 }
 export interface MemoryVectorMetadata { 'id' : bigint }
 export type MemoryVectorsCheckResult = { 'Ok' : boolean } |
@@ -75,12 +114,17 @@ export type MemoryVectorsResult = { 'Ok' : Array<MemoryVector> } |
 export type MemoryVectorsStoredResult = { 'Ok' : boolean } |
   { 'Err' : ApiError };
 export interface Message { 'content' : string, 'sender' : string }
+export type SearchKnowledgeBaseResult = { 'Ok' : string } |
+  { 'Err' : ApiError };
 export interface SignUpFormInput {
   'emailAddress' : string,
   'pageSubmittedFrom' : string,
 }
 export interface UpdateChatObject { 'id' : string, 'chatTitle' : string }
 export type UpdateUserSettingsResult = { 'Ok' : boolean } |
+  { 'Err' : ApiError };
+export interface UserCanisterEntry { 'userCanister' : CanisterInfo }
+export type UserCanistersEntryResult = { 'Ok' : UserCanisterEntry } |
   { 'Err' : ApiError };
 export interface UserSettings {
   'responseLength' : string,

@@ -66,7 +66,7 @@ npm run erase-replica
 ### 4. Deploy your canisters to the replica
 Local:
 ```bash
-dfx deploy --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend --network local
+dfx deploy --argument "( principal\"$(dfx identity get-principal)\", \"bkyz2-fmaaa-aaaaa-qaaaq-cai\" )" DeVinci_backend --network local
 dfx deploy internet_identity --network local
 dfx deploy DeVinci_frontend --network local
 ```
@@ -85,6 +85,7 @@ Deploy the code as canisters to the live IC where it's accessible via regular We
 ```bash
 dfx deploy --network development --argument "( principal\"$(dfx identity get-principal)\" )" DeVinci_backend
 dfx deploy --network development DeVinci_frontend
+dfx deploy --network development arcmindvectordb
 ```
 
 ### Testing Stage

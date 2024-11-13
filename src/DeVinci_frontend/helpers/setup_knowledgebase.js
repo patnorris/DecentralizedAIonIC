@@ -1,16 +1,11 @@
+import * as pdfjsLib from 'pdfjs-dist';
+
 export const getResourceAsArray = async (pathToUploadedPdf) => {
   let documentContent = await getDocumentContent(pathToUploadedPdf);
   return documentContent;
 };
 
-// Loaded via <script> tag, create shortcut to access PDF.js exports.
-let { pdfjsLib } = globalThis;
-
-// Only set the workerSrc if not on localhost
-if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
-  // The workerSrc property shall be specified.
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
-}
+pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
 
 const getDocumentContent = async (documentUrl) => {
   let documentContent = [];

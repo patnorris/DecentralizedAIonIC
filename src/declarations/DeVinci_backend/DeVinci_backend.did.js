@@ -1,12 +1,31 @@
 export const idlFactory = ({ IDL }) => {
+  const Embeddings = IDL.Vec(IDL.Float64);
   const ApiError = IDL.Variant({
     'ZeroAddress' : IDL.Null,
     'InvalidTokenId' : IDL.Null,
     'Unauthorized' : IDL.Null,
     'Other' : IDL.Text,
   });
+  const MemoryVectorsStoredResult = IDL.Variant({
+    'Ok' : IDL.Bool,
+    'Err' : ApiError,
+  });
+  const AuthRecord = IDL.Record({ 'auth' : IDL.Text });
+  const AuthRecordResult = IDL.Variant({ 'Ok' : AuthRecord, 'Err' : ApiError });
   const MemoryVectorsCheckResult = IDL.Variant({
     'Ok' : IDL.Bool,
+    'Err' : ApiError,
+  });
+  const CanisterType = IDL.Variant({ 'Knowledgebase' : IDL.Null });
+  const CanisterCreationConfigurationInput = IDL.Record({
+    'canisterType' : CanisterType,
+  });
+  const CanisterCreationRecord = IDL.Record({
+    'creationResult' : IDL.Text,
+    'newCanisterId' : IDL.Text,
+  });
+  const CanisterCreationResult = IDL.Variant({
+    'Ok' : CanisterCreationRecord,
     'Err' : ApiError,
   });
   const Message = IDL.Record({ 'content' : IDL.Text, 'sender' : IDL.Text });
@@ -20,6 +39,19 @@ export const idlFactory = ({ IDL }) => {
     'firstMessagePreview' : IDL.Text,
   });
   const ChatResult = IDL.Variant({ 'Ok' : Chat, 'Err' : ApiError });
+  const AvailableCanistersRecord = IDL.Record({
+    'canisterType' : CanisterType,
+  });
+  const CanisterInfo = IDL.Record({
+    'canisterType' : CanisterType,
+    'creationTimestamp' : IDL.Nat64,
+    'canisterAddress' : IDL.Text,
+  });
+  const UserCanisterEntry = IDL.Record({ 'userCanister' : CanisterInfo });
+  const UserCanistersEntryResult = IDL.Variant({
+    'Ok' : UserCanisterEntry,
+    'Err' : ApiError,
+  });
   const ChatPreview = IDL.Record({
     'id' : IDL.Text,
     'creationTime' : IDL.Nat64,
@@ -35,7 +67,7 @@ export const idlFactory = ({ IDL }) => {
   const MemoryVector = IDL.Record({
     'content' : IDL.Text,
     'metadata' : MemoryVectorMetadata,
-    'embedding' : IDL.Vec(IDL.Float64),
+    'embedding' : Embeddings,
   });
   const MemoryVectorsResult = IDL.Variant({
     'Ok' : IDL.Vec(MemoryVector),
@@ -57,8 +89,8 @@ export const idlFactory = ({ IDL }) => {
     'emailAddress' : IDL.Text,
     'pageSubmittedFrom' : IDL.Text,
   });
-  const MemoryVectorsStoredResult = IDL.Variant({
-    'Ok' : IDL.Bool,
+  const SearchKnowledgeBaseResult = IDL.Variant({
+    'Ok' : IDL.Text,
     'Err' : ApiError,
   });
   const SignUpFormInput = IDL.Record({
@@ -75,14 +107,30 @@ export const idlFactory = ({ IDL }) => {
     'chatTitle' : IDL.Text,
   });
   const DeVinciBackend = IDL.Service({
+    'add_to_user_knowledgebase' : IDL.Func(
+        [IDL.Text, Embeddings],
+        [MemoryVectorsStoredResult],
+        [],
+      ),
+    'amiController' : IDL.Func([], [AuthRecordResult], ['query']),
     'check_caller_has_memory_vectors_entry' : IDL.Func(
         [],
         [MemoryVectorsCheckResult],
         ['query'],
       ),
+    'createNewCanister' : IDL.Func(
+        [CanisterCreationConfigurationInput],
+        [CanisterCreationResult],
+        [],
+      ),
     'create_chat' : IDL.Func([IDL.Vec(Message)], [ChatCreationResult], []),
     'delete_chat' : IDL.Func([IDL.Text], [ChatResult], []),
     'delete_email_subscriber' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'getUserCanistersEntry' : IDL.Func(
+        [AvailableCanistersRecord],
+        [UserCanistersEntryResult],
+        ['query'],
+      ),
     'get_caller_chat_history' : IDL.Func([], [ChatsPreviewResult], ['query']),
     'get_caller_chats' : IDL.Func([], [ChatsResult], ['query']),
     'get_caller_memory_vectors' : IDL.Func(
@@ -98,6 +146,12 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'isControllerLogicOk' : IDL.Func([], [AuthRecordResult], []),
+    'search_user_knowledgebase' : IDL.Func(
+        [Embeddings],
+        [SearchKnowledgeBaseResult],
+        [],
+      ),
     'store_user_chats_memory_vectors' : IDL.Func(
         [IDL.Vec(MemoryVector)],
         [MemoryVectorsStoredResult],
@@ -115,7 +169,8 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'update_chat_metadata' : IDL.Func([UpdateChatObject], [ChatIdResult], []),
+    'whoami' : IDL.Func([], [IDL.Principal], ['query']),
   });
   return DeVinciBackend;
 };
-export const init = ({ IDL }) => { return [IDL.Principal]; };
+export const init = ({ IDL }) => { return [IDL.Principal, IDL.Text]; };

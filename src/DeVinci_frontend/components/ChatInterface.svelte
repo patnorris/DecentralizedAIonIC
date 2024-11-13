@@ -4,11 +4,13 @@
     chatModelGlobal,
     activeChatGlobal,
     chatModelIdInitiatedGlobal,
-    downloadedModels
+    downloadedModels,
+    useKnowledgeBase
   } from "../store";
   import InstallToastNotification from './InstallToastNotification.svelte';
   import {
     getSearchVectorDbTool,
+    searchUserKnowledgebase,
     //storeEmbeddings,
     //loadExistingVectorStore,
     //checkUserHasKnowledgeBase
@@ -58,11 +60,11 @@
   });
 
   let vectorDbSearchTool;
-  let useKnowledgeBase = false;
+  let useSessionVectorDb = false;
 
   async function setVectorDbSearchTool(pathToInput) {
     vectorDbSearchTool = await getSearchVectorDbTool(pathToInput);
-    useKnowledgeBase = true;
+    useSessionVectorDb = true;
   };
 
   // Debug Android
@@ -85,36 +87,55 @@
       /* debugOutput = "###in getChatModelResponse###";
       debugOutput += JSON.stringify(prompt);
       setLabel("debug-label", debugOutput); */
-      if (vectorDbSearchTool && useKnowledgeBase) {
-        /* debugOutput += " useKnowledgeBase ";
+      if ((vectorDbSearchTool && useSessionVectorDb) || $useKnowledgeBase) {
+        /* debugOutput += " useSessionVectorDb ";
         setLabel("debug-label", debugOutput); */
         // Add content from local knowledge base if activated
         let additionalContentToProvide = "";
         additionalContentToProvide = " Additional content (use this if relevant to the User Prompt): ";
         try {
           const promptContent = prompt[prompt.length - 1].content;
-          let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
-          vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
-          try {
-            for (let index = 0; index < vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase.length; index++) {
-              const additionalEntry = vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase[index];
-              additionalContentToProvide += "  ";
-              additionalContentToProvide += additionalEntry.content;
+          if (vectorDbSearchTool && useSessionVectorDb) {
+            try {
+              let vectorDbSearchToolResponse = await vectorDbSearchTool.func(promptContent);
+              vectorDbSearchToolResponse = JSON.parse(vectorDbSearchToolResponse);
+              for (let index = 0; index < vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase.length; index++) {
+                const additionalEntry = vectorDbSearchToolResponse.existingChatsFoundInLocalDatabase[index];
+                additionalContentToProvide += "  ";
+                additionalContentToProvide += additionalEntry.content;
+              };
+            } catch (error) {
+              console.error("Error in getChatModelResponse vectorDbSearchTool");
+              console.error(error.toString());
+              /* debugOutput += " final prompt and additionalContentEntry error ";
+              debugOutput += error.toString();
+                debugOutput += error.name;
+                debugOutput += error.message;
+              setLabel("debug-label", debugOutput);  */
             };
-            // Compose the final prompt
-            const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
-            prompt = [...prompt, additionalContentEntry];
-          } catch (error) {
-            console.error("Error in getChatModelResponse final prompt and additionalContentEntry");
-            console.error(error.toString());
-            /* debugOutput += " final prompt and additionalContentEntry error ";
-            debugOutput += error.toString();
-              debugOutput += error.name;
-              debugOutput += error.message;
-            setLabel("debug-label", debugOutput);  */
           };
+          if ($useKnowledgeBase) {
+            try {
+              let userKnowledgeBaseResponse = await searchUserKnowledgebase(promptContent);
+              if (userKnowledgeBaseResponse) {
+                additionalContentToProvide += "  ";
+                additionalContentToProvide += userKnowledgeBaseResponse;
+              };
+            } catch (error) {
+              console.error("Error in getChatModelResponse vectorDbSearchTool");
+              console.error(error.toString());
+              /* debugOutput += " final prompt and additionalContentEntry error ";
+              debugOutput += error.toString();
+                debugOutput += error.name;
+                debugOutput += error.message;
+              setLabel("debug-label", debugOutput);  */
+            };
+          };
+          // Compose the final prompt
+          const additionalContentEntry = { role: 'user', content: additionalContentToProvide, name: 'UserKnowledgeBase' };
+          prompt = [...prompt, additionalContentEntry];
         } catch (error) {
-          console.error("Error in getChatModelResponse getting vectorDbSearchToolResponse");
+          console.error("Error in getChatModelResponse getting additionalContentToProvide");
           console.error(error.toString());
           /* debugOutput += " vectorDbSearchToolResponse error ";
           debugOutput += error.toString();
@@ -123,7 +144,6 @@
           setLabel("debug-label", debugOutput);   */
         };
       };
-
       try {
         /* debugOutput += " final prompt ";
         debugOutput += JSON.stringify(prompt);

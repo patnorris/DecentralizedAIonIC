@@ -185,13 +185,8 @@
   let pathToUploadedPdf = '';
   let initiatedKnowledgeDatabase = false;
   let loadingKnowledgeDatabase = false;
-  let useKnowledgeBase = false;
   //let persistingCurrentEmbeddings = false;
   //let userHasExistingKnowledgeBase = false;
-
-  function handleUseKnowledgeBaseToggle() { //TODO
-    useKnowledgeBase = !useKnowledgeBase;
-  };
 
   async function uploadPdfToVectorDatabase() {
     const fileInput = document.getElementById('pdf_chat') as HTMLInputElement;
@@ -202,18 +197,17 @@
       await callbackSearchVectorDbTool(pathToUploadedPdf);
       initiatedKnowledgeDatabase = true;
       loadingKnowledgeDatabase = false;
-      useKnowledgeBase = true;
       showToast = true;
       toastMessage = "PDF processed and ready to use!";
     } else {
       showToast = true;
       toastMessage = "Please select a PDF file.";
     }
-  }
+  };
 
   function closeToast() {
     showToast = false;
-  }
+  };
 
 // Retrieve the chat's history if an existing chat is to be displayed
   let chatRetrievalInProgress = false;
