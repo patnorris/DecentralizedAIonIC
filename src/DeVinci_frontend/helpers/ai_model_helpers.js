@@ -54,6 +54,15 @@ const availableAiModels = [
     default: true
   },
   { //requires shader-f16
+    id: 'gemma-2-2b-jpn-it-q4f16_1-MLC',
+    name: 'Gemma 2 Jpn',
+    size: 'Small',
+    parameters: '2 billion',
+    performance: 'Good',
+    goodFor: 'Japanese',
+    default: false
+  },
+  { //requires shader-f16
     id: 'gemma-2-9b-it-q4f16_1-MLC',
     name: 'Gemma 2 9B',
     size: 'Large',
