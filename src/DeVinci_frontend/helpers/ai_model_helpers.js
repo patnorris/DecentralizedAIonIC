@@ -36,8 +36,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-1.7B-Instruct-q0f16-MLC',
-    name: 'SmolLM 1.7B',
+    id: 'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+    name: 'SmolLM 2 1.7B',
     size: 'Small',
     parameters: '1.7 billion',
     performance: 'Good',
@@ -45,8 +45,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-360M-Instruct-q0f16-MLC',
-    name: 'SmolLM 360M',
+    id: 'SmolLM2-360M-Instruct-q4f16_1-MLC',
+    name: 'SmolLM 2 360M',
     size: 'Very Small',
     parameters: '360 million',
     performance: 'Quite Good',
@@ -54,8 +54,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-135M-Instruct-q0f16-MLC',
-    name: 'SmolLM 135M',
+    id: 'SmolLM2-135M-Instruct-q0f16-MLC',
+    name: 'SmolLM 2 135M',
     size: 'Super Small',
     parameters: '135 million',
     performance: 'Alright',
