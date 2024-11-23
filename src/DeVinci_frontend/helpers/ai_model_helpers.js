@@ -1,5 +1,23 @@
 const availableAiModels = [
   { //requires shader-f16
+    id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    name: 'Llama3.2 1B',
+    size: 'Very Small',
+    parameters: '1 billion',
+    performance: 'Good',
+    goodFor: 'English',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
+    name: 'Llama3.2 3B',
+    size: 'Medium',
+    parameters: '3 billion',
+    performance: 'Very Good',
+    goodFor: 'English',
+    default: false
+  },
+  { //requires shader-f16
     id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',
     name: 'Llama3.1 8B',
     size: 'Large',
