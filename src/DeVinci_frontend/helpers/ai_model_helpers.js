@@ -1,5 +1,23 @@
 const availableAiModels = [
   { //requires shader-f16
+    id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    name: 'Llama3.2 1B',
+    size: 'Very Small',
+    parameters: '1 billion',
+    performance: 'Good',
+    goodFor: 'English',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
+    name: 'Llama3.2 3B',
+    size: 'Medium',
+    parameters: '3 billion',
+    performance: 'Very Good',
+    goodFor: 'English',
+    default: false
+  },
+  { //requires shader-f16
     id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',
     name: 'Llama3.1 8B',
     size: 'Large',
@@ -18,8 +36,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-1.7B-Instruct-q0f16-MLC',
-    name: 'SmolLM 1.7B',
+    id: 'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+    name: 'SmolLM 2 1.7B',
     size: 'Small',
     parameters: '1.7 billion',
     performance: 'Good',
@@ -27,8 +45,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-360M-Instruct-q0f16-MLC',
-    name: 'SmolLM 360M',
+    id: 'SmolLM2-360M-Instruct-q4f16_1-MLC',
+    name: 'SmolLM 2 360M',
     size: 'Very Small',
     parameters: '360 million',
     performance: 'Quite Good',
@@ -36,8 +54,8 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
-    id: 'SmolLM-135M-Instruct-q0f16-MLC',
-    name: 'SmolLM 135M',
+    id: 'SmolLM2-135M-Instruct-q0f16-MLC',
+    name: 'SmolLM 2 135M',
     size: 'Super Small',
     parameters: '135 million',
     performance: 'Alright',
@@ -52,6 +70,15 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'English',
     default: true
+  },
+  { //requires shader-f16
+    id: 'gemma-2-2b-jpn-it-q4f16_1-MLC',
+    name: 'Gemma 2 Jpn',
+    size: 'Small',
+    parameters: '2 billion',
+    performance: 'Good',
+    goodFor: 'Japanese',
+    default: false
   },
   { //requires shader-f16
     id: 'gemma-2-9b-it-q4f16_1-MLC',
