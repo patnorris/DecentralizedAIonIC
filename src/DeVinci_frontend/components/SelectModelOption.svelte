@@ -202,30 +202,9 @@
   // Add this reactive statement
   $: isChecked = $selectedAiModelId !== null && $selectedAiModelId === id;
 
-  // Function to convert parameters to GB size (approximate)
-  function parametersToGB(params: string): string {
-    const parts = params.split(' ');
-    const value = parseFloat(parts[0]);
-    const unit = parts[1].toLowerCase();
-    
-    // Convert to billions based on unit
-    let billions;
-    if (unit === 'billion') {
-      billions = value;
-    } else if (unit === 'million') {
-      billions = value / 1000;
-    } else {
-      return "N/A";
-    }
-    
-    // Rough estimation: 1B parameters ≈ 2GB in FP16
-    const sizeGB = (billions * 2).toFixed(1);
-    return sizeGB;
-  }
 
   // Function to convert VRAM MB to GB
   function vramMBtoGB(vramMB: number): string {
-    console.log('vramMB value:', vramMB, typeof vramMB);
     if (!vramMB || isNaN(vramMB)) return "N/A";
     return (vramMB / 1024).toFixed(1);
   }
@@ -274,7 +253,7 @@
         <div class="block">
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
           <div class="w-full text-sm font-normal">
-            {parameters} (~{parametersToGB(parameters)}GB)
+            {parameters}
           </div>
           <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
           <span 
@@ -282,10 +261,10 @@
             on:mouseenter={() => showVramTooltip = true}
             on:mouseleave={() => showVramTooltip = false}
           >
-            VRAM: {vramRequired ? vramMBtoGB(vramRequired) : "N/A"}GB
+            Size: {vramRequired ? vramMBtoGB(vramRequired) : "N/A"}GB
             {#if showVramTooltip}
               <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 p-2 text-sm text-white bg-black rounded-lg shadow-lg whitespace-nowrap">
-                Recommended VRAM
+                Aprox. model size to download
               </div>
             {/if}
           </span>
