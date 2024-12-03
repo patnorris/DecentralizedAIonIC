@@ -29,6 +29,7 @@
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
   export let autoInitiateIfModelSelected = false;
+  export let vramRequired;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
@@ -37,6 +38,10 @@
 
   let initiateText;
   let downloadText;
+
+  // Add a reactive variable to control tooltip visibility
+  let showTooltip = false;
+  let showVramTooltip = false;
 
   function toPercentage(floatValue, decimals = 2) {
     return (floatValue * 100).toFixed(decimals);
@@ -196,6 +201,34 @@
   // Add this reactive statement
   $: isChecked = $selectedAiModelId !== null && $selectedAiModelId === id;
 
+  // Function to convert parameters to GB size (approximate)
+  function parametersToGB(params: string): string {
+    const parts = params.split(' ');
+    const value = parseFloat(parts[0]);
+    const unit = parts[1].toLowerCase();
+    
+    // Convert to billions based on unit
+    let billions;
+    if (unit === 'billion') {
+      billions = value;
+    } else if (unit === 'million') {
+      billions = value / 1000;
+    } else {
+      return "N/A";
+    }
+    
+    // Rough estimation: 1B parameters ≈ 2GB in FP16
+    const sizeGB = (billions * 2).toFixed(1);
+    return sizeGB;
+  }
+
+  // Function to convert VRAM MB to GB
+  function vramMBtoGB(vramMB: number): string {
+    console.log('vramMB value:', vramMB, typeof vramMB);
+    if (!vramMB || isNaN(vramMB)) return "N/A";
+    return (vramMB / 1024).toFixed(1);
+  }
+
 </script>
 
 {#if !onlyShowIfDownloaded || isDownloaded}
@@ -205,14 +238,43 @@
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
         <div class="block">
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
-          <div class="w-full text-sm font-normal">{parameters}</div>
-          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
-          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
-          <div class="inline-flex  bg-gray-100 mt-2 text-gray-800 text-xs font-medium mx-0 px-2 py-1 rounded border border-gray-500">
-            <div class="w-64">
-              {goodFor}
-            </div>
+          <div class="w-full text-sm font-normal">
+            {parameters} (~{parametersToGB(parameters)}GB)
           </div>
+          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
+          <span 
+            class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500 relative inline-block cursor-pointer"
+            on:mouseenter={() => showVramTooltip = true}
+            on:mouseleave={() => showVramTooltip = false}
+          >
+            VRAM: {vramRequired ? vramMBtoGB(vramRequired) : "N/A"}GB
+            {#if showVramTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 p-2 text-sm text-white bg-black rounded-lg shadow-lg whitespace-nowrap">
+                Recommended VRAM
+              </div>
+            {/if}
+          </span>
+          
+          <!-- Language support -->
+          <div class="relative inline-block">
+            <span 
+              class="inline-flex items-center text-indigo-900 text-xs font-medium me-1.5 px-2.5 py-0.5 bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-300 cursor-pointer transition-colors duration-200"
+              on:mouseenter={() => showTooltip = true}
+              on:mouseleave={() => showTooltip = false}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 mr-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Supported Languages
+            </span>
+            {#if showTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 w-48 p-2 text-sm text-white bg-black rounded-lg shadow-lg">
+                {goodFor}
+              </div>
+            {/if}
+          </div>
+            
         </div>
         <svg class="w-6 h-5 ms-3 min-w-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -279,5 +341,19 @@
   .animate-bgMove {
     background-size: 200% 100%;
     animation: bgMove 2s linear infinite;
+  }
+
+  .relative {
+    position: relative;
+  }
+  .absolute {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 </style>

@@ -42,6 +42,7 @@
             bind:chatModelDownloadInProgress
             onlyShowIfDownloaded={onlyShowDownloadedModels}
             autoInitiateIfModelSelected={autoInitiateSelectedModel}
+            vramRequired={option.vramRequired}
           />
         {:else}
           <SelectModelOption
@@ -54,6 +55,7 @@
             goodFor={option.goodFor}
             size={option.size}
             bind:chatModelDownloadInProgress
+            vramRequired={option.vramRequired}
           />
         {/if}
       {/each}
