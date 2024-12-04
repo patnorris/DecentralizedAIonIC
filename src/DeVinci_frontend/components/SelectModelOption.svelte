@@ -40,9 +40,10 @@
   let initiateText;
   let downloadText;
 
-  // Add a reactive variable to control tooltip visibility
-  let showTooltip = false;
+  // Reactive variables to control tooltip visibility
+  let showLanguagesTooltip = false;
   let showVramTooltip = false;
+  let showPerformanceTooltip = false;
 
   function toPercentage(floatValue, decimals = 2) {
     return (floatValue * 100).toFixed(decimals);
@@ -263,7 +264,24 @@
           <div class="w-full text-sm font-normal">
             {parameters}
           </div>
-          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
+
+          <!-- Model Performance -->
+          <div class="relative inline-block">
+            <span
+              class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]"
+              on:mouseenter={() => showPerformanceTooltip = true}
+              on:mouseleave={() => showPerformanceTooltip = false}
+            >
+              {performance}
+            </span>
+            {#if showPerformanceTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 w-48 p-2 text-sm text-white bg-black rounded-lg shadow-lg">
+                Performance of the AI model (how "smart" it is)
+              </div>
+            {/if}
+          </div>
+
+          <!-- Model size -->
           <span 
             class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500 relative inline-block cursor-pointer"
             on:mouseenter={() => showVramTooltip = true}
@@ -281,8 +299,8 @@
           <div class="relative inline-block">
             <span 
               class="inline-flex items-center text-indigo-900 text-xs font-medium me-1.5 px-2.5 py-0.5 bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-300 cursor-pointer transition-colors duration-200"
-              on:mouseenter={() => showTooltip = true}
-              on:mouseleave={() => showTooltip = false}
+              on:mouseenter={() => showLanguagesTooltip = true}
+              on:mouseleave={() => showLanguagesTooltip = false}
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 mr-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
@@ -290,7 +308,7 @@
               </svg>
               Supported Languages
             </span>
-            {#if showTooltip}
+            {#if showLanguagesTooltip}
               <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 w-48 p-2 text-sm text-white bg-black rounded-lg shadow-lg">
                 {goodFor}
               </div>
