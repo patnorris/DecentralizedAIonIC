@@ -291,7 +291,7 @@
             {vramRequired ? vramMBtoGB(vramRequired) : "N/A"}GB
             {#if showVramTooltip}
               <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 p-2 text-sm text-white bg-black rounded-lg shadow-lg whitespace-nowrap">
-                Aprox. model size to download
+                Aprox. model download size
               </div>
             {/if}
           </span>
