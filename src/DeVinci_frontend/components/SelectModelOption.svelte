@@ -190,6 +190,14 @@
   };
 
   onMount(async () => {
+    // Find the model in the list by the id and retrieve its vram_required_MB
+    const modelInfo = webllm.prebuiltAppConfig.model_list.find(model => model.model_id === id);
+    if (modelInfo) {
+      vramRequired = modelInfo.vram_required_MB;
+    } else {
+      console.error('Model not found:', id);
+    };
+
     if (autoInitiateIfModelSelected) {
       // Initiate the model without the user having to click
       // if this model is the currently selected one
