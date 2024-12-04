@@ -7,7 +7,6 @@ const availableAiModels = [
     performance: 'Super Good',
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
     default: false,
-    vramRequired: 4598.34
   },
   { //requires shader-f16
     id: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
@@ -17,7 +16,6 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'German, English, Spanish, French, Japanese, Russian, Thai, Chinese, Dutch, Ukrainian',
     default: false,
-    vramRequired: 2740.48
   },
   { //requires shader-f16
     id: 'SmolLM-1.7B-Instruct-q0f16-MLC',
@@ -27,7 +25,6 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'English',
     default: false,
-    vramRequired: 1843.20
   },
   { //requires shader-f16
     id: 'SmolLM-360M-Instruct-q0f16-MLC',
@@ -37,7 +34,6 @@ const availableAiModels = [
     performance: 'Quite Good',
     goodFor: 'English',
     default: false,
-    vramRequired: 512.45
   },
   { //requires shader-f16
     id: 'SmolLM-135M-Instruct-q0f16-MLC',
@@ -47,7 +43,6 @@ const availableAiModels = [
     performance: 'Alright',
     goodFor: 'English',
     default: false,
-    vramRequired: 256.32
   },
   { //requires shader-f16
     id: 'gemma-2-2b-it-q4f16_1-MLC',
@@ -57,7 +52,6 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'English',
     default: true,
-    vramRequired: 2131.97
   },
   { //requires shader-f16
     id: 'gemma-2-9b-it-q4f16_1-MLC',
@@ -67,7 +61,6 @@ const availableAiModels = [
     performance: 'Super Good',
     goodFor: 'English',
     default: false,
-    vramRequired: 5120.64
   },
   { //requires shader-f16
     id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",
@@ -77,7 +70,6 @@ const availableAiModels = [
     performance: 'Quite Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
     default: false,
-    vramRequired: 768.45
   },
   { //requires shader-f16
     id: "Qwen2.5-1.5B-Instruct-q4f32_1-MLC",
@@ -87,7 +79,6 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
     default: false,
-    vramRequired: 1843.20
   },
   { //requires shader-f16
     id: "Qwen2.5-7B-Instruct-q4f16_1-MLC",
@@ -97,7 +88,6 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
     default: false,
-    vramRequired: 4032.48
   },
   { //requires shader-f16
     id: "Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC",
@@ -107,7 +97,6 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'Coding',
     default: false,
-    vramRequired: 1843.20
   },
   { //requires shader-f16
     id: "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC",
@@ -117,7 +106,6 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'Coding',
     default: false,
-    vramRequired: 4032.48
   },
   { //requires shader-f16
     id: "Qwen2.5-Math-1.5B-Instruct-q4f16_1-MLC",
@@ -127,7 +115,6 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'Math',
     default: false,
-    vramRequired: 1843.20
   },
   { //requires shader-f16
     id: 'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC',
@@ -137,7 +124,6 @@ const availableAiModels = [
     performance: 'Alright',
     goodFor: 'English',
     default: false,
-    vramRequired: 1024.56
   },
   { //requires shader-f16
     id: 'Mistral-7B-Instruct-v0.3-q4f16_1-MLC',
@@ -147,7 +133,6 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'English',
     default: false,
-    vramRequired: 4032.48
   },
   { //requires shader-f16
     id: 'WizardMath-7B-V1.1-q4f16_1-MLC',
@@ -157,7 +142,6 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'Math',
     default: false,
-    vramRequired: 4032.48
   },
   { //requires shader-f16
     id: 'Llama-3.1-70B-Instruct-q3f16_1-MLC',
@@ -167,7 +151,6 @@ const availableAiModels = [
     performance: 'Insane',
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
     default: false,
-    vramRequired: 35840.72
   },
   // Android WebGPU models (q4f32 models typically require more VRAM)
   {
@@ -180,7 +163,6 @@ const availableAiModels = [
     goodFor: 'Chinese, English',
     default: true,
     android: true,
-    vramRequired: 2048.64
   },
   {
     id: 'Llama-3.1-8B-Instruct-q4f32_1-MLC-1k',
@@ -191,7 +173,6 @@ const availableAiModels = [
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
     default: false,
     android: true,
-    vramRequired: 5120.64
   },
   {
     id: 'Phi-3.5-mini-instruct-q4f32_1-MLC-1k',
@@ -202,7 +183,6 @@ const availableAiModels = [
     goodFor: 'German, English, Spanish, French, Japanese, Russian, Thai, Chinese, Dutch, Ukrainian',
     default: false,
     android: true,
-    vramRequired: 3072.56
   },
   {
     id: 'SmolLM-1.7B-Instruct-q4f32_1-MLC',
@@ -213,7 +193,6 @@ const availableAiModels = [
     goodFor: 'English',
     default: false,
     android: true,
-    vramRequired: 2048.64
   },
   {
     id: 'gemma-2-2b-it-q4f32_1-MLC-1k',
@@ -224,7 +203,6 @@ const availableAiModels = [
     goodFor: 'English',
     default: false,
     android: true,
-    vramRequired: 2740.48
   },
   {
     id: 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC-1k',
@@ -235,7 +213,6 @@ const availableAiModels = [
     goodFor: 'English',
     default: false,
     android: true,
-    vramRequired: 1536.45
   },
   {
     id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k',
@@ -246,7 +223,6 @@ const availableAiModels = [
     goodFor: 'English',
     default: false,
     android: true,
-    vramRequired: 3072.56
   }
 ];
 

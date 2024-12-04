@@ -30,7 +30,8 @@
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
   export let autoInitiateIfModelSelected = false;
-  export let vramRequired;
+  
+  let vramRequired;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
