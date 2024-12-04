@@ -6,7 +6,7 @@ const availableAiModels = [
     parameters: '8 billion',
     performance: 'Super Good',
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
@@ -15,7 +15,7 @@ const availableAiModels = [
     parameters: '3.8 billion',
     performance: 'Very Good',
     goodFor: 'German, English, Spanish, French, Japanese, Russian, Thai, Chinese, Dutch, Ukrainian',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'SmolLM-1.7B-Instruct-q0f16-MLC',
@@ -24,7 +24,7 @@ const availableAiModels = [
     parameters: '1.7 billion',
     performance: 'Good',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'SmolLM-360M-Instruct-q0f16-MLC',
@@ -33,7 +33,7 @@ const availableAiModels = [
     parameters: '360 million',
     performance: 'Quite Good',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'SmolLM-135M-Instruct-q0f16-MLC',
@@ -42,7 +42,7 @@ const availableAiModels = [
     parameters: '135 million',
     performance: 'Alright',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'gemma-2-2b-it-q4f16_1-MLC',
@@ -51,7 +51,7 @@ const availableAiModels = [
     parameters: '2 billion',
     performance: 'Good',
     goodFor: 'English',
-    default: true,
+    default: true
   },
   { //requires shader-f16
     id: 'gemma-2-9b-it-q4f16_1-MLC',
@@ -60,7 +60,7 @@ const availableAiModels = [
     parameters: '9 billion',
     performance: 'Super Good',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",
@@ -69,7 +69,7 @@ const availableAiModels = [
     parameters: '0.5 billion',
     performance: 'Quite Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-1.5B-Instruct-q4f32_1-MLC",
@@ -78,7 +78,7 @@ const availableAiModels = [
     parameters: '1.5 billion',
     performance: 'Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-7B-Instruct-q4f16_1-MLC",
@@ -87,7 +87,7 @@ const availableAiModels = [
     parameters: '7 billion',
     performance: 'Very Good',
     goodFor: 'Chinese, English, Japanese, Korean, Vietnamese, Thai, Arabic, French, Spanish, Portuguese, German, Italian, Russian',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC",
@@ -96,7 +96,7 @@ const availableAiModels = [
     parameters: '1.5 billion',
     performance: 'Good',
     goodFor: 'Coding',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC",
@@ -105,7 +105,7 @@ const availableAiModels = [
     parameters: '7 billion',
     performance: 'Very Good',
     goodFor: 'Coding',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: "Qwen2.5-Math-1.5B-Instruct-q4f16_1-MLC",
@@ -114,7 +114,7 @@ const availableAiModels = [
     parameters: '1.5 billion',
     performance: 'Good',
     goodFor: 'Math',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC',
@@ -123,7 +123,7 @@ const availableAiModels = [
     parameters: '1.1 billion',
     performance: 'Alright',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'Mistral-7B-Instruct-v0.3-q4f16_1-MLC',
@@ -132,7 +132,7 @@ const availableAiModels = [
     parameters: '7 billion',
     performance: 'Very Good',
     goodFor: 'English',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'WizardMath-7B-V1.1-q4f16_1-MLC',
@@ -141,7 +141,7 @@ const availableAiModels = [
     parameters: '7 billion',
     performance: 'Very Good',
     goodFor: 'Math',
-    default: false,
+    default: false
   },
   { //requires shader-f16
     id: 'Llama-3.1-70B-Instruct-q3f16_1-MLC',
@@ -150,7 +150,7 @@ const availableAiModels = [
     parameters: '70 billion',
     performance: 'Insane',
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
-    default: false,
+    default: false
   },
   // Android WebGPU models (q4f32 models typically require more VRAM)
   {
@@ -162,7 +162,7 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'Chinese, English',
     default: true,
-    android: true,
+    android: true
   },
   {
     id: 'Llama-3.1-8B-Instruct-q4f32_1-MLC-1k',
@@ -172,7 +172,7 @@ const availableAiModels = [
     performance: 'Super Good',
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
     default: false,
-    android: true,
+    android: true
   },
   {
     id: 'Phi-3.5-mini-instruct-q4f32_1-MLC-1k',
@@ -182,7 +182,7 @@ const availableAiModels = [
     performance: 'Very Good',
     goodFor: 'German, English, Spanish, French, Japanese, Russian, Thai, Chinese, Dutch, Ukrainian',
     default: false,
-    android: true,
+    android: true
   },
   {
     id: 'SmolLM-1.7B-Instruct-q4f32_1-MLC',
@@ -192,7 +192,7 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'English',
     default: false,
-    android: true,
+    android: true
   },
   {
     id: 'gemma-2-2b-it-q4f32_1-MLC-1k',
@@ -202,7 +202,7 @@ const availableAiModels = [
     performance: 'Good',
     goodFor: 'English',
     default: false,
-    android: true,
+    android: true
   },
   {
     id: 'TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC-1k',
@@ -212,7 +212,7 @@ const availableAiModels = [
     performance: 'Alright',
     goodFor: 'English',
     default: false,
-    android: true,
+    android: true
   },
   {
     id: 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-MLC-1k',
@@ -222,7 +222,7 @@ const availableAiModels = [
     performance: 'Alright',
     goodFor: 'English',
     default: false,
-    android: true,
+    android: true
   }
 ];
 
