@@ -8,7 +8,8 @@
     chatModelGlobal,
     selectedAiModelId,
     chatModelIdInitiatedGlobal,
-    currentModelName
+    currentModelName,
+    downloadedModels
   } from "../store";
   import {
     setLocalFlag,
@@ -29,6 +30,8 @@
   export let chatModelDownloadInProgress;
   export let onlyShowIfDownloaded = false;
   export let autoInitiateIfModelSelected = false;
+  
+  let vramRequired;
 
   // Reactive statement to check if the ID is included in the already downloaded model IDs
   $: isDownloaded = getLocalFlag("downloadedAiModels").includes(id);
@@ -37,6 +40,11 @@
 
   let initiateText;
   let downloadText;
+
+  // Reactive variables to control tooltip visibility
+  let showLanguagesTooltip = false;
+  let showVramTooltip = false;
+  let showPerformanceTooltip = false;
 
   function toPercentage(floatValue, decimals = 2) {
     return (floatValue * 100).toFixed(decimals);
@@ -184,6 +192,14 @@
   };
 
   onMount(async () => {
+    // Find the model in the list by the id and retrieve its vram_required_MB
+    const modelInfo = webllm.prebuiltAppConfig.model_list.find(model => model.model_id === id);
+    if (modelInfo) {
+      vramRequired = modelInfo.vram_required_MB;
+    } else {
+      console.error('Model not found:', id);
+    };
+
     if (autoInitiateIfModelSelected) {
       // Initiate the model without the user having to click
       // if this model is the currently selected one
@@ -196,6 +212,47 @@
   // Add this reactive statement
   $: isChecked = $selectedAiModelId !== null && $selectedAiModelId === id;
 
+
+  // Function to convert VRAM MB to GB
+  function vramMBtoGB(vramMB: number): string {
+    if (!vramMB || isNaN(vramMB)) return "N/A";
+    return (vramMB / 1024).toFixed(1);
+  }
+
+  async function deleteModel(modelId: string) {
+    try {
+      // Delete from WebLLM cache
+      await webllm.deleteModelAllInfoInCache(modelId);
+      
+      // Update downloadedModels array
+      const currentDownloaded = JSON.parse(localStorage.getItem("downloadedAiModels") || "[]");
+      const updatedDownloaded = currentDownloaded.filter(id => id !== modelId);
+      localStorage.setItem("downloadedAiModels", JSON.stringify(updatedDownloaded));
+      downloadedModels.set(updatedDownloaded);
+      
+      // Clear only this model's download progress
+      const currentProgress = JSON.parse(localStorage.getItem("aiModelDownloadingProgress") || "{}");
+      delete currentProgress[modelId];
+      localStorage.setItem("aiModelDownloadingProgress", JSON.stringify(currentProgress));
+      
+      // Reset selected model only if it was the deleted one
+      if ($selectedAiModelId === modelId) {
+        selectedAiModelId.set(null);
+        chatModelIdInitiatedGlobal.set(null);
+        currentModelName.set(null);
+      }
+      
+      // Reset component state for this specific model
+      downloadProgress = null;
+      downloadText = null;
+      initiateText = null;
+      isDownloaded = false;
+      
+    } catch (error) {
+      console.error("Error deleting model:", error);
+    }
+  }
+
 </script>
 
 {#if !onlyShowIfDownloaded || isDownloaded}
@@ -205,14 +262,59 @@
       <label for={id} class="inline-flex items-center justify-between w-full h-full p-3 cursor-pointer peer-checked:border-solid peer-checked:cursor-default peer-checked:bg-[lightsteelblue] peer-checked:border-[#151b1e] peer-checked:text-[#151b1e] hover:text-gray-600 hover:bg-[lightsteelblue]">
         <div class="block">
           <div class="w-full text-[#151b1e] text-md font-semibold">{name}</div>
-          <div class="w-full text-sm font-normal">{parameters}</div>
-          <span class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]">{performance}</span>
-          <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500">{size}</span>
-          <div class="inline-flex  bg-gray-100 mt-2 text-gray-800 text-xs font-medium mx-0 px-2 py-1 rounded border border-gray-500">
-            <div class="w-64">
-              {goodFor}
-            </div>
+          <div class="w-full text-sm font-normal">
+            {parameters}
           </div>
+
+          <!-- Model Performance -->
+          <div class="relative inline-block">
+            <span
+              class="performance-span text-[#151b1e] text-xs font-medium me-1.5 px-2.5 py-0.5 bg-gray-300 rounded border-2 border-[#151b1e]"
+              on:mouseenter={() => showPerformanceTooltip = true}
+              on:mouseleave={() => showPerformanceTooltip = false}
+            >
+              {performance}
+            </span>
+            {#if showPerformanceTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 w-48 p-2 text-sm text-white bg-black rounded-lg shadow-lg">
+                Performance of the AI model (how "smart" it is)
+              </div>
+            {/if}
+          </div>
+
+          <!-- Model size -->
+          <span 
+            class="bg-gray-100 text-gray-800 text-xs font-medium mx-0 px-2.5 py-0.5 rounded border border-gray-500 relative inline-block cursor-pointer"
+            on:mouseenter={() => showVramTooltip = true}
+            on:mouseleave={() => showVramTooltip = false}
+          >
+            {vramRequired ? vramMBtoGB(vramRequired) : "N/A"}GB
+            {#if showVramTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 p-2 text-sm text-white bg-black rounded-lg shadow-lg whitespace-nowrap">
+                Aprox. model download size
+              </div>
+            {/if}
+          </span>
+          
+          <!-- Language support -->
+          <div class="relative inline-block">
+            <span 
+              class="inline-flex items-center text-indigo-900 text-xs font-medium me-1.5 px-2.5 py-0.5 bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-300 cursor-pointer transition-colors duration-200"
+              on:mouseenter={() => showLanguagesTooltip = true}
+              on:mouseleave={() => showLanguagesTooltip = false}
+            >
+              Good for
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M18 6h-8M18 6v8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            {#if showLanguagesTooltip}
+              <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 z-50 w-48 p-2 text-sm text-white bg-black rounded-lg shadow-lg">
+                {goodFor}
+              </div>
+            {/if}
+          </div>
+            
         </div>
         <svg class="w-6 h-5 ms-3 min-w-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -234,6 +336,18 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
           </svg>
         </span>
+        
+        <!-- Delete button -->
+        <button
+          on:click|stopPropagation={() => deleteModel(id)}
+          class="inline-flex items-center bg-red-600 hover:bg-red-700 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full transition-colors duration-200"
+          title="Delete model from cache"
+        >
+          Delete
+          <svg class="ml-0.5 w-3 h-3 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+          </svg>
+        </button>
         {#if $selectedAiModelId === id}
           <span class="inline-flex items-center bg-green-700 text-yellow-300 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
             In use
@@ -279,5 +393,19 @@
   .animate-bgMove {
     background-size: 200% 100%;
     animation: bgMove 2s linear infinite;
+  }
+
+  .relative {
+    position: relative;
+  }
+  .absolute {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 </style>

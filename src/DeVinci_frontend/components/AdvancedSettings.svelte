@@ -37,7 +37,7 @@
   // Function to update the system prompt
   async function updateSystemPrompt() {
     const inputElement = document.getElementById('systemPromptInput');
-    if (inputElement) {
+    if (inputElement instanceof HTMLInputElement) {
       const systemPromptValue = inputElement.value;
       if ($userSettings) {
         $userSettings.systemPrompt = systemPromptValue;
@@ -87,7 +87,7 @@
   
     <!-- Response Length Radio Buttons -->
     <div class="response-length">
-      <label>Choose Response Length:</label>
+      <p>Choose Response Length:</p>
       <div>
         <input type="radio" id="short" value="Short" checked={responseLength === 'Short'} on:change={handleResponseLengthChange} />
         <label for="short">Short</label>

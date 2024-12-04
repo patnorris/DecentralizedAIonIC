@@ -32,8 +32,8 @@ const getDocumentContent = async (documentUrl) => {
         return page.getTextContent().then(textContent => {
           // Filter text items to remove those that contain only spaces or punctuation
           const filteredTextItems = textContent.items
-              .map(item => item.str)
-              .filter(str => str.trim().length > 0 && !/^\p{P}+$/u.test(str));
+              .map(item => ('str' in item ? item.str : ''))
+              .filter(str => typeof str === 'string' && str.trim().length > 0 && !/^\p{P}+$/u.test(str));
 
           // Concatenate and split text to ensure each entry is under the limit of characters (the LLM's context window size might otherwise not be able to handle it)
           let combinedText = '';

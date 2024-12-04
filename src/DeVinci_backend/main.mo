@@ -29,7 +29,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     return true;
   };
 
-  stable var CANISTER_CREATION_CANISTER_ID : Text = ""; // local dev: "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  stable var CANISTER_CREATION_CANISTER_ID : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // local dev: "bkyz2-fmaaa-aaaaa-qaaaq-cai";
 
   public shared (msg) func setCanisterCreationCanisterId(_canister_creation_canister_id : Text) : async Types.AuthRecordResult {
     if (not Principal.isController(msg.caller)) {

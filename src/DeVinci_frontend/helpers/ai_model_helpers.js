@@ -152,7 +152,7 @@ const availableAiModels = [
     goodFor: 'English, German, French, Italian, Portuguese, Hindi, Spanish, Thai',
     default: false
   },
-// Android WebGPU models
+  // Android WebGPU models (q4f32 models typically require more VRAM)
   {
     model: "https://huggingface.co/mlc-ai/Qwen2-1.5B-Instruct-q4f32_1-MLC",
     id: "Qwen2-1.5B-Instruct-q4f32_1-MLC",
@@ -255,3 +255,13 @@ export const initiateCollapsibles = () => {
     coll[i].addEventListener('click', addCollapsibleFunctionality);
   };
 };
+
+function parametersToGB(parametersStr) {
+  const number = parseFloat(parametersStr);
+  if (parametersStr.includes('billion')) {
+    return (number * 2).toFixed(1);  // Each billion parameters is roughly 2GB
+  } else if (parametersStr.includes('million')) {
+    return ((number / 1000) * 2).toFixed(1);  // Convert million to billion first
+  }
+  return "N/A";
+}
