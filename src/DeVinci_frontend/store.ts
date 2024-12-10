@@ -131,9 +131,9 @@ type State = {
 };
 
 let defaultBackendCanisterId = backendCanisterId;
-if (userBackendCanisterAddressValue && userBackendCanisterAddressValue !== null && userBackendCanisterAddressValue.length > 5) {
+/* if (userBackendCanisterAddressValue && userBackendCanisterAddressValue !== null && userBackendCanisterAddressValue.length > 5) {
   defaultBackendCanisterId = userBackendCanisterAddressValue;
-};
+}; */
 
 const defaultState: State = {
   isAuthed: null,
@@ -229,7 +229,7 @@ export const createStore = ({
   };
 
   const initBackendCanisterActor = async (loginType, identity: Identity) => {
-    const getUserBackendCanisterId = async (backendActor) => {
+    /* const getUserBackendCanisterId = async (backendActor) => {
       try {
         const canisterEntryResponse = await backendActor.getUserCanistersEntry({ 'canisterType' : { 'Backend' : null } });
         // @ts-ignore
@@ -249,19 +249,19 @@ export const createStore = ({
         console.error("Error in getUserBackendCanisterId: ", error);
       };
       return null; // no user backend canister
-    };
+    }; */
 
     let canisterId = backendCanisterId;
-    if (userBackendCanisterAddressValue && userBackendCanisterAddressValue !== null && userBackendCanisterAddressValue.length > 5) {
+    /* if (userBackendCanisterAddressValue && userBackendCanisterAddressValue !== null && userBackendCanisterAddressValue.length > 5) {
       canisterId = userBackendCanisterAddressValue;
-    };
+    }; */
     
     if (loginType === "plug") {
       let backendActor = (await window.ic?.plug.createActor({
         canisterId: canisterId,
         interfaceFactory: backendIdlFactory,
       })) as typeof DeVinci_backend;
-      if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
+      /* if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
         // The user might have an own backend canister
         const canisterIdResponse = await getUserBackendCanisterId(backendActor);
         if (canisterIdResponse && canisterIdResponse !== canisterId) {
@@ -271,7 +271,7 @@ export const createStore = ({
             interfaceFactory: backendIdlFactory,
           })) as typeof DeVinci_backend;
         };
-      };
+      }; */
       return backendActor;
     } else if (loginType === "bitfinity") {
       let backendActor = (await window.ic?.infinityWallet.createActor({
@@ -279,7 +279,7 @@ export const createStore = ({
         interfaceFactory: backendIdlFactory,
         host,
       })) as typeof DeVinci_backend;
-      if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
+      /* if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
         // The user might have an own backend canister
         const canisterIdResponse = await getUserBackendCanisterId(backendActor);
         if (canisterIdResponse && canisterIdResponse !== canisterId) {
@@ -290,7 +290,7 @@ export const createStore = ({
             host,
           })) as typeof DeVinci_backend;
         };
-      };
+      }; */
       return backendActor;
     } else {
       let backendActor = createBackendCanisterActor(canisterId, {
@@ -299,7 +299,7 @@ export const createStore = ({
           host: HOST,
         },
       });
-      if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
+      /* if (!userBackendCanisterAddressValue || userBackendCanisterAddressValue === null) {
         // The user might have an own backend canister
         const canisterIdResponse = await getUserBackendCanisterId(backendActor);
         if (canisterIdResponse && canisterIdResponse !== canisterId) {
@@ -311,7 +311,7 @@ export const createStore = ({
             },
           });
         };
-      };
+      }; */
       return backendActor;
     };
   };
