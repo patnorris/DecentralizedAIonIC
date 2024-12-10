@@ -31,28 +31,6 @@ type Message =
    content: text;
    sender: text;
  };
-type MemoryVectorsStoredResult = 
- variant {
-   Err: ApiError;
-   Ok: bool;
- };
-type MemoryVectorsResult = 
- variant {
-   Err: ApiError;
-   Ok: vec MemoryVector;
- };
-type MemoryVectorsCheckResult = 
- variant {
-   Err: ApiError;
-   Ok: bool;
- };
-type MemoryVectorMetadata = record {id: int;};
-type MemoryVector = 
- record {
-   content: text;
-   embedding: vec float64;
-   metadata: MemoryVectorMetadata;
- };
 type EmailSubscriber = 
  record {
    emailAddress: text;
@@ -61,14 +39,11 @@ type EmailSubscriber =
  };
 type DeVinciBackend = 
  service {
-   check_caller_has_memory_vectors_entry: () ->
-    (MemoryVectorsCheckResult) query;
    create_chat: (vec Message) -> (ChatCreationResult);
    delete_chat: (text) -> (ChatResult);
    delete_email_subscriber: (text) -> (bool);
    get_caller_chat_history: () -> (ChatsPreviewResult) query;
    get_caller_chats: () -> (ChatsResult) query;
-   get_caller_memory_vectors: () -> (MemoryVectorsResult) query;
    get_caller_settings: () -> (UserSettingsResult) query;
    get_chat: (text) -> (ChatResult) query;
    get_email_subscribers: () -> (vec record {
@@ -76,8 +51,6 @@ type DeVinciBackend =
                                        EmailSubscriber;
                                      }) query;
    greet: (text) -> (text);
-   store_user_chats_memory_vectors: (vec MemoryVector) ->
-    (MemoryVectorsStoredResult);
    submit_signup_form: (SignUpFormInput) -> (text);
    update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
    update_chat_messages: (text, vec Message) -> (ChatIdResult);

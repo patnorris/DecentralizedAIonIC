@@ -1,0 +1,194 @@
+type UserSettingsResult = 
+ variant {
+   Err: ApiError;
+   Ok: UserSettings;
+ };
+type UserSettings = 
+ record {
+   responseLength: text;
+   saveChats: bool;
+   selectedAiModelId: text;
+   systemPrompt: text;
+   temperature: float64;
+ };
+type UserCanistersEntryResult = 
+ variant {
+   Err: ApiError;
+   Ok: UserCanisterEntry;
+ };
+type UserCanisterEntry = record {userCanister: CanisterInfo;};
+type UpdateUserSettingsResult = 
+ variant {
+   Err: ApiError;
+   Ok: bool;
+ };
+type UpdateChatObject = 
+ record {
+   chatTitle: text;
+   id: text;
+ };
+type SignUpFormInput = 
+ record {
+   emailAddress: text;
+   pageSubmittedFrom: text;
+ };
+type SearchKnowledgeBaseResult = 
+ variant {
+   Err: ApiError;
+   Ok: text;
+ };
+type Message = 
+ record {
+   content: text;
+   sender: text;
+ };
+type MemoryVectorsStoredResult = 
+ variant {
+   Err: ApiError;
+   Ok: bool;
+ };
+type MemoryVectorsResult = 
+ variant {
+   Err: ApiError;
+   Ok: vec MemoryVector;
+ };
+type MemoryVectorsCheckResult = 
+ variant {
+   Err: ApiError;
+   Ok: bool;
+ };
+type MemoryVectorMetadata = record {id: int;};
+type MemoryVector = 
+ record {
+   content: text;
+   embedding: Embeddings;
+   metadata: MemoryVectorMetadata;
+ };
+type List = 
+ opt record {
+       Chat;
+       List;
+     };
+type Embeddings = vec float64;
+type EmailSubscriber = 
+ record {
+   emailAddress: text;
+   pageSubmittedFrom: text;
+   subscribedAt: nat64;
+ };
+type DeVinciBackend = 
+ service {
+   add_to_user_knowledgebase: (text, Embeddings) ->
+    (MemoryVectorsStoredResult);
+   amiController: () -> (AuthRecordResult) query;
+   check_caller_has_memory_vectors_entry: () ->
+    (MemoryVectorsCheckResult) query;
+   createNewCanister: (CanisterCreationConfigurationInput) ->
+    (CanisterCreationResult);
+   create_chat: (vec Message) -> (ChatCreationResult);
+   delete_chat: (text) -> (ChatResult);
+   delete_email_subscriber: (text) -> (bool);
+   getUserCanistersEntry: (AvailableCanistersRecord) ->
+    (UserCanistersEntryResult) query;
+   get_caller_chat_history: () -> (ChatsPreviewResult) query;
+   get_caller_chats: () -> (ChatsResult) query;
+   get_caller_memory_vectors: () -> (MemoryVectorsResult) query;
+   get_caller_settings: () -> (UserSettingsResult) query;
+   get_chat: (text) -> (ChatResult) query;
+   get_email_subscribers: () -> (vec record {
+                                       text;
+                                       EmailSubscriber;
+                                     }) query;
+   greet: (text) -> (text);
+   isControllerLogicOk: () -> (AuthRecordResult);
+   migrate_user_chats: (principal, List) -> (bool);
+   search_user_knowledgebase: (Embeddings) -> (SearchKnowledgeBaseResult);
+   setCanisterCreationCanisterId: (text) -> (AuthRecordResult);
+   store_user_chats_memory_vectors: (vec MemoryVector) ->
+    (MemoryVectorsStoredResult);
+   submit_signup_form: (SignUpFormInput) -> (text);
+   updateCanisterIsPrivate: (bool) -> (bool);
+   update_caller_settings: (UserSettings) -> (UpdateUserSettingsResult);
+   update_chat_messages: (text, vec Message) -> (ChatIdResult);
+   update_chat_metadata: (UpdateChatObject) -> (ChatIdResult);
+   whoami: () -> (principal) query;
+ };
+type ChatsResult = 
+ variant {
+   Err: ApiError;
+   Ok: vec Chat;
+ };
+type ChatsPreviewResult = 
+ variant {
+   Err: ApiError;
+   Ok: vec ChatPreview;
+ };
+type ChatResult = 
+ variant {
+   Err: ApiError;
+   Ok: Chat;
+ };
+type ChatPreview = 
+ record {
+   chatTitle: text;
+   creationTime: nat64;
+   firstMessagePreview: text;
+   id: text;
+ };
+type ChatIdResult = 
+ variant {
+   Err: ApiError;
+   Ok: text;
+ };
+type ChatCreationResult = 
+ variant {
+   Err: ApiError;
+   Ok: text;
+ };
+type Chat = 
+ record {
+   chatTitle: text;
+   creationTime: nat64;
+   firstMessagePreview: text;
+   id: text;
+   messages: vec Message;
+   owner: principal;
+ };
+type CanisterType = 
+ variant {
+   Backend;
+   Knowledgebase;
+ };
+type CanisterInfo = 
+ record {
+   canisterAddress: text;
+   canisterType: CanisterType;
+   creationTimestamp: nat64;
+ };
+type CanisterCreationResult = 
+ variant {
+   Err: ApiError;
+   Ok: CanisterCreationRecord;
+ };
+type CanisterCreationRecord = 
+ record {
+   creationResult: text;
+   newCanisterId: text;
+ };
+type CanisterCreationConfigurationInput = record {canisterType: CanisterType;
+                                          };
+type AvailableCanistersRecord = record {canisterType: CanisterType;};
+type AuthRecordResult = 
+ variant {
+   Err: ApiError;
+   Ok: AuthRecord;
+ };
+type AuthRecord = record {auth: text;};
+type ApiError = 
+ variant {
+   InvalidTokenId;
+   Other: text;
+   Unauthorized;
+   ZeroAddress;
+ };
+service : (principal) -> DeVinciBackend

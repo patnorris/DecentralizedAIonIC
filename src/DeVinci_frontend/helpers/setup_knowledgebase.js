@@ -1,16 +1,11 @@
+import * as pdfjsLib from 'pdfjs-dist';
+
 export const getResourceAsArray = async (pathToUploadedPdf) => {
   let documentContent = await getDocumentContent(pathToUploadedPdf);
   return documentContent;
 };
 
-// Loaded via <script> tag, create shortcut to access PDF.js exports.
-let { pdfjsLib } = globalThis;
-
-// Only set the workerSrc if not on localhost
-if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
-  // The workerSrc property shall be specified.
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
-}
+pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
 
 const getDocumentContent = async (documentUrl) => {
   let documentContent = [];
@@ -37,8 +32,8 @@ const getDocumentContent = async (documentUrl) => {
         return page.getTextContent().then(textContent => {
           // Filter text items to remove those that contain only spaces or punctuation
           const filteredTextItems = textContent.items
-              .map(item => item.str)
-              .filter(str => str.trim().length > 0 && !/^\p{P}+$/u.test(str));
+              .map(item => ('str' in item ? item.str : ''))
+              .filter(str => typeof str === 'string' && str.trim().length > 0 && !/^\p{P}+$/u.test(str));
 
           // Concatenate and split text to ensure each entry is under the limit of characters (the LLM's context window size might otherwise not be able to handle it)
           let combinedText = '';

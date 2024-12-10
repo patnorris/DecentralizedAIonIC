@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "canisters": {
+    "canister_creation_canister": {
+      "main": "src/Main.mo"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "mops sources"
+    }
+  },
+  "networks": {
+    "development": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
+    }
+  }
+}
