@@ -17,7 +17,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
 
   stable var canisterIsPrivate : Bool = false; // variable to indicate whether this is the shared DeVinci backend (false) or a user's own backend (true)
 
-  public shared({ caller }) func updateCanisterIsPrivate(newIsPrivateValue : Bool) : async Bool {
+  /* public shared({ caller }) func updateCanisterIsPrivate(newIsPrivateValue : Bool) : async Bool {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
       return false;
@@ -27,18 +27,18 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };
     canisterIsPrivate := newIsPrivateValue;
     return true;
-  };
+  }; */
 
-  stable var CANISTER_CREATION_CANISTER_ID : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // local dev: "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  //stable var CANISTER_CREATION_CANISTER_ID : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // local dev: "bkyz2-fmaaa-aaaaa-qaaaq-cai";
 
-  public shared (msg) func setCanisterCreationCanisterId(_canister_creation_canister_id : Text) : async Types.AuthRecordResult {
+  /* public shared (msg) func setCanisterCreationCanisterId(_canister_creation_canister_id : Text) : async Types.AuthRecordResult {
     if (not Principal.isController(msg.caller)) {
       return #Err(#Unauthorized);
     };
     CANISTER_CREATION_CANISTER_ID := _canister_creation_canister_id;
     let authRecord = { auth = "You set the creation canister for this canister." };
     return #Ok(authRecord);
-  };
+  }; */
 
 // TODO: instead add functions to manage cycles balance and gather stats
   public func greet(name : Text) : async Text {
@@ -384,7 +384,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     };
   };
 
-  public shared({ caller }) func store_user_chats_memory_vectors(memoryVectors : [Types.MemoryVector]) : async Types.MemoryVectorsStoredResult {
+  /* public shared({ caller }) func store_user_chats_memory_vectors(memoryVectors : [Types.MemoryVector]) : async Types.MemoryVectorsStoredResult {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
@@ -426,7 +426,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
       case (null) { return #Err(#Unauthorized); };
       case (?memoryVectors) { return #Ok(true); };
     };   
-  };
+  }; */
 
 // Knowledgebase
   //let knowledgebaseCanisterId : Text = "bkyz2-fmaaa-aaaaa-qaaaq-cai"; // for local dev
@@ -435,7 +435,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   type VecQuery = { #Embeddings : Types.Embeddings };
   type PlainDoc = { content : Text };
 
-  public shared({ caller }) func add_to_user_knowledgebase(content: Text, embeddings: Types.Embeddings) : async Types.MemoryVectorsStoredResult {
+  /* public shared({ caller }) func add_to_user_knowledgebase(content: Text, embeddings: Types.Embeddings) : async Types.MemoryVectorsStoredResult {
     // don't allow anonymous Principal
     if (Principal.isAnonymous(caller)) {
       return #Err(#Unauthorized);
@@ -477,7 +477,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   let canisterCreationCanister = actor (CANISTER_CREATION_CANISTER_ID) : actor {
       amiController() : async Types.AuthRecordResult;
       createCanister : (configurationInput : Types.CanisterCreationConfiguration) -> async Types.CanisterCreationResult;
-  };
+  }; */
 
   // Map each user Principal to a record with the info about the created canisters
   private var createdCanistersByUser = HashMap.HashMap<Principal, [Types.UserCanisterEntry]>(0, Principal.equal, Principal.hash);
@@ -486,7 +486,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
   private var usersWithOwnBackendCanister = HashMap.HashMap<Principal, Text>(0, Principal.equal, Principal.hash);
   stable var usersWithOwnBackendCanisterStable : [(Principal, Text)] = [];
 
-  public query (msg) func whoami() : async Principal {
+  /* public query (msg) func whoami() : async Principal {
     return msg.caller;
   };
 
@@ -756,7 +756,7 @@ shared actor class DeVinciBackend(custodian: Principal) = Self {
     });
 
     return true;
-};
+  }; */
 
   // Admin functions TODO
 // Use with caution!
