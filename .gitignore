@@ -1,6 +1,10 @@
 # Nested repos
 PoAIW
 
+# Repo specific
+*.wasm
+.dfx
+
 # Logs
 logs
 *.log
