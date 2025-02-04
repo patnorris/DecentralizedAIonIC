@@ -18,6 +18,24 @@ const availableAiModels = [
     default: false
   },
   { //requires shader-f16
+    id: 'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC',
+    name: 'DeepSeek Qwen 7B',
+    size: 'Large',
+    parameters: '7 billion',
+    performance: 'Super Good',
+    goodFor: 'Chinese, English',
+    default: false
+  },
+  { //requires shader-f16
+    id: 'DeepSeek-R1-Distill-Llama-8B-q4f16_1-MLC',
+    name: 'DeepSeek Llama 8B',
+    size: 'Large',
+    parameters: '8 billion',
+    performance: 'Super Good',
+    goodFor: 'English',
+    default: false
+  },
+  { //requires shader-f16
     id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',
     name: 'Llama3.1 8B',
     size: 'Large',
