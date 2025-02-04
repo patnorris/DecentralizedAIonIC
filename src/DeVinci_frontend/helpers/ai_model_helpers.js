@@ -210,26 +210,6 @@ const availableAiModels = [
     android: true
   },
   {
-    id: 'SmolLM2-1.7B-Instruct-q4f32_1-MLC',
-    name: 'SmolLM2 1.7B',
-    size: 'Small',
-    parameters: '1.7 billion',
-    performance: 'Good',
-    goodFor: 'English',
-    default: false,
-    android: true
-  },
-  {
-    id: 'SmolLM2-360M-Instruct-q4f32_1-MLC',
-    name: 'SmolLM2 360M',
-    size: 'Very Small',
-    parameters: '360 million',
-    performance: 'Alright',
-    goodFor: 'English',
-    default: false,
-    android: true
-  },
-  {
     id: 'Llama-3.1-8B-Instruct-q4f32_1-MLC-1k',
     name: 'Llama3.1 8B',
     size: 'Large',
