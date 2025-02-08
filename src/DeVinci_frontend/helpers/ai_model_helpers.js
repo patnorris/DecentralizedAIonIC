@@ -230,16 +230,6 @@ const availableAiModels = [
     android: true
   },
   {
-    id: 'SmolLM-1.7B-Instruct-q4f32_1-MLC',
-    name: 'SmolLM 1.7B',
-    size: 'Small',
-    parameters: '1.7 billion',
-    performance: 'Good',
-    goodFor: 'English',
-    default: false,
-    android: true
-  },
-  {
     id: 'gemma-2-2b-it-q4f32_1-MLC-1k',
     name: 'Gemma 2',
     size: 'Small',
