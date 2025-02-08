@@ -272,7 +272,7 @@ export const getDefaultAiModelId = (isAndroid = false) => {
   return availableAiModels.find(model => model.default && !model.android).id;
 };
 
-// Named event listener function such that it will only be attached once (anonymous event listeners may be attached mulitple times, so in casu each time initiateCollapsibles is called which messes up the functionality)
+// Named event listener function such that it will only be attached once (anonymous event listeners may be attached multiple times, so in casu each time initiateCollapsibles is called which messes up the functionality)
 const addCollapsibleFunctionality = (event) => {
   event.target.classList.toggle('active-app-button');
   var content = event.target.nextElementSibling;
